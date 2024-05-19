@@ -47,10 +47,38 @@ const { Content } = await entry.render();
         </div>
       </div>
     </div>
-
+    <figure class="mx-auto max-w-3xl">
+      <img
+        src={entry.data.image.src}
+        alt={entry.data.image.alt}
+        class="w-full h-96 object-cover mt-8 rounded-lg"
+      />
+      <figcaption class="text-gray-400 text-xs text-center w-100">{entry.data.image.alt}</figcaption>
+      
+    </div>
     <div class="mx-auto prose prose-lg mt-6 max-w-3xl">
       <Content />
     </div>
+    <blockquote class="md:hidden text-xs mx-auto prose prose-lg mt-6 max-w-3xl">
+      I`m a developer that loves to share knowledge
+    </blockquote>
+    <button class="md:hidden bg-100 px-5 py-3 rounded-md hover:bg-gray-200 transition" id="share" data-description={entry.data.title}>share</button>
+    <script>
+    const shareData = {
+      text:'',
+      title:'',
+      url: window.location.href,
+    };
+    
+    const btn = document.getElementById("share");
+    
+    // Share must be triggered by "user activation"
+    btn!.addEventListener("click", async () => {
+      shareData.text = btn!.dataset.description;
+      shareData.title = btn!.dataset.description;
+        await navigator.share(shareData);
+    });
+  </script>
     <div class="text-center mt-8">
       <a
         href="/blog"

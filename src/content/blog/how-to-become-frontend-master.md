@@ -1,44 +1,110 @@
 ---
-draft: false
-title: "How to become a Frontend Master"
-snippet: "Ornare cum cursus laoreet sagittis nunc fusce posuere per euismod dis vehicula a, semper fames lacus maecenas dictumst pulvinar neque enim non potenti. Torquent hac sociosqu eleifend potenti."
+draft: true
+title: "CORS and Preflight Requests explained"
+snippet: "The post offers a comprehensive overview of handling CORS and Preflight Requests to optimize client-side resource integration and security."
 image: {
-    src: "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?&fit=crop&w=430&h=240",
-    alt: "frontend master"
+    src: "https://cdn.giorgiosaud.io/CORS%20%2B%20Preflight%20Request%20.webp?&fit=crop&w=430&h=240",
+    alt: "CORS and Preflight Requests explained"
 }
-publishDate: "2022-11-07 15:39"
-category: "Tutorials"
-author: "Connor Lopez"
-tags: [astro, tailwindcss, frontend]
+publishDate: "2022-11-11 11:39"
+category: "integration"
+author: "Giorgio Saud"
+tags: [frontend,cors,preflight-request,integrations]
 ---
+When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues lets describe them briefly.
 
-Whatever you do, it's always beneficial to have the right tools at your disposal. I love working remotely and am a big advocate of doing remote software development. Therefore, I always strive to have the best equipment available to be as productive as possible. Writing posts like this constantly takes a lot of time. Luckily iVanky helped me out and sponsored this post so that I can concentrate on writing. I recently had the chance to test out one of their hottest products, a dual USB-C Docking Station that allows me to connect both my wide-screen monitors to my MacBook with Dual 4K@60Hz display connectivity. It also supports up to 96W laptop charging, which is awesome. If you are in a situation like me and want to upgrade your equipment, check out this and their other products! And now comes the article:
+CORS(cross-origin resource sharing) for security communicational reasons browsers restrict cross-domain requests, but what is a cross-domain request? imagine a web served from an URL `https://my.web.com` That ask resources via XMLHttpRequest from another like this `https://other.web.net/some-resource.json` can be made via GET, POST, PUT, or PATCH methods.
 
-Whether you are new to programming or already an experienced developer. In this industry, learning new concepts and languages/frameworks is
-mandatory to keep up with the rapid changes. Take for example React - open-sourced by Facebook just a shy 4 years ago it already became the number one choice for JavaScript devs around the globe. But also Vue and Angular, of course, have their legitimate follower-base. And then there is Svelte, and universal frameworks like Next.js or Nuxt.js, and Gatsby, and Gridsome, and Quasar, and and and. If you want to shine as an expert JavaScript developer you should at least have some experience in different frameworks and libraries - besides doing your homework with good, old JS.
+This is a cross-domain request because those are separated domains this could be owned by different developers/organizations and because of that, the browser need to ensure that we can access these resources securely.
 
-To help you become Frontend Masters, I have collected 9 different projects, each with a distinct topic and a different JavaScript framework or library as a tech stack that you can build and add to your portfolio. Remember, nothing helps you more than actually building stuff so go ahead, sharpen your mind and make this happen!
+Here is where CORS came in help every resource that must be fetched via the Fetch API or XMLHttpRequest must come with extra headers the main header that allows us to consume resources is Access-Control-Allow-Origin this header can be set to allow any origin to consume our resources like this:
 
-## Dictum integer fusce ac ridiculus
+```
+Access-Control-Allow-Origin: *
+```
 
-Lorem ipsum dolor sit amet consectetur adipiscing elit euismod rutrum, consequat fringilla ultricies nullam curae mollis semper conubia viverra, orci aenean dapibus pharetra nec tortor tellus cubilia. Ullamcorper mi lectus eu malesuada tempor massa praesent magna mattis posuere, lobortis vulputate ut duis magnis parturient habitant nibh id tristique, quis suspendisse donec nisl penatibus sem non feugiat taciti. Mollis per ridiculus integer cursus semper vestibulum fermentum penatibus cubilia blandit scelerisque, tempus platea leo posuere ac pharetra volutpat aliquet euismod id ullamcorper lobortis, urna est magna mus rhoncus massa curae libero praesent eget. Mattis malesuada vestibulum quis ac nam phasellus suscipit facilisis libero diam posuere, cursus massa vehicula neque imperdiet tincidunt dui egestas lacinia mollis aliquet orci, nisl curabitur dapibus litora dis cum nostra montes ligula praesent. Facilisi aliquam convallis molestie tempor blandit ultricies bibendum parturient cubilia quam, porttitor morbi torquent tempus taciti nec faucibus elementum phasellus, quis inceptos vestibulum gravida augue potenti eget nunc maecenas. Tempor facilisis ligula volutpat habitant consequat inceptos orci per potenti blandit platea, mus sapien eget vel libero vestibulum augue cubilia ut ultrices fringilla lectus, imperdiet pellentesque cum ridiculus convallis sollicitudin nisl interdum semper felis.
+Or only restrict it to some site like this:
 
-Ornare cum cursus laoreet sagittis nunc fusce posuere per euismod dis vehicula a, semper fames lacus maecenas dictumst pulvinar neque enim non potenti. Torquent hac sociosqu eleifend potenti augue nulla vivamus senectus odio, quisque curabitur enim consequat class sociis feugiat ullamcorper, felis dis imperdiet cubilia commodo sed massa phasellus. Viverra purus mus nisi condimentum dui vehicula facilisis turpis, habitant nascetur lectus tempor quisque habitasse urna scelerisque, nibh nullam vestibulum luctus aenean mollis metus. Suscipit gravida duis nec aliquet natoque molestie a ridiculus scelerisque cum, justo cursus sapien sodales purus dignissim vel facilisi magnis, inceptos rutrum ut integer auctor commodo sollicitudin fames et. Faucibus ligula nibh sagittis mauris auctor posuere habitant, scelerisque phasellus accumsan egestas gravida viverra nam, sed etiam eleifend proin massa dictumst. Porttitor risus luctus per aenean tellus primis fringilla vitae fames lacinia mauris metus, nec pulvinar quisque commodo sodales ac nibh natoque phasellus semper placerat. Lectus aenean potenti leo sollicitudin tristique eros quam ligula, vestibulum diam consequat enim torquent nec tempus, blandit viverra dapibus eleifend dis nunc nascetur.
+```
+Access-Control-Allow-Origin: https://my.web.com
+```
 
-## Sodales hendrerit malesuada et vestibulum
+With that, we restrict access to our resources consumed directly from the browser but make it happen in all request is sometimes expensive, imagine that you have to upload via post some big image and after you send all this big request you get noticed that your URL is not allowed to consume this service, and there is where Preflight Requests came to help they are intimately related with cors because when we need access to an external resource like this from our website, the browser sends a request with the method OPTIONS to the server before the main one is sent to verify if this request can be done, normally it verifies if the request method is accepted and if the origin header is present in this resource, with this information and before sending any payload to the browser can check the health status and the capability of the service to execute the request.
 
-- Luctus euismod pretium nisi et, est dui enim.
+This kind of request is called Preflight Request and is automatically called directly from the browser, not by the front end code but the browser itself makes the request to optimize the client resources (avoiding the expensive call of an API if it doesn't have security access or is down).
 
-- Curae eget inceptos malesuada, fermentum class.
+To finalize here is a graphic representing the way that said when the prefight request is called from Wikipedia
 
-- Porttitor vestibulum aliquam porta feugiat velit, potenti eu placerat.
+![image.png](https://cdn.giorgiosaud.io/o2FU26DzG.avif)
 
-- Ligula lacus tempus ac porta, vel litora.
+> Here is a postman preflight test to validate if the response requires it and if the response of the OPTIONS request is ok
 
-Torquent non nisi lacinia faucibus nibh tortor taciti commodo porttitor, mus hendrerit id leo scelerisque mollis habitasse orci tristique aptent, lacus at molestie cubilia facilisis porta accumsan condimentum. Metus lacus suscipit porttitor integer facilisi torquent, nostra nulla platea at natoque varius venenatis, id quam pharetra aliquam leo. Dictum orci himenaeos quam mi fusce lacinia maecenas ac magna eleifend laoreet, vivamus enim curabitur ullamcorper est ultrices convallis suscipit nascetur. Ornare fames pretium ante ac eget nisi tellus vivamus, convallis mauris sapien imperdiet sollicitudin aliquet taciti quam, lacinia tempor primis magna iaculis at eu. Est facilisi proin risus eleifend orci torquent ultricies platea, quisque nullam vel porttitor euismod sociis non, maecenas sociosqu interdum arcu sed pharetra potenti. Aliquet risus tempus hendrerit sapien tellus eget cursus enim etiam dui, lobortis nostra pellentesque odio posuere morbi ad neque senectus arcu eu, turpis proin ac felis purus fames magnis dis dignissim.
+```js
+function verifyCustomHeaders(optionsResponse,originalHeaders){
+    const accessControlAllowHeader=optionsResponse.headers.find(header=>header.key.toLowerCase()==='access-control-allow-headers')
+    const originalHeadersArray=originalHeaders.split(', ')
 
-Orci volutpat augue viverra scelerisque dictumst ut condimentum vivamus, accumsan cum sem sollicitudin aliquet vehicula porta pretium placerat, malesuada euismod primis cubilia rutrum tempus parturient. Urna mauris in nibh morbi hendrerit vulputate condimentum, iaculis consequat porttitor dui dis euismod eros, arcu elementum venenatis varius lectus nisi. Nibh arcu ultrices semper morbi quam aptent quisque porta posuere iaculis, vestibulum cum vitae primis varius natoque conubia eu. Placerat sociis sagittis sociosqu morbi purus lobortis convallis, bibendum tortor ridiculus orci habitasse viverra dictum, quis rutrum fusce potenti volutpat vehicula. Curae porta inceptos lectus mus urna litora semper aliquam libero rutrum sem dui maecenas ligula quis, eget risus non imperdiet cum morbi magnis suspendisse etiam augue porttitor placerat facilisi hendrerit. Et eleifend eget augue duis fringilla sagittis erat est habitasse commodo tristique quisque pretium, suspendisse imperdiet inceptos mollis blandit magna mus elementum molestie sed vestibulum. Euismod morbi hendrerit suscipit felis ornare libero ligula, mus tortor urna interdum blandit nisi netus posuere, purus fermentum magnis nam primis nulla.
+    if(!accessControlAllowHeader){
+        console.error('header "Access-Control-Allow-Headers" missing in option request')
+    }else{
+        const missingInaccessControlAllowHeader=originalHeadersArray.filter(n => !accessControlAllowHeader.value.split(', ').includes(n))
+        if(missingInaccessControlAllowHeader.length>0){
+            console.error(`missing "${missingInaccessControlAllowHeader.join(', ')}" "Access-Control-Allow-Headers"`)
+        }
+    }
+};
+(function () {
+    const request = pm.request
+    const url = request.url.toString()
+    const requestMethod = request.method
+    const headers = request.headers.toObject()
+    const origin = headers.origin
+    if (!origin) {
+        throw new TypeError('The request must have an Origin header to attempt a preflight please add it to test the preflight request')
+    }
+    console.info(`Checking preflight request for ${origin}`)
+    delete headers.origin
+    const requestHeaders = Object.keys(headers).join(', ')
+    if (!['GET', 'HEAD', 'POST'].includes(requestMethod)) {
+        console.warn(`The request uses ${requestMethod}, so a preflight will be required`)
+    } else if (requestHeaders) {
+        console.warn(`The request has custom headers, so a preflight will be required with this custom headers: ${requestHeaders}`)
+    } else {
+        console.info("A preflight may not be required for this request but we'll attempt it anyway")
+    }
+    const preflightHeaders = {
+        Origin: origin,
+        'Access-Control-Request-Method': requestMethod
+    }
+    if (requestHeaders) {
+        preflightHeaders['Access-Control-Request-Headers'] = requestHeaders
+    }
+    pm.sendRequest({
+        url,
+        method: 'OPTIONS',
+        header: preflightHeaders
+    }, (err, optionsResponse) => {
+        if (err) {
+            throw new Error('Error:', err)
+        }
+        console.info(`Preflight response has status code ${optionsResponse.code}`)
+        console.log(optionsResponse)
+        if(requestHeaders){
+            verifyCustomHeaders(optionsResponse,requestHeaders)
+        }
+        console.info(`verifiying other headers:`)
+        const optionalCustomHeaders = [
+            'access-control-allow-origin',
+            'access-control-allow-methods',
+            'access-control-allow-credentials',
+            'access-control-max-age'
+        ]
 
-## Elementum nisi urna cursus nisl quam ante tristique blandit ultricies eget
-
-Netus at rutrum taciti vestibulum molestie conubia semper class potenti lobortis, hendrerit donec vitae ad libero natoque parturient litora congue. Torquent rhoncus odio cursus iaculis molestie arcu leo condimentum accumsan, laoreet congue duis libero justo tortor commodo fusce, massa eros hac euismod netus sodales mi magnis. Aenean nullam sollicitudin ad velit nulla venenatis suspendisse iaculis, aliquet senectus mollis aptent fringilla volutpat nascetur, nec urna vehicula lacinia neque augue orci. Suspendisse et eleifend convallis sollicitudin posuere diam turpis gravida congue ultrices, laoreet ultricies dapibus proin facilisis magna class praesent fusce. Mus morbi magnis ultricies sed turpis ultrices tempus tortor bibendum, netus nulla viverra torquent malesuada ridiculus tempor. Parturient sociosqu erat ullamcorper gravida natoque varius, etiam habitant augue praesent per curabitur iaculis, donec pellentesque cursus suscipit aliquet. Congue curae cursus scelerisque pellentesque quis fusce arcu eros dictumst luctus ridiculus nisl viverra, turpis class faucibus phasellus feugiat eleifend fringilla orci tristique habitasse conubia quam. Habitasse montes congue sodales rutrum cras torquent cursus auctor condimentum imperdiet egestas nascetur, platea tincidunt ut sollicitudin purus libero lobortis ad nisi diam quam.
+        const headersArray=optionsResponse.headers.map(header => header.key.toLowerCase())
+        const missingCustomHeadersArray=optionalCustomHeaders.filter(n => !headersArray.includes(n))
+        if(missingCustomHeadersArray.length>0){
+            console.error(`Cors Failure headers posibbly missing "${missingCustomHeadersArray.join(', ')}"`);
+        }
+    })
+})()
+```
