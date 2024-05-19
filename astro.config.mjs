@@ -4,7 +4,8 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import { shield } from '@kindspells/astro-shield'
-
+const rootDir = new URL('.', import.meta.url).pathname
+const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs')
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
