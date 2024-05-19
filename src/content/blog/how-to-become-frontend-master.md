@@ -1,110 +1,139 @@
 ---
-draft: true
-title: "CORS and Preflight Requests explained"
-snippet: "The post offers a comprehensive overview of handling CORS and Preflight Requests to optimize client-side resource integration and security."
+draft: false
+title: "Simplified Explanation of the Singleton Design Pattern"
+snippet: "The primary purpose of this pattern is to restrict the instantiation of a class to a single instance. Although its use cases can be rare, Jorge highlights some practical applications."
 image: {
-    src: "https://cdn.giorgiosaud.io/CORS%20%2B%20Preflight%20Request%20.webp?&fit=crop&w=430&h=240",
-    alt: "CORS and Preflight Requests explained"
+    src: "https://cdn.giorgiosaud.io/singleton.webp?&fit=crop&w=430&h=240",
+    alt: "Recicle Singleton image"
 }
-publishDate: "2022-11-11 11:39"
-category: "integration"
+publishDate: "2023-11-14 11:39"
+category: "development"
 author: "Giorgio Saud"
-tags: [frontend,cors,preflight-request,integrations]
+tags: [design-patterns,development]
 ---
-When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues lets describe them briefly.
+in this blog post, I will try to explain the pattern in a simplified way the Singleton Design Pattern, its main purpose is to reconstruct the instantiation of a class to a singular instance, I need to clarify that the use case is very difficult to find but if you think about it in a deeper way I found some interesting uses.
 
-CORS(cross-origin resource sharing) for security communicational reasons browsers restrict cross-domain requests, but what is a cross-domain request? imagine a web served from an URL `https://my.web.com` That ask resources via XMLHttpRequest from another like this `https://other.web.net/some-resource.json` can be made via GET, POST, PUT, or PATCH methods.
-
-This is a cross-domain request because those are separated domains this could be owned by different developers/organizations and because of that, the browser need to ensure that we can access these resources securely.
-
-Here is where CORS came in help every resource that must be fetched via the Fetch API or XMLHttpRequest must come with extra headers the main header that allows us to consume resources is Access-Control-Allow-Origin this header can be set to allow any origin to consume our resources like this:
-
+The more known use case is to use a class to define the configuration of an application, to make use of this pattern in this use case we need to define a Class with the definitions and a configuration that can instantiate the class only if this instance does not exist like this
+```js
+    class AppConfig {
+      constructor() {
+        this.apiEndpoint = 'https://api.example.com';
+        // Other configuration options
+      }
+    }
+    
+    const AppConfiguration = (() => {
+      let instance;
+    
+      function createInstance() {
+        return new AppConfig();
+      }
+    
+      return {
+        getInstance: () => {
+          if (!instance) {
+            instance = createInstance();
+          }
+          return instance;
+        },
+      };
+    })();
+    
+    const config = AppConfiguration.getInstance();
+    
 ```
-Access-Control-Allow-Origin: *
-```
 
-Or only restrict it to some site like this:
+This use case can be some const defined in a simplified way centralizing them or defining them in the env vars of the deployment process that is because is typically known as an antipattern and not a real pattern.
 
-```
-Access-Control-Allow-Origin: https://my.web.com
-```
-
-With that, we restrict access to our resources consumed directly from the browser but make it happen in all request is sometimes expensive, imagine that you have to upload via post some big image and after you send all this big request you get noticed that your URL is not allowed to consume this service, and there is where Preflight Requests came to help they are intimately related with cors because when we need access to an external resource like this from our website, the browser sends a request with the method OPTIONS to the server before the main one is sent to verify if this request can be done, normally it verifies if the request method is accepted and if the origin header is present in this resource, with this information and before sending any payload to the browser can check the health status and the capability of the service to execute the request.
-
-This kind of request is called Preflight Request and is automatically called directly from the browser, not by the front end code but the browser itself makes the request to optimize the client resources (avoiding the expensive call of an API if it doesn't have security access or is down).
-
-To finalize here is a graphic representing the way that said when the prefight request is called from Wikipedia
-
-![image.png](https://cdn.giorgiosaud.io/o2FU26DzG.avif)
-
-> Here is a postman preflight test to validate if the response requires it and if the response of the OPTIONS request is ok
+There are 2 ways very handful to use it, one is to use this pattern to govern the state of an application in a simplified way like a JS vanilla application there is an example of this use case
 
 ```js
-function verifyCustomHeaders(optionsResponse,originalHeaders){
-    const accessControlAllowHeader=optionsResponse.headers.find(header=>header.key.toLowerCase()==='access-control-allow-headers')
-    const originalHeadersArray=originalHeaders.split(', ')
-
-    if(!accessControlAllowHeader){
-        console.error('header "Access-Control-Allow-Headers" missing in option request')
-    }else{
-        const missingInaccessControlAllowHeader=originalHeadersArray.filter(n => !accessControlAllowHeader.value.split(', ').includes(n))
-        if(missingInaccessControlAllowHeader.length>0){
-            console.error(`missing "${missingInaccessControlAllowHeader.join(', ')}" "Access-Control-Allow-Headers"`)
-        }
+    class GlobalState {
+      constructor() {
+        this.data = {};
+      }
+    
+      setData(key, value) {
+        this.data[key] = value;
+      }
+    
+      getData(key) {
+        return this.data[key];
+      }
     }
-};
-(function () {
-    const request = pm.request
-    const url = request.url.toString()
-    const requestMethod = request.method
-    const headers = request.headers.toObject()
-    const origin = headers.origin
-    if (!origin) {
-        throw new TypeError('The request must have an Origin header to attempt a preflight please add it to test the preflight request')
-    }
-    console.info(`Checking preflight request for ${origin}`)
-    delete headers.origin
-    const requestHeaders = Object.keys(headers).join(', ')
-    if (!['GET', 'HEAD', 'POST'].includes(requestMethod)) {
-        console.warn(`The request uses ${requestMethod}, so a preflight will be required`)
-    } else if (requestHeaders) {
-        console.warn(`The request has custom headers, so a preflight will be required with this custom headers: ${requestHeaders}`)
-    } else {
-        console.info("A preflight may not be required for this request but we'll attempt it anyway")
-    }
-    const preflightHeaders = {
-        Origin: origin,
-        'Access-Control-Request-Method': requestMethod
-    }
-    if (requestHeaders) {
-        preflightHeaders['Access-Control-Request-Headers'] = requestHeaders
-    }
-    pm.sendRequest({
-        url,
-        method: 'OPTIONS',
-        header: preflightHeaders
-    }, (err, optionsResponse) => {
-        if (err) {
-            throw new Error('Error:', err)
-        }
-        console.info(`Preflight response has status code ${optionsResponse.code}`)
-        console.log(optionsResponse)
-        if(requestHeaders){
-            verifyCustomHeaders(optionsResponse,requestHeaders)
-        }
-        console.info(`verifiying other headers:`)
-        const optionalCustomHeaders = [
-            'access-control-allow-origin',
-            'access-control-allow-methods',
-            'access-control-allow-credentials',
-            'access-control-max-age'
-        ]
-
-        const headersArray=optionsResponse.headers.map(header => header.key.toLowerCase())
-        const missingCustomHeadersArray=optionalCustomHeaders.filter(n => !headersArray.includes(n))
-        if(missingCustomHeadersArray.length>0){
-            console.error(`Cors Failure headers posibbly missing "${missingCustomHeadersArray.join(', ')}"`);
-        }
-    })
-})()
+    
+    const AppState = (() => {
+      let instance;
+    
+      function createInstance() {
+        return new GlobalState();
+      }
+    
+      return {
+        getInstance: () => {
+          if (!instance) {
+            instance = createInstance();
+          }
+          return instance;
+        },
+      };
+    })();
+    
+    // Usage
+    const appState = AppState.getInstance();
+    // Set Data
+    appState.setData('user', { id: 1, name: 'John Doe' });
+    // Get Data
+    console.log(appState.getData('user'))
+    
 ```
+
+With this use case, we can resolve a simple state management centralized
+
+The other common use case is to use as a Bus or a PubSub system to communicate 2 elements of different scopes
+
+```js
+    class EventBus {
+      constructor() {
+        this.listeners = {};
+      }
+    
+      subscribe(event, callback) {
+        if (!this.listeners[event]) {
+          this.listeners[event] = [];
+        }
+        this.listeners[event].push(callback);
+      }
+    
+      publish(event, data) {
+        if (this.listeners[event]) {
+          this.listeners[event].forEach(callback => callback(data));
+        }
+      }
+    }
+    
+    const EventManager = (() => {
+      let instance;
+    
+      function createInstance() {
+        return new EventBus();
+      }
+    
+      return {
+        getInstance: () => {
+          if (!instance) {
+            instance = createInstance();
+          }
+          return instance;
+        },
+      };
+    })();
+    
+    // Usage
+    const eventBus = EventManager.getInstance();
+    eventBus.subscribe('userLoggedIn', (user) => {
+      console.log(`${user.name} logged in`);
+    });
+```
+
+> There are some simple examples of this implementation of the more complex to-understand design pattern the Singleton Pattern.
