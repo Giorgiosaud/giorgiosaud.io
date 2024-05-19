@@ -5,6 +5,8 @@ import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import { shield } from '@kindspells/astro-shield'
 import { resolve } from 'node:path'
+import partytown from '@astrojs/partytown'
+
 const rootDir = new URL('.', import.meta.url).pathname
 const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs')
 // https://astro.build/config
@@ -41,5 +43,10 @@ export default defineConfig({
         }
       }
     }
-  })],
+  }),
+  partytown({
+    config: {
+      forward: ["dataLayer.push"],
+    },
+  }),],
 });
