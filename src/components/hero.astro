@@ -1,33 +1,36 @@
 ---
-import { Picture } from "astro:assets";
-import heroImage from "assets/Innovation-amico.png";
+import { Image } from "astro:assets";
+import heroImage from "@assets/innovation-amico.png";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 ---
 
 <main
-class="grid lg:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
+class="grid md:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
 <div class="py-6 md:order-1 hidden md:block">
-  <Picture
+  <Image
   src={heroImage}
   alt="Astronaut in the air"
   widths={[200, 400, 600]}
   sizes="(max-width: 800px) 100vw, 620px"
   loading="eager"
-  format="avif"
   />
 </div>
 <div>
   <h1
   class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">My web developer notebook</h1>
   <p class="text-lg mt-4 text-slate-600 max-w-xl">
-    This website is made with Astro and based on Astroship theme but is a 
-    simple place to take my mental notes, and remember my investigations 
-    because is very difficult to me to loose focus on the web surfing and 
-    i need a place to concentrate the good things.
+    This website is made with Astro and based on an Astroship theme but is a simple place to take my mental notes and remember my investigations because is very difficult for me to get focus on web surfing and I need a place to concentrate on the good things.
   </p>
   <div class="mt-6 flex flex-col sm:flex-row gap-3">
   
+  <Link
+  size="lg"
+  href="/notebook"
+  class="flex gap place-items-center">
+    <Icon class="text-white w-4 h-4 mr-3" name="bx:book-heart" />
+    My Notebook
+  </Link>
   <Link
   size="lg"
   style="outline"
