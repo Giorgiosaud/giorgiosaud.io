@@ -1,6 +1,5 @@
 ---
 import { Image } from "astro:assets";
-import heroImage from "../assets/innovation-amico.png";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon/components";
 ---
@@ -8,10 +7,9 @@ import { Icon } from "astro-icon/components";
 <main
 class="grid md:grid-cols-2 place-items-center pt-16 pb-8 md:pt-12 md:pb-24">
 <div class="py-6 md:order-1 hidden md:block">
-  <Image
-  src={heroImage}
+  <img
+  src="//cdn.giorgiosaud.com/innovation-amico.png"
   alt="Astronaut in the air"
-  widths={[200, 400, 600]}
   sizes="(max-width: 800px) 100vw, 620px"
   loading="eager"
   />
