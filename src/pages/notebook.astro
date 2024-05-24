@@ -6,12 +6,13 @@ import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 
 // Filter blog entries with 'draft: false' & date before current date
-const publishedBlogEntries = await getCollection("blog", ({ data }) => {
+const publishedNotesEntries = await getCollection("notes", ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
+
 // Sort content entries by publication date
-publishedBlogEntries.sort(function (a, b) {
+publishedNotesEntries.sort(function (a, b) {
   return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
 });
 ---
@@ -27,14 +28,14 @@ publishedBlogEntries.sort(function (a, b) {
     <main class="mt-16">
       <ul class="grid gap-16 max-w-4xl mx-auto">
         {
-          publishedBlogEntries.map((blogPostEntry, index) => (
+          publishedNotesEntries.map((noteEntry, index) => (
             <li>
-              <a href={`/notebook/${blogPostEntry.slug}`}>
+              <a href={`/notebook/${noteEntry.slug}`}>
                 <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
                   <Picture
-                    transition:name=`${blogPostEntry.id}-image`
-                    src={blogPostEntry.data.image.src}
-                    alt={blogPostEntry.data.image.alt}
+                    transition:name=`${noteEntry.id}-image`
+                    src={noteEntry.data.image.src}
+                    alt={noteEntry.data.image.alt}
                     sizes="(max-width: 800px) 100vw, 800px"
                     width={800}
                     height={600}
@@ -44,29 +45,32 @@ publishedBlogEntries.sort(function (a, b) {
                   />
                   <div>
                     <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-                    transition:name=`${blogPostEntry.id} category`
+                    transition:name=`${noteEntry.id} category`
                     >
-                      {blogPostEntry.data.category}
+                      {noteEntry.data.category}
                     </span>
 
                     <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "
-                    transition:name=`${blogPostEntry.id} title`
+                    transition:name=`${noteEntry.id} title`
                     >
-                      {blogPostEntry.data.title}
+                      {noteEntry.data.title}
                     </h2>
 
                     <div class="flex gap-2 mt-3"
-                    transition:name=`${blogPostEntry.id} meta`>
+                    transition:name=`${noteEntry.id} meta`>
                       <span class="text-gray-400">
-                        {blogPostEntry.data.author}
+                        {noteEntry.data.author}
                       </span>
                       <span class="text-gray-400">• </span>
                       <time
                         class="text-gray-400"
-                        datetime={blogPostEntry.data.publishDate.toISOString()}>
-                        {blogPostEntry.data.publishDate.toDateString()}
+                        datetime={noteEntry.data.publishDate.toISOString()}>
+                        {noteEntry.data.publishDate.toDateString()}
                       </time>
                     </div>
+                    <p class="text-slate-500">
+                      {noteEntry.data.snippet}
+                    </p>
                   </div>
                 </div>
               </a>
