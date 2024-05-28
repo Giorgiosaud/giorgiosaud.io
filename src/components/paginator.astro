@@ -32,7 +32,7 @@ const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
             size="md"
             href={`/notebook/${pageX}`}
             style="pages"
-            class:list={[{'bg-slate-500 text-white':pageX===page.currentPage}]}
+            class:list={[{'bg-slate-600 text-white':pageX===page.currentPage}]}
             class="flex gap place-items-center">
             {pageX}
             
