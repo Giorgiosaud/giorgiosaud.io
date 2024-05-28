@@ -10,6 +10,7 @@ const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
+  output: "server",
   security: {
     checkOrigin: true
   },
@@ -18,7 +19,8 @@ export default defineConfig({
     changefreq: 'weekly',
     priority: 0.7,
     lastmod: new Date('2022-02-24'),
-  }), icon({
+  }), 
+  icon({
     iconDir: "src/components/ui/icons",
     include: {
       uil: ['*'],
