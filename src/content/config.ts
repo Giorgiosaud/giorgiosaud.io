@@ -7,6 +7,7 @@ const notesCollection = defineCollection({
     draft: z.boolean(),
     title: z.string(),
     snippet: z.string(),
+    readingTime: z.string().default(""),
     image: z.object({
       src: z.string(),
       alt: z.string(),

@@ -14,6 +14,11 @@ export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
     publishedNotesEntries.sort(function (a, b) {
         return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
     });
+    publishedNotesEntries.map((entry, index) => {
+        const newEntry={...entry};
+        newEntry.data.readingTime = `${Math.ceil(entry.body.split(" ").length / 200)} min read`;
+        return newEntry;
+    });
     return paginate(publishedNotesEntries, {pageSize:4});
 }
 type Props = {
@@ -71,10 +76,14 @@ const { page } = Astro.props;
                             datetime={noteEntry.data.publishDate.toISOString()}>
                             {noteEntry.data.publishDate.toDateString()}
                         </time>
+                        <span class="text-gray-400">• </span>
+                        <span class="text-gray-400">{noteEntry.data.readingTime} </span>
+
                     </div>
                     <p class="text-slate-500">
                         {noteEntry.data.snippet}
                     </p>
+                    
                 </div>
             </div>
         </a>
