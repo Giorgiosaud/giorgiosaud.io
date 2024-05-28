@@ -196,4 +196,18 @@ export default {
 }
 ```
 
+This allow us to make test more easy than mocking axios with moxios or thigs like this because we can use a spy on the repository and mock the resolved value for it when we run the test 
+
+```ts
+import SummaryRepository from '@/repository/summaryRepository.ts';
+
+jest.spyOn(SummaryRepository,'getSummary').mockResolvedValue({
+  amount: 100;
+  currency: "$";
+  accountNumber: "123-123-123";
+});
+```
+
+As simple as this we can mock the method getSummary and get example data for our test or make it fail.
+
 Please note that there might be errors in this code as it was not run; it is only meant to illustrate how to use the repository factory. If you find any issues, please report them to my email. "Once I find the best solution, I will post it with the name of the person who fits best and was first to provide it ;) ....
