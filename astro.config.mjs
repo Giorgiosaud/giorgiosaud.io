@@ -12,7 +12,7 @@ const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
-  output: "server",
+  output: "hybrid",
   security: {
     checkOrigin: true
   },
