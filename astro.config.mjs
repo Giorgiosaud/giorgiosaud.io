@@ -10,12 +10,6 @@ const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
-  redirects: {
-    '/notebook': {
-      status: 302,
-      destination: '/notebook/1'
-    }
-  },
   security: {
     checkOrigin: true
   },
