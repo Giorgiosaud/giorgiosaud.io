@@ -16,15 +16,15 @@ In the world of frontend development, managing data efficiently is crucial for b
 
 This has been growing with techniques like micro-frontend architecture where we need to decouple and isolate terms but also keep some elements shareables between projects to keep consistency here is where the data management can become a mess, and we need to take some architectural decisions to accomplish this consistency, and avoid rework.
 
-## The Repository Pattern is important for several reasons, that i call <abbr class="text-slate-600">STRAD</abbr>
+## The Repository Pattern is important for several reasons, that i call <abbr class="text-slate-600">STAR-D</abbr>
 
 - **Separation of concerns (Definition of Clients and Separation of Scopes):** The pattern helps define clear boundaries between different parts of the application. It separates the data access logic (clients, repositories) from the business logic, and Api calls, ensuring that each part of the code has a single responsibility and is easier to manage.
 
 - **Testability:** This means that repositories methods can be easily mocked, making it simpler to write unit tests for your micro-frontend. Leading to more reliable and maintainable code, and also allow us to make mock of simplest request actions and test the failed request scenarios.
 
-- **Reusablity:** When we separate the client of the request and the repository method from the interface and declare the methods that shoud be used from the component, you are making a segregation that allows us to use the same client for many repositories because not always but many times when we work with SSO the authorization method in apis is the same, then you dont need to write this login in every call you only write the client well and make the request in the repository, wich allow us also to make the request more abstract and if for come reason the client or request changes the component get the same data and work as well as before, even if the mapping changes the repository take charge of it to avoid changes in the component.
-
 - **Abstracted data hadling (Decoupling Component Logic from Data Consumption and Delivery):** The Repository Pattern allows the definition of the component and its logic to be decoupled from how data is consumed and delivered. This means that components can focus purely on rendering and user interaction, while repositories handle data retrieval and processing. This separation of concerns leads to cleaner and more maintainable code.
+
+- **Reusablity:** When we separate the client of the request and the repository method from the interface and declare the methods that shoud be used from the component, you are making a segregation that allows us to use the same client for many repositories because not always but many times when we work with SSO the authorization method in apis is the same, then you dont need to write this login in every call you only write the client well and make the request in the repository, wich allow us also to make the request more abstract and if for come reason the client or request changes the component get the same data and work as well as before, even if the mapping changes the repository take charge of it to avoid changes in the component.
 
 - **Definition Clarity (Type Safety with TypeScript):** Typescript allow us to make more predictable code, and not wait until raise a local dev environment or use console logs to get typos errors, with Ts we can define the interface of our component and the interface of our apis responses to make easy the mapping of the request.
 
