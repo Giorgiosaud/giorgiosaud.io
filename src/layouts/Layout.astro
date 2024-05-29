@@ -6,6 +6,7 @@ import "@fontsource-variable/inter/index.css";
 
 export interface Props {
   title?: string;
+  canonical?: string;
   image?: string;
   description?: string;
   article?:{
@@ -25,7 +26,7 @@ const resolvedImageWithDomain = new URL(
 Astro.site
 ).toString();
 
-const { title, description,image, article } = Astro.props;
+const { title, description,image, article,canonical } = Astro.props;
 
 const makeDescription= description ?? "A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.";
 const seoProps:SEOProps={
@@ -70,6 +71,7 @@ if(article){
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  {canonical&&<link rel="canonical" href={canonical} />}
   <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
