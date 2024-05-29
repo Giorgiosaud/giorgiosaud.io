@@ -30,7 +30,6 @@ export default defineConfig({
       status:302,
       destination:'/notebook/microfrontend',
     },
-    }
   },
   security: {
     checkOrigin: true
