@@ -13,6 +13,25 @@ const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 export default defineConfig({
   site: "https://giorgiosaud.io",
   output: "hybrid",
+  redirects:{
+    '/atributos-srcset-y-sizes-en-un-tag-de-imagen-img': {
+      status:302,
+      destination:'/notebook/tag-link',
+    },
+    '/tag/*': {
+      status:302,
+      destination:'/notebook',
+    },
+    '/problemas-comunes-de-integracion-front-end': {
+      status:302,
+      destination:'/notebook/really-common-issues-integrating-from-front-end',
+    },
+    'arquitectura-de-micro-frontend':{
+      status:302,
+      destination:'/notebook/microfrontend',
+    },
+    }
+  },
   security: {
     checkOrigin: true
   },
