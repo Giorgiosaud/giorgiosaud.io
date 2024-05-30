@@ -43,13 +43,20 @@ In this folder structure, you can create a repository pattern that is framework-
 src/
   ├── repositories/
   │   ├── clients/
-  │   │   └── apiClient.ts
-  │   ├── summaryRepository.ts
-  │   ├── transactionsRepository.ts
-  │   └── repositoryFactory.ts
+  │   │   └── ApiClient.ts
+  │   ├── SummaryRepository.ts
+  │   ├── TransactionsRepository.ts
+  │   └── RepositoryFactory.ts
   ├── interfaces/
-  │   └── ISummary.ts
-  │   └── ITransactions.ts
+  │   └── apis
+  │       └── summary
+  │           └── Get.d.ts
+  │           └── GetPaths.ts
+  │       └── transactions
+  │           └── Get.d.ts
+  │           └── GetPaths.ts
+  │           └── Post.d.ts
+  │   └── IApiClient.ts
   └── components/
       └── DataComponent.tsx
 ```
@@ -59,17 +66,44 @@ src/
 Now, I will define each file in this folder structure, starting with the simplest one: the interface definitions. Here, we will define and agree upon the API or SDK contract between our component and the requested resource.
 
 ```ts
-// src/interfaces/ISummary.ts
+// src/interfaces/apis/summary/Get.d.ts
+import { GetPaths } from './GetPaths';
 
-export interface ISummary {
-  amount: number;
-  currency: string;
-  accountNumber: string;
+export interface ISummaryAccountsResponse {
+  'amount': number
 }
+export interface ISummaryCardsResponse {
+  'amount': number
+}
+type GetSummaryAccounts = (string:TPaths.SUMMARY_ACCOUNT)=>Promise<ISummaryAccountsResponse>;
+type GetSummaryCards = (string:TPaths.SUMMARY_CARD)=>Promise<ISummaryCardsResponse>;
+export type GetData = GetSummaryAccounts & GetSummaryCards;
+export enum TPaths {
+  SUMMARY_ACCOUNT = 'summary',
+  SUMMARY_CARD = 'summary/card',
+}
+
+
+
 ```
 
+And the endpoint paths in GetPaths
+
 ```ts
-// src/interfaces/ISummary.ts
+// src/interfaces/apis/summary/GetPaths.ts
+export enum GetPaths {
+  KEY = 'key',
+  PULIC_KEY = 'pubkey',
+}
+
+```
+
+Transactions should be the same as before
+
+```ts
+// src/interfaces/apis/transactions/Get.ts
+import { TPaths } from './GetPaths';
+
 interface ITransaction{
     date: Date;
     description: string;
@@ -79,54 +113,22 @@ interface ITransaction{
 export interface ITransactions {
   transactions[]: ITransaction[];
 }
+
+type GetTransactions = (string:TPaths.TRANSACTIONS)=>Promise<ITransactions>;
+export type GetData = GetTransactions;
 ```
+
+```ts
+// src/interfaces/apis/transactions/GetPaths.ts
+export enum TPaths {
+  TRANSACTIONS = 'transactions',
+}
+
+```
+
 All the elements defined in these interfaces are the ones that our already-made component requires to work properly.
 
 Then lets go for more, lets work in the client and try to implement it in 2 ways an axios one and a fetch one
-
-```ts
-// src/repositories/clients/apiClient.ts
-
-const BASE_URL='https://api.example.com';
-const TOKEN='MY_JWT_TOKEN';
-const ApiClient ={
-  async getData(path)<T>: Promise<T> {
-    const response = await fetch(`https://api.example.com/${path}`,{
-        headers:{
-            'content-type':'application/json',
-            Authorization:`Bearer ${TOKEN}`,
-        }
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data: T = await response.json();
-    return data;
-  },
-  /** 
-   *  Here is an example of posting data 
-   * for which you should define an interface,
-   *  but for practical purposes, we will define it as unknown.
-   */
-  async postData(path,data:unknown): Promise<T> {
-    const response = await fetch(`https://api.example.com/${path}`,{
-        method:'POST',
-        body:JSON.stringify(data),
-        headers:{
-            'content-type':'application/json',
-            Authorization:`Bearer ${TOKEN}`,
-        }
-    });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const data: T = await response.json();
-    return data;
-  }
-}
-
-export default ApiClient;
-```
 
 I can also use axios and simplify this client like this
 
@@ -149,18 +151,36 @@ ApiClient.interceptors.request.use(addTokenInterceptor);
 
 export default ApiClient;
 ```
+or use fetch like this 
+```ts
+// IapiClient.d.ts
+import { GetData as TGetData } from './apis/transactions/Get';
+import { GetData as SGetData} from './apis/summary/Post';
 
+type GetData=TGetData&SGetData;
+
+export interface IApiClient {
+  getData: GetData;
+  postData: PostData;
+}
+
+
+```
 This will allow us to use any method request in our repository file, and we can use these clients to fetch data in those repository files.
 
 The repository file:
 
 ```ts
 // src/repositories/summaryRepository.ts
-
-import { ISummary } from '../../interfaces/ISummary';
+// if you have request definitions import here like this
+/*import {
+  type ITransactionRequest,
+} from './interfaces/apis/transactions/Get.ts';
+*/
 import ApiClient from './clients/apiClient.ts';
 
 const summaryRepository={
+  //and use the payload as param typed from ITransactionRequest
     async getSummary():ISummary{
         const summary = await Apiclient.getData('summary')<ISummary>
         /**
@@ -181,23 +201,31 @@ Then we will use the repository factory to allow use one single factory method t
 ```ts
 // src/repositories/RepositoryFactory.ts
 
-import SummaryRepository from './summaryRepository.ts';
-import OtherRepository from './OtherRepository.ts';
+import SummaryRepository, { ISummaryRepository } from './summaryRepository.ts';
+import OtherRepository, { IOtherRepository } from './OtherRepository.ts';
 
-type GETREPOSITORY=get("summary"):typeof SummaryRepository;
-type GETREPOSITORY=get("other"):typeof OtherRepository;
+type Repositories = 'summary' | 'other';
+function get(string:'summary'):ISummaryRepository;
+function get(string:'other'):IOtherRepository;
+function get(string:Repositories):unknown;
+
+function get(name: Repositories) {
+  switch (name) {
+    case 'summary':
+      return SummaryRepository;
+    case 'other':
+      return OtherRepository;
+    default:
+      return null;
+  }
+}
+
 export default {
-    get(repo){
-        repositories= {
-            "summary":SummaryRepository,
-            "other":OtherRepository
-        }
-        return repositories[repo]
-    }
+    get
 }
 ```
 
-This allow us to make test more easy than mocking axios with moxios or thigs like this because we can use a spy on the repository and mock the resolved value for it when we run the test 
+This allow us to make test more easy than mocking axios with moxios or thigs like this because we can use a spy on the repository and mock the resolved value for it when we run the test
 
 ```ts
 import SummaryRepository from '@/repository/summaryRepository.ts';
