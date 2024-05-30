@@ -31,10 +31,27 @@ const teamCollection = defineCollection({
     publishDate: z.string().transform(str => new Date(str)),
   }),
 });
+const portfolioCollection = defineCollection({
+  schema: z.object({
+    draft: z.boolean(),
+    title: z.string(),
+    resume: z.string(),
+    readingTime: z.string().default(""),
+    image: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }),
+    publishDate: z.string().transform(str => new Date(str)),
+    category: z.string(),
+    tags: z.array(z.string()),
+  }),
+});
 
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
 export const collections = {
   'notes': notesCollection,
   'team': teamCollection,
+  "portfolio":portfolioCollection,
 };
+w
