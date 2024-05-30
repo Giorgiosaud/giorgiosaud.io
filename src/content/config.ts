@@ -54,4 +54,3 @@ export const collections = {
   'team': teamCollection,
   "portfolio":portfolioCollection,
 };
-w
