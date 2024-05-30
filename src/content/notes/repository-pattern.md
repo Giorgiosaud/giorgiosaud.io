@@ -16,7 +16,7 @@ In the world of frontend development, managing data efficiently is crucial for b
 
 This has been growing with techniques like micro-frontend architecture where we need to decouple and isolate terms but also keep some elements shareables between projects to keep consistency here is where the data management can become a mess, and we need to take some architectural decisions to accomplish this consistency, and avoid rework.
 
-## The Repository Pattern is important for several reasons, that i call <abbr class="text-slate-600">STAR-D</abbr>
+## The Repository Pattern is important for several reasons, that I call STAR-D
 
 - **Separation of concerns (Definition of Clients and Separation of Scopes):** The pattern helps define clear boundaries between different parts of the application. It separates the data access logic (clients, repositories) from the business logic, and Api calls, ensuring that each part of the code has a single responsibility and is easier to manage.
 
