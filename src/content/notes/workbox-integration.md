@@ -40,7 +40,7 @@ To solve these issues, this is where the Front End architect emerges, because th
 
 ## How Frontend Architects Harness Micro Frontends
 
----
+----
 
 As we mentioned before, the importance of TTM is growing and we need new ways of working in order to meet demand. However, MVCs and SPAs are mired in issues that reduce overall speed because of enlarged pipeline processes, resolving difficulties and issues during fast deployments, misaligning developer priorities to focus more on business rather than the code necessary to implement it, which means less time resolving issues on StackOverflow 😉.
 
@@ -50,7 +50,7 @@ Even within MFE development, there are a variety of approaches. One approach sep
 
 ## Micro Frontends at ®Modyo
 
----
+----
 
 Between a complete single page application approach, and a micro app approach based purely on functionality, at Modyo we use something in between, where we separate applications by their business subdomain. We call each of these applications a widget, and these widgets can be managed independently from the rest of the developed web application. They can even be deployed and rolled back on their own, and take advantage of the benefits of the overall Modyo platform to bootstrap and manage them, injecting them into a page to load asynchronously in any order that we need.
 
@@ -64,10 +64,9 @@ When delivering content, Modyo is a mix between a headless and decoupled CMS, an
 
 ## The Future of Micro Frontends at Modyo
 
----
+----
 We’re working hard on new features that allow us to deliver this architecture to the Modyo platform, all without interrupting the normal workflow of expert developers on the market while also giving them the ability to use native APIs to build interactions between widgets without breaking core MFE principles.
 
 In a future post, we’ll talk about how to make this happen from a front end perspective and how this improves our work once the Modyo way of managing MFE architecture is in our veins.
 
 Until next time!
-
