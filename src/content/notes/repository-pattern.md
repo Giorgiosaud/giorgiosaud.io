@@ -151,7 +151,9 @@ ApiClient.interceptors.request.use(addTokenInterceptor);
 
 export default ApiClient;
 ```
-or use fetch like this 
+
+or use fetch like this
+
 ```ts
 // IapiClient.d.ts
 import { GetData as TGetData } from './apis/transactions/Get';
@@ -166,6 +168,7 @@ export interface IApiClient {
 
 
 ```
+
 This will allow us to use any method request in our repository file, and we can use these clients to fetch data in those repository files.
 
 The repository file:

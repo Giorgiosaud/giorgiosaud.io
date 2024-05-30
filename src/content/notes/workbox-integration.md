@@ -36,7 +36,7 @@ And yes, I say “from the shadows” because this architecture has always exist
 
 To solve these issues, this is where the Front End architect emerges, because the architect must deal with the user experience, performance, SEO, Accessibility, Tagging events, and take ownership of this layer, between the service and the user.
 
-![](https://miro.medium.com/v2/resize:fit:1400/1*MmgKz3-I72tznd1xMMDf2Q.png)
+![Microfrontends](https://miro.medium.com/v2/resize:fit:1400/1*MmgKz3-I72tznd1xMMDf2Q.png)
 
 ## How Frontend Architects Harness Micro Frontends
 
@@ -60,9 +60,10 @@ Recently, we’ve resolved how to share portions of code between apps, similar t
 
 When delivering content, Modyo is a mix between a headless and decoupled CMS, and with the advantages of the decoupled CMS strategy, we can deliver content from the server-side directly to our widgets (MFEs) via the Liquid Template Engine that we natively support. It’s a best practice to adopt and take advantage of this MFE architecture, with the foundation of client-side MFE composition.
 
-![](https://miro.medium.com/v2/resize:fit:1400/0*pgqMdevdWSs9_HL8.png)
+![Puzzle blocks](https://miro.medium.com/v2/resize:fit:1400/0*pgqMdevdWSs9_HL8.png)
 
 ## The Future of Micro Frontends at Modyo
+
 ---
 We’re working hard on new features that allow us to deliver this architecture to the Modyo platform, all without interrupting the normal workflow of expert developers on the market while also giving them the ability to use native APIs to build interactions between widgets without breaking core MFE principles.
 
@@ -70,4 +71,3 @@ In a future post, we’ll talk about how to make this happen from a front end pe
 
 Until next time!
 
-[](https://medium.com/tag/mfe?source=post_page-----198b211b1bcc---------------mfe-----------------)
