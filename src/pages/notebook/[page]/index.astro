@@ -25,8 +25,9 @@ type Props = {
   page: Page<CollectionEntry<'notes'>>;
 };
 const { page } = Astro.props;
+
 let canonical
-if (page.currentPage===1){
+if (page.currentPage===1 && "tag"===null){
     canonical=`/notebook/`;
 }
 ---
@@ -35,7 +36,7 @@ if (page.currentPage===1){
         <Sectionhead>
             <Fragment slot="title">My Notebook</Fragment>
             <Fragment slot="desc">
-                A notebook links for beginners to experts.
+                A notebook links for beginners to experts. {"tag"}
             </Fragment>
         </Sectionhead>
         <main class="mt-16">
