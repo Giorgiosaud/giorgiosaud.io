@@ -43,10 +43,10 @@ const seoProps:SEOProps={
     card: "summary_large_image",
   },
   openGraph: {
-    basic: {
+    basic:{
       url: canonicalURL,
       type: "website",
-      title: `Giorgiosaud.io - ${article.title??"Astro Notebook"}`,
+      title: `Giorgiosaud.io - Giorgio Notebook`,
       image: image??resolvedImageWithDomain,
     },
     image: {
@@ -60,6 +60,12 @@ const seoProps:SEOProps={
   }
 }
 if(article){
+  seoProps.openGraph!.basic={
+    ...seoProps.openGraph!.basic,
+    type: "blog",
+    title: `Giorgiosaud.io - ${article.title}`,
+    image: image??resolvedImageWithDomain,
+  },
   seoProps.openGraph!.article={
     publishedTime: article.publishedTime,
     modifiedTime: article.modifiedTime,
