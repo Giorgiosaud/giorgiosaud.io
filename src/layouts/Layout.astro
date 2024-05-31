@@ -106,6 +106,39 @@ if(article){
   }}
   {...seoProps}
   />
+  {article&&<script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "NewsArticle",
+      "headline": {article.title},
+      "image": {
+        "@type": "ImageObject",
+        "url": {image},
+        "width": "430",
+        "height": "240"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Giorgio Saud",
+        "url": "https://giorgiosaud.io/about/"
+
+      },
+   
+      "publisher": {
+        "@type": "Organization",
+        "name": "Personal Website",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://cdn.giorgiosaud.io/IMG_1167_.jpg?&fit=crop&w=280",
+          "width": "280",
+          "height": "280"
+        }
+      },
+      "datePublished": {article.publishedTime}
+      "dateModified": {article.modifiedTime},
+    }
+    </script>
+    }
   
 </head>
 <body>
