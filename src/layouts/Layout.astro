@@ -10,6 +10,7 @@ export interface Props {
   image?: string;
   description?: string;
   article?:{
+    title?: string;
     publishedTime?: string;
     modifiedTime?: string;
     expirationTime?: string;
@@ -45,7 +46,7 @@ const seoProps:SEOProps={
     basic: {
       url: canonicalURL,
       type: "website",
-      title: `Giorgiosaud.io - Astro Notebook`,
+      title: `Giorgiosaud.io - ${article.title??"Astro Notebook"}`,
       image: image??resolvedImageWithDomain,
     },
     image: {

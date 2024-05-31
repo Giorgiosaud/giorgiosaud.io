@@ -20,6 +20,7 @@ const { entry } = Astro.props;
 const { Content } = await entry.render();
 
 const article={
+  title: entry.data.title,
   publishedTime: entry.data.publishDate.toISOString(),
   authors: ["Giorgiosaud"],
   section: entry.data.category,
