@@ -5,6 +5,7 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Paginator from "@components/paginator.astro";
+import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 
 // Filter blog entries with 'draft: false' & date before current date
 const publishedNotesEntries = await getCollection("notes", ({ data }) => {
@@ -36,13 +37,10 @@ publishedNotesEntries.sort(function (a, b) {
                     <li>
                         <a href={`/notebook/${noteEntry.slug}`}>
                             <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
-                                <Picture
-                                transition:name=`${noteEntry.id}-image`
-                                src={noteEntry.data.image.src}
+                                <CloudinaryImage
+                                src={`notebook-posts/${noteEntry.data.image.src}`}
                                 alt={noteEntry.data.image.alt}
-                                sizes="(max-width: 800px) 100vw, 800px"
-                                width={800}
-                                height={600}
+                                aspectRatio="1"
                                 loading={index <= 2 ? "eager" : "lazy"}
                                 decoding={index <= 2 ? "sync" : "async"}
                                 class="w-full rounded-md object-cover object-center bg-white"

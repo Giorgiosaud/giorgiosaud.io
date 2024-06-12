@@ -3,7 +3,7 @@ draft: false
 title: "Micro Frontend Architecture"
 snippet: "Giorgio discusses the benefits and implementation of micro frontend architecture, emphasizing its growing popularity and effectiveness in modern web development. He outlines how this architecture enables more efficient, specialized development by dividing frontend applications into smaller, manageable components."
 image: {
-    src: "https://cdn.giorgiosaud.io/microfrontend.webp?&fit=crop&w=430&h=240",
+    src: "microfrontend_klswbm",
     alt: "Micro Frontend Architecture"
 }
 publishDate: "2023-05-08 11:39"

@@ -21,14 +21,14 @@ export async function GET({params,request}){
         ],
         "screenshots" : [
             {
-              "src": "https://cdn.giorgiosaud.io/Screenshot%202024-06-04%20at%2010.38.53%E2%80%AFAM.png?&fit=crop&w=1280&h=720&format=webp",
+              "src": "https://res.cloudinary.com/giorgiosaud/image/upload/v1718219196/blog/home-screenshot_fjnul6?_a=DATAdtIIZAA0",
               "sizes": "1280x720",
               "type": "image/webp",
               "form_factor": "wide",
               "label": "Homescreen of Awesome App"
             },
             {
-              "src": "https://cdn.giorgiosaud.io/Screenshot%202024-06-04%20at%2010.40.23%E2%80%AFAM.png?&fit=crop&w=1280&h=720&format=webp",
+              "src": "https://res.cloudinary.com/giorgiosaud/image/upload/blog/notebook-screenshot_cispy7?_a=DATAdtIIZAA0",
               "sizes": "1280x720",
               "type": "image/webp",
               "form_factor": "wide",
