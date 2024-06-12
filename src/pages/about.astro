@@ -1,9 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import { Picture } from "astro:assets";
+import {  Picture } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
+import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 
 // Filter team entries with 'draft: false' & date before current date
 const publishedTeamMembers = await getCollection("team", ({ data }) => {
@@ -15,9 +16,10 @@ const publishedTeamMembers = await getCollection("team", ({ data }) => {
   <Container>
     <Sectionhead>
       <Fragment slot="title">About Me</Fragment>
-      <Fragment slot="desc">A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.      </Fragment>
+      <Fragment slot="desc">A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.      
+      </Fragment>
     </Sectionhead>
-    
+
     <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
       <h2 class="font-bold text-3xl text-gray-800">About this blog</h2>
       <p class="text-lg leading-relaxed text-slate-500">
@@ -62,7 +64,17 @@ const publishedTeamMembers = await getCollection("team", ({ data }) => {
       <h2 class="font-bold text-3xl text-gray-800">
         My Background
       </h2>
-      <p class="text-lg leading-relaxed text-slate-500">
+
+   
+      <p class="text-lg leading-relaxed text-slate-500 content">
+        <CloudinaryImage 
+        height={300}
+        src='My photo'
+        alt="my photo"
+        type="portrait"
+        loading="lazy"
+        aspectRatio="1"
+        class="float-start me-3 rounded-xl"/>
         I am an industrial engineer with a diverse professional background, including experience in sales, logistics, and as a real estate appraiser engineer. Despite my varied career, I have always been passionate about the programming world. My extensive experience in monolithic and decoupled architecture, spanning over 15 years, enables me to provide practical, real-world solutions to the challenges faced by developers.
       </p>
       <p class="text-lg leading-relaxed text-slate-500">
@@ -74,7 +86,7 @@ const publishedTeamMembers = await getCollection("team", ({ data }) => {
         Goals and Aspirations
       </h2>
       <p class="text-lg leading-relaxed text-slate-500">
-        The main goal of this blog is to be a notebook for any developer looking to explain complicated web development concepts in simple terms. Additionally, I aim to achieve more than 1 million visits per month, creating a valuable resource that is widely used and appreciated.
+        The main goal of this blog is to be a notebook for any developer looking to explain complicated web development concepts in simple terms. Additionally, I aim to achieve some income for doing this ;).
       </p>
       
     </div>  

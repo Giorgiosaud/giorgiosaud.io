@@ -5,9 +5,9 @@ import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import { resolve } from 'node:path';
 import cloudflare from "@astrojs/cloudflare";
+import serviceWorker from "astrojs-service-worker";
 const rootDir = new URL('.', import.meta.url).pathname;
 const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
-
 
 // https://astro.build/config
 export default defineConfig({
@@ -34,7 +34,7 @@ export default defineConfig({
   security: {
     checkOrigin: true
   },
-  integrations: [tailwind(), mdx(), sitemap({
+  integrations: [serviceWorker(),tailwind(), mdx(), sitemap({
     entryLimit: 10000,
     changefreq: 'weekly',
     priority: 0.7,
@@ -49,5 +49,8 @@ export default defineConfig({
   })],
   adapter: cloudflare({
     imageService: 'cloudflare'
-  })
+  }),
+  image:{
+    domains:['https://res.cloudinary.com']
+  }
 });
