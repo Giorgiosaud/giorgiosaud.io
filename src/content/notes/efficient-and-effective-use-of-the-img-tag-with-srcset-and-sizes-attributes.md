@@ -3,7 +3,7 @@ draft: false
 title: "Efficient and Effective Use of the <img> Tag with srcset and sizes Attributes"
 snippet: "explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness."
 image: {
-    src: "https://cdn.giorgiosaud.io/src-set.webp?&fit=crop&w=430&h=240",
+    src: "link_siloo8",
     alt: "full stack web development"
 }
 publishDate: "2023-05-08 11:39"

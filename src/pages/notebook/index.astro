@@ -5,10 +5,13 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Paginator from "@components/paginator.astro";
+import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 
 // Filter blog entries with 'draft: false' & date before current date
 const publishedNotesEntries = await getCollection("notes", ({ data }) => {
-    return !data.draft && data.publishDate < new Date();
+    const isDraft= import.meta.env.PROD ? data.draft === true : false;
+    console.log("isDraft",isDraft);
+    return !isDraft && data.publishDate < new Date()
 });
 
 
@@ -34,13 +37,10 @@ publishedNotesEntries.sort(function (a, b) {
                     <li>
                         <a href={`/notebook/${noteEntry.slug}`}>
                             <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
-                                <Picture
-                                transition:name=`${noteEntry.id}-image`
-                                src={noteEntry.data.image.src}
+                                <CloudinaryImage
+                                src={`notebook-posts/${noteEntry.data.image.src}`}
                                 alt={noteEntry.data.image.alt}
-                                sizes="(max-width: 800px) 100vw, 800px"
-                                width={800}
-                                height={600}
+                                aspectRatio="1"
                                 loading={index <= 2 ? "eager" : "lazy"}
                                 decoding={index <= 2 ? "sync" : "async"}
                                 class="w-full rounded-md object-cover object-center bg-white"
@@ -51,6 +51,10 @@ publishedNotesEntries.sort(function (a, b) {
                                     >
                                     {noteEntry.data.category}
                                 </span>
+                                {noteEntry.data.draft&&<span class=" text-red-950 uppercase tracking-wider text-sm font-medium bg-red-200 px-4 py-2 rounded-full hover:bg-red-900 hover:text-red-200"
+                                    >
+                                    #Draft
+                                </span>}
                                 
                                 <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "
                                 transition:name=`${noteEntry.id} title`

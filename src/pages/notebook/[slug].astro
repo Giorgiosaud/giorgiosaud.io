@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry} from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import type { GetStaticPaths, Page } from 'astro';
+import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
@@ -17,6 +18,8 @@ interface Props {
 }
 // Get the entry directly from the prop on render
 const { entry } = Astro.props;
+console.log("entry",entry.data.publishDate.toISOString())
+
 const { Content } = await entry.render();
 
 const article={
@@ -61,11 +64,14 @@ const article={
           </div>
         </div>
         <figure class="mx-auto max-w-3xl">
-          <img
-            class="w-full h-96 object-cover mt-8 rounded-lg"
-            src={entry.data.image.src}
-            alt={entry.data.image.alt}
-            transition:name=`${entry.id}-image`/>
+          <CloudinaryImage
+                                src={`notebook-posts/${entry.data.image.src}`}
+                                alt={entry.data.image.alt}
+                                aspectRatio="1"
+                                loading={"eager" }
+                                decoding={"sync"}
+                                class="w-full rounded-md object-cover object-center bg-white"
+                                />
           <figcaption class="text-gray-400 text-xs text-center w-100 pt-2">{entry.data.image.alt}
           </figcaption>
         </figure>

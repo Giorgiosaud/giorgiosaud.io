@@ -3,7 +3,7 @@ draft: false
 title: "Simplified Explanation of the Singleton Design Pattern"
 snippet: "The primary purpose of this pattern is to restrict the instantiation of a class to a single instance. Although its use cases can be rare, Jorge highlights some practical applications."
 image: {
-    src: "https://cdn.giorgiosaud.io/singleton.webp?&fit=crop&w=430&h=240",
+    src: "singleton_hbupze",
     alt: "Recicle Singleton image"
 }
 publishDate: "2023-11-14 11:39"
