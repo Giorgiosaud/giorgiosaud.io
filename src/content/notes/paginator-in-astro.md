@@ -3,7 +3,7 @@ draft: false
 title: "Paginator in astro"
 snippet: "Paginate a website in Astro or any other framework like next.js or nuxt is a challenge but not because is difficult to implement but because is difficult to understand, in this post i will try to illustrate how the paginator of this website was made."
 image: {
-    src: "https://cdn.giorgiosaud.io/paginator.webp?&fit=crop&w=430&h=240",
+    src: "paginator",
     alt: "Full pages with an indiator"
 }
 publishDate: "2024-05-21 09:45"

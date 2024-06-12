@@ -51,6 +51,6 @@ export default defineConfig({
     imageService: 'cloudflare'
   }),
   image:{
-    domains:['https://res.cloudinary.com','cdn.giorgiosaud.io']
+    domains:['https://res.cloudinary.com']
   }
 });
