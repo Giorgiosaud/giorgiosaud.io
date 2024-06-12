@@ -8,7 +8,9 @@ import Paginator from "@components/paginator.astro";
 
 // Filter blog entries with 'draft: false' & date before current date
 const publishedNotesEntries = await getCollection("notes", ({ data }) => {
-    return !data.draft && data.publishDate < new Date();
+    const isDraft= import.meta.env.PROD ? data.draft === true : false;
+    console.log("isDraft",isDraft);
+    return !isDraft && data.publishDate < new Date()
 });
 
 
@@ -51,6 +53,10 @@ publishedNotesEntries.sort(function (a, b) {
                                     >
                                     {noteEntry.data.category}
                                 </span>
+                                {noteEntry.data.draft&&<span class=" text-red-950 uppercase tracking-wider text-sm font-medium bg-red-200 px-4 py-2 rounded-full hover:bg-red-900 hover:text-red-200"
+                                    >
+                                    #Draft
+                                </span>}
                                 
                                 <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "
                                 transition:name=`${noteEntry.id} title`

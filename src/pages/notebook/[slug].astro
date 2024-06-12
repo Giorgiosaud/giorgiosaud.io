@@ -17,6 +17,8 @@ interface Props {
 }
 // Get the entry directly from the prop on render
 const { entry } = Astro.props;
+console.log("entry",entry.data.publishDate.toISOString())
+
 const { Content } = await entry.render();
 
 const article={
