@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
-    "build": "astro build && npm run generateSW",
-    "generateSW": "SW_DIST_PATH=dist/client workbox generateSW workbox.config.cjs",
+    "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
