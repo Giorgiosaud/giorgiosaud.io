@@ -4,7 +4,7 @@ name: "Jorge Saud"
 alias: "Giorgio"
 title: "Blogger"
 avatar: {
-    src: "my-photo",
+    src: "My Photo",
     alt: "Giorgio Saud"
 }
 publishDate: "2024-05-14 12:06"
