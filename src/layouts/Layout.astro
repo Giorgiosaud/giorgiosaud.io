@@ -42,6 +42,8 @@ const seoProps:SEOProps={
     creator: "@giorgiosaud",
     site: "https://giorgiosaud.io",
     card: "summary_large_image",
+    image: imgSrc,
+    title: title??"Giorgiosaud.io - Giorgio Notebook",
   },
   openGraph: {
     basic:{
@@ -51,7 +53,7 @@ const seoProps:SEOProps={
       image: image??resolvedImageWithDomain,
     },
     image: {
-      alt: title??"Giorgiosaud Screenshot",
+      alt: title??"Giorgiosaud.io",
     },
     optional: {
       description: description??"my Notebook",
