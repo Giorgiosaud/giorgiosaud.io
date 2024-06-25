@@ -43,6 +43,7 @@ publishedNotesEntries.sort(function (a, b) {
                                 aspectRatio="1"
                                 loading={index <= 2 ? "eager" : "lazy"}
                                 decoding={index <= 2 ? "sync" : "async"}
+                                transition:name=`${noteEntry.id} img`
                                 class="w-full rounded-md object-cover object-center bg-white"
                                 />
                                 <div>
@@ -74,7 +75,9 @@ publishedNotesEntries.sort(function (a, b) {
                             {noteEntry.data.publishDate.toDateString()}
                         </time>
                     </div>
-                    <p class="text-slate-500">
+                    <p class="text-slate-500"
+                        transition:name=`${noteEntry.id} snippet`
+                    >
                         {noteEntry.data.snippet}
                     </p>
                 </div>
