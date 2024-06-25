@@ -19,7 +19,6 @@ const publishedNotesEntries = await getCollection("notes", ({ data }) => {
 publishedNotesEntries.sort(function (a, b) {
     return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
 });
-
 ---
 
 <Layout title="Blog">
@@ -33,7 +32,7 @@ publishedNotesEntries.sort(function (a, b) {
         <main class="mt-16">
             <ul class="grid gap-16 max-w-4xl mx-auto">
                 {
-                    publishedNotesEntries.map((noteEntry, index) => (
+                    publishedNotesEntries.slice(0,4).map((noteEntry, index) => (
                     <li>
                         <a href={`/notebook/${noteEntry.slug}`}>
                             <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
