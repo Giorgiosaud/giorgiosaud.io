@@ -6,7 +6,7 @@ image: {
     src: "datalayer",
     alt: "Datalayer pattern"
 }
-publishDate: "2024-05-21 09:45"
+publishDate: "2024-06-21 09:45"
 category: "Architecture"
 author: "Giorgio Saud"
 tags: [micro-frontend,development, frontend, backend]
