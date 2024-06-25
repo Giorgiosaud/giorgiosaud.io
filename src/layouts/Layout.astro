@@ -103,7 +103,20 @@ if(article){
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="generator" content={Astro.generator} />
-
+  <script type="speculationrules">
+    {
+      "prerender": [{
+        "source": "document",
+        "where": {
+          "and": [
+            { "href_matches": "/*" },
+            { "not": {"href_matches": "/logout/*"}}
+          ]
+        },
+        "eagerness": "moderate"
+      }]
+    }
+  </script>
 
   <!-- Google Tag Manager -->
   <script is:inline>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
