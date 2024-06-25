@@ -1,4 +1,6 @@
+import { auto } from "@cloudinary/url-gen/actions/resize";
 import { Cloudinary } from "@cloudinary/url-gen/index";
+import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
 const cld = new Cloudinary({
     cloud: {
       cloudName: 'giorgiosaud',
@@ -12,5 +14,6 @@ const cld = new Cloudinary({
   }); 
 export const cloudinarySrc = (src)=>{
     let cldSrc=cld.image(src).format('auto').quality('auto');
+    cldSrc=cldSrc.resize(auto().gravity(autoGravity()).width(300));
     return cldSrc.toURL();
 }
