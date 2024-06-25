@@ -49,10 +49,12 @@ if (page.currentPage===1 && "tag"===null){
                             <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
                                 <CloudinaryImage
                                 src={`notebook-posts/${noteEntry.data.image.src}`}
+                                
                                 alt={noteEntry.data.image.alt}
                                 aspectRatio="1"
                                 loading={index <= 2 ? "eager" : "lazy"}
                                 decoding={index <= 2 ? "sync" : "async"}
+                                transition:name=`${noteEntry.id} img`
                                 class="w-full rounded-md object-cover object-center bg-white"
                                 />
                                 <div>
