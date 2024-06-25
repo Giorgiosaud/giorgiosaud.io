@@ -3,6 +3,7 @@ import { SEO, type Props as SEOProps } from "astro-seo";
 import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
 import "@fontsource-variable/inter/index.css";
+import { cloudinarySrc } from "@utils/cloudinarySrc";
 
 export interface Props {
   title?: string;
@@ -28,7 +29,7 @@ Astro.site
 ).toString();
 
 const { title, description,image, article,canonical } = Astro.props;
-
+const imgSrc=image?.includes('http')?cloudinarySrc(image):resolvedImageWithDomain;
 const makeDescription= description ?? "A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.";
 const seoProps:SEOProps={
   title,
@@ -64,7 +65,7 @@ if(article){
     ...seoProps.openGraph!.basic,
     type: "blog",
     title: `Giorgiosaud.io - ${article.title}`,
-    image: image??resolvedImageWithDomain,
+    image: imgSrc,
   },
   seoProps.openGraph!.article={
     publishedTime: article.publishedTime,
