@@ -12,6 +12,8 @@ author: "Giorgio Saud"
 tags: [micro-frontend,development, frontend, backend]
 ---
 
+This post is created because @Kevcastle talk to me about the complex structure of the previous post related to Repository pattern and I try to resolve it in a simples way in more than one post, this is the first of Datalayer series.
+
 Now that we are aligned with the world we can talk in a more light way about Datalayer Pattern.
 
 This pattern allow us to encapsulate the concerns of API connections in a special way that, separates the User Experience from the network calls, allowing us to make simple code in our ui and only map and reformat the data from the network in a separated world.
