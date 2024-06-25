@@ -4,37 +4,38 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import { resolve } from 'node:path';
-import cloudflare from "@astrojs/cloudflare";
 import serviceWorker from "astrojs-service-worker";
+import vercel from "@astrojs/vercel/serverless";
 const rootDir = new URL('.', import.meta.url).pathname;
 const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
+
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
   output: "hybrid",
-  redirects:{
+  redirects: {
     '/atributos-srcset-y-sizes-en-un-tag-de-imagen-img': {
-      status:302,
-      destination:'/notebook/tag-link',
+      status: 302,
+      destination: '/notebook/tag-link'
     },
     '/tag/*': {
-      status:302,
-      destination:'/notebook',
+      status: 302,
+      destination: '/notebook'
     },
     '/problemas-comunes-de-integracion-front-end': {
-      status:302,
-      destination:'/notebook/really-common-issues-integrating-from-front-end',
+      status: 302,
+      destination: '/notebook/really-common-issues-integrating-from-front-end'
     },
-    'arquitectura-de-micro-frontend':{
-      status:302,
-      destination:'/notebook/microfrontend',
-    },
+    'arquitectura-de-micro-frontend': {
+      status: 302,
+      destination: '/notebook/microfrontend'
+    }
   },
   security: {
     checkOrigin: true
   },
-  integrations: [serviceWorker(),tailwind(), mdx(), sitemap({
+  integrations: [serviceWorker(), tailwind(), mdx(), sitemap({
     entryLimit: 10000,
     changefreq: 'weekly',
     priority: 0.7,
@@ -47,10 +48,8 @@ export default defineConfig({
       'simple-icons': ['*']
     }
   })],
-  adapter: cloudflare({
-    imageService: 'cloudflare'
-  }),
-  image:{
-    domains:['https://res.cloudinary.com']
-  }
+  image: {
+    domains: ['https://res.cloudinary.com']
+  },
+  adapter: vercel()
 });
