@@ -6,6 +6,9 @@ import icon from "astro-icon";
 import { resolve } from 'node:path';
 import serviceWorker from "astrojs-service-worker";
 import vercel from "@astrojs/vercel/serverless";
+import vue from "@astrojs/vue";
+import react from "@astrojs/react";
+import svelte from "@astrojs/svelte";
 const rootDir = new URL('.', import.meta.url).pathname;
 const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 
@@ -47,7 +50,7 @@ export default defineConfig({
       bx: ['*'],
       'simple-icons': ['*']
     }
-  })],
+  }), vue(), react(), svelte()],
   image: {
     domains: ['https://res.cloudinary.com']
   },
