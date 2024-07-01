@@ -51,4 +51,26 @@ A server side redered but component loaded reactivity in when is visible
 
 In a md file we cant do this because is more for static content and we can't use JSX code in it. 
 
+Even when .md is a great tool because is like create html without complexity mdx is great because mix all in one file only separating a paragraph with a JSX component.
 
+Allowing to import components and everithing that you need even using all the md power.
+
+```md
+# hola mundo en h1
+## hola mundo en h2
+este es un parrafo
+> Blockquote text
+```
+
+
+```mdx
+import Component from 'component';
+
+# hola mundo en h1
+## hola mundo en h2
+este es un parrafo
+> Blockquote text
+
+<Component />
+```
+> This is a MDX file 💌
