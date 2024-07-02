@@ -1,7 +1,8 @@
 ---
 draft: true
+selfHealing: "000001"
 title: "Workbox"
-snippet: "https://web.dev/learn/pwa/workbox?hl=es-419
+resume: "https://web.dev/learn/pwa/workbox?hl=es-419
 https://rumaan.dev/blog/workbox-astro-project"
 image: {
     src: "microfrontend_klswbm",
@@ -9,7 +10,7 @@ image: {
 }
 publishDate: "2023-05-08 11:39"
 category: "architecture"
-author: "Giorgio Saud"
+author: "jorge-saud"
 tags: [micro-frontend,architecture]
 ---
 In a [previous article at modyo blog](https://blog.modyo.com/posts/micro-frontends-empower-your-developers-to-build-better-digital-products), we talked about how micro frontends offer more freedom for teams and deliver more efficient applications. Because of this, they are becoming popular among architects and developers because large organizations and industry leaders are successfully managing their own web applications using micro frontend architectures.

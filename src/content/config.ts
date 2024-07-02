@@ -1,19 +1,22 @@
 // 1. Import utilities from `astro:content`
-import { z, defineCollection } from 'astro:content';
+import { z, defineCollection, reference } from 'astro:content';
 
 // 2. Define your collection(s)
 const notesCollection = defineCollection({
   schema: z.object({
-    draft: z.boolean(),
+    draft: z.boolean({
+      required_error: "draft is required",
+      
+    }),
     title: z.string(),
-    snippet: z.string(),
-    readingTime: z.string().default(""),
+    resume: z.string(),
+    selfHealing: z.string().length(6),
     image: z.object({
       src: z.string(),
       alt: z.string(),
     }),
     publishDate: z.string().transform(str => new Date(str)),
-    author: z.string().default('Astroship'),
+    author: reference("team"),
     category: z.string(),
     tags: z.array(z.string()),
   }),
@@ -22,6 +25,7 @@ const notesCollection = defineCollection({
 const teamCollection = defineCollection({
   schema: z.object({
     draft: z.boolean(),
+    alias: z.string(),
     name: z.string(),
     title: z.string(),
     avatar: z.object({
@@ -36,7 +40,6 @@ const portfolioCollection = defineCollection({
     draft: z.boolean(),
     title: z.string(),
     resume: z.string(),
-    readingTime: z.string().default(""),
     image: z.object({
       src: z.string(),
       alt: z.string(),

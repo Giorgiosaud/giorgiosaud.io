@@ -1,14 +1,16 @@
 ---
 draft: true
+selfHealing: "000010"
+
 title: "The microfrontend Architecture is not Decoupled is Resilient"
-snippet: "The coupling between the microfrontend and the backend is strictly protected by a contract. However, if this contract is broken, it could potentially disrupt the entire application. The issue is not the coupling itself, but the need for resilience in this kind of development. It's crucial to implement methods that can handle any changes in the backend effectively. And more important clear communication"
+resume: "The coupling between the microfrontend and the backend is strictly protected by a contract. However, if this contract is broken, it could potentially disrupt the entire application. The issue is not the coupling itself, but the need for resilience in this kind of development. It's crucial to implement methods that can handle any changes in the backend effectively. And more important clear communication"
 image: {
     src: "singleton_hbupze",
     alt: "Recicle Singleton image"
 }
 publishDate: "2023-11-14 11:39"
 category: "architecture"
-author: "Giorgio Saud"
+author: "jorge-saud"
 tags: [microfrontend,architecture,alignment]
 ---
 When we talk of coupled or decoupled architecture the microfrontend is one of the top architectural patterns that can be used to accomplish goals, and in many times the decoupling architecture is related with this kind of implementation and manytimes its compared coupling with monolithics and decoupled with microfrontend architectures but, is that really true?.

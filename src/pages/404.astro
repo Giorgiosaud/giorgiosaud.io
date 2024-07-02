@@ -1,6 +1,19 @@
 ---
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
+import { getCollection } from "astro:content";
+let path = Astro.url.pathname;
+if(path.includes("/notebook/")){
+ const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
+ if(hashToHeal){
+  const col=await getCollection("notes", (entry) =>{
+    return entry.data.selfHealing===hashToHeal
+  });
+  if(col.length){
+    return Astro.redirect("/notebook/"+col[0].slug);
+  }
+ }
+}
 ---
 
 <Layout title="404 Not Found">

@@ -1,14 +1,15 @@
 ---
 draft: false
+selfHealing: "000005"
 title: "Repository pattern in frontend"
-snippet: "The Repository Pattern in frontend development abstracts data access logic, enhancing code maintainability and testability by encapsulating operations and promoting loose coupling. It fosters modular, scalable codebases adaptable to changing requirements."
+resume: "The Repository Pattern in frontend development abstracts data access logic, enhancing code maintainability and testability by encapsulating operations and promoting loose coupling. It fosters modular, scalable codebases adaptable to changing requirements."
 image: {
     src: "repository pattern",
     alt: "Repository Pattern"
 }
 publishDate: "2024-05-21 09:45"
 category: "Architecture"
-author: "Giorgio Saud"
+author: "jorge-saud"
 tags: [micro-frontend,development, frontend, backend]
 ---
 

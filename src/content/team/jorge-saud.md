@@ -1,10 +1,10 @@
 ---
 draft: false
 name: "Jorge Saud"
-alias: "Giorgio"
-title: "Blogger"
+alias: "Giorgio Saud"
+title: "Giorgio Saud"
 avatar: {
-    src: "My Photo",
+    src: "My Photo in team",
     alt: "Giorgio Saud"
 }
 publishDate: "2024-05-14 12:06"

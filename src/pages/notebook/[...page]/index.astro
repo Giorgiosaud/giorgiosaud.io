@@ -1,43 +1,57 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, getEntry, getEntryBySlug, type CollectionEntry} from "astro:content";
 import { Picture } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Paginator from "@components/paginator.astro";
+import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 
-// Filter blog entries with 'draft: false' & date before current date
-const publishedNotesEntries = await getCollection("notes", ({ data }) => {
-    const isDraft= import.meta.env.PROD ? data.draft === true : false;
-    console.log("isDraft",isDraft);
-    return !isDraft && data.publishDate < new Date()
-});
+export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
+    const publishedNotesEntries = await getCollection("notes", ({ data }) => {
+        return !data.draft && data.publishDate < new Date();
+    });
+    publishedNotesEntries.sort(function (a, b) {
+        return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+    });
+    for (const entry of publishedNotesEntries) {
+        const author = await getEntry("team",entry.data.author.slug);
+        entry.author=author;
+    }
+    return paginate(publishedNotesEntries, {pageSize:4});
+}
+type Props = {
+  page: Page<CollectionEntry<'notes'>>;
+};
+const { page } = Astro.props;
+
+const tag = Astro.url.searchParams.get('tag') || '';
 
 
-// Sort content entries by publication date
-publishedNotesEntries.sort(function (a, b) {
-    return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
-});
+let canonical
+if (page.currentPage===1 && "tag"===null){
+    canonical=`/notebook/`;
+}
 ---
-
-<Layout title="My Notebook">
+<Layout title="Blog" canonical={canonical}>
     <Container>
         <Sectionhead>
             <Fragment slot="title">My Notebook</Fragment>
             <Fragment slot="desc">
-                A notebook links for beginners to experts.
+                A notebook links for beginners to experts. {tag}
             </Fragment>
         </Sectionhead>
         <main class="mt-16">
             <ul class="grid gap-16 max-w-4xl mx-auto">
                 {
-                    publishedNotesEntries.slice(0,4).map((noteEntry, index) => (
+                    page.data.map((noteEntry, index) => (
                     <li>
                         <a href={`/notebook/${noteEntry.slug}`}>
                             <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
                                 <CloudinaryImage
                                 src={`notebook-posts/${noteEntry.data.image.src}`}
+                                
                                 alt={noteEntry.data.image.alt}
                                 aspectRatio="1"
                                 loading={index <= 2 ? "eager" : "lazy"}
@@ -51,10 +65,6 @@ publishedNotesEntries.sort(function (a, b) {
                                     >
                                     {noteEntry.data.category}
                                 </span>
-                                {noteEntry.data.draft&&<span class=" text-red-950 uppercase tracking-wider text-sm font-medium bg-red-200 px-4 py-2 rounded-full hover:bg-red-900 hover:text-red-200"
-                                    >
-                                    #Draft
-                                </span>}
                                 
                                 <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "
                                 transition:name=`${noteEntry.id} title`
@@ -64,21 +74,22 @@ publishedNotesEntries.sort(function (a, b) {
                             
                             <div class="flex gap-2 mt-3"
                             transition:name=`${noteEntry.id} meta`>
-                            <span class="text-gray-400">
-                                {noteEntry.data.author}
-                            </span>
+                            <a class="text-gray-400" href={`team/${noteEntry.author.slug}`}>
+                                {noteEntry.author.data.alias}
+                            </a>
                             <span class="text-gray-400">• </span>
                             <time
                             class="text-gray-400"
                             datetime={noteEntry.data.publishDate.toISOString()}>
                             {noteEntry.data.publishDate.toDateString()}
                         </time>
+                        
+
                     </div>
-                    <p class="text-slate-500"
-                        transition:name=`${noteEntry.id} snippet`
-                    >
-                        {noteEntry.data.snippet}
+                    <p class="text-slate-500">
+                        {noteEntry.data.resume}
                     </p>
+                    
                 </div>
             </div>
         </a>
@@ -86,15 +97,7 @@ publishedNotesEntries.sort(function (a, b) {
     ))
 }
 </ul>
-<Paginator page={
-    {
-        url:{
-            current: "/notebook/1",
-            prev: "",
-            next: "/notebook/2"
-        }
-    }
-}></Paginator>
+<Paginator page={page}></Paginator>
 </main>
 </Container>
 </Layout>
