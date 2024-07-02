@@ -6,7 +6,7 @@ import Layout from "./Layout.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={frontmatter.title} title={frontmatter.title} description={frontmatter.snippet} image={frontmatter.image.src} article={{
+<Layout title={frontmatter.title} title={frontmatter.title} description={frontmatter.resume} image={frontmatter.image.src} article={{
   title: frontmatter.title,
   publishedTime: frontmatter.publishDate.toISOString(),
   authors: ["Giorgiosaud"],

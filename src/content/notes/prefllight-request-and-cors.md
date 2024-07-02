@@ -1,14 +1,15 @@
 ---
 draft: false
 title: "Preflight request and Cors"
-snippet: "When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues"
+selfHealing: "000008"
+resume: "When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues"
 image: {
     src: "preflight-request-12",
     alt: "Preflight request and Cors Updated"
 }
 publishDate: "2024-05-30 17:46"
 category: "integration"
-author: "Giorgio Saud"
+author: "jorge-saud"
 tags: [frontend,csp,integrations, cors, preflight-rwquest,common-issues]
 ---
 When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues lets describe them briefly.

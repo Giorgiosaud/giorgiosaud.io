@@ -1,14 +1,15 @@
 ---
 draft: false
 title: "Content Security Policy (CSP)"
-snippet: "Content Security Policy (CSP), a security layer that mitigates XSS attacks and data injection. To activate CSP, one must set up the server configuration to include the Content-Security-Policy header. Alternatively, a meta tag can be used, although it's not recommended."
+selfHealing: "000007"
+resume: "Content Security Policy (CSP), a security layer that mitigates XSS attacks and data injection. To activate CSP, one must set up the server configuration to include the Content-Security-Policy header. Alternatively, a meta tag can be used, although it's not recommended."
 image: {
     src: "Really common issues integrating frontend",
     alt: "Really common issues integrating from front-end image"
 }
 publishDate: "2021-05-12 11:39"
 category: "integration"
-author: "Giorgio Saud"
+author: "jorge-saud"
 tags: [frontend,csp,integrations,common-issues]
 ---
 

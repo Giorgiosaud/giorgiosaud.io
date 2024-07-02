@@ -1,14 +1,15 @@
 ---
 draft: false
 title: "Tag link"
-snippet: "explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness."
+selfHealing: "000002"
+resume: "explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness."
 image: {
     src: "link_siloo8",
     alt: "link tag"
 }
 publishDate: "2023-05-08 11:39"
 category: "Tutorials"
-author: "Giorgio Saud"
+author: "jorge-saud"
 tags: [webdev, frontend, img, src-set]
 ---
 
