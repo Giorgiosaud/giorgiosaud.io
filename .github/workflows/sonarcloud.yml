@@ -31,7 +31,7 @@ jobs:
           cache: pnpm
       - name: Clean install dependencies full
         if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' && !inputs.legacy-peer-deps }}
-          run: npm ci
+        run: npm ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This gets generated automatically
