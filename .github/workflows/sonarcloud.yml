@@ -1,0 +1,42 @@
+name: SonarCloud Scan
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarcloud:
+    name: SonarCloud
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Cache Node_modules based on pnpm-lock changes
+        id: cache-node-modules
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-modules
+        with:
+          path: ./node_modules
+          lookup-only: true
+          key: ${{ hashFiles('**/pnpm-lock.yaml') }}-pnpm-node-modules
+      - name: setup node.js
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{inputs.node-version}}
+          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+      - name: Clean install dependencies full
+        if: ${{ steps.cache-node-modules.outputs.cache-hit != 'true' && !inputs.legacy-peer-deps }}
+          run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This gets generated automatically
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
