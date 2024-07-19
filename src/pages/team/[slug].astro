@@ -29,7 +29,7 @@ const { Content } = await entry.render();
           </span>
           <h1
             class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
-            transition:name=`${entry.id} title`>
+            transition:name=`${entry.data.alias} alias`>
               {entry.data.title}
           </h1>
           <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap"
