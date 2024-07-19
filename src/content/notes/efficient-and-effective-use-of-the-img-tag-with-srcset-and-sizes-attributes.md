@@ -10,7 +10,7 @@ image: {
 publishDate: "2023-05-08 11:39"
 category: "Tutorials"
 author: "jorge-saud"
-tags: [webdev, frontend, img, src-set]
+tags: [webdev, frontend, img, srcset]
 ---
 
 In this blog post, Jorge Saud explains the efficient and effective use of the

@@ -10,7 +10,7 @@ image: {
 publishDate: "2024-05-21 09:45"
 category: "Architecture"
 author: "jorge-saud"
-tags: [micro-frontend,development, frontend, backend]
+tags: [microfrontend,development, frontend, backend]
 ---
 
 In the world of frontend development, managing data efficiently is crucial for building scalable and maintainable applications. One architectural pattern that has proven to be highly effective in achieving this goal is the Repository Pattern. Traditionally used in backend development, the Repository Pattern is increasingly being adopted in frontend development for its ability to decouple data access logic from business logic.
