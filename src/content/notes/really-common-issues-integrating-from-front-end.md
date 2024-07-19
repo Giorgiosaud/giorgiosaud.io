@@ -10,7 +10,7 @@ image: {
 publishDate: "2021-05-12 11:39"
 category: "integration"
 author: "jorge-saud"
-tags: [frontend,csp,integrations,common-issues]
+tags: [frontend,csp,integrations,common,issues]
 ---
 
 Hi welcome to another mini-post, this is about CSP let's start defining CSP content security policy this is a security layer based on mitigation of XSS attacks and data injection.

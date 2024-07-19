@@ -10,7 +10,7 @@ image: {
 publishDate: "2023-05-08 11:39"
 category: "Tutorials"
 author: "jorge-saud"
-tags: [webdev, frontend, img, src-set]
+tags: [webdev, frontend, img, srcset]
 ---
 
 Here is a short story about a small trick that can help us separate constraints, optimize performance, and have a cool way to insert styles into our pages.

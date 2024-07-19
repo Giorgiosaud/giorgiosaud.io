@@ -10,7 +10,7 @@ image: {
 publishDate: "2024-06-21 09:45"
 category: "Architecture"
 author: "jorge-saud"
-tags: [micro-frontend,development, frontend, backend]
+tags: [microfrontend,development, frontend, backend]
 ---
 
 This post is created because @Kevcastle talk to me about the complex structure of the previous post related to Repository pattern and I try to resolve it in a simples way in more than one post, this is the first of Datalayer series.
