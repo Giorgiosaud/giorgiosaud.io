@@ -4,6 +4,8 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+import { getEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
 
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
@@ -29,6 +31,7 @@ const article={
   section: entry.data.category,
   tags: entry.data.tags,
 }
+const author=await getEntry("team",entry.data.author.slug);
 ---
 
 <Layout title={entry.data.title} description={entry.data.resume} image={entry.data.image.src} article={article}>
@@ -47,7 +50,8 @@ const article={
         </h1>
         <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap"
           transition:name=`${entry.id} meta`>
-          <span class="text-gray-400">{entry.data.author}</span>
+          <a href={`/team/${author.slug}`} class="text-gray-400"
+          transition:name=`${author.data.alias} alias`>{author.data.alias}</a>
           <span class="text-gray-400">•</span>
           <time
             class="text-gray-400"
@@ -89,19 +93,27 @@ const article={
     <blockquote class="md:hidden text-xs mx-auto prose prose-lg mt-6 max-w-3xl">
       I`m a developer that loves to share knowledge
     </blockquote>
-    <button class="md:hidden bg-100 px-5 py-3 rounded-md hover:bg-gray-200 transition" id="share" data-description={entry.data.title}>share</button>
+    <div class="mx-auto prose prose-lg mt-6 max-w-3xl">
+    <button class="my-4 bg-300 border-solid border-2 px-4 py-4 text-center flex align-middle justify-center  rounded-md hover:bg-gray-200 transition text-gray-500 " id="share" data-resume={entry.data.resume} data-title={entry.data.title} data-tags={entry.data.tags} data-selfhealing={entry.data.selfHealing}>
+      <Icon name="bx:share-alt" />
+    </button>
+  </div>
     <script>
-      const shareData = {
-        text:'',
-        title:'',
-        url: window.location.href,
-      };
       const btn = document.getElementById("share");
+      const shareData = {
+        text:btn?.dataset.resume,
+        title:btn?.dataset.title,
+        url: window.location.href+"-"+btn?.dataset.selfhealing,
+      };
+
       // Share must be triggered by "user activation"
       btn!.addEventListener("click", async () => {
-        shareData.text = btn!.dataset.description??"";
-        shareData.title = btn!.dataset.description??"";
-        await navigator.share(shareData);
+        try{
+          await navigator.share(shareData);
+        } catch (err) {
+          //share in linkedin
+          window.open(`http://twitter.com/share?text=${btn?.dataset.resume}&url=${window.location.href+"-"+btn?.dataset.selfhealing}&hashtags=${btn?.dataset.tags}`, "_blank");
+        }
       });
     </script>
     <div class="text-center mt-8">
