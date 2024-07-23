@@ -55,7 +55,7 @@ export default defineConfig({
   },
   output: 'hybrid',
   adapter: vercel({
-    webAnalytics: { enabled: true }
+    webAnalytics: { enabled: true },
   }),
   markdown: {
     shikiConfig: {
