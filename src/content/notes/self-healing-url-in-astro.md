@@ -53,12 +53,6 @@ if(path.includes("/notebook/")){
 
 Before rendering my 404 page I will try to detect the self-healing ID and redirect to the collection available with this ID then in my normal URL I don't need to apply this but in the shareable link, I will include it because in other pages is common that the link is bad referenced.
 
-For use this functionality in hybrid mode in the 404.astro page you must add.
-
-```astro
----
-export const prerender = false;
----
-```
+For use this functionality we must me in hybrid mode.
 
 > Thanks to [Tim Neubauer](https://timneubauer.dev/blog/copy-code-button-in-astro/) for the copy code button i use it only touching the css, and a little copilot refactor but it was great.
