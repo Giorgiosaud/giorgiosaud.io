@@ -12,11 +12,7 @@ if(path.includes("/notebook/")){
       return entry.data.selfHealing===hashToHeal
     });
     redirect="/notebook/"+col[0].slug;
-    const hasRedirect=redirect.includes("notebook");
-    
-    if(hasRedirect){
-      Astro.redirect(redirect);
-    }
+    return Astro.redirect(redirect);
   }
 }
 ---
