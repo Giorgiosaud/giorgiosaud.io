@@ -12,7 +12,7 @@ if(path.includes("/notebook/")){
     });
     if(col.length){
       const redirect="/notebook/"+col[0].slug;
-      return Astro.redirect(redirect);
+      return Astro.redirect(redirect,301);
     }
   }
 }
