@@ -20,7 +20,7 @@ if(path.includes("/notebook/")){
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
   const notebookEntries = await getCollection("notes");
-   return notebookEntries.map((entry) => ({
+  return notebookEntries.map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
@@ -49,111 +49,119 @@ const author=await getEntry("team",entry.data.author.slug);
     <div class="mx-auto max-w-3xl mt-14">
       <header>
         <span 
-          class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-          transition:name=`${entry.id} category`>
-            {entry.data.category}
-        </span>
-        <h1
-          class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
-          transition:name=`${entry.id} title`>
-            {entry.data.title}
-        </h1>
-        <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap"
-          transition:name=`${entry.id} meta`>
-          <a href={`/team/${author.slug}`} class="text-gray-400"
-          transition:name=`${author.data.alias} alias`>{author.data.alias}</a>
-          <span class="text-gray-400">•</span>
-          <time
-            class="text-gray-400"
-            datetime={entry.data.publishDate.toISOString()}>
-              {entry.data.publishDate.toDateString()}
-          </time>
-          <span class="text-gray-400 hidden md:block">•</span>
-          <div class="text-gray-400">
-            {
-              entry.data.tags.map((tag) => (
-              <span class="text-sm text-gray-400">#{tag} </span>
-              ))
-            }
-          </div>
-        </div>
-        <figure class="mx-auto max-w-3xl aspect-square w-full">
-          <CloudinaryImage
-                                src={`notebook-posts/${entry.data.image.src}`}
-                                alt={entry.data.image.alt}
-                                aspectRatio="1"
-                                loading={"eager" }
-                                decoding={"sync"}
-                                transition:name=`${entry.id} img`
-                                class="w-full rounded-md object-cover object-center bg-white aspect-square"
-                                />
-          <figcaption class="text-gray-400 text-xs text-center w-100 pt-2">{entry.data.image.alt}
-          </figcaption>
-        </figure>
-        <details>
-          <summary>Summary</summary>
-          <p class="text-sm text-gray-400" 
-          transition:name=`${entry.id} resume`>{entry.data.resume}</p>
-        </details>
-      </header>
-    </div>
-    <div class="mx-auto prose prose-lg mt-6 max-w-3xl">
-      <Content />
-    </div>
-    <blockquote class="md:hidden text-xs mx-auto prose prose-lg mt-6 max-w-3xl">
-      I`m a developer that loves to share knowledge
-    </blockquote>
-    <div class="mx-auto prose prose-lg mt-6 max-w-3xl">
-    <button class="my-4 bg-300 border-solid border-2 px-4 py-4 text-center flex align-middle justify-center  rounded-md hover:bg-gray-200 transition text-gray-500 " id="share" data-resume={entry.data.resume} data-title={entry.data.title} data-tags={entry.data.tags} data-selfhealing={entry.data.selfHealing}>
-      <Icon name="bx:share-alt" />
-    </button>
+        class="text-blue-400 uppercase tracking-wider text-sm font-medium"
+        transition:name=`${entry.id} category`>
+        {entry.data.category}
+      </span>
+      <h1
+      class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
+      transition:name=`${entry.id} title`>
+      {entry.data.title}
+    </h1>
+    <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap"
+    transition:name=`${entry.id} meta`>
+    <a href={`/team/${author.slug}`} class="text-gray-400"
+    transition:name=`${author.data.alias} alias`>{author.data.alias}</a>
+    <span class="text-gray-400">•</span>
+    <time
+    class="text-gray-400"
+    datetime={entry.data.publishDate.toISOString()}>
+    {entry.data.publishDate.toDateString()}
+  </time>
+  <span class="text-gray-400 hidden md:block">•</span>
+  <div class="text-gray-400">
+    {
+      entry.data.tags.map((tag) => (
+      <span class="text-sm text-gray-400">#{tag} </span>
+      ))
+    }
   </div>
-    <script>
-      const btn = document.getElementById("share");
-      const shareData = {
-        text:btn?.dataset.resume,
-        title:btn?.dataset.title,
-        url: window.location.href+"-"+btn?.dataset.selfhealing,
-      };
+</div>
+<figure class="mx-auto max-w-3xl aspect-square w-full">
+  <CloudinaryImage
+  src={`notebook-posts/${entry.data.image.src}`}
+  alt={entry.data.image.alt}
+  aspectRatio="1"
+  loading={"eager" }
+  decoding={"sync"}
+  transition:name=`${entry.id} img`
+  class="w-full rounded-md object-cover object-center bg-white aspect-square"
+  />
+  <figcaption class="text-gray-400 text-xs text-center w-100 pt-2">{entry.data.image.alt}
+  </figcaption>
+</figure>
+<details>
+  <summary>Summary</summary>
+  <p class="text-sm text-gray-400" 
+  transition:name=`${entry.id} resume`>{entry.data.resume}</p>
+</details>
+</header>
+</div>
+<div class="mx-auto prose prose-lg mt-6 max-w-3xl">
+  <Content />
+</div>
+<blockquote class="md:hidden text-xs mx-auto prose prose-lg mt-6 max-w-3xl">
+  I`m a developer that loves to share knowledge
+</blockquote>
+<div class="mx-auto prose prose-lg mt-6 max-w-3xl">
+  <button class="relative my-4 bg-300 border-solid border-2 px-4 py-4 text-center flex align-middle justify-center  rounded-md hover:bg-gray-200 transition text-gray-500 " id="share" data-resume={entry.data.resume} data-title={entry.data.title} data-tags={entry.data.tags} data-selfhealing={entry.data.selfHealing}>
 
-      // Share must be triggered by "user activation"
-      btn!.addEventListener("click", async () => {
-        try{
-          await navigator.share(shareData);
-        } catch (err) {
-          //share in linkedin
-          window.open(`http://twitter.com/share?text=${btn?.dataset.resume}&url=${window.location.href+"-"+btn?.dataset.selfhealing}&hashtags=${btn?.dataset.tags}`, "_blank");
-        }
-      });
-    </script>
-    <div class="text-center mt-8">
-      <a
-        href="/notebook"
-        class="bg-gray-100 px-5 py-3 rounded-md hover:bg-gray-200 transition">
-        ← Back to Notebook
-      </a>
-    </div>
-  </Container>
+    <Icon name="bx:share-alt" />
+  <span class="text-sm w-[200%] absolute left-[120%] opacity-0 transition-opacity" id="copied-text">Url Copied!</span>
+
+  </button>
+</div>
+<script>
+  
+</script>
+<div class="text-center mt-8">
+  <a
+  href="/notebook"
+  class="bg-gray-100 px-5 py-3 rounded-md hover:bg-gray-200 transition">
+  ← Back to Notebook
+</a>
+</div>
+</Container>
 </Layout>
 <script>
-  document.querySelectorAll("pre").forEach(codeBlock => {
-  const wrapper = document.createElement("div");
-  wrapper.style.position = "relative";
+  const btn = document.getElementById("share");
+  const txt = document.getElementById("copied-text");
+  const shareData = {
+    text:btn?.dataset.resume,
+    title:btn?.dataset.title,
+    url: window.location.href+"-"+btn?.dataset.selfhealing,
+  };
+  
+  // Share must be triggered by "user activation"
+  btn!.addEventListener("click", async () => {
+    try{
+      await navigator.share(shareData);
+    } catch (err) {
+      //share in linkedin
+      navigator.clipboard.writeText(shareData.url);
+      txt?.classList.remove("opacity-0");
+      setTimeout(() => txt?.classList.add("opacity-0"), 700);
 
-  const copyButton = document.createElement("button");
-  copyButton.className = "copy-code";
-  copyButton.textContent = "Copy Code";
-  codeBlock.setAttribute("tabindex", "0");
-  wrapper.appendChild(copyButton);
-  codeBlock.before(wrapper);
-  wrapper.appendChild(codeBlock);
-
-  copyButton.addEventListener("click", async () => {
-    await navigator.clipboard.writeText(codeBlock.querySelector("code").innerText);
-    copyButton.textContent = "Code Copied";
-    setTimeout(() => copyButton.textContent = "Copy Code", 700);
+    }
   });
-});
+  document.querySelectorAll("pre").forEach(codeBlock => {
+    const wrapper = document.createElement("div");
+    wrapper.style.position = "relative";
+    
+    const copyButton = document.createElement("button");
+    copyButton.className = "copy-code";
+    copyButton.textContent = "Copy Code";
+    codeBlock.setAttribute("tabindex", "0");
+    wrapper.appendChild(copyButton);
+    codeBlock.before(wrapper);
+    wrapper.appendChild(codeBlock);
+    
+    copyButton.addEventListener("click", async () => {
+      await navigator.clipboard.writeText(codeBlock.querySelector("code").innerText);
+      copyButton.textContent = "Code Copied";
+      setTimeout(() => copyButton.textContent = "Copy Code", 700);
+    });
+  });
 </script> 
 <style is:inline>
   .copy-code{
