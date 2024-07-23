@@ -15,9 +15,11 @@ if(path.includes("/notebook/")){
   redirect="/notebook/"+col[0].slug;
   console.log('col::',col)
   console.log('red::',"/notebook/"+col[0].slug)
-  //if(col.length){
-    //return Astro.redirect("/notebook/"+col[0].slug);
-  //}
+  const hasRedirect=redirect.includes("notebook");
+
+  if(hasRedirect){
+    Astro.redirect("/notebook/"+col[0].slug);
+  }
  }
 }
 const hasRedirect=redirect.includes("notebook");
