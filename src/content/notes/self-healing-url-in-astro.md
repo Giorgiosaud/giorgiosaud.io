@@ -2,7 +2,7 @@
 draft: false
 selfHealing: "000014"
 title: "Self-healing URL in Astro"
-resume: "In this post i will talk how to develop a functionality of self-healing url in Astro project with a simple approach"
+resume: "In this post, I will talk about how to develop a functionality of self-healing URL in Astro project with a simple approach "
 image: {
     src: "selfhealing_url_lygv2g",
     alt: "Self Healing paint"
