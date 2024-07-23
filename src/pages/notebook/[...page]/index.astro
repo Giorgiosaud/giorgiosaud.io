@@ -26,11 +26,9 @@ type Props = {
 };
 const { page } = Astro.props;
 
-const tag = Astro.url.searchParams.get('tag') || '';
-
 
 let canonical
-if (page.currentPage===1 && "tag"===null){
+if (page.currentPage===1){
     canonical=`/notebook/`;
 }
 ---
@@ -39,7 +37,7 @@ if (page.currentPage===1 && "tag"===null){
         <Sectionhead>
             <Fragment slot="title">My Notebook</Fragment>
             <Fragment slot="desc">
-                A notebook links for beginners to experts. {tag}
+                A notebook links for beginners to experts.
             </Fragment>
         </Sectionhead>
         <main class="mt-16">
