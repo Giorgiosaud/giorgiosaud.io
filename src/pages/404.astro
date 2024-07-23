@@ -10,8 +10,10 @@ if(path.includes("/notebook/")){
     const col=await getCollection("notes", (entry) =>{
       return entry.data.selfHealing===hashToHeal
     });
-    const redirect="/notebook/"+col[0].slug;
-    return Astro.redirect(redirect);
+    if(col.length){
+      const redirect="/notebook/"+col[0].slug;
+      return Astro.redirect(redirect);
+    }
   }
 }
 ---
