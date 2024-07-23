@@ -48,7 +48,7 @@ We can set policies based on this directives:
 
 > for example, if we want to set a default policy to accept resources from self URL and base64 and only from [mysite.com](https://mysite.com) data we can set the policy like this:
 
-```headers
+```
 Content-Security-Policy: "default-src 'self' data: https://mysite.com"
 ```
 
