@@ -2,6 +2,7 @@
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
+export const prerender = false;
 let path = Astro.url.pathname;
 if(path.includes("/notebook/")){
  const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];

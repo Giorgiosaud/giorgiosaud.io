@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000013"
+selfHealing: "000014"
 title: "Self-healing URL in Astro"
 resume: "In this post i will talk how to develop a functionality of self-healing url in Astro project with a simple approach"
 image: {
@@ -17,22 +17,30 @@ First start to define what a self-healing URL is, a self-healing URL is like [me
 
 In other frameworks, it is easy to find information about it but in Astro, I can't find any doc related to it I made my implementation in which I use a self-healing ID in the content post, manually generated and I will add this ID to all my shareable links, and I made the implementation on my 404 page like this:
 
-```Astro
-----
-if(path.includes("/notebook/")){
- const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
- if(hashToHeal){
-  const col=await getCollection("notes", (entry) =>{
-    return entry.data.selfHealing===hashToHeal
- });
-  if(col.length){
-    return Astro.redirect("/notebook/"+col[0].slug);
- }
- }
+```astro
+---
+if(path.includes("/notebook/")) {
+  const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
+    if(hashToHeal){
+      const col=await getCollection("notes", (entry) =>{
+      return entry.data.selfHealing===hashToHeal
+    });
+    if(col.length){
+      return Astro.redirect("/notebook/"+col[0].slug);
+    }
+  }
 }
-
 ---
 ```
 
 Before rendering my 404 page I will try to detect the self-healing ID and redirect to the collection available with this ID then in my normal URL I don't need to apply this but in the shareable link, I will include it because in other pages is common that the link is bad referenced.
+
+For use this functionality in hybrid mode in the 404.astro page you must add.
+
+```astro
+---
+export const prerender = false;
+---
+```
+
 > Thanks to [Tim Neubauer](https://timneubauer.dev/blog/copy-code-button-in-astro/) for the copy code button i use it only touching the css, and a little copilot refactor but it was great.
