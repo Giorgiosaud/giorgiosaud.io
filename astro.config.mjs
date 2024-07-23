@@ -16,7 +16,6 @@ const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
-  output: "hybrid",
   redirects: {
     '/atributos-srcset-y-sizes-en-un-tag-de-imagen-img': {
       status: 302,
@@ -54,7 +53,10 @@ export default defineConfig({
   image: {
     domains: ['https://res.cloudinary.com']
   },
-  adapter: vercel(),
+  output: 'server',
+  adapter: vercel({
+    webAnalytics: { enabled: true }
+  }),
   markdown: {
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
