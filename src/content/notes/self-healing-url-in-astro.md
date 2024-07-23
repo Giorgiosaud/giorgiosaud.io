@@ -44,3 +44,6 @@ export const prerender = false;
 ```
 
 > Thanks to [Tim Neubauer](https://timneubauer.dev/blog/copy-code-button-in-astro/) for the copy code button i use it only touching the css, and a little copilot refactor but it was great.
+
+
+> PD i need to implement some fixes because 302 are not very handled by vercel but here is the fix instead of astro.redirect i use a meta refresh link to redirect
