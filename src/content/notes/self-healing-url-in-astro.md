@@ -26,7 +26,7 @@ if(path.includes("/notebook/")) {
       return entry.data.selfHealing===hashToHeal
     });
     if(col.length){
-      return Astro.redirect("/notebook/"+col[0].slug);
+       Astro.redirect("/notebook/"+col[0].slug);
     }
   }
 }

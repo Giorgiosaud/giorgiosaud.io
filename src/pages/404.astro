@@ -4,16 +4,20 @@ import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 export const prerender = false;
 let path = Astro.url.pathname;
+let redirect = 'null';
 if(path.includes("/notebook/")){
- const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
- if(hashToHeal){
-  const col=await getCollection("notes", (entry) =>{
-    return entry.data.selfHealing===hashToHeal
-  });
-  if(col.length){
-    return Astro.redirect("/notebook/"+col[0].slug);
+  const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
+  if(hashToHeal){
+    const col=await getCollection("notes", (entry) =>{
+      return entry.data.selfHealing===hashToHeal
+    });
+    redirect="/notebook/"+col[0].slug;
+    const hasRedirect=redirect.includes("notebook");
+    
+    if(hasRedirect){
+      Astro.redirect("/notebook/"+col[0].slug);
+    }
   }
- }
 }
 ---
 
