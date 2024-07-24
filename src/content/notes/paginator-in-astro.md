@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000009"
+selfHealing: "000007"
 title: "Paginator in astro"
 resume: "Paginate a website in Astro or any other framework like next.js or nuxt is a challenge but not because is difficult to implement but because is difficult to understand, in this post i will try to illustrate how the paginator of this website was made."
 image: {

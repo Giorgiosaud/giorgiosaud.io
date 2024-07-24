@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000011"
+selfHealing: "000003"
 
 title: "Micro Frontend Architecture"
 resume: "Giorgio discusses the benefits and implementation of micro frontend architecture, emphasizing its growing popularity and effectiveness in modern web development. He outlines how this architecture enables more efficient, specialized development by dividing frontend applications into smaller, manageable components."

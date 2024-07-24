@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000006"
+selfHealing: "000009"
 title: "The Repository pattern is called Data Layer Architecture"
 resume: "The Repository Pattern in frontend development is included in the Data Layer architecture because it concerns about Repositories and datasources abstracted from the UI layer and the Domain Layer, only taking the data transmission as part of the scope of its interactions."
 image: {
