@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000005"
+selfHealing: "000006"
 title: "Repository pattern in frontend"
 resume: "The Repository Pattern in frontend development abstracts data access logic, enhancing code maintainability and testability by encapsulating operations and promoting loose coupling. It fosters modular, scalable codebases adaptable to changing requirements."
 image: {
