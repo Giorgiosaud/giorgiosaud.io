@@ -6,17 +6,6 @@ import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 import { getEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
-let path = Astro.url.pathname;
-if(path.includes("/notebook/")){
-  const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
-  if(hashToHeal){
-    const col=await getCollection("notes", (entry) =>{
-      return entry.data.selfHealing===hashToHeal
-    });
-    const redirect="/notebook/"+col[0].slug;
-    return Astro.redirect(redirect);
-  }
-}
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
   const notebookEntries = await getCollection("notes");
