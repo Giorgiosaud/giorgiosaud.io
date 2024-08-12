@@ -38,15 +38,21 @@ const teamCollection = defineCollection({
 const portfolioCollection = defineCollection({
   schema: z.object({
     draft: z.boolean(),
-    title: z.string(),
+    client: z.string(),
+    country: z.string(),
+    category: z.string(),
+    selfHealing: z.string().length(6),
+    workingOn: z.string(),
+    project: z.string(),
     resume: z.string(),
+    classes: z.string().optional(),
+    classesClient: z.string().optional(),
     image: z.object({
       src: z.string(),
       alt: z.string(),
     }),
     publishDate: z.string().transform(str => new Date(str)),
-    category: z.string(),
-    tags: z.array(z.string()),
+    technologies: z.array(z.string()),
   }),
 });
 

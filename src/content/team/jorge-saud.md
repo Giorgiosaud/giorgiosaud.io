@@ -7,6 +7,7 @@ avatar: {
     src: "My Photo in team",
     alt: "Giorgio Saud"
 }
+classes: "bg-clip-text text-transparent bg-gradient-to-r"
 publishDate: "2024-05-14 12:06"
 ---
 ### Jorge Luis Saud Rosal
