@@ -20,6 +20,8 @@ export interface Props {
     section?: string;
     tags?: string[];
   }
+  job?:{
+  }
 }
 const date=new Date().getMilliseconds();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
