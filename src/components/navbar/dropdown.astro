@@ -1,6 +1,10 @@
 ---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
 import { Dropdown as DropdownContainer, DropdownItems } from "astro-navbar";
 const { title, lastItem, children } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 ---
 
 <li class="relative">
@@ -34,9 +38,9 @@ const { title, lastItem, children } = Astro.props;
           {
             children.map((item) => (
               <a
-                href={item.path}
+                href={translatePath(item.path)}
                 class="py-1 text-gray-600 hover:text-gray-900">
-                {item.title}
+                {t(item.title)}
               </a>
             ))
           }
