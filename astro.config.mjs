@@ -16,6 +16,14 @@ const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
+  i18n:{
+    locales: ['en', 'es'],
+    defaultLocale: 'en',
+    routing:{
+      prefixDefaultLocale: false
+    }
+
+  },
   redirects: {
     '/atributos-srcset-y-sizes-en-un-tag-de-imagen-img': {
       status: 302,

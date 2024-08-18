@@ -3,26 +3,25 @@ import Container from "@components/container.astro";
 import Link from "@components/ui/link.astro";
 import Dropdown from "./dropdown.astro";
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+import { getLangFromUrl, useTranslatedPath, useTranslations } from '@i18n/utils';
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+import type { MenuItemsInterface } from "@components/definitions/MenuItemsInterface";
 
-export interface MenuItemsInterface {
-    title:     string;
-    path:      string;
-    children?: MenuItemsInterface[];
-    badge?:    boolean;
-}
 const menuItems:MenuItemsInterface[] = [
   {
-    title: "About",
+    title: t("nav.about"),
     badge:true,
-    path: "/about",
+    path: translatePath('/about',lang),
   },
   {
-    title: "Notebook",
-    path: "/notebook",
+    title: t("nav.title"),
+    path: translatePath("/notebook",lang),
   },
   {
-    title: "Contact",
-    path: "/contact",
+    title: t("nav.contact"),
+    path: translatePath("/contact",lang),
   },
 ];
 ---
@@ -31,7 +30,7 @@ const menuItems:MenuItemsInterface[] = [
   <header class="flex flex-col lg:flex-row justify-between items-center">
     <Astronav>
       <div class="flex w-full lg:w-auto items-center justify-between">
-        <a href="/" class="text-lg"
+        <a href={translatePath('/',lang)} class="text-lg"
           ><span class="font-bold text-slate-800">Giorgiosaud</span><span
             class="text-slate-500">.io</span
           >
