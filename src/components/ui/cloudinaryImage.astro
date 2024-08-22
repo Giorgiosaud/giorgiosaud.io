@@ -1,46 +1,48 @@
 ---
-import {Cloudinary} from "@cloudinary/url-gen";
+import { Cloudinary } from "@cloudinary/url-gen";
 import * as CloudinaryEffects from "@cloudinary/url-gen/actions/effect";
-import { auto } from '@cloudinary/url-gen/actions/resize';
+import { auto } from "@cloudinary/url-gen/actions/resize";
 import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
 
 const cld = new Cloudinary({
   cloud: {
-    cloudName: 'giorgiosaud',
+    cloudName: "giorgiosaud",
     apiKey: import.meta.env.CLOUDINARY_API_KEY,
-    apiSecret:import.meta.env.CLOUDINARY_API_SECRET
+    apiSecret: import.meta.env.CLOUDINARY_API_SECRET,
   },
   url: {
     secure: true, // force https, set to false to force http,
-   // secureDistribution: 'www.giorgiosaud.io', 
-  }
-}); 
-const {src,...props}=Astro.props;
+    // secureDistribution: 'www.giorgiosaud.io',
+  },
+});
+const { src, ...props } = Astro.props;
 
-interface Props{
-    src:string;
-    alt:string;
-    width?:number;
-    height?:number;
-    aspectRatio?:string;
-    type?:string;
-    [key:string]:any;
+interface Props {
+  src: string;
+  alt: string;
+  width?: number;
+  height?: number;
+  aspectRatio?: string;
+  type?: string;
+  [key: string]: any;
 }
-let cldSrc=cld.image(src).format('auto').quality('auto');
-if(props.type=='portrait'){
-    cldSrc=cldSrc.resize(auto().width(300).height(400)).effect(CloudinaryEffects.removeBackground());
-
+let cldSrc = cld.image(src).format("auto").quality("auto");
+if (props.type == "portrait") {
+  cldSrc = cldSrc
+    .resize(auto().width(300).height(400))
+    .effect(CloudinaryEffects.removeBackground());
 }
-if(props.width){
-    cldSrc=cldSrc.resize(auto().gravity(autoGravity()).width(props.width));
+if (props.width) {
+  cldSrc = cldSrc.resize(auto().gravity(autoGravity()).width(props.width));
 }
-if( props.height){
-    cldSrc=cldSrc.resize(auto().gravity(autoGravity()).height(props.height));
+if (props.height) {
+  cldSrc = cldSrc.resize(auto().gravity(autoGravity()).height(props.height));
 }
-if( props.aspectRatio){
-    cldSrc=cldSrc.resize(auto().gravity(autoGravity()).aspectRatio(props.aspectRatio));
+if (props.aspectRatio) {
+  cldSrc = cldSrc.resize(
+    auto().gravity(autoGravity()).aspectRatio(props.aspectRatio),
+  );
 }
-
 ---
 
-<img {...props}  src={cldSrc.toURL()} />
+<img {...props} src={cldSrc.toURL()} />

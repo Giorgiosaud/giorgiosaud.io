@@ -7,15 +7,13 @@ client: "Larrainvial"
 category: "Private Site"
 project: "Client Private Site"
 resume: "Create a robust and secure website for Larrainvial’s private channel. Larrainvial is a renowned wealth management company that offers clients various investment options, including Cuenta Activa, Mutual Funds, and APV. The website’s primary function was to enable seamless API connections to backend services, making it easier for clients to manage their investments and personal information."
-image: {
-    src: "larrainvial",
-    alt: "Larrainial Project"
-}
+image: { src: "larrainvial", alt: "Larrainial Project" }
 publishDate: "08-12-2019"
 classes: "bg-clip-text text-transparent bg-gradient-to-b from-red-400 to-red-900"
 classesClient: "bg-clip-text text-transparent bg-gradient-to-b from-red-300 to-red-400"
-technologies: ["vue 2","bootstrap 4","vanilla js"]
+technologies: ["vue 2", "bootstrap 4", "vanilla js"]
 ---
+
 ### Project Overview: Larrainvial Private Site
 
 **Objective:**  
@@ -23,6 +21,7 @@ The goal of this project was to create a robust and secure website for Larrainvi
 
 **Technology Stack:**  
 To build this platform, we utilized **Modyo** as the microfrontend platform, which allowed us to segment the site into various business domains. The core of the development involved multiple **Vue 2** applications that managed key aspects such as:
+
 - Investment summaries
 - Fund management
 - Account management

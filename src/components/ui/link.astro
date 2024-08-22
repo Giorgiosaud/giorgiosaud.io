@@ -3,7 +3,13 @@ interface Props {
   href: string;
   size?: "md" | "lg";
   block?: boolean;
-  style?: "outline" | "primary" | "inverted" | "muted"|"pages"| "pages-active";
+  style?:
+    | "outline"
+    | "primary"
+    | "inverted"
+    | "muted"
+    | "pages"
+    | "pages-active";
   class?: string;
   [x: string]: any;
 }
@@ -27,8 +33,10 @@ const styles = {
   primary: "bg-black text-white hover:bg-gray-800  border-2 border-transparent",
   inverted: "bg-white text-black   border-2 border-transparent",
   muted: "bg-gray-100 hover:bg-gray-200   border-2 border-transparent",
-  pages:"bg-white text-slate-500 border-2 border-slate-600 border-r-0 rounded-none hover:bg-slate-300 first:rounded-l-md last:rounded-r-md last:border-r-2",
-  "pages-active":"border-2 border-slate-600 border-r-0 rounded-none hover:bg-slate-300 first:rounded-l-md last:rounded-r-md last:border-r-2 bg-slate-600 text-white"
+  pages:
+    "bg-white text-slate-500 border-2 border-slate-600 border-r-0 rounded-none hover:bg-slate-300 first:rounded-l-md last:rounded-r-md last:border-r-2",
+  "pages-active":
+    "border-2 border-slate-600 border-r-0 rounded-none hover:bg-slate-300 first:rounded-l-md last:rounded-r-md last:border-r-2 bg-slate-600 text-white",
 };
 ---
 

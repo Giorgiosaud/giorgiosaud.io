@@ -4,15 +4,13 @@ selfHealing: "000003"
 
 title: "Micro Frontend Architecture"
 resume: "Giorgio discusses the benefits and implementation of micro frontend architecture, emphasizing its growing popularity and effectiveness in modern web development. He outlines how this architecture enables more efficient, specialized development by dividing frontend applications into smaller, manageable components."
-image: {
-    src: "microfrontend_klswbm",
-    alt: "Micro Frontend Architecture"
-}
+image: { src: "microfrontend_klswbm", alt: "Micro Frontend Architecture" }
 publishDate: "2023-05-08 11:39"
 category: "architecture"
 author: "jorge-saud"
-tags: [microfrontend,architecture]
+tags: [microfrontend, architecture]
 ---
+
 In a [previous article at modyo blog](https://blog.modyo.com/posts/micro-frontends-empower-your-developers-to-build-better-digital-products), we talked about how micro frontends offer more freedom for teams and deliver more efficient applications. Because of this, they are becoming popular among architects and developers because large organizations and industry leaders are successfully managing their own web applications using micro frontend architectures.
 
 We can begin by first explaining how to determine if something is a trend that won’t last long, a new way of making things that people are beginning to adopt, or a widely accepted architecture. Let’s start by defining the word, architecture:
@@ -23,17 +21,18 @@ Like the definition says, architecture is representative of an era or period of 
 
 ## Micro frontend architecture
 
-----
+---
+
 Frontend architecture is a new concept, but it’s becoming more and more popular every day due to the evolution of the web and the need for people to interact more with computers, websites, native applications, and [progressive web applications](https://www.youtube.com/watch?v=zB9xQH_Rhnk&t=4s). How we use and choose technology like frontend architecture is more important now than ever given the changes brought on by the COVID-19 pandemic. Not only do we use technology to make our lives easier and more convenient, but also to make us safer. It helps us stay safe at home, pay for services online, and keeps the general economical ball rolling.
 
 Although we’ve made many changes to adjust to the demands of the pandemic, these changes aren’t temporary. They’re here to stay, **which now drives the market need to adopt a new architecture**–an architecture that interacts directly with people, one that humanizes our interactions with people and doesn’t just deal with APIs. This situation makes us evolve how we deliver new services and take advantage of faster time to market (TTM). We need to take the decisions that we make in the front end with careful consideration and more accountability. This is where the **Front End Architecture** emerges from the shadows.
 
 And yes, I say “from the shadows” because this architecture has always existed. When we define an application like a Model View Controller (MVC), or a Single Page Application (SPA) that consumes an API, it is the responsibility of software architects to make choices for which architecture solves any given use case, and architects need to address a number of factors:
 
-* The way queues are attended to.
-* Services that need to be orchestrated to have an effective API available.
-* The Backend For Frontend (BFF) layer to help create an easy implementation and separation of concerns for different frameworks.
-* Many other factors that demand consideration and push defining the front end lower and lower in the order of importance.
+- The way queues are attended to.
+- Services that need to be orchestrated to have an effective API available.
+- The Backend For Frontend (BFF) layer to help create an easy implementation and separation of concerns for different frameworks.
+- Many other factors that demand consideration and push defining the front end lower and lower in the order of importance.
 
 To solve these issues, this is where the Front End architect emerges, because the architect must deal with the user experience, performance, SEO, Accessibility, Tagging events, and take ownership of this layer, between the service and the user.
 
@@ -64,7 +63,9 @@ When delivering content, Modyo is a mix between a headless and decoupled CMS, an
 ![](https://miro.medium.com/v2/resize:fit:1400/0*pgqMdevdWSs9_HL8.png)
 
 ## The Future of Micro Frontends at Modyo
+
 ---
+
 We’re working hard on new features that allow us to deliver this architecture to the Modyo platform, all without interrupting the normal workflow of expert developers on the market while also giving them the ability to use native APIs to build interactions between widgets without breaking core MFE principles.
 
 In a future post, we’ll talk about how to make this happen from a front end perspective and how this improves our work once the Modyo way of managing MFE architecture is in our veins.

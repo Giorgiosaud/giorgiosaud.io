@@ -7,15 +7,13 @@ client: "Fundacion de la Mujer"
 category: "Private Site"
 project: "Simple Private Site"
 resume: "Create a simple site for manage credits summary and add check credit details."
-image: {
-    src: "fdlm",
-    alt: "Fundacion de la mujer Project"
-}
+image: { src: "fdlm", alt: "Fundacion de la mujer Project" }
 publishDate: "10-20-2020"
 classes: "bg-clip-text text-transparent bg-gradient-to-b from-pink-400 to-pink-900"
 classesClient: "bg-clip-text text-transparent bg-gradient-to-b from-pink-300 to-pink-400"
-technologies: ["vue 2","bootstrap 4","vanilla js"]
+technologies: ["vue 2", "bootstrap 4", "vanilla js"]
 ---
+
 ### Project Overview: Fundación de la Mujer
 
 **Objective:**  
@@ -30,7 +28,8 @@ As the **Front-End Architect**, I was responsible for designing the overall arch
 **Challenges & Solutions:**  
 A significant challenge was connecting to the client's SSO (Single Sign-On) system and managing the client APIs. To overcome this, I implemented a robust integration strategy that ensured seamless authentication and secure API communication.
 
-**Key Features:**  
+**Key Features:**
+
 - **Credit Summary Management:** Users could easily view and manage their credit summaries.
 - **Loan Details Check:** A feature that allowed users to check the detailed status of their loans.
 

@@ -1,12 +1,11 @@
 // 1. Import utilities from `astro:content`
-import { z, defineCollection, reference } from 'astro:content';
+import { z, defineCollection, reference } from "astro:content";
 
 // 2. Define your collection(s)
 const notesCollection = defineCollection({
   schema: z.object({
     draft: z.boolean({
       required_error: "draft is required",
-      
     }),
     title: z.string(),
     resume: z.string(),
@@ -15,7 +14,7 @@ const notesCollection = defineCollection({
       src: z.string(),
       alt: z.string(),
     }),
-    publishDate: z.string().transform(str => new Date(str)),
+    publishDate: z.string().transform((str) => new Date(str)),
     author: reference("team"),
     category: z.string(),
     tags: z.array(z.string()),
@@ -32,7 +31,7 @@ const teamCollection = defineCollection({
       src: z.string(),
       alt: z.string(),
     }),
-    publishDate: z.string().transform(str => new Date(str)),
+    publishDate: z.string().transform((str) => new Date(str)),
   }),
 });
 const portfolioCollection = defineCollection({
@@ -51,7 +50,7 @@ const portfolioCollection = defineCollection({
       src: z.string(),
       alt: z.string(),
     }),
-    publishDate: z.string().transform(str => new Date(str)),
+    publishDate: z.string().transform((str) => new Date(str)),
     technologies: z.array(z.string()),
   }),
 });
@@ -59,7 +58,7 @@ const portfolioCollection = defineCollection({
 // 3. Export a single `collections` object to register your collection(s)
 //    This key should match your collection directory name in "src/content"
 export const collections = {
-  'notes': notesCollection,
-  'team': teamCollection,
-  "portfolio":portfolioCollection,
+  notes: notesCollection,
+  team: teamCollection,
+  portfolio: portfolioCollection,
 };

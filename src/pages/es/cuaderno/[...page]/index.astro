@@ -1,12 +1,13 @@
 ---
-import { getCollection, getEntry, getEntryBySlug, type CollectionEntry} from "astro:content";
-import { Picture } from "astro:assets";
+import { getCollection, getEntry, type CollectionEntry} from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Paginator from "@components/paginator.astro";
 import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+
+
 
 export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
     const publishedNotesEntries = await getCollection("notes", ({ data }) => {
@@ -32,7 +33,7 @@ if (page.currentPage===1){
     canonical=`/notebook/`;
 }
 ---
-<Layout title="Cuaderno" canonical={canonical}>
+<Layout title="Cuaderno" canonical={canonical} lang="es">
     <Container>
         <Sectionhead>
             <Fragment slot="title">Mi Cuaderno</Fragment>

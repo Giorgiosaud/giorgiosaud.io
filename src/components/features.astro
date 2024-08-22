@@ -1,45 +1,50 @@
 ---
-import { getLangFromUrl, useTranslations, useTranslatedPath } from "@i18n/utils";
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "@i18n/utils";
 import { Icon } from "astro-icon/components";
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const features = [
   {
     title: t("features.1.title"),
-    description:t("features.1.description"),
+    description: t("features.1.description"),
     icon: "bx:bxs-window-alt",
-
   },
   {
     title: t("features.2.title"),
-    description:t("features.2.description"),
+    description: t("features.2.description"),
     icon: "bx:bxs-window-alt",
   },
   {
     title: t("features.3.title"),
-    description:t("features.3.description"),
+    description: t("features.3.description"),
     icon: "bx:bxs-data",
   },
   {
     title: t("features.4.title"),
-    description:t("features.4.description"),
+    description: t("features.4.description"),
     icon: "bx:bxs-bot",
   },
   {
     title: t("features.5.title"),
-    description:t("features.5.description"),
+    description: t("features.5.description"),
     icon: "bx:bxs-file-find",
   },
   {
     title: t("features.6.title"),
-    description:t("features.6.description"),
+    description: t("features.6.description"),
     icon: "bx:bxs-user",
   },
 ];
 ---
 
 <div class="mt-16 md:mt-0">
-  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">{t("features.title")}</h2>
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    {t("features.title")}
+  </h2>
   <p class="text-lg mt-4 text-slate-600">
     {t("features.description")}
   </p>
