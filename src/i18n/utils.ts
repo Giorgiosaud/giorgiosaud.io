@@ -1,13 +1,13 @@
-import { ui, defaultLang, routes, showDefaultLang } from '@i18n/ui';
+import { ui, defaultLang, routes, showDefaultLang } from "@i18n/ui";
 
 export function getLangFromUrl(url: URL) {
-  const [, lang] = url.pathname.split('/');
+  const [, lang] = url.pathname.split("/");
   if (lang in ui) return lang as keyof typeof ui;
   return defaultLang;
 }
 export function getRouteFromUrl(url: URL): string | undefined {
   const pathname = new URL(url).pathname;
-  const parts = pathname?.split('/');
+  const parts = pathname?.split("/");
   const path = parts.pop() || parts.pop();
 
   if (path === undefined) {
@@ -21,9 +21,12 @@ export function getRouteFromUrl(url: URL): string | undefined {
     return route[path] !== undefined ? route[path] : undefined;
   }
 
-  const getKeyByValue = (obj: Record<string, string>, value: string): string | undefined  => {
-      return Object.keys(obj).find((key) => obj[key] === value);
-  }
+  const getKeyByValue = (
+    obj: Record<string, string>,
+    value: string,
+  ): string | undefined => {
+    return Object.keys(obj).find((key) => obj[key] === value);
+  };
 
   const reversedKey = getKeyByValue(routes[currentLang], path);
 
@@ -34,16 +37,21 @@ export function getRouteFromUrl(url: URL): string | undefined {
   return undefined;
 }
 export function useTranslations(lang: keyof typeof ui) {
-  return function t(key: keyof typeof ui[typeof defaultLang]) {
-    return ui[lang][key] || ui[defaultLang][key]||key;
-  }
+  return function t(key: keyof (typeof ui)[typeof defaultLang]) {
+    return ui[lang][key] || ui[defaultLang][key] || key;
+  };
 }
 export function useTranslatedPath(lang: keyof typeof ui) {
   return function translatePath(path: string, l: string = lang) {
-    const pathName = path.replaceAll('/', '')
-    const hasTranslation = defaultLang !== l && routes[l] !== undefined && routes[l][pathName] !== undefined
-    const translatedPath = hasTranslation ? '/' + routes[l][pathName] : path
+    const pathName = path.replaceAll("/", "");
+    const hasTranslation =
+      defaultLang !== l &&
+      routes[l] !== undefined &&
+      routes[l][pathName] !== undefined;
+    const translatedPath = hasTranslation ? "/" + routes[l][pathName] : path;
 
-    return !showDefaultLang && l === defaultLang ? translatedPath : `/${l}${translatedPath}`
-  }
+    return !showDefaultLang && l === defaultLang
+      ? translatedPath
+      : `/${l}${translatedPath}`;
+  };
 }
