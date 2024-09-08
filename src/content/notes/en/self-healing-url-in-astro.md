@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2024-07-19 11:39"
 category: "architecture"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [architecture,functionalfeatures]
 ---
 

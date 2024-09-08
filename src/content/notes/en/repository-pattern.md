@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2024-05-21 09:45"
 category: "Architecture"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [microfrontend,development, frontend, backend]
 ---
 

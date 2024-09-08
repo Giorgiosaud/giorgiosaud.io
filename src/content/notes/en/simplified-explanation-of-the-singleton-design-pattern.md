@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2023-11-14 11:39"
 category: "development"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [design-patterns,development]
 ---
 in this blog post, I will try to explain the pattern in a simplified way the Singleton Design Pattern, its main purpose is to reconstruct the instantiation of a class to a singular instance, I need to clarify that the use case is very difficult to find but if you think about it in a deeper way I found some interesting uses.

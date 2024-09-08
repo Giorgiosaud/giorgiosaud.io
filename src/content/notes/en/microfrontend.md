@@ -1,16 +1,16 @@
 ---
-draft: true
-selfHealing: "000001"
-title: "Workbox"
-resume: "https://web.dev/learn/pwa/workbox?hl=es-419
-https://rumaan.dev/blog/workbox-astro-project"
+draft: false
+selfHealing: "000003"
+
+title: "Micro Frontend Architecture"
+resume: "Giorgio discusses the benefits and implementation of micro frontend architecture, emphasizing its growing popularity and effectiveness in modern web development. He outlines how this architecture enables more efficient, specialized development by dividing frontend applications into smaller, manageable components."
 image: {
     src: "microfrontend_klswbm",
     alt: "Micro Frontend Architecture"
 }
 publishDate: "2023-05-08 11:39"
 category: "architecture"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [microfrontend,architecture]
 ---
 In a [previous article at modyo blog](https://blog.modyo.com/posts/micro-frontends-empower-your-developers-to-build-better-digital-products), we talked about how micro frontends offer more freedom for teams and deliver more efficient applications. Because of this, they are becoming popular among architects and developers because large organizations and industry leaders are successfully managing their own web applications using micro frontend architectures.
@@ -37,11 +37,11 @@ And yes, I say “from the shadows” because this architecture has always exist
 
 To solve these issues, this is where the Front End architect emerges, because the architect must deal with the user experience, performance, SEO, Accessibility, Tagging events, and take ownership of this layer, between the service and the user.
 
-![Microfrontends](https://miro.medium.com/v2/resize:fit:1400/1*MmgKz3-I72tznd1xMMDf2Q.png)
+![](https://miro.medium.com/v2/resize:fit:1400/1*MmgKz3-I72tznd1xMMDf2Q.png)
 
 ## How Frontend Architects Harness Micro Frontends
 
-----
+---
 
 As we mentioned before, the importance of TTM is growing and we need new ways of working in order to meet demand. However, MVCs and SPAs are mired in issues that reduce overall speed because of enlarged pipeline processes, resolving difficulties and issues during fast deployments, misaligning developer priorities to focus more on business rather than the code necessary to implement it, which means less time resolving issues on StackOverflow 😉.
 
@@ -51,7 +51,7 @@ Even within MFE development, there are a variety of approaches. One approach sep
 
 ## Micro Frontends at ®Modyo
 
-----
+---
 
 Between a complete single page application approach, and a micro app approach based purely on functionality, at Modyo we use something in between, where we separate applications by their business subdomain. We call each of these applications a widget, and these widgets can be managed independently from the rest of the developed web application. They can even be deployed and rolled back on their own, and take advantage of the benefits of the overall Modyo platform to bootstrap and manage them, injecting them into a page to load asynchronously in any order that we need.
 
@@ -61,13 +61,14 @@ Recently, we’ve resolved how to share portions of code between apps, similar t
 
 When delivering content, Modyo is a mix between a headless and decoupled CMS, and with the advantages of the decoupled CMS strategy, we can deliver content from the server-side directly to our widgets (MFEs) via the Liquid Template Engine that we natively support. It’s a best practice to adopt and take advantage of this MFE architecture, with the foundation of client-side MFE composition.
 
-![Puzzle blocks](https://miro.medium.com/v2/resize:fit:1400/0*pgqMdevdWSs9_HL8.png)
+![](https://miro.medium.com/v2/resize:fit:1400/0*pgqMdevdWSs9_HL8.png)
 
 ## The Future of Micro Frontends at Modyo
-
-----
+---
 We’re working hard on new features that allow us to deliver this architecture to the Modyo platform, all without interrupting the normal workflow of expert developers on the market while also giving them the ability to use native APIs to build interactions between widgets without breaking core MFE principles.
 
 In a future post, we’ll talk about how to make this happen from a front end perspective and how this improves our work once the Modyo way of managing MFE architecture is in our veins.
 
 Until next time!
+
+[](https://medium.com/tag/mfe?source=post_page-----198b211b1bcc---------------mfe-----------------)

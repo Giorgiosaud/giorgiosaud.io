@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2023-11-14 11:39"
 category: "architecture"
-author: "jorge-saud"
+author: "en/jorge-saud"
 tags: [microfrontend,architecture,alignment]
 ---
 When we talk of coupled or decoupled architecture the microfrontend is one of the top architectural patterns that can be used to accomplish goals, and in many times the decoupling architecture is related with this kind of implementation and manytimes its compared coupling with monolithics and decoupled with microfrontend architectures but, is that really true?.

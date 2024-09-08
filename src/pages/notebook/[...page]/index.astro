@@ -1,6 +1,5 @@
 ---
-import { getCollection, getEntry, getEntryBySlug, type CollectionEntry} from "astro:content";
-import { Picture } from "astro:assets";
+import { getCollection, getEntry, type CollectionEntry} from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
@@ -9,14 +8,16 @@ import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 
 export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
-    const publishedNotesEntries = await getCollection("notes", ({ data }) => {
+    const publishedNotesEntries = await getCollection("notes", ({ data,...args }) => {
+        console.log("data::",args);
         return !data.draft && data.publishDate < new Date();
     });
-    publishedNotesEntries.sort(function (a, b) {
+    publishedNotesEntries.filter((entry)=>entry.id.includes('en'))
+    .sort(function (a, b) {
         return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
     });
     for (const entry of publishedNotesEntries) {
-        const author = await getEntry("team",entry.data.author.slug);
+        const author = await getEntry("team",entry.data.author.slug); 
         entry.author=author;
     }
     return paginate(publishedNotesEntries, {pageSize:4});

@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2024-05-30 17:46"
 category: "integration"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [frontend,csp,integrations, cors, preflightrequest,preflight,common-issues]
 ---
 When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues lets describe them briefly.
