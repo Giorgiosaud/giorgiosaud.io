@@ -1,0 +1,137 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+
+// Filtrar entradas del equipo con 'draft: false' y fecha anterior a la actual
+const publishedTeamMembers = await getCollection("team", ({ data }) => {
+  return !data.draft && data.publishDate < new Date();
+});
+---
+
+<Layout title="Acerca de mí">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Acerca de mí</Fragment>
+      <Fragment slot="desc">Un experimentado arquitecto de soluciones compartiendo conocimientos prácticos sobre desarrollo web para desarrolladores desde principiantes hasta expertos.
+      </Fragment>
+    </Sectionhead>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">Acerca de este blog</h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        ¡Bienvenido a mi blog de recursos de desarrollo! Este espacio sirve como un cuaderno de acceso público donde documento y comparto varias ideas y soluciones relacionadas con el desarrollo web.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
+      <h2 class="font-bold text-3xl text-gray-800">
+        ¿Por qué este blog?
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        Como arquitecto de soluciones, a menudo me encuentro explicando conceptos y soluciones complejas a desarrolladores. Me di cuenta de la necesidad de una fuente única de verdad para agilizar estas explicaciones y asegurar la coherencia. Este blog nació de esa necesidad, con el objetivo de simplificar los desafíos recurrentes que enfrentan los desarrolladores e integradores.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">
+        ¿Qué encontrarás aquí?
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        Este blog se centra principalmente en:
+        <ul class="text-lg leading-relaxed text-slate-500">
+          <li><strong>Problemas comunes y soluciones:</strong> Abordar problemas frecuentes que enfrentan los integradores en una arquitectura desacoplada.</li>
+          <li><strong>Ejemplos de frameworks:</strong> Ejemplos prácticos y mejores prácticas con varios frameworks.</li>
+          <li><strong>Experiencias personales:</strong> Perspectivas y lecciones aprendidas de mi trayectoria profesional.</li>
+        </ul>
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
+      <h2 class="font-bold text-3xl text-gray-800">
+        ¿Para quién es este blog?
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        Este blog está diseñado para desarrolladores en todas las etapas de su carrera, desde principiantes hasta profesionales con experiencia ("de 0 a héroe"). Ya sea que estés comenzando o buscando mejorar tus habilidades, aquí encontrarás recursos valiosos y conocimientos para ayudarte a navegar por las complejidades del desarrollo web.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
+      <h2 class="font-bold text-3xl text-gray-800">
+        Mi trayectoria
+      </h2>
+   
+      <p class="text-lg leading-relaxed text-slate-500 content">
+        <CloudinaryImage 
+        height={300}
+        src='Mi foto'
+        alt="mi foto"
+        type="portrait"
+        aspectRatio="1"
+        class="float-start me-3 rounded-xl"/>
+        Soy ingeniero industrial con una trayectoria profesional diversa, incluyendo experiencia en ventas, logística y como tasador inmobiliario. A pesar de mi carrera variada, siempre he sido un apasionado del mundo de la programación. Mi amplia experiencia en arquitecturas monolíticas y desacopladas, que abarca más de 15 años, me permite ofrecer soluciones prácticas y reales a los desafíos que enfrentan los desarrolladores.
+      </p>
+      <p class="text-lg leading-relaxed text-slate-500">
+        Incluso trabajando en otros campos, a menudo me encontraba implementando características de programación para resolver problemas, ya sea en la tasación o en la logística. Esta mezcla de experiencias enriquece el contenido que comparto en este blog.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
+      <h2 class="font-bold text-3xl text-gray-800">
+        Metas y aspiraciones
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        El objetivo principal de este blog es ser un cuaderno para cualquier desarrollador que busque explicar conceptos complicados de desarrollo web en términos sencillos. Además, espero obtener algún ingreso por hacerlo ;).
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
+      <h2 class="font-bold text-3xl text-gray-800">
+        Un compromiso con el aprendizaje
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        Creo firmemente que un día sin aprendizaje es un día perdido. Esta filosofía me impulsa a buscar continuamente nuevos conocimientos y a compartir lo que aprendo con los demás. Espero que este blog refleje ese compromiso e inspire a otros a seguir aprendiendo también.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
+      <h2 class="font-bold text-3xl text-gray-800">
+        Únete al viaje
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        Te invito a explorar, aprender y participar con el contenido aquí. Juntos, podemos abordar los desafíos del desarrollo web y crear soluciones robustas y eficientes.
+      </p>
+      <p class="text-lg leading-relaxed text-slate-500">
+        ¡Gracias por visitar!        
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">
+      {
+        publishedTeamMembers.map((teamMemberEntry) => (
+        <div class="group">
+           <div class="w-full aspect-square">
+            <CloudinaryImage
+            src={teamMemberEntry.data.avatar.src}
+            alt={teamMemberEntry.data.avatar.alt}
+            sizes="(max-width: 800px) 100vw, 400px"
+            width={400}
+            height={400}
+            class="w-full rounded-md rounded transition group-hover:-translate-y-1 group-hover:shadow-xl bg-white object-cover object-center aspect-square"
+            />
+          </div>
+          
+          <div class="mt-4 text-center">
+            <h2 class="text-lg text-gray-800">{teamMemberEntry.data.name}</h2>
+            <h3 class="text-sm text-slate-500">
+              {teamMemberEntry.data.title}
+            </h3>
+          </div>
+        </div>
+        ))
+      }
+    </div>
+  </Container>
+</Layout>

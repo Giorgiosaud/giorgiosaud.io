@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2023-05-08 11:39"
 category: "Tutorials"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [webdev, frontend, img, srcset]
 ---
 

@@ -1,6 +1,6 @@
 ---
 import Container from "@components/container.astro";
-import Link from "@components/ui/link.astro";
+import LanguagePicker from "@components/languagePicker.astro";
 import Dropdown from "./dropdown.astro";
 import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 import { getLangFromUrl, useTranslatedPath, useTranslations } from '@i18n/utils';
@@ -69,6 +69,7 @@ const menuItems:MenuItemsInterface[] = [
               </>
             ))
           }
+          <LanguagePicker />
         </ul>
         
       </MenuItems>
