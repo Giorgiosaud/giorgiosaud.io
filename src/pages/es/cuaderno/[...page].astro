@@ -1,32 +1,36 @@
 
 ---
-import { getCollection, getEntry, type CollectionEntry} from "astro:content";
+import { getCollection, getEntries, getEntry, getEntryBySlug, type CollectionEntry} from "astro:content";
+import { Picture } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Paginator from "@components/paginator.astro";
 import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+import { getUniqueObjectsByKey } from "@utils/getUniqueObjectsByKey";
+import Note from "@components/note.astro";
 
 export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
     const publishedNotesEntries = await getCollection("notas", ({ data }) => {
         return !data.draft && data.publishDate < new Date();
     });
-    publishedNotesEntries.filter((entry)=>entry.id.includes('en'))
-    .sort(function (a, b) {
+    publishedNotesEntries.sort(function (a, b) {
         return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
     });
-    for (const entry of publishedNotesEntries) {
-        const author = await getEntry("team",entry.data.author.slug); 
-        entry.author=author;
-    }
+ 
     return paginate(publishedNotesEntries, {pageSize:4});
 }
 type Props = {
-  page: Page<CollectionEntry<'notes'>>;
+  page: Page<CollectionEntry<'notas'>>;
 };
-const { page } = Astro.props;
+const { page } = Astro.props as Props;
 
+const authors = getUniqueObjectsByKey(page.data.map((entry) => {
+    return entry.data.author;
+}),"slug");
+
+const authorsData=await getEntries(authors);
 
 let canonical
 if (page.currentPage===1){
@@ -38,7 +42,7 @@ if (page.currentPage===1){
         <Sectionhead>
             <Fragment slot="title">Mi Cuaderno</Fragment>
             <Fragment slot="desc">
-                Un cuaderno de enlaces para principiantes y expertos.
+                Un cuaderno para principiantes y expertos.
             </Fragment>
         </Sectionhead>
         <main class="mt-16">
@@ -46,52 +50,19 @@ if (page.currentPage===1){
                 {
                     page.data.map((noteEntry, index) => (
                     <li>
-                        <a href={`/notebook/${noteEntry.slug}`}>
-                            <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
-                                <CloudinaryImage
-                                src={`notebook-posts/${noteEntry.data.image.src}`}
-                                
-                                alt={noteEntry.data.image.alt}
-                                aspectRatio="1"
-                                loading={index <= 2 ? "eager" : "lazy"}
-                                decoding={index <= 2 ? "sync" : "async"}
-                                transition:name=`${noteEntry.id} img`
-                                class="w-full rounded-md object-cover object-center bg-white aspect-square"
-                                />
-                                <div>
-                                    <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-                                    transition:name=`${noteEntry.id} category`
-                                    >
-                                    {noteEntry.data.category}
-                                </span>
-                                
-                                <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "
-                                transition:name=`${noteEntry.id} title`
-                                >
-                                {noteEntry.data.title}
-                            </h2>
-                            
-                            <div class="flex gap-2 mt-3"
-                            transition:name=`${noteEntry.id} meta`>
-                            <a class="text-gray-400" href={`team/${noteEntry.author.slug}`}>
-                                {noteEntry.author.data.alias}
-                            </a>
-                            <span class="text-gray-400">• </span>
-                            <time
-                            class="text-gray-400"
-                            datetime={noteEntry.data.publishDate.toISOString()}>
-                            {noteEntry.data.publishDate.toDateString()}
-                        </time>
-                        
-
-                    </div>
-                    <p class="text-slate-500">
-                        {noteEntry.data.resume}
-                    </p>
-                    
-                </div>
-            </div>
-        </a>
+                        <Note 
+                        link={`/es/cuaderno/${noteEntry.slug}`}
+                        imageSrc={noteEntry.data.image.src} 
+                        imageAlt={noteEntry.data.image.alt}
+                        category={noteEntry.data.category}
+                        title={noteEntry.data.title}
+                        authorAlias={authorsData.find((author)=>author.slug===noteEntry.data.author.slug).data.alias}
+                        publishDate={noteEntry.data.publishDate}
+                        resume={noteEntry.data.resume}
+                        slug={noteEntry.slug}
+                        index={index}
+                        authorLink={`/es/equipo/${noteEntry.data.author.slug}`}
+                        />
     </li>
     ))
 }

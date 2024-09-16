@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000007"
+selfHealing: "000006"
 title: "Paginator in astro"
 resume: "Paginate a website in Astro or any other framework like next.js or nuxt is a challenge but not because is difficult to implement but because is difficult to understand, in this post i will try to illustrate how the paginator of this website was made."
 image: {
@@ -15,7 +15,7 @@ tags: [astro,next, nuxt, frontent, backend]
 
 # Basis of Pagination
 
-Astro like many other frameworks has a pagination system based on repeatable content, this content should belong to a single repository, Astro has collections, the collections are files written in .md and stored in the filesystem that can be processed internally by Astro, this allows to use in the build process some techniques to generate in 3 ways the website, we can configure the output as **static** where the build will generate all the static paths **server** where the build process will generate a server which processes all request supporting SSR (server-side rendering) or **hybrid** where some elements are statics and other are SSR ones.
+Astro como muchos otros frameworks tiene un sistema de paginación basado en contenido repetible, este contenido debe pertenecer a un único repositorio, Astro tiene colecciones, las colecciones son archivos escritos en .md y almacenados en el sistema de archivos que pueden ser procesados ​​internamente por Astro, esto permite utilizar en el proceso de construcción algunas técnicas para generar de 3 maneras el sitio web, podemos configurar la salida como **estática** donde la construcción generará todas las rutas estáticas **servidor** donde el proceso de construcción generará un servidor que procesa todas las solicitudes soportando SSR (server-side renderizado) o **híbrido** donde algunos elementos son estáticos y otros son SSR.
 
 ```bash
 src/
@@ -39,7 +39,7 @@ src/
   .
 ```
 
-In this structure, the blog can show the 2 blog notes of the content but when the blog grows not only the build process will take more time but the /blog path also renders more content than a normal page increasing the loading time of the final rendered site, then we think about pagination, we can add a paginator in the blog, but pagination in this page is almost impossible because this page is rendered with the ```getCollection``` function but for pagination purposes we need to use the ```getStaticPaths``` method, this is because this method is the one that generates dynamic routes to match the brackets syntax in the routing, then we need to separate this index page in 2 pages one that should be shown in the /blog and another that takes care of pages, and move the blog.astro to the blog file structure to allow us to manage all related blog issues inside of this folder, when we move it we need to rename to index.astro because the folder name is the route that we want.
+En esta estructura, el blog puede mostrar las 2 notas del blog del contenido, pero cuando el blog crece, no solo el proceso de construcción tomará más tiempo, sino que la ruta /blog también muestra más contenido que una página normal, lo que aumenta el tiempo de carga del sitio final renderizado, luego pensamos en la paginación, podemos agregar un paginador en el blog, pero la paginación en esta página es casi imposible porque esta página se renderiza con la función ```getCollection``` pero para fines de paginación necesitamos usar el método ```getStaticPaths```, esto se debe a que este método es el que genera rutas dinámicas para que coincidan con la sintaxis de corchetes en el enrutamiento, luego necesitamos separar esta página de índice en 2 páginas, una que debe mostrarse en el /blog y otra que se encarga de las páginas, y mover el blog.astro a la estructura de archivos del blog para permitirnos administrar todos los problemas relacionados con el blog dentro de esta carpeta, cuando lo movemos necesitamos cambiarle el nombre a index.astro porque el nombre de la carpeta es la ruta que queremos.
 
 ```bash
 src/
@@ -69,14 +69,16 @@ src/
   .
 ```
 
-With this file structure now have all related blog pages in one place, and I choose to use one index and another page that takes care of the paginated ones all but page 1, that`s because if I use the same page for pagination or show the main show to avoid duplication will be /1 now I can handle this and make /1 canonical of /blog and in my index.astro inside the blog folder only shows one arrow to see the previous post that will move to /2 page of / blog like this ```blog/2```
 
-To handle this canonical between ```blog/1```and ```blog``` I add a canonical property to my ```Layout.astro``` page  and in the head I add to the head this:
+Con esta estructura de archivos ahora tengo todas las páginas del blog relacionadas en un solo lugar, y elijo usar un índice y otra página que se encargue de las paginadas todas menos la página 1, eso es porque si uso la misma página para paginación o muestro la principal para evitar duplicación será /1 ahora puedo manejar esto y hacer /1 canónico de /blog y en mi index.astro dentro de la carpeta blog solo muestra una flecha para ver el post anterior que se moverá a la página /2 de /blog como este ```blog/2```
+
+Para manejar esta canonical entre ```blog/1```y ```blog``` agrego una propiedad canonical a mi pagina ```Layout.astro``` y en el head agrego esto:
 
 ```astro 
   {canonical&&<link rel="canonical" href={canonical} />}
 ```
-then in the frontmatter part i delcared canonical as a Astr.prop and make it optional, then in the [page].astro i used it as.
+
+Luego, en la parte preliminar, declaré canónico como Astr.prop y lo hice opcional, luego en [page].astro lo usé como.
 
 ```astro
 <Layout title="Blog" canonical={canonical}>
@@ -86,7 +88,7 @@ then in the frontmatter part i delcared canonical as a Astr.prop and make it opt
 </Layout>
 ```
 
-And there I added my page component let's talk about it in the getStaticPaths constant that we need to export we receive as a param the paginate method we can destroy the params to obtain it like this:
+Y ahí agregué mi componente de página, hablemos de ello en la constante getStaticPaths que necesitamos exportar recibimos como parámetro el método paginate podemos destruir los parámetros para obtenerlo así:
 
 ```astro
 ---
@@ -108,7 +110,7 @@ export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
 ---
 ```
 
-This technique now exposes the page data from astro props like this
+Esta técnica ahora expone los datos de la página de astro props de esta manera
 
 ```astro
 ---
@@ -126,7 +128,7 @@ if (page.currentPage===1){
 ---
 ```
 
-And then we can make our paginator component that will receive these pages and render the specific page post we use page.data the Page will result in a component with this interface.
+Y luego podemos crear nuestro componente paginador que recibirá estas páginas y renderizará la página específica que usemos. La página dará como resultado un componente con esta interfaz.
 
 ```ts
 interface Page{
@@ -155,9 +157,9 @@ interface Page{
 }
 ``` 
 
-Then from the data we get the data collection to show, start is the number of indexes of the first post on the page end of the last one, the total is the total numbers in the collection, currentPage is the actual page, size is the items Per page or pageSize that we pass to the first method, lastPage is the number of the last page important for the paginator element and URL are actual previous and next.
+Luego, a partir de los datos, obtenemos la recopilación de datos que se va a mostrar: start es el número de índices de la primera publicación en la página, end de la última, total es el número total de la recopilación, currentPage es la página actual, size son los elementos por página o pageSize que pasamos al primer método, lastPage es el número de la última página importante para el elemento paginador y URL son los valores reales anterior y siguiente.
 
-Then we can use a paginator component like this:
+Luego, podemos usar un componente paginador como este:
 
 ```astro
 ---
@@ -219,6 +221,6 @@ const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
 </section>
 ```
 
-This component is stylized with tailwind.css but you can create your one.
+Este componente está estilizado con tailwind.css pero puedes crear el tuyo propio.
 
-Thanks, thats all as always if you think that can help to make this post better or detect a bad practice please notify me in the contact form and I will be in touch with you to fix it.
+Gracias, eso es todo como siempre, si crees que puede ayudar a mejorar este post o detectas alguna mala práctica por favor notifícamelo en el formulario de contacto y me pondré en contacto contigo para solucionarlo.

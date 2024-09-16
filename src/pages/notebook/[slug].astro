@@ -104,11 +104,18 @@ const author=await getEntry("team",entry.data.author.slug);
 </script>
 <div class="text-center mt-8">
   <a
-  href="/notebook"
+  id="back"
+  href="#"
   class="bg-gray-100 px-5 py-3 rounded-md hover:bg-gray-200 transition">
   ← Back to Notebook
 </a>
 </div>
+<script>
+document.getElementById('back').addEventListener('click',(e)=>{
+  e.preventDefault();
+  window.history.back();
+})
+</script>
 </Container>
 </Layout>
 <script>

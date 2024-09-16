@@ -1,7 +1,7 @@
 ---
 draft: false
 title: "Preflight request and Cors"
-selfHealing: "000008"
+selfHealing: "000007"
 resume: "When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues"
 image:
   { src: "preflight-request-12", alt: "Preflight request and Cors Updated" }
