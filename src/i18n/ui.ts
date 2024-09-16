@@ -1,9 +1,18 @@
 import * as esTranslations from "./locales/es";
 import * as enTranslations from "./locales/es";
-export const languages = {
-  en: "English",
-  es: "Español",
-};
+
+export const languages=[
+  {
+    name:"English",
+    code:"en",
+    path:'/'
+  },
+  {
+    name:"Español",
+    code:"es",
+    path:'/es'
+  }
+]
 export const showDefaultLang = false;
 
 export const defaultLang = "en";
@@ -28,6 +37,7 @@ export const ui = {
     "nav.about": "About",
     "nav.contact": "Contact",
     "nav.title": "Notebook",
+    "nav.lang": "Languages",
     "nav.twitter": "Twitter",
     "hero.title": "My web developer notebook",
     "hero.description":
@@ -67,11 +77,13 @@ export const ui = {
     "contact.submit": "Send Message",
   },
   es: {
+    ...esTranslations,
     "nav.home": "Inicio",
     "nav.about": "Acerca de mi",
     "nav.twitter": "Twitter",
     "nav.contact": "Contáctame",
     "nav.title": "Cuaderno",
+    "nav.lang": "Idiomas",
     "hero.title": "Mi cuaderno de desarrollo web",
     "hero.description":
       "Este sitio web está hecho con Astro y basado en un tema de Astroship, pero es un lugar simple para tomar mis notas mentales y recordar mis investigaciones porque me resulta muy difícil mantenerme concentrado en la navegación web, y necesito un lugar para concentrarme en las cosas buenas.",

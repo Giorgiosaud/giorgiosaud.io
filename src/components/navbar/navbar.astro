@@ -11,7 +11,8 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 import type { MenuItemsInterface } from "@components/definitions/MenuItemsInterface";
-
+import { languages } from "@i18n/ui";
+const otherLangs= languages.filter(lang=>lang.code!==lang);
 const menuItems: MenuItemsInterface[] = [
   {
     title: t("nav.about"),
@@ -26,7 +27,21 @@ const menuItems: MenuItemsInterface[] = [
     title: t("nav.contact"),
     path: translatePath("/contact", lang),
   },
-];
+  
+  ];
+  if(lang==='es'){
+    menuItems.push({
+      title: "English",
+      path: "/",
+  });
+    
+  }else{
+    menuItems.push({
+      title: "Españoål",
+      path: "/es",
+  });
+  }
+  console.log(JSON.stringify(menuItems))
 ---
 
 <div class="sticky top-0 z-50 bg-slate-100 py-5 opacity-85">
