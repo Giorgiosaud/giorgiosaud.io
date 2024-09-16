@@ -3,28 +3,15 @@
   "compilerOptions": {
     "baseUrl": "src",
     "strictNullChecks": true,
-    "types": [
-      "astro/client"
-    ],
+    "types": ["astro/client"],
     "paths": {
-      "@lib/*": [
-        "lib/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ],
-      "@components/*": [
-        "components/*"
-      ],
-      "@layouts/*": [
-        "layouts/*"
-      ],
-      "@assets/*": [
-        "assets/*"
-      ],
-      "@pages/*": [
-        "pages/*"
-      ]
+      "@lib/*": ["lib/*"],
+      "@i18n/*": ["i18n/*"],
+      "@utils/*": ["utils/*"],
+      "@components/*": ["components/*"],
+      "@layouts/*": ["layouts/*"],
+      "@assets/*": ["assets/*"],
+      "@pages/*": ["pages/*"]
     },
     "jsx": "react-jsx",
     "jsxImportSource": "react"

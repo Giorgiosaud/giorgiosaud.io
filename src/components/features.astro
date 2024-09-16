@@ -1,51 +1,52 @@
 ---
-// @ts-ignore
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "@i18n/utils";
 import { Icon } from "astro-icon/components";
-
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 const features = [
   {
-    title: "Front end Tools/Frameworks",
-    description:
-      "Although I have a deep appreciation for vanilla JavaScript, I will provide comparisons of various frontend frameworks I've used, from the elegant to the less appealing.",
-    icon: "bx:bxs-briefcase",
-  },
-  {
-    title: "Code Design patterns",
-    description:
-      "I will simplify and explain various design patterns and issues I've resolved in my roles as a Frontend Developer, Architect, and Solution Architect.",
+    title: t("features.1.title"),
+    description: t("features.1.description"),
     icon: "bx:bxs-window-alt",
   },
   {
-    title: "Code Snippets",
-    description:
-      "I'll share useful gists and code snippets, including GitHub calls, to simplify both your life and mine, saving time and money in the process.",
+    title: t("features.2.title"),
+    description: t("features.2.description"),
+    icon: "bx:bxs-window-alt",
+  },
+  {
+    title: t("features.3.title"),
+    description: t("features.3.description"),
     icon: "bx:bxs-data",
   },
   {
-    title: "Integration issues",
-    description:
-      "I'll address common issues I've encountered while integrating various systems and libraries, providing solutions and insights.",
+    title: t("features.4.title"),
+    description: t("features.4.description"),
     icon: "bx:bxs-bot",
   },
   {
-    title: "SEO Things",
-    description:
-      "We will be explaining some basic technical SEO implementations an dismitifyng some old SEO techniques with a touch of reality but knowing the obscure side of the SEO moon",
+    title: t("features.5.title"),
+    description: t("features.5.description"),
     icon: "bx:bxs-file-find",
   },
   {
-    title: "Community",
-    description:
-      "My main idea is to make a community that helps each other to resolve some issues or just to share some knowledge, so i will try to make some posts about how to make a community and how to make it grow.",
+    title: t("features.6.title"),
+    description: t("features.6.description"),
     icon: "bx:bxs-user",
   },
 ];
 ---
 
 <div class="mt-16 md:mt-0">
-  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">Topics to talk in this notebook</h2>
+  <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
+    {t("features.title")}
+  </h2>
   <p class="text-lg mt-4 text-slate-600">
-    All the topics related with web development like frontend or backend frameworks, pretending to be the most agnostic and imparcial as possible.
+    {t("features.description")}
   </p>
 </div>
 

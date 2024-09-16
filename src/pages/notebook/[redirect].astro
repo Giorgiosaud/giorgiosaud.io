@@ -4,28 +4,32 @@ import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 export const prerender = false;
 let path = Astro.url.pathname;
-if(path.includes("/notebook/")){
-  console.log("inside if path::");
-  
-  const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
-  if(hashToHeal){
-    console.log("inside if hash:::",hashToHeal);
-    
+console.log(path);
+const hashToHeal = path.match(/\/.*\/.*?(\d{6})/)?.[1]; 
+console.log(hashToHeal)
+if(hashToHeal){
     const col=await getCollection("notes", (entry) =>{
-      return entry.data.selfHealing===hashToHeal
+        return entry.data.selfHealing===hashToHeal
     });
-    console.log("col searched::",col);
-    
     if(col.length){
-      const redirect="/notebook/"+col[0].slug;
-      console.log("redirect::",redirect);
-      
-      return Astro.redirect(redirect);
+        // replace last segment of the path with the slug
+        let newPath = path.split("/");
+        newPath.pop();
+        const newPathString = newPath.join("/")+ "/" + col[0].slug;
+        return Astro.redirect(newPathString);
     }
-    
-  }
-  console.log("outside if hash:::",hashToHeal);
-  
-  return Astro.redirect("/404");
 }
+
+
 ---
+
+<Layout title="404 Not Found">
+  <Container>
+    <div class="min-h-[calc(100vh-16rem)] flex items-center justify-center">
+      <div class="mt-16 text-center">
+        <h1 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">404</h1>
+        <p class="text-lg mt-4 text-slate-600">Page not found.</p>
+      </div>
+    </div>
+  </Container>
+</Layout>

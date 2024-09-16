@@ -7,6 +7,7 @@ import { cloudinarySrc } from "@utils/cludinarySrc";
 import  SpeedInsights  from "@vercel/speed-insights/astro"
 
 export interface Props {
+  lang?: string;
   title?: string;
   canonical?: string;
   image?: string;
@@ -20,6 +21,8 @@ export interface Props {
     section?: string;
     tags?: string[];
   }
+  job?:{
+  }
 }
 const date=new Date().getMilliseconds();
 const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
@@ -29,7 +32,7 @@ const resolvedImageWithDomain = new URL(
 Astro.site
 ).toString();
 
-const { title, description,image, article,canonical } = Astro.props;
+const { title, description,image, article,canonical,lang="en" } = Astro.props;
 const imgSrc=(!image?.startsWith('http'))?cloudinarySrc('notebook-posts/'+  image):resolvedImageWithDomain;
 const makeDescription= description ?? "A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.";
 const seoProps:SEOProps={
@@ -81,7 +84,7 @@ if(article){
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang}>
 <head>
   {canonical&&<link rel="canonical" href={canonical} />}
   <meta charset="UTF-8" />
@@ -101,14 +104,14 @@ if(article){
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="manifest" href=`/manifest.json?v=${date}`}>
+  <link rel="manifest" href={`/manifest.json?v=${date}`}>
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
   <link rel="sitemap" href="/sitemap-index.xml" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <meta name="generator" content={Astro.generator} />
-  <script type="speculationrules">
+  <script type="json/speculationrules">
     {
       "prerender": [{
         "source": "document",

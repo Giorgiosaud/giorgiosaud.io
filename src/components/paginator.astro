@@ -3,54 +3,49 @@ import Link from "@components/ui/link.astro";
 import type { Page } from "astro";
 import { Icon } from "astro-icon/components";
 
-interface Props{
-    page:Page
+interface Props {
+  page: Page;
 }
 
-const {page}=Astro.props;
-const totalPages=Math.ceil(page.total/page.size);
-const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
+const { page } = Astro.props;
 ---
-<hr class="mt-4">
-<section class="grid grid-cols-3 py-3">
-    <div class="flex justify-start">
-        {
-            page.url.prev &&
-            <Link
-            size="md"
-            href={page.url.prev}
-            style="inverted"
-            class="flex gap place-items-center hover:bg-slate-600 py-3 px-4 group">
-            <Icon name="bx:left-arrow-alt"  class=" text-slate-600 group-hover:text-white"/>
-        </Link>
-    }
-</div>
-<div class="flex justify-center">
-    {pagesArray.map(pageX=>{
-        return(
-            <Link
-            size="md"
-            href={`/notebook/${pageX===1?"":pageX}`}
-            style={pageX===page.currentPage?"pages-active":"pages"}
-            class="flex gap place-items-center">
-            {pageX}
-            
-        </Link>
-    )
-    })}
-</div>
-<div class="flex justify-end">
-    {
-        page.url.next &&
-        <Link
-        size="md"
-        href={page.url.next}
-        style="inverted"
-        
-        class="flex gap place-items-center hover:bg-slate-600 py-3 px-4 group">
-        <Icon class="text-white w-4 h-4 mr-3" name="bx:right-arrow-alt" class=" text-slate-600 group-hover:text-white" />
-    </Link>
-}
-</div>
 
+<hr class="mt-4" />
+<section class="grid grid-cols-2 py-3">
+  <div class="flex justify-start">
+    {
+      page.url.prev && (
+        <Link
+          size="md"
+          href={page.url.prev}
+          style="inverted"
+          class="flex gap place-items-center hover:bg-slate-600 py-3 px-4 group"
+        >
+          <Icon
+            name="bx:left-arrow-alt"
+            class=" text-slate-600 group-hover:text-white"
+          />
+        </Link>
+      )
+    }
+  </div>
+  
+  <div class="flex justify-end">
+    {
+      page.url.next && (
+        <Link
+          size="md"
+          href={page.url.next}
+          style="inverted"
+          class="flex gap place-items-center hover:bg-slate-600 py-3 px-4 group"
+        >
+          <Icon
+            class="text-white w-4 h-4 mr-3"
+            name="bx:right-arrow-alt"
+            class=" text-slate-600 group-hover:text-white"
+          />
+        </Link>
+      )
+    }
+  </div>
 </section>

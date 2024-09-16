@@ -3,57 +3,72 @@ import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
-import { resolve } from 'node:path';
+import { resolve } from "node:path";
 import serviceWorker from "astrojs-service-worker";
 import vercel from "@astrojs/vercel/serverless";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
-const rootDir = new URL('.', import.meta.url).pathname;
-const modulePath = resolve(rootDir, 'src', 'generated', 'sriHashes.mjs');
-
+const rootDir = new URL(".", import.meta.url).pathname;
+const modulePath = resolve(rootDir, "src", "generated", "sriHashes.mjs");
 
 // https://astro.build/config
 export default defineConfig({
   site: "https://giorgiosaud.io",
+  i18n: {
+    locales: ["en", "es"],
+    defaultLocale: "en",
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   redirects: {
-    '/atributos-srcset-y-sizes-en-un-tag-de-imagen-img': {
+    "/atributos-srcset-y-sizes-en-un-tag-de-imagen-img": {
       status: 302,
-      destination: '/notebook/tag-link'
+      destination: "/notebook/tag-link",
     },
-    '/tag/*': {
+    "/tag/*": {
       status: 302,
-      destination: '/notebook'
+      destination: "/notebook",
     },
-    '/problemas-comunes-de-integracion-front-end': {
+    "/problemas-comunes-de-integracion-front-end": {
       status: 302,
-      destination: '/notebook/really-common-issues-integrating-from-front-end'
+      destination: "/notebook/really-common-issues-integrating-from-front-end",
     },
-    'arquitectura-de-micro-frontend': {
+    "arquitectura-de-micro-frontend": {
       status: 302,
-      destination: '/notebook/microfrontend'
-    }
+      destination: "/notebook/microfrontend",
+    },
   },
   security: {
-    checkOrigin: true
+    checkOrigin: true,
   },
-  integrations: [serviceWorker(), tailwind(), mdx(), sitemap({
-    entryLimit: 10000,
-    changefreq: 'weekly',
-    priority: 0.7,
-    lastmod: new Date('2022-02-24')
-  }), icon({
-    iconDir: "src/components/ui/icons",
-    include: {
-      uil: ['*'],
-      bx: ['*'],
-      'simple-icons': ['*']
-    }
-  }), vue(), react(), svelte()],
+  integrations: [
+    serviceWorker(),
+    tailwind(),
+    mdx(),
+    sitemap({
+      entryLimit: 10000,
+      changefreq: "weekly",
+      priority: 0.7,
+      lastmod: new Date("2022-02-24"),
+    }),
+    icon({
+      iconDir: "src/components/ui/icons",
+      include: {
+        uil: ["*"],
+        bx: ["*"],
+        "simple-icons": ["*"],
+      },
+    }),
+    vue(),
+    react(),
+    svelte(),
+  ],
   image: {
-    domains: ['https://res.cloudinary.com']
+    domains: ["https://res.cloudinary.com"],
   },
-  output: 'hybrid',
+  output: "hybrid",
   adapter: vercel({
     webAnalytics: { enabled: true },
   }),
@@ -61,7 +76,7 @@ export default defineConfig({
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
       // https://shiki.style/themes
-      theme: 'vitesse-dark',
+      theme: "vitesse-dark",
       // Alternatively, provide multiple themes
       // See note below for using dual light/dark themes
       // Disable the default colors

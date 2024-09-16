@@ -15,120 +15,135 @@ const publishedTeamMembers = await getCollection("team", ({ data }) => {
   <Container>
     <Sectionhead>
       <Fragment slot="title">About Me</Fragment>
-      <Fragment slot="desc">A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.      
+      <Fragment slot="desc"
+        >A seasoned solution architect sharing practical web development
+        insights and solutions for developers from beginners to experts.
       </Fragment>
     </Sectionhead>
 
     <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
       <h2 class="font-bold text-3xl text-gray-800">About this blog</h2>
       <p class="text-lg leading-relaxed text-slate-500">
-        Welcome to my development resources blog! This space serves as a publicly accessible notebook where I document and share various web development-related insights and solutions.
-      </p>
-    </div>
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
-      <h2 class="font-bold text-3xl text-gray-800">
-        Why This Blog?
-      </h2>
-      <p class="text-lg leading-relaxed text-slate-500">
-        As a solution architect, I frequently find myself explaining complex concepts and solutions to developers. I realized the need for a single source of truth to streamline these explanations and ensure consistency. This blog was born out of that necessity, aimed at simplifying the recurring challenges faced by developers and integrators.
+        Welcome to my development resources blog! This space serves as a
+        publicly accessible notebook where I document and share various web
+        development-related insights and solutions.
       </p>
     </div>
     <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
-      <h2 class="font-bold text-3xl text-gray-800">
-        What You’ll Find Here
-      </h2>
+      <h2 class="font-bold text-3xl text-gray-800">Why This Blog?</h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        As a solution architect, I frequently find myself explaining complex
+        concepts and solutions to developers. I realized the need for a single
+        source of truth to streamline these explanations and ensure consistency.
+        This blog was born out of that necessity, aimed at simplifying the
+        recurring challenges faced by developers and integrators.
+      </p>
+    </div>
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">What You’ll Find Here</h2>
       <p class="text-lg leading-relaxed text-slate-500">
         This blog primarily focuses on:
         <ul class="text-lg leading-relaxed text-slate-500">
-          <li><strong>Common Issues and Solutions:</strong> Addressing frequent problems encountered by integrators in a decoupled architecture.
+          <li>
+            <strong>Common Issues and Solutions:</strong> Addressing frequent problems
+            encountered by integrators in a decoupled architecture.
           </li>
           <li>
-            <strong>Framework Examples:</strong> Practical examples and best practices involving various frameworks.
+            <strong>Framework Examples:</strong> Practical examples and best practices
+            involving various frameworks.
           </li>
           <li>
-            <strong>Personal Experiences:</strong> Insights and lessons learned from my professional journey.
+            <strong>Personal Experiences:</strong> Insights and lessons learned from
+            my professional journey.
           </li>
         </ul>
       </p>
-    </div>   
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
-      <h2 class="font-bold text-3xl text-gray-800">
-        Who Is This For?
-      </h2>
+    </div>
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">Who Is This For?</h2>
       <p class="text-lg leading-relaxed text-slate-500">
-        This blog is designed for developers at all stages of their journey, from beginners to seasoned professionals ("0 to hero"). Whether you're just starting out or looking to enhance your skills, you'll find valuable resources and insights here to help you navigate the complexities of web development.
+        This blog is designed for developers at all stages of their journey,
+        from beginners to seasoned professionals ("0 to hero"). Whether you're
+        just starting out or looking to enhance your skills, you'll find
+        valuable resources and insights here to help you navigate the
+        complexities of web development.
       </p>
-    </div>  
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
-      <h2 class="font-bold text-3xl text-gray-800">
-        My Background
-      </h2>
+    </div>
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">My Background</h2>
 
-   
       <p class="text-lg leading-relaxed text-slate-500 content">
-        <CloudinaryImage 
-        height={300}
-        src='My photo'
-        alt="my photo"
-        type="portrait"
-        aspectRatio="1"
-        class="float-start me-3 rounded-xl"/>
-        I am an industrial engineer with a diverse professional background, including experience in sales, logistics, and as a real estate appraiser engineer. Despite my varied career, I have always been passionate about the programming world. My extensive experience in monolithic and decoupled architecture, spanning over 15 years, enables me to provide practical, real-world solutions to the challenges faced by developers.
+        <CloudinaryImage
+          height={300}
+          src="My photo"
+          alt="my photo"
+          type="portrait"
+          aspectRatio="1"
+          class="float-start me-3 rounded-xl"
+        />
+        I am an industrial engineer with a diverse professional background, including
+        experience in sales, logistics, and as a real estate appraiser engineer.
+        Despite my varied career, I have always been passionate about the programming
+        world. My extensive experience in monolithic and decoupled architecture,
+        spanning over 15 years, enables me to provide practical, real-world solutions
+        to the challenges faced by developers.
       </p>
       <p class="text-lg leading-relaxed text-slate-500">
-        Even when working in other fields, I often found myself implementing programming features to resolve issues, be it in appraisal or logistics. This blend of experiences enriches the content I share on this blog.
+        Even when working in other fields, I often found myself implementing
+        programming features to resolve issues, be it in appraisal or logistics.
+        This blend of experiences enriches the content I share on this blog.
       </p>
-    </div>  
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
-      <h2 class="font-bold text-3xl text-gray-800">
-        Goals and Aspirations
-      </h2>
+    </div>
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">Goals and Aspirations</h2>
       <p class="text-lg leading-relaxed text-slate-500">
-        The main goal of this blog is to be a notebook for any developer looking to explain complicated web development concepts in simple terms. Additionally, I aim to achieve some income for doing this ;).
+        The main goal of this blog is to be a notebook for any developer looking
+        to explain complicated web development concepts in simple terms.
+        Additionally, I aim to achieve some income for doing this ;).
       </p>
-      
-    </div>  
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
-      <h2 class="font-bold text-3xl text-gray-800">
-        A Commitment to Learning
-      </h2>
+    </div>
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">A Commitment to Learning</h2>
       <p class="text-lg leading-relaxed text-slate-500">
-        I firmly believe that a day without learning is a lost day. This philosophy drives me to continually seek new knowledge and share what I learn with others. I hope this blog reflects that commitment and inspires others to keep learning as well.
+        I firmly believe that a day without learning is a lost day. This
+        philosophy drives me to continually seek new knowledge and share what I
+        learn with others. I hope this blog reflects that commitment and
+        inspires others to keep learning as well.
       </p>
-    </div>  
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">  
-      <h2 class="font-bold text-3xl text-gray-800">
-        Join the Journey
-      </h2>
+    </div>
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">Join the Journey</h2>
       <p class="text-lg leading-relaxed text-slate-500">
-        I invite you to explore, learn, and engage with the content here. Together, we can tackle the challenges of web development and create robust, efficient solutions.
+        I invite you to explore, learn, and engage with the content here.
+        Together, we can tackle the challenges of web development and create
+        robust, efficient solutions.
       </p>
       <p class="text-lg leading-relaxed text-slate-500">
-        Thank you for visiting!        
+        Thank you for visiting!
       </p>
-    </div>  
+    </div>
     <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-12">
       {
         publishedTeamMembers.map((teamMemberEntry) => (
-        <div class="group">
-          <div class="w-full aspect-square">
-            <CloudinaryImage
-            src={teamMemberEntry.data.avatar.src}
-            alt={teamMemberEntry.data.avatar.alt}
-            sizes="(max-width: 800px) 100vw, 400px"
-            width={400}
-            height={400}
-            class="w-full rounded-md rounded transition group-hover:-translate-y-1 group-hover:shadow-xl bg-white object-cover object-center aspect-square"
-            />
+          <div class="group">
+            <div class="w-full aspect-square">
+              <CloudinaryImage
+                src={teamMemberEntry.data.avatar.src}
+                alt={teamMemberEntry.data.avatar.alt}
+                sizes="(max-width: 800px) 100vw, 400px"
+                width={400}
+                height={400}
+                class="w-full rounded-md rounded transition group-hover:-translate-y-1 group-hover:shadow-xl bg-white object-cover object-center aspect-square"
+              />
+            </div>
+
+            <div class="mt-4 text-center">
+              <h2 class="text-lg text-gray-800">{teamMemberEntry.data.name}</h2>
+              <h3 class="text-sm text-slate-500">
+                {teamMemberEntry.data.title}
+              </h3>
+            </div>
           </div>
-          
-          <div class="mt-4 text-center">
-            <h2 class="text-lg text-gray-800">{teamMemberEntry.data.name}</h2>
-            <h3 class="text-sm text-slate-500">
-              {teamMemberEntry.data.title}
-            </h3>
-          </div>
-        </div>
         ))
       }
     </div>

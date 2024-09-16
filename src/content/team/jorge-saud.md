@@ -3,12 +3,11 @@ draft: false
 name: "Jorge Saud"
 alias: "Giorgio Saud"
 title: "Giorgio Saud"
-avatar: {
-    src: "My Photo in team",
-    alt: "Giorgio Saud"
-}
+avatar: { src: "My Photo in team", alt: "Giorgio Saud" }
+classes: "bg-clip-text text-transparent bg-gradient-to-r"
 publishDate: "2024-05-14 12:06"
 ---
+
 ### Jorge Luis Saud Rosal
 
 **Contact Information:**
@@ -28,7 +27,7 @@ Solution Architect with over 14 years of experience in front-end development, in
 **Experience:**
 
 **Solution Architect | Modyo**
-*Chile* | *2022 – Present*
+_Chile_ | _2022 – Present_
 
 - Lead the design and implementation of decoupled architecture solutions for various clients, focusing on frontend development.
 - Provided technical guidance and support to development teams, ensuring best practices and high-quality code.
@@ -36,7 +35,7 @@ Solution Architect with over 14 years of experience in front-end development, in
 - Implemented decoupled architecture in all projects for Modyo.
 
 **Front End Architect | Modyo**
-*Chile* | *2019 – 2022*
+_Chile_ | _2019 – 2022_
 
 - Architected front-end solutions for large-scale web applications, focusing on performance, scalability, and maintainability.
 - Collaborated with cross-functional teams to define requirements and deliver robust solutions.
@@ -44,14 +43,14 @@ Solution Architect with over 14 years of experience in front-end development, in
 - Conducted front-end optimizations to improve performance and user experience.
 
 **Front End Developer | Modyo**
-*Chile* | *2018 – 2019*
+_Chile_ | _2018 – 2019_
 
 - Developed and maintained front-end components for various web applications.
 - Worked closely with designers and back-end developers to create seamless user experiences.
 - Implemented responsive design principles to ensure applications functioned well across different devices.
 
 **CTO | Zonapro**
-*Venezuela* | *2010 – 2016*
+_Venezuela_ | _2010 – 2016_
 
 - Led the development of self-manageable websites using WordPress and advanced websites with Laravel.
 - Managed the technical team and ensured high-quality deliverables.
@@ -62,7 +61,7 @@ Solution Architect with over 14 years of experience in front-end development, in
 **Education:**
 
 **Industrial Engineer | Universidad Católica Andrés Bello**
-*Venezuela* | *Graduated 2008*
+_Venezuela_ | _Graduated 2008_
 
 - Served as a math assistant from the 3rd semester to the last semester of the 5-year program.
 
