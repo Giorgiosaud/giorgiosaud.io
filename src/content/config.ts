@@ -41,7 +41,6 @@ const notasCollection = defineCollection({
 });
 
 const equipoCollection = defineCollection({
-  type: "data",
   schema: z.object({
     draft: z.boolean(),
     alias: z.string(),
@@ -56,7 +55,6 @@ const equipoCollection = defineCollection({
 });
 
 const teamCollection = defineCollection({
-  type: "data",
   schema: z.object({
     draft: z.boolean(),
     alias: z.string(),
