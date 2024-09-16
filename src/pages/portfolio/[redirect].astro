@@ -5,7 +5,6 @@ import { getCollection } from "astro:content";
 export const prerender = false;
 let path = Astro.url.pathname;
 if (path.includes("/portfolio")) {
-  console.log("inside if path::");
 
   const hashToHeal = path.match(/\/portfolio\/.*?(\d{6})/)?.[1];
   if (hashToHeal) {

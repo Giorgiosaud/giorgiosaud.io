@@ -1,6 +1,5 @@
 import * as esTranslations from "./locales/es";
 import * as enTranslations from "./locales/es";
-console.log(esTranslations);
 export const languages = {
   en: "English",
   es: "Español",
@@ -111,4 +110,3 @@ export const ui = {
     "contact.submit": "Enviar mensaje",
   },
 } as const;
-console.log("ui", ui);
