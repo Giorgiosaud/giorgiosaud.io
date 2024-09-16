@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000004"
+selfHealing: "000002"
 title: "Efficient and Effective Use of the <img> Tag with srcset and sizes Attributes"
 resume: "explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness."
 image: { src: "link_siloo8", alt: "full stack web development" }

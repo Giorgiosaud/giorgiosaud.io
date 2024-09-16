@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000004"
+selfHealing: "000002"
 title: "Uso Eficiente y Efectivo de la Etiqueta <img> con los Atributos srcset y sizes"
 resume: "Explica el uso eficiente y efectivo de la etiqueta <img> en HTML, enfocándose en los atributos srcset y sizes. Estos atributos optimizan el uso de recursos según el dispositivo que muestra el contenido, mejorando el rendimiento y la capacidad de respuesta."
 image: { src: "link_siloo8", alt: "desarrollo web full stack" }

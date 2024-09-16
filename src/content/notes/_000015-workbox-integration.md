@@ -1,6 +1,6 @@
 ---
 draft: true
-selfHealing: "000001"
+selfHealing: "000015"
 title: "Workbox"
 resume: "https://web.dev/learn/pwa/workbox?hl=es-419
 https://rumaan.dev/blog/workbox-astro-project"
