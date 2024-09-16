@@ -62,6 +62,14 @@ if (page.currentPage===1){
                         slug={noteEntry.slug}
                         index={index}
                         authorLink={`/team/${noteEntry.data.author.slug}`}
+                        localization={{
+                            lang:"en-EN",
+                            options:{
+                                month:'long',
+                                day:'numeric',
+                                year:'numeric'
+                            }
+                        }}
                         />
     </li>
     ))

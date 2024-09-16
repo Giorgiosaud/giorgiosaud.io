@@ -54,7 +54,10 @@ const author=await getEntry("team",entry.data.author.slug);
     <time
     class="text-gray-400"
     datetime={entry.data.publishDate.toISOString()}>
-    {entry.data.publishDate.toDateString()}
+    {entry.data.publishDate.toLocaleDateString('en-En',{
+                                month:'long',
+                                day:'numeric',
+                                year:'numeric'})}
   </time>
   <span class="text-gray-400 hidden md:block">•</span>
   <div class="text-gray-400">

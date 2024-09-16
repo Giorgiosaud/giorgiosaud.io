@@ -29,13 +29,13 @@ const { Content } = await entry.render();
       <header>
         <span
           class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-          transition:name=`${entry.id} category`
+          transition:name=`${entry.slug}_category`
         >
           {entry.data.category}
         </span>
         <h1
           class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
-          transition:name=`${entry.data.alias} alias`
+          transition:name=`${entry.data.alias}_alias`
         >
           {entry.data.title}
         </h1>
@@ -48,6 +48,7 @@ const { Content } = await entry.render();
           <time
             class="text-gray-400"
             datetime={entry.data.publishDate.toISOString()}
+            transition:name=`${entry.slug}_date` 
           >
             {entry.data.publishDate.toDateString()}
           </time>

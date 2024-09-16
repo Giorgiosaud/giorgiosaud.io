@@ -1,4 +1,5 @@
 ---
+import type { TypeOf } from "astro:schema";
 import CloudinaryImage from "./ui/cloudinaryImage.astro";
 
 interface Props {
@@ -13,6 +14,10 @@ interface Props {
     authorLink:string;
     publishDate: Date;
     resume:string;
+    localization:{
+        lang:string;
+        options:Intl.DateTimeFormatOptions;
+    }
 }
 const { 
     link,
@@ -25,7 +30,8 @@ const {
     resume,
     authorAlias,
     authorLink,
-    publishDate
+    publishDate,
+    localization
 } = Astro.props as Props;
 
 console.log(Astro.props)
@@ -55,15 +61,17 @@ console.log(publishDate instanceof Date)
     </a>
     <div class="flex gap-2 mt-3 align-start"
         transition:name=`${slug}_meta`>
-        <a class="text-gray-400" href={authorLink}
-            transition:name=`${authorAlias}_alias`>
+        <a class="text-gray-400" href={authorLink}>
             {authorAlias}
         </a>
         <span class="text-gray-400">• </span>
         <time
             class="text-gray-400"
+            transition:name=`${slug}_date` 
             datetime={publishDate.toISOString()}>
-            {publishDate.toLocaleDateString()}
+            {publishDate.toLocaleDateString(localization.lang,{
+                ...localization.options
+            })}
         </time>
     </div>
     <p class="text-slate-500">
