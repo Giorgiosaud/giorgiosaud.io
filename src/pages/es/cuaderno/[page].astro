@@ -62,6 +62,14 @@ if (page.currentPage===1){
                         slug={noteEntry.slug}
                         index={index}
                         authorLink={`/es/equipo/${noteEntry.data.author.slug}`}
+                        localization={{
+                            lang:"es-ES",
+                            options:{
+                                month:'long',
+                                day:'numeric',
+                                year:'numeric'
+                            }
+                        }}
                         />
     </li>
     ))

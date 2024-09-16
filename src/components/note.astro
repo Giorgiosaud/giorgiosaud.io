@@ -1,4 +1,5 @@
 ---
+import type { TypeOf } from "astro:schema";
 import CloudinaryImage from "./ui/cloudinaryImage.astro";
 
 interface Props {
@@ -9,10 +10,14 @@ interface Props {
     slug:string;
     category:string;
     title: string;
-    authorAlias:string;
+    authorAlias?:string;
     authorLink:string;
     publishDate: Date;
     resume:string;
+    localization:{
+        lang:string;
+        options:Intl.DateTimeFormatOptions;
+    }
 }
 const { 
     link,
@@ -25,7 +30,8 @@ const {
     resume,
     authorAlias,
     authorLink,
-    publishDate
+    publishDate,
+    localization
 } = Astro.props as Props;
 
 console.log(Astro.props)
@@ -40,30 +46,32 @@ console.log(publishDate instanceof Date)
             aspectRatio="1"
             loading={index <= 2 ? "eager" : "lazy"}
             decoding={index <= 2 ? "sync" : "async"}
-            transition:name=`${slug} img`
+            transition:name=`${slug}_img`
         />
     </a>
     <div>
         <a href={link}>
         <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-            transition:name=`${slug} category`>
+            transition:name=`${slug}_category`>
             {category}
         </span>
-        <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug} title`>
+        <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug}_title`>
             {title}
         </h2>
     </a>
     <div class="flex gap-2 mt-3 align-start"
-        transition:name=`${slug} meta`>
-        <a class="text-gray-400" href={authorLink}
-            transition:name=`${authorAlias} alias`>
+        transition:name=`${slug}_meta`>
+        <a class="text-gray-400" href={authorLink}>
             {authorAlias}
         </a>
         <span class="text-gray-400">• </span>
         <time
             class="text-gray-400"
+            transition:name=`${slug}_date` 
             datetime={publishDate.toISOString()}>
-            {publishDate.toLocaleDateString()}
+            {publishDate.toLocaleDateString(localization.lang,{
+                ...localization.options
+            })}
         </time>
     </div>
     <p class="text-slate-500">

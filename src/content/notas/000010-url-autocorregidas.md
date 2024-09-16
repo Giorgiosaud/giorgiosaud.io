@@ -3,7 +3,7 @@ draft: false
 selfHealing: "000010"
 title: "URLs de post autocorregidas en Astro" 
 resume: "En este post, hablaré de como desarrollar una funcionalidad de self-healing URL en el proyecto Astro con una simple aproximación "
-image: { src: "selfhealing_url_lygv2g", alt: "Imagen autosanado" }
+image: { src: "selfhealing_url_lygv2g", alt: "Imagen autocorregidas" }
 publishDate: "2024-07-19 11:39"
 category: "astro"
 author: "jorge-saud"
