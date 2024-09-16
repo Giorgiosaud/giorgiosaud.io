@@ -6,6 +6,10 @@ export const languages = {
   es: "Español",
 };
 export const showDefaultLang = false;
+    'en': 'English',
+    es: 'Español',
+  };
+  export const showDefaultLang = false;
 
 export const defaultLang = "en";
 export const routes = {
