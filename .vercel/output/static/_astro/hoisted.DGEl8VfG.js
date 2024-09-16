@@ -1,1 +1,0 @@
-import"./hoisted.B_st5uWx.js";const t={text:"",title:"",url:window.location.href},e=document.getElementById("share");e.addEventListener("click",async()=>{t.text=e.dataset.description??"",t.title=e.dataset.description??"",await navigator.share(t)});
