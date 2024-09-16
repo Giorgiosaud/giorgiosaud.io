@@ -1,0 +1,70 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Note from "@components/note.astro";
+import { getUniqueObjectsByKey } from "@utils/getUniqueObjectsByKey";
+
+import {getCollection,getEntries} from 'astro:content';
+export async function getStaticPaths() {
+  const publishedNotes = await getCollection("notes", ({ data }) => {
+        return !data.draft && data.publishDate < new Date();
+    });
+    const uniqueTags = [...new Set(publishedNotes.map(note=>note.data.tags).flat())];
+  return uniqueTags.map(tag=>({
+    params:{
+      tag,
+    }
+  }))
+}
+const { tag } = Astro.params;
+const entries = await getCollection("notes", ({ data }) => {
+    return !data.draft && data.publishDate < new Date() && data.tags.includes(tag);
+});
+const authors = getUniqueObjectsByKey(entries.map((entry) => {
+    return entry.data.author;
+}),"slug");
+const authorsData=await getEntries(authors);
+
+---
+<Layout title="Blog">
+  <Container>
+      <Sectionhead>
+          <Fragment slot="title">My tag #{tag}</Fragment>
+          <Fragment slot="desc">
+              A list of notes with #{tag}.
+          </Fragment>
+      </Sectionhead>
+      <main class="mt-16">
+          <ul class="grid gap-16 max-w-4xl mx-auto">
+              {
+                  entries.map((noteEntry, index) => (
+                  <li>
+                      <Note 
+                      link={`/notebook/${noteEntry.slug}`}
+                      imageSrc={noteEntry.data.image.src} 
+                      imageAlt={noteEntry.data.image.alt}
+                      category={noteEntry.data.category}
+                      title={noteEntry.data.title}
+                      authorAlias={authorsData.find((author)=>author.slug===noteEntry.data.author.slug)?.data.alias}
+                      publishDate={noteEntry.data.publishDate}
+                      resume={noteEntry.data.resume}
+                      slug={noteEntry.slug}
+                      index={index}
+                      authorLink={`/team/${noteEntry.data.author.slug}`}
+                      localization={{
+                          lang:"en-EN",
+                          options:{
+                              month:'long',
+                              day:'numeric',
+                              year:'numeric'
+                          }
+                      }}
+                      />
+  </li>
+  ))
+}
+</ul>
+</main>
+</Container>
+</Layout>

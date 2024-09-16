@@ -6,6 +6,7 @@ import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 import { getEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
+import NoteHeader from "@components/noteHeader.astro";
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
   const notebookEntries = await getCollection("notes");
@@ -35,58 +36,20 @@ const author=await getEntry("team",entry.data.author.slug);
 <Layout title={entry.data.title} description={entry.data.resume} image={entry.data.image.src} article={article}>
   <Container>
     <div class="mx-auto max-w-3xl mt-14">
-      <header>
-        <span 
-        class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-        transition:name=`${entry.id}_category`>
-        {entry.data.category}
-      </span>
-      <h1
-      class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
-      transition:name=`${entry.slug}_title`>
-      {entry.data.title}
-    </h1>
-    <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap"
-    transition:name=`${entry.slug}_meta`>
-    <a href={`/team/${author.slug}`} class="text-gray-400"
-    transition:name=`${author.data.alias}_alias`>{author.data.alias}</a>
-    <span class="text-gray-400">•</span>
-    <time
-    class="text-gray-400"
-    datetime={entry.data.publishDate.toISOString()}>
-    {entry.data.publishDate.toLocaleDateString('en-En',{
-                                month:'long',
-                                day:'numeric',
-                                year:'numeric'})}
-  </time>
-  <span class="text-gray-400 hidden md:block">•</span>
-  <div class="text-gray-400">
-    {
-      entry.data.tags.map((tag) => (
-      <span class="text-sm text-gray-400">#{tag} </span>
-      ))
-    }
-  </div>
-</div>
-<figure class="mx-auto max-w-3xl aspect-square w-full">
-  <CloudinaryImage
-  src={`notebook-posts/${entry.data.image.src}`}
-  alt={entry.data.image.alt}
-  aspectRatio="1"
-  loading={"eager" }
-  decoding={"sync"}
-  transition:name=`${entry.slug}_img`
-  class="w-full rounded-md object-cover object-center bg-white aspect-square"
-  />
-  <figcaption class="text-gray-400 text-xs text-center w-100 pt-2">{entry.data.image.alt}
-  </figcaption>
-</figure>
-<details>
-  <summary>Summary</summary>
-  <p class="text-sm text-gray-400" 
-  transition:name=`${entry.id}_resume`>{entry.data.resume}</p>
-</details>
-</header>
+      <NoteHeader
+      basePath="notebook"
+        slug={entry.slug}
+        resume={entry.data.resume}
+        category={entry.data.category}
+        title={entry.data.title}
+        publishDate={entry.data.publishDate}
+        imageSrc={entry.data.image.src}
+        imageAlt={entry.data.image.alt}
+        authorAlias={author.data.alias}
+        authorSlug={entry.data.author.slug}
+        authorLink=`/team/${entry.data.author.slug}`
+        tags={entry.data.tags} 
+      />
 </div>
 <div class="mx-auto prose prose-lg mt-6 max-w-3xl">
   <Content />

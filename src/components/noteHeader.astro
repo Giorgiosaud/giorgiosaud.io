@@ -1,0 +1,85 @@
+---
+import { string } from "astro:schema";
+import CloudinaryImage from "./ui/cloudinaryImage.astro";
+
+type Props = {
+    slug: string;
+    resume: string;
+    category: string;
+    title: string;
+    publishDate: Date;
+    imageSrc: string;
+    imageAlt: string;
+    authorAlias: string;
+    authorLink:string;
+    tags: string[];
+    basePath:string;
+}
+const {
+    slug,
+    resume,
+    category,
+    title,
+    publishDate,
+    imageSrc,
+    imageAlt,
+    authorLink,
+    basePath,
+    authorAlias,
+    tags
+    } = Astro.props as Props;
+---
+<header>
+    <span 
+    class="text-blue-400 uppercase tracking-wider text-sm font-medium"
+    transition:name=`${slug}_category`>
+    {category}
+  </span>
+  <h1
+  class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
+  transition:name=`${slug}_title`>
+  {title}
+</h1>
+
+<figure class="mx-auto max-w-3xl aspect-square w-full">
+<CloudinaryImage
+src={`notebook-posts/${imageSrc}`}
+alt={imageAlt}
+aspectRatio="1"
+loading={"eager" }
+decoding={"sync"}
+transition:name=`${slug}_img`
+class="w-full rounded-md object-cover object-center bg-white aspect-square"
+/>
+<figcaption class="text-gray-400 text-xs text-center w-100 pt-2">{imageAlt}
+</figcaption>
+</figure>
+<div class="flex gap-2 my-3 items-center flex-wrap md:flex-nowrap"
+transition:name=`${slug}_meta`>
+<a href={authorLink} 
+class="text-gray-400"
+transition:name=`${authorAlias}_alias`>{authorAlias}</a>
+<span class="text-gray-400">•</span>
+<time
+class="text-gray-400"
+datetime={publishDate.toISOString()}>
+{publishDate.toLocaleDateString('en-En',{
+                            month:'long',
+                            day:'numeric',
+                            year:'numeric'})}
+</time>
+<span class="text-gray-400 hidden md:block">•</span>
+<div class="text-gray-400">
+{
+  tags.map((tag) => (
+  <a class="text-sm text-gray-400" href=`/${basePath}/tag/${tag}`>#{tag} </a>
+  ))
+}
+</div>
+</div>
+<details>
+<summary>Summary</summary>
+<p class="text-sm text-gray-400" 
+transition:name=`${slug}_resume`>{resume}</p>
+</details>
+</header>
