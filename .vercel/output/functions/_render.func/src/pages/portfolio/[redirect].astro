@@ -1,0 +1,23 @@
+---
+import Container from "@components/container.astro";
+import Layout from "@layouts/Layout.astro";
+import { getCollection } from "astro:content";
+export const prerender = false;
+let path = Astro.url.pathname;
+if (path.includes("/portfolio")) {
+  console.log("inside if path::");
+
+  const hashToHeal = path.match(/\/portfolio\/.*?(\d{6})/)?.[1];
+  if (hashToHeal) {
+    const col = await getCollection("portfolio", (entry) => {
+      return entry.data.selfHealing === hashToHeal;
+    });
+    if (col.length) {
+      const redirect = "/portfolio/" + col[0].slug;
+      return Astro.redirect(redirect);
+    }
+  }
+
+  return Astro.redirect("/404");
+}
+---
