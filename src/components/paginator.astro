@@ -8,12 +8,10 @@ interface Props {
 }
 
 const { page } = Astro.props;
-const totalPages = Math.ceil(page.total / page.size);
-const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
 ---
 
 <hr class="mt-4" />
-<section class="grid grid-cols-3 py-3">
+<section class="grid grid-cols-2 py-3">
   <div class="flex justify-start">
     {
       page.url.prev && (
@@ -31,22 +29,7 @@ const pagesArray = Array.from({ length: totalPages }, (_, i) => i + 1);
       )
     }
   </div>
-  <div class="flex justify-center">
-    {
-      pagesArray.map((pageX) => {
-        return (
-          <Link
-            size="md"
-            href={`/notebook/${pageX === 1 ? "" : pageX}`}
-            style={pageX === page.currentPage ? "pages-active" : "pages"}
-            class="flex gap place-items-center"
-          >
-            {pageX}
-          </Link>
-        );
-      })
-    }
-  </div>
+  
   <div class="flex justify-end">
     {
       page.url.next && (

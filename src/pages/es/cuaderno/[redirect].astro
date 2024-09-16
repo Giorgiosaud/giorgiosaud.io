@@ -4,27 +4,19 @@ import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 export const prerender = false;
 let path = Astro.url.pathname;
-if (path.includes("/notebook/")) {
-  console.log("inside if path::");
-
+if(path.includes("/notebook/")){
+  
   const hashToHeal = path.match(/\/notebook\/.*?(\d{6})/)?.[1];
-  if (hashToHeal) {
-    console.log("inside if hash:::", hashToHeal);
-
-    const col = await getCollection("notes", (entry) => {
-      return entry.data.selfHealing === hashToHeal;
+  if(hashToHeal){
+    const col=await getCollection("notes", (entry) =>{
+      return entry.data.selfHealing===hashToHeal
     });
-    console.log("col searched::", col);
-
-    if (col.length) {
-      const redirect = "/notebook/" + col[0].slug;
-      console.log("redirect::", redirect);
-
+    if(col.length){
+      const redirect="/notebook/"+col[0].slug;
       return Astro.redirect(redirect);
     }
+    
   }
-  console.log("outside if hash:::", hashToHeal);
-
   return Astro.redirect("/404");
 }
 ---

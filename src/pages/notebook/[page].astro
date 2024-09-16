@@ -1,5 +1,6 @@
+
 ---
-import { getCollection, getEntry, getEntryBySlug, type CollectionEntry} from "astro:content";
+import { getCollection, getEntries, getEntry, getEntryBySlug, type CollectionEntry} from "astro:content";
 import { Picture } from "astro:assets";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
@@ -7,6 +8,7 @@ import Sectionhead from "@components/sectionhead.astro";
 import Paginator from "@components/paginator.astro";
 import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+import { getUniqueObjectsByKey } from "@utils/getUniqueObjectsByKey";
 
 export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
     const publishedNotesEntries = await getCollection("notes", ({ data }) => {
@@ -15,17 +17,19 @@ export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
     publishedNotesEntries.sort(function (a, b) {
         return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
     });
-    for (const entry of publishedNotesEntries) {
-        const author = await getEntry("team",entry.data.author.slug);
-        entry.author=author;
-    }
+ 
     return paginate(publishedNotesEntries, {pageSize:4});
 }
 type Props = {
   page: Page<CollectionEntry<'notes'>>;
 };
-const { page } = Astro.props;
+const { page } = Astro.props as Props;
 
+const authors = getUniqueObjectsByKey(page.data.map((entry) => {
+    return entry.data.author;
+}),"slug");
+
+const authorsData=await getEntries(authors);
 
 let canonical
 if (page.currentPage===1){
@@ -72,8 +76,9 @@ if (page.currentPage===1){
                             
                             <div class="flex gap-2 mt-3"
                             transition:name=`${noteEntry.id} meta`>
-                            <a class="text-gray-400" href={`team/${noteEntry.author.slug}`}>
-                                {noteEntry.author.data.alias}
+                            <a class="text-gray-400" href={`team/${noteEntry.data.author.slug}`}
+                            transition:name=`${authorsData.find((author)=>author.slug===noteEntry.data.author.slug).data.alias} alias`>
+                                {authorsData.find((author)=>author.slug===noteEntry.data.author.slug).data.alias}
                             </a>
                             <span class="text-gray-400">• </span>
                             <time
