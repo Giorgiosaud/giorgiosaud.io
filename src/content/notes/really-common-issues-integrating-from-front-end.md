@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2021-05-12 11:39"
 category: "integration"
-author: "es/jorge-saud"
+author: "jorge-saud"
 tags: [frontend,csp,integrations,common,issues]
 ---
 
