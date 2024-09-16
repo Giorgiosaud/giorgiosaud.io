@@ -6,7 +6,7 @@ resume: "explains the efficient and effective use of the <img> tag in HTML, focu
 image: { src: "link_siloo8", alt: "link tag" }
 publishDate: "2023-05-08 11:39"
 category: "Tutorials"
-author: "jorge-saud"
+author: "es/jorge-saud"
 tags: [webdev, frontend, img, srcset]
 ---
 

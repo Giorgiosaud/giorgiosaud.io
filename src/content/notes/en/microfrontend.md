@@ -7,8 +7,13 @@ resume: "Giorgio discusses the benefits and implementation of micro frontend arc
 image: { src: "microfrontend_klswbm", alt: "Micro Frontend Architecture" }
 publishDate: "2023-05-08 11:39"
 category: "architecture"
+<<<<<<< HEAD:src/content/notes/microfrontend.md
 author: "jorge-saud"
 tags: [microfrontend, architecture]
+=======
+author: "es/jorge-saud"
+tags: [microfrontend,architecture]
+>>>>>>> 4ccc457af8a380feaa0bb46f9b24cddfc85885bd:src/content/notes/en/microfrontend.md
 ---
 
 In a [previous article at modyo blog](https://blog.modyo.com/posts/micro-frontends-empower-your-developers-to-build-better-digital-products), we talked about how micro frontends offer more freedom for teams and deliver more efficient applications. Because of this, they are becoming popular among architects and developers because large organizations and industry leaders are successfully managing their own web applications using micro frontend architectures.
