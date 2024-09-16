@@ -46,17 +46,17 @@ console.log(publishDate instanceof Date)
     <div>
         <a href={link}>
         <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-            transition:name=`${slug} category`>
+            transition:name=`${slug}_category`>
             {category}
         </span>
-        <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug} title`>
+        <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug}_title`>
             {title}
         </h2>
     </a>
     <div class="flex gap-2 mt-3 align-start"
-        transition:name=`${slug} meta`>
+        transition:name=`${slug}_meta`>
         <a class="text-gray-400" href={authorLink}
-            transition:name=`${authorAlias} alias`>
+            transition:name=`${authorAlias}_alias`>
             {authorAlias}
         </a>
         <span class="text-gray-400">• </span>

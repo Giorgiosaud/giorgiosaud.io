@@ -38,18 +38,18 @@ const author=await getEntry("team",entry.data.author.slug);
       <header>
         <span 
         class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-        transition:name=`${entry.id} category`>
+        transition:name=`${entry.id}_category`>
         {entry.data.category}
       </span>
       <h1
       class="text-4xl lg:text-5xl font-bold lg:tracking-tight mt-1 lg:leading-tight"
-      transition:name=`${entry.id} title`>
+      transition:name=`${entry.slug}_title`>
       {entry.data.title}
     </h1>
     <div class="flex gap-2 mt-3 items-center flex-wrap md:flex-nowrap"
-    transition:name=`${entry.id} meta`>
+    transition:name=`${entry.slug}_meta`>
     <a href={`/team/${author.slug}`} class="text-gray-400"
-    transition:name=`${author.data.alias} alias`>{author.data.alias}</a>
+    transition:name=`${author.data.alias}_alias`>{author.data.alias}</a>
     <span class="text-gray-400">•</span>
     <time
     class="text-gray-400"
@@ -81,7 +81,7 @@ const author=await getEntry("team",entry.data.author.slug);
 <details>
   <summary>Summary</summary>
   <p class="text-sm text-gray-400" 
-  transition:name=`${entry.id} resume`>{entry.data.resume}</p>
+  transition:name=`${entry.id}_resume`>{entry.data.resume}</p>
 </details>
 </header>
 </div>
