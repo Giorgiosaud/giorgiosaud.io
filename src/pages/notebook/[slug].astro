@@ -72,7 +72,7 @@ const author=await getEntry("team",entry.data.author.slug);
   aspectRatio="1"
   loading={"eager" }
   decoding={"sync"}
-  transition:name=`${entry.id} img`
+  transition:name=`${entry.slug}_img`
   class="w-full rounded-md object-cover object-center bg-white aspect-square"
   />
   <figcaption class="text-gray-400 text-xs text-center w-100 pt-2">{entry.data.image.alt}
