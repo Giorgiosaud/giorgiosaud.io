@@ -20,6 +20,8 @@ export interface Props {
     authors?: string[];
     section?: string;
     tags?: string[];
+    imageSrc:string;
+
   }
   job?:{
   }
@@ -94,14 +96,14 @@ const schema={
           "height": "280"
         }
       },
-      "datePublished": "",
-      "dateModified": "",
+      "datePublished": new Date(),
+      "dateModified": new Date(),
     }
 if(article){
   schema.headline=article.title??'';
-  schema.image.url=image??'';
-  schema.datePublished=article.publishedTime?.toISOString().substring(0,10)??'';
-  schema.dateModified=article.modifiedTime?.toISOString().substring(0,10)??'';
+  schema.image.url=article.imageSrc??'';
+  schema.datePublished=article.publishedTime??new Date();
+  schema.dateModified=article.modifiedTime??new Date();
   seoProps.openGraph!.basic={
     ...seoProps.openGraph!.basic,
     type: "blog",

@@ -6,6 +6,9 @@ import type { GetStaticPaths, Page } from 'astro';
 import { getEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 import NoteHeader from "@components/noteHeader.astro";
+import { auto } from "@cloudinary/url-gen/actions/resize";
+import { Cloudinary } from "@cloudinary/url-gen/index";
+import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
   const notebookEntries = await getCollection("notes");
@@ -21,7 +24,24 @@ interface Props {
 const { entry } = Astro.props;
 
 const { Content } = await entry.render();
+const cld = new Cloudinary({
+  cloud: {
+    cloudName: "giorgiosaud",
+    apiKey: import.meta.env.CLOUDINARY_API_KEY,
+    apiSecret: import.meta.env.CLOUDINARY_API_SECRET,
+  },
+  url: {
+    secure: true, // force https, set to false to force http,
+    // secureDistribution: 'www.giorgiosaud.io',
+  },
+});
 
+let cldSrc = cld.image(entry.data.image.src).format("auto").quality("auto");
+  cldSrc = cldSrc.resize(auto().gravity(autoGravity()).width(430));
+  cldSrc = cldSrc.resize(auto().gravity(autoGravity()).height(430));
+  cldSrc = cldSrc.resize(
+    auto().gravity(autoGravity()).aspectRatio(1),
+  );
 const article={
   title: entry.data.title,
   publishedTime: entry.data.publishDate,
@@ -29,6 +49,7 @@ const article={
   authors: ["Giorgiosaud"],
   section: entry.data.category,
   tags: entry.data.tags,
+  imageSrc: cldSrc,
 }
 const author=await getEntry("team",entry.data.author.slug);
 ---
