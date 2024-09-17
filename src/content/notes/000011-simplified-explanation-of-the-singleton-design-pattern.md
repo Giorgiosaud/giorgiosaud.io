@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "000005"
+selfHealing: "000011"
 title: "Simplified Explanation of the Singleton Design Pattern"
 resume: "The primary purpose of this pattern is to restrict the instantiation of a class to a single instance. Although its use cases can be rare, Jorge highlights some practical applications."
 image: { src: "singleton_hbupze", alt: "Recicle Singleton image" }
