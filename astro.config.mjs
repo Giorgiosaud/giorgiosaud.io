@@ -51,7 +51,7 @@ export default defineConfig({
       entryLimit: 10000,
       changefreq: "weekly",
       priority: 0.7,
-      lastmod: new Date("2022-02-24"),
+      lastmod: new Date(),
     }),
     icon({
       iconDir: "src/components/ui/icons",
