@@ -14,8 +14,8 @@ export interface Props {
   description?: string;
   article?:{
     title?: string;
-    publishedTime?: string;
-    modifiedTime?: string;
+    publishedTime?: Date;
+    modifiedTime?: Date;
     expirationTime?: string;
     authors?: string[];
     section?: string;
@@ -67,7 +67,41 @@ const seoProps:SEOProps={
     },
   }
 }
+const schema={
+      "@context": "https://schema.org/",
+      "@type": "NewsArticle",
+      "headline":'',
+      "image": {
+        "@type": "ImageObject",
+        "url": "",
+        "width": "430",
+        "height": "240"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Giorgio Saud",
+        "url": "https://giorgiosaud.io/about/"
+        
+      },
+      
+      "publisher": {
+        "@type": "Organization",
+        "name": "Personal Website",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://res.cloudinary.com/giorgiosaud/image/upload/f_auto/q_auto/c_auto,h_400,w_300/e_bgremoval/c_auto,g_auto,h_280/ar_1.0,c_auto,g_auto/My%20photo?_a=DATAdtIIZAA0",
+          "width": "280",
+          "height": "280"
+        }
+      },
+      "datePublished": "",
+      "dateModified": "",
+    }
 if(article){
+  schema.headline=article.title??'';
+  schema.image.url=image??'';
+  schema.datePublished=article.publishedTime?.toISOString().substring(0,10)??'';
+  schema.dateModified=article.modifiedTime?.toISOString().substring(0,10)??'';
   seoProps.openGraph!.basic={
     ...seoProps.openGraph!.basic,
     type: "blog",
@@ -75,8 +109,8 @@ if(article){
     image: imgSrc,
   },
   seoProps.openGraph!.article={
-    publishedTime: article.publishedTime,
-    modifiedTime: article.modifiedTime,
+    publishedTime: article.publishedTime?.toISOString().substring(0,10),
+    modifiedTime: article.modifiedTime?.toISOString().substring(0,10),
     section: article.section,
     tags: article.tags,
   }
@@ -145,39 +179,9 @@ if(article){
   canonical={canonicalURL}
   {...seoProps}
   />
-  
-  {article&&<script type="application/ld+json">
-    {
-      "@context": "https://schema.org/",
-      "@type": "NewsArticle",
-      "headline": {article.title},
-      "image": {
-        "@type": "ImageObject",
-        "url": {image},
-        "width": "430",
-        "height": "240"
-      },
-      "author": {
-        "@type": "Person",
-        "name": "Giorgio Saud",
-        "url": "https://giorgiosaud.io/about/"
-        
-      },
-      
-      "publisher": {
-        "@type": "Organization",
-        "name": "Personal Website",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://res.cloudinary.com/giorgiosaud/image/upload/f_auto/q_auto/c_auto,h_400,w_300/e_bgremoval/c_auto,g_auto,h_280/ar_1.0,c_auto,g_auto/My%20photo?_a=DATAdtIIZAA0",
-          "width": "280",
-          "height": "280"
-        }
-      },
-      "datePublished": {article.publishedTime}
-      "dateModified": {article.modifiedTime},
-    }
-  </script>
+  {
+  article&&
+  <script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
 }
 
 </head>

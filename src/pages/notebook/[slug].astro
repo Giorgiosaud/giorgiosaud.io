@@ -3,7 +3,6 @@ import { getCollection, type CollectionEntry} from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import type { GetStaticPaths, Page } from 'astro';
-import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 import { getEntry } from "astro:content";
 import { Icon } from "astro-icon/components";
 import NoteHeader from "@components/noteHeader.astro";
@@ -25,7 +24,8 @@ const { Content } = await entry.render();
 
 const article={
   title: entry.data.title,
-  publishedTime: entry.data.publishDate.toISOString(),
+  publishedTime: entry.data.publishDate,
+  modifiedTime: entry.data.publishDate,
   authors: ["Giorgiosaud"],
   section: entry.data.category,
   tags: entry.data.tags,
