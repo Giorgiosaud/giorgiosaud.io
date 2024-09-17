@@ -49,7 +49,7 @@ const article={
   authors: ["Giorgiosaud"],
   section: entry.data.category,
   tags: entry.data.tags,
-  imageSrc: cldSrc,
+  imageSrc: cldSrc.toURL(),
 }
 const author=await getEntry("team",entry.data.author.slug);
 ---
