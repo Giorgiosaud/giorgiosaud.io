@@ -1,7 +1,6 @@
 ---
-import type { TypeOf } from "astro:schema";
 import CloudinaryImage from "./ui/cloudinaryImage.astro";
-
+const url=Astro.url;
 interface Props {
     link: string;
     imageSrc: string;
@@ -14,6 +13,7 @@ interface Props {
     authorLink:string;
     publishDate: Date;
     resume:string;
+    tags?:string[];
     localization:{
         lang:string;
         options:Intl.DateTimeFormatOptions;
@@ -31,7 +31,9 @@ const {
     authorAlias,
     authorLink,
     publishDate,
-    localization
+    localization,
+    tags,
+    basePath,
 } = Astro.props as Props;
 
 console.log(Astro.props)
@@ -51,32 +53,38 @@ console.log(publishDate instanceof Date)
     </a>
     <div>
         <a href={link}>
-        <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-            transition:name=`${slug}_category`>
-            {category}
-        </span>
-        <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug}_title`>
-            {title}
-        </h2>
-    </a>
-    <div class="flex gap-2 mt-3 align-start"
-        transition:name=`${slug}_meta`>
-        <a class="text-gray-400" href={authorLink}>
-            {authorAlias}
+            <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
+                transition:name=`${slug}_category`>
+                {category}
+            </span>
+            <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug}_title`>
+                {title}
+            </h2>
         </a>
-        <span class="text-gray-400">• </span>
-        <time
-            class="text-gray-400"
-            transition:name=`${slug}_date` 
-            datetime={publishDate.toISOString()}>
-            {publishDate.toLocaleDateString(localization.lang,{
-                ...localization.options
-            })}
-        </time>
+        <div class="flex gap-2 mt-3 align-start"
+            transition:name=`${slug}_meta`>
+            <a class="text-gray-400" href={authorLink}>
+                {authorAlias}
+            </a>
+            <span class="text-gray-400">• </span>
+            <time
+                class="text-gray-400"
+                transition:name=`${slug}_date` 
+                datetime={publishDate.toISOString()}>
+                {publishDate.toLocaleDateString(localization.lang,{
+                    ...localization.options
+                })}
+            </time>
+        </div>
+        <p class="text-slate-500">
+            {resume}
+        </p>
+        <div class="mt-4 flex gap-2 flex-wrap">
+            {tags?.map((tag)=>(
+                <a href={`${url}/tag/${tag}`} class="text-blue-300 transition duration-700 text-sm font-medium hover:text-blue-700 ">
+                    #{tag}
+                </a>
+            ))}
+        </div>
     </div>
-    <p class="text-slate-500">
-        {resume}
-    </p>
 </div>
-</div>
-    
