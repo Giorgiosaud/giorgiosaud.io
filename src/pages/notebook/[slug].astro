@@ -37,7 +37,7 @@ const author=await getEntry("team",entry.data.author.slug);
   <Container>
     <div class="mx-auto max-w-3xl mt-14">
       <NoteHeader
-      basePath="notebook"
+        basePath="notebook"
         slug={entry.slug}
         resume={entry.data.resume}
         category={entry.data.category}
@@ -46,7 +46,6 @@ const author=await getEntry("team",entry.data.author.slug);
         imageSrc={entry.data.image.src}
         imageAlt={entry.data.image.alt}
         authorAlias={author.data.alias}
-        authorSlug={entry.data.author.slug}
         authorLink=`/team/${entry.data.author.slug}`
         tags={entry.data.tags} 
       />

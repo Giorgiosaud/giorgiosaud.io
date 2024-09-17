@@ -72,7 +72,7 @@ datetime={publishDate.toISOString()}>
 <div class="text-gray-400">
 {
   tags.map((tag) => (
-  <a class="text-sm text-gray-400" href=`/${basePath}/tag/${tag}`>#{tag} </a>
+  <a class="text-sm text-gray-400" transition:name=`${tag}_tagname` href=`/${basePath}/tag/${tag}`>#{tag} </a>
   ))
 }
 </div>

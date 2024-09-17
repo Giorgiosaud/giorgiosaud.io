@@ -33,9 +33,7 @@ const authorsData=await getEntries(authors);
   <Container>
       <Sectionhead>
           <Fragment slot="title">My tag #{tag}</Fragment>
-          <Fragment slot="desc">
-              A list of notes with #{tag}.
-          </Fragment>
+          
       </Sectionhead>
       <main class="mt-16">
           <ul class="grid gap-16 max-w-4xl mx-auto">
@@ -52,6 +50,7 @@ const authorsData=await getEntries(authors);
                       publishDate={noteEntry.data.publishDate}
                       resume={noteEntry.data.resume}
                       slug={noteEntry.slug}
+                      tags={noteEntry.data.tags}
                       index={index}
                       authorLink={`/es/equipo/${noteEntry.data.author.slug}`}
                       localization={{

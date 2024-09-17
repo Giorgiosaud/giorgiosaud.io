@@ -30,10 +30,8 @@ const authorsData=await getEntries(authors);
 <Layout title="Blog">
   <Container>
       <Sectionhead>
-          <Fragment slot="title">My tag #{tag}</Fragment>
-          <Fragment slot="desc">
-              A list of notes with #{tag}.
-          </Fragment>
+          <Fragment slot="title">My tag <span transition:name=`${tag}_tagname`>#{tag}</span></Fragment>
+    
       </Sectionhead>
       <main class="mt-16">
           <ul class="grid gap-16 max-w-4xl mx-auto">
@@ -51,6 +49,7 @@ const authorsData=await getEntries(authors);
                       resume={noteEntry.data.resume}
                       slug={noteEntry.slug}
                       index={index}
+                      tags={noteEntry.data.tags}
                       authorLink={`/team/${noteEntry.data.author.slug}`}
                       localization={{
                           lang:"en-EN",
