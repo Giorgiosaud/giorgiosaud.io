@@ -1,7 +1,6 @@
 ---
 draft: false
 workingOn: "Modyo"
-selfHealing: "900001"
 country: "Chile"
 client: "Larrainvial"
 category: "Private Site"

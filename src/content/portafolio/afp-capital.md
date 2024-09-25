@@ -2,15 +2,15 @@
 draft: false
 workingOn: "Modyo"
 country: "Chile"
-client: "Copec"
-category: "Private Site"
-project: "Redeem Site"
-resume: "Create a simple site for manage credits summary and add check credit details."
-image: { src: "fullcopec", alt: "Full Copec Project" }
-publishDate: "08-01-2020"
+client: "Afp Capital"
+category: "Public Site"
+project: "Frontend Public Site"
+resume: "Architecture and design of a frontend public site for a company in Chile."
+image: { src: "afp-capital", alt: "AFP Capital Project" }
+publishDate: "05-28-2024"
 classes: "bg-clip-text text-transparent bg-gradient-to-b from-indigo-300 to-indigo-600"
 classesClient: "bg-clip-text bg-gradient-to-b text-transparent from-indigo-600 to-indigo-950"
-technologies: ["vue 2", "bootstrap 4", "vanilla js"]
+technologies: ["bootstrap 5", "vanilla js"] 
 ---
 
 # Project Overview: Full Copec Website
