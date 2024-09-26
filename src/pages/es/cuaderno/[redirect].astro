@@ -4,9 +4,7 @@ import Layout from "@layouts/Layout.astro";
 import { getCollection } from "astro:content";
 export const prerender = false;
 let path = Astro.url.pathname;
-console.log(path);
 const hashToHeal = path.match(/\/.*\/.*?(\d{6})/)?.[1]; 
-console.log(hashToHeal)
 if(hashToHeal){
     const col=await getCollection("notas", (entry) =>{
         return entry.data.selfHealing===hashToHeal

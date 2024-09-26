@@ -1,7 +1,6 @@
 ---
 draft: false
 workingOn: "Modyo"
-selfHealing: "900002"
 country: "Colombia"
 client: "Fundacion de la Mujer"
 category: "Private Site"

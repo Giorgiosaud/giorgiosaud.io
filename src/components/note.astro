@@ -14,6 +14,7 @@ interface Props {
     publishDate: Date;
     resume:string;
     tags?:string[];
+    hideTags:boolean;
     localization:{
         lang:string;
         options:Intl.DateTimeFormatOptions;
@@ -32,12 +33,10 @@ const {
     authorLink,
     publishDate,
     localization,
+    hideTags,
     tags,
-    basePath,
 } = Astro.props as Props;
 
-console.log(Astro.props)
-console.log(publishDate instanceof Date)
 ---
 <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
     <a href={link}>
@@ -80,7 +79,7 @@ console.log(publishDate instanceof Date)
             {resume}
         </p>
         <div class="mt-4 flex gap-2 flex-wrap">
-            {tags?.map((tag)=>(
+            {!hideTags && tags?.map((tag)=>(
                 <a href={`${url}/tag/${tag}`} class="text-blue-300 transition duration-700 text-sm font-medium hover:text-blue-700 ">
                     #{tag}
                 </a>
