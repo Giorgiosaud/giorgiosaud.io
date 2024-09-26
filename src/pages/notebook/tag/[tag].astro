@@ -50,6 +50,7 @@ const authorsData=await getEntries(authors);
                       slug={noteEntry.slug}
                       index={index}
                       tags={noteEntry.data.tags}
+                      hideTags={true}
                       authorLink={`/team/${noteEntry.data.author.slug}`}
                       localization={{
                           lang:"en-EN",
