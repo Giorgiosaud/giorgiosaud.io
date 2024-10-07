@@ -14,6 +14,7 @@ interface Props {
     publishDate: Date;
     resume:string;
     tags?:string[];
+    tagsBase:string;
     hideTags:boolean;
     localization:{
         lang:string;
@@ -34,9 +35,9 @@ const {
     publishDate,
     localization,
     hideTags,
+    tagsBase,
     tags,
 } = Astro.props as Props;
-
 ---
 <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
     <a href={link}>
@@ -80,7 +81,7 @@ const {
         </p>
         <div class="mt-4 flex gap-2 flex-wrap">
             {!hideTags && tags?.map((tag)=>(
-                <a href={`${url}/tag/${tag}`} class="text-blue-300 transition duration-700 text-sm font-medium hover:text-blue-700 ">
+                <a href={`${tagsBase}/${tag}`} class="text-blue-300 transition duration-700 text-sm font-medium hover:text-blue-700 ">
                     #{tag}
                 </a>
             ))}
