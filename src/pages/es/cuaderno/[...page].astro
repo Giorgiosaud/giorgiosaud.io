@@ -56,13 +56,13 @@ if (page.currentPage===1){
                         imageAlt={noteEntry.data.image.alt}
                         category={noteEntry.data.category}
                         title={noteEntry.data.title}
-
                         authorAlias={authorsData.find(({slug})=>slug===noteEntry.data.author.slug)?.data.alias}
                         publishDate={noteEntry.data.publishDate}
                         resume={noteEntry.data.resume}
                         slug={noteEntry.slug}
                         index={index}
                         hideTags={false}
+                        tagsBase="/es/cuaderno/tag/"
                         authorLink={`/es/equipo/${noteEntry.data.author.slug}`}
                         localization={{
                             lang:"es-ES",

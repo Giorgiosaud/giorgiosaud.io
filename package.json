@@ -13,15 +13,15 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@astrojs/mdx": "^3.1.5",
+    "@astrojs/mdx": "^3.1.7",
     "@astrojs/partytown": "^2.1.2",
     "@astrojs/react": "^3.6.2",
     "@astrojs/rss": "^4.0.7",
     "@astrojs/sitemap": "^3.1.6",
-    "@astrojs/svelte": "^5.7.0",
-    "@astrojs/tailwind": "^5.1.0",
-    "@astrojs/vercel": "^7.8.0",
-    "@astrojs/vue": "^4.5.0",
+    "@astrojs/svelte": "^5.7.1",
+    "@astrojs/tailwind": "^5.1.1",
+    "@astrojs/vercel": "^7.8.1",
+    "@astrojs/vue": "^4.5.1",
     "@cloudinary/url-gen": "^1.20.0",
     "@fontsource-variable/inter": "^5.0.20",
     "@iconify-json/bx": "^1.2.0",
@@ -31,7 +31,7 @@
     "@types/react": "^18.3.5",
     "@types/react-dom": "^18.3.0",
     "@vercel/speed-insights": "^1.0.12",
-    "astro": "^4.15.4",
+    "astro": "^4.15.9",
     "astro-icon": "^1.1.1",
     "astro-navbar": "^2.3.3",
     "astro-seo": "^0.8.4",
@@ -48,11 +48,11 @@
   "devDependencies": {
     "@commitlint/cli": "^19.4.1",
     "@commitlint/config-conventional": "^19.4.1",
-    "husky": "^9.1.5",
     "@typescript-eslint/parser": "^8.2.0",
     "eslint": "^9.9.0",
     "eslint-plugin-astro": "^1.2.3",
     "eslint-plugin-jsx-a11y": "^6.9.0",
+    "husky": "^9.1.5",
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1"
   }
