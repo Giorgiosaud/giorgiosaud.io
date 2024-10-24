@@ -11,6 +11,6 @@ test('Contact Form works', async () => {
   const el=document.querySelector('form')
   expect(el).toBeTruthy();
   expect(el?.method).toBe('POST');
-  expect(result).toContain('action="https://api.web3forms.com/submit"');
+  expect(el?.action).toBe('https://api.web3forms.com/submit');
   expect(result).toContain('name="botcheck"');
 });
