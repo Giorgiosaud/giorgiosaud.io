@@ -5,6 +5,8 @@ import Navbar from "@components/navbar/navbar.astro";
 import "@fontsource-variable/inter/index.css";
 import { cloudinarySrc } from "@utils/cludinarySrc";
 import  SpeedInsights  from "@vercel/speed-insights/astro"
+import HeadTagManager from "@components/headTagManager.astro";
+import DebuggerTagManager from "@components/debuggerTagManager.astro";
 
 export interface Props {
   lang?: string;
@@ -122,6 +124,7 @@ if(article){
 <!DOCTYPE html>
 <html lang={lang}>
 <head>
+  <HeadTagManager/>
   {canonical&&<link rel="canonical" href={canonical} />}
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width" />
@@ -188,6 +191,7 @@ if(article){
 
 </head>
 <body>
+  <DebuggerTagManager/>
   <SpeedInsights/>
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MDK3K8G2"
