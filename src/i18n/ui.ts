@@ -72,7 +72,7 @@ export const ui = {
     "contact.name.placeholder": "Full Name",
     "contact.email.placeholder": "Email Address",
     "contact.email.error": "Please provide your email.",
-    "contact.message.placeholder": "You Message",
+    "contact.message.placeholder": "Your Message",
     "contact.message.error": "Please provide your message.",
     "contact.submit": "Send Message",
   },
