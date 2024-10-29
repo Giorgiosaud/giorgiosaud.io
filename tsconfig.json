@@ -2,6 +2,7 @@
   "extends": "astro/tsconfigs/base",
   "compilerOptions": {
     "baseUrl": "src",
+    "moduleResolution": "Bundler",
     "strictNullChecks": true,
     "types": ["astro/client"],
     "paths": {
