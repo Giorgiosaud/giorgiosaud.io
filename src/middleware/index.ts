@@ -3,7 +3,6 @@ import { getCollection, type ContentCollectionKey } from "astro:content";
 import { defineMiddleware, sequence } from "astro:middleware";
 const selfHealingMiddleware=(path:string,collection:ContentCollectionKey)=>async (_,next:MiddlewareNext)=>{
     const {url}=_;
-    console.log(_);
     if(url.pathname.includes(`/${path}/`)){
         const requestedSlug=url.pathname.split("/").pop();
         const entriesSlugs = (await getCollection(collection, ({slug }) => {
