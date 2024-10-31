@@ -10,6 +10,9 @@ const selfHealingMiddleware=(path:string,collection:ContentCollectionKey)=>async
         const entrySlug = ((await getCollection(collection, ({id }) => {
             return id;
         })).map((entry)=>entry.id).find((slug)=>slug.includes(hashToHeal)))
+        if(!entrySlug){
+            return _.rewrite('/404',{statusCode:404})
+        }
         if(entrySlug && entrySlug!==requestedSlug){
             const redirectUrl = `${url.origin}/${path}/${entrySlug}`;
             return Response.redirect(redirectUrl,301);
