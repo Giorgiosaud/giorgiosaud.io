@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import type { GetStaticPaths, Page } from "astro";
@@ -10,7 +10,7 @@ import { Icon } from "astro-icon/components";
 export const getStaticPaths: GetStaticPaths = async () => {
   const jobEntries = await getCollection("portfolio");
   return jobEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 };
@@ -19,7 +19,7 @@ interface Props {
 }
 // Get the entry directly from the prop on render
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry);
 
 const job = {
   title: entry.data.client,

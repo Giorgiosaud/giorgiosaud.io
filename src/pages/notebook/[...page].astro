@@ -51,7 +51,7 @@ if (page.currentPage===1){
                     page.data.map((noteEntry, index) => (
                     <li>
                         <Note 
-                        link={`/notebook/${noteEntry.slug}`}
+                        link={`/notebook/${noteEntry.id}`}
                         imageSrc={noteEntry.data.image.src} 
                         imageAlt={noteEntry.data.image.alt}
                         category={noteEntry.data.category}
@@ -59,7 +59,7 @@ if (page.currentPage===1){
                         authorAlias={authorsData.find((author)=>author.slug===noteEntry.data.author.slug)?.data.alias}
                         publishDate={noteEntry.data.publishDate}
                         resume={noteEntry.data.resume}
-                        slug={noteEntry.slug}
+                        slug={noteEntry.id}
                         index={index}
                         tags={noteEntry.data.tags}
                         tagsBase="/notebook/tag"

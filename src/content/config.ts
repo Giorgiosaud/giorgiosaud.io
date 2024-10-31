@@ -1,8 +1,10 @@
 // 1. Import utilities from `astro:content`
 import { z, defineCollection, reference } from "astro:content";
+import { glob } from 'astro/loaders';
 
 // 2. Define your collection(s)
 const notesCollection = defineCollection({
+  loader: glob({ pattern: '**\/[^_]*.md', base: "./src/content/notes" }),
   schema: z.object({
     draft: z.boolean({
       required_error: "draft is required",
@@ -22,6 +24,7 @@ const notesCollection = defineCollection({
 });
 
 const notasCollection = defineCollection({
+  loader: glob({ pattern: '**\/[^_]*.md', base: "./src/content/notas" }),
   schema: z.object({
     draft: z.boolean({
       required_error: "draft is required",
@@ -41,6 +44,7 @@ const notasCollection = defineCollection({
 });
 
 const equipoCollection = defineCollection({
+  loader: glob({ pattern: '**\/[^_]*.md', base: "./src/content/equipo" }),
   schema: z.object({
     draft: z.boolean(),
     alias: z.string(),
@@ -55,6 +59,7 @@ const equipoCollection = defineCollection({
 });
 
 const teamCollection = defineCollection({
+  loader: glob({ pattern: '**\/[^_]*.md', base: "./src/content/team" }),
   schema: z.object({
     draft: z.boolean(),
     alias: z.string(),
@@ -69,6 +74,8 @@ const teamCollection = defineCollection({
 });
 
 const portfolioCollection = defineCollection({
+  loader: glob({ pattern: '**\/[^_]*.md', base: "./src/content/portfolio" }),
+
   schema: z.object({
     draft: z.boolean(),
     client: z.string(),
@@ -89,6 +96,8 @@ const portfolioCollection = defineCollection({
   }),
 });
 const portafolioCollection = defineCollection({
+  loader: glob({ pattern: '**\/[^_]*.md', base: "./src/content/portafolio" }),
+
   schema: z.object({
     draft: z.boolean(),
     client: z.string(),

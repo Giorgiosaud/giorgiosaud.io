@@ -70,7 +70,7 @@ const otherJobs=jobs.data.filter(job=>!["Private Site","Public Site"].includes(j
                                     >
                                     {job.data.category}
                                 </span>
-                                <a href={`/es/portafolio/${job.slug}`}>
+                                <a href={`/es/portafolio/${job.id}`}>
                                 <h2 class:list={[
                                     "text-3xl font-semibold mt-1",{
                                     [job.data.classesClient??'']:!!job.data.classesClient
