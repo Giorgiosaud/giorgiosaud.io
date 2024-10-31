@@ -70,8 +70,7 @@ export default defineConfig({
   },
   output: "static",
   adapter: vercel({
-    webAnalytics: { enabled: true },
-    edgeMiddleware:true
+    webAnalytics: { enabled: true }
   }),
   markdown: {
     shikiConfig: {
