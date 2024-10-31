@@ -3,12 +3,12 @@ import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
 import Container from "@components/container.astro";
 import Layout from "@layouts/Layout.astro";
 import type { GetStaticPaths } from "astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const teamEntries = await getCollection("team");
   return teamEntries.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }));
 };
@@ -16,7 +16,7 @@ interface Props {
   entry: CollectionEntry<"notes">;
 }
 const { entry } = Astro.props;
-const { Content } = await entry.render();
+const { Content } = await render(entry)
 ---
 
 <Layout

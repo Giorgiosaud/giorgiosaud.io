@@ -32,7 +32,6 @@ const authorsData=await getEntries(authors);
   <Container>
       <Sectionhead>
           <Fragment slot="title">My tag #{tag}</Fragment>
-          
       </Sectionhead>
       <main class="mt-16">
           <ul class="grid gap-16 max-w-4xl mx-auto">
@@ -40,7 +39,7 @@ const authorsData=await getEntries(authors);
                   entries.map((noteEntry, index) => (
                   <li>
                       <Note 
-                      link={`/es/cuaderno/${noteEntry.slug}`}
+                      link={`/es/cuaderno/${noteEntry.id}`}
                       imageSrc={noteEntry.data.image.src} 
                       imageAlt={noteEntry.data.image.alt}
                       category={noteEntry.data.category}
@@ -48,7 +47,7 @@ const authorsData=await getEntries(authors);
                       authorAlias={authorsData.find((author)=>author.slug===noteEntry.data.author.slug)?.data.alias}
                       publishDate={noteEntry.data.publishDate}
                       resume={noteEntry.data.resume}
-                      slug={noteEntry.slug}
+                      slug={noteEntry.id}
                       tags={noteEntry.data.tags}
                       hideTags={true}
                       index={index}
@@ -61,6 +60,7 @@ const authorsData=await getEntries(authors);
                               year:'numeric'
                           }
                       }}
+                      tagsBase="/es/cuaderno/tag/"
                       />
   </li>
   ))
