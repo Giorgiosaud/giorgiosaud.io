@@ -10,7 +10,7 @@ import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
 const rootDir = new URL(".", import.meta.url).pathname;
-const modulePath = resolve(rootDir, "src", "generated", "sriHashes.mjs");
+//const modulePath = resolve(rootDir, "src", "generated", "sriHashes.mjs");
 
 // https://astro.build/config
 export default defineConfig({
@@ -70,7 +70,9 @@ export default defineConfig({
   },
   output: "static",
   adapter: vercel({
-    webAnalytics: { enabled: true }
+    webAnalytics: { enabled: true },
+    isr: true,
+
   }),
   markdown: {
     shikiConfig: {
