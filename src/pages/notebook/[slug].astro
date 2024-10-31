@@ -9,6 +9,7 @@ import NoteHeader from "@components/noteHeader.astro";
 import { auto } from "@cloudinary/url-gen/actions/resize";
 import { Cloudinary } from "@cloudinary/url-gen/index";
 import { autoGravity } from "@cloudinary/url-gen/qualifiers/gravity";
+export const prerender = true
 // Generate a new path for every collection entry
 export const getStaticPaths:GetStaticPaths=async ()=> {
   const notebookEntries = await getCollection("notes");
