@@ -68,7 +68,7 @@ export default defineConfig({
   image: {
     domains: ["https://res.cloudinary.com"],
   },
-  output: "server",
+  output: "static",
   adapter: vercel({
     webAnalytics: { enabled: true }
   }),
