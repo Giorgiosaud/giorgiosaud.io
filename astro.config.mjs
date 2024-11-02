@@ -3,7 +3,6 @@ import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
-import { resolve } from "node:path";
 import serviceWorker from "astrojs-service-worker";
 import vercel from "@astrojs/vercel/serverless";
 import vue from "@astrojs/vue";
