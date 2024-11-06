@@ -42,16 +42,17 @@ export function useTranslations(lang: keyof typeof ui) {
   };
 }
 export function useTranslatedPath(lang: keyof typeof ui) {
-  return function translatePath(path: string, l: string = lang) {
-    const pathName = path.replaceAll("/", "");
-    const hasTranslation =
-      defaultLang !== l &&
-      routes[l] !== undefined &&
-      routes[l][pathName] !== undefined;
-    const translatedPath = hasTranslation ? "/" + routes[l][pathName] : path;
 
-    return !showDefaultLang && l === defaultLang
+  const translatePath=(path: string, l: string = lang) =>{ 
+    
+    const pathName = path.replaceAll("/", "");
+    const hasTranslation = routes[pathName] !== undefined;
+    const translatedPath = hasTranslation ? "/" + routes[pathName][lang] : path;
+      return !showDefaultLang && l === defaultLang
       ? translatedPath
       : `/${l}${translatedPath}`;
   };
+  return{
+    translatePath,
+  }
 }

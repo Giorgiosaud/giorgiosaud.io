@@ -4,14 +4,18 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+import { getLangFromUrl, useTranslatedPath } from "@i18n/utils";
 
 // Filter team entries with 'draft: false' & date before current date
 const publishedTeamMembers = await getCollection("team", ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
+const langToTranslate = getLangFromUrl(Astro.url)==="en"?"es":"en";
+const {translatePath} = useTranslatedPath(langToTranslate);
+const translateActualPath=translatePath('about',langToTranslate);
 ---
 
-<Layout title="Acerca de mi">
+<Layout title="Acerca de mi y de este cuaderno" translateActualPath={translateActualPath}>
   <Container>
     <Sectionhead>
       <Fragment slot="title">Acerca de mi</Fragment>

@@ -50,6 +50,7 @@ const equipoCollection = defineCollection({
     alias: z.string(),
     name: z.string(),
     title: z.string(),
+    resume: z.string(),
     avatar: z.object({
       src: z.string(),
       alt: z.string(),
@@ -65,6 +66,7 @@ const teamCollection = defineCollection({
     alias: z.string(),
     name: z.string(),
     title: z.string(),
+    resume: z.string(),
     avatar: z.object({
       src: z.string(),
       alt: z.string(),

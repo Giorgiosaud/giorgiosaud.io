@@ -17,8 +17,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 interface Props {
   entry: CollectionEntry<"portfolio">;
 }
+
 // Get the entry directly from the prop on render
 const { entry } = Astro.props;
+const hash= entry.id.match(/\d{6}/)?.[0];
+const translateActualPath='/es/cuaderno/'+hash
+
 const { Content } = await render(entry);
 
 const job = {
@@ -36,6 +40,7 @@ const job = {
   description={entry.data.resume}
   image={entry.data.image.src}
   job={job}
+  translateActualPath={translateActualPath}
 >
   <Container>
     <div class="mx-auto max-w-3xl mt-14">

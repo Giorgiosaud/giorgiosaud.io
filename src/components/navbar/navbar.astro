@@ -8,16 +8,19 @@ import {
   useTranslations,
 } from "@i18n/utils";
 const lang = getLangFromUrl(Astro.url);
+const otherLang=lang==='es'?'en':'es';
 const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
+const {translatePath} = useTranslatedPath(lang);
 import type { MenuItemsInterface } from "@components/definitions/MenuItemsInterface";
-import { languages } from "@i18n/ui";
-const otherLangs= languages.filter(lang=>lang.code!==lang);
+interface Props{
+  translateActualPath?:string
+}
+const {translateActualPath} = Astro.props
 const menuItems: MenuItemsInterface[] = [
   {
     title: t("nav.about"),
     badge: true,
-    path: translatePath("/about", lang),
+    path: translatePath("about", lang),
   },
   {
     title: t("nav.title"),
@@ -32,15 +35,16 @@ const menuItems: MenuItemsInterface[] = [
   if(lang==='es'){
     menuItems.push({
       title: "English",
-      path: "/",
+      path: translateActualPath?translateActualPath:"/",
   });
     
   }else{
     menuItems.push({
       title: "Español",
-      path: "/es",
+      path: translateActualPath?translateActualPath:"/es",
   });
   }
+
 ---
 
 <div class="sticky top-0 z-50 bg-slate-100 py-5 opacity-85">
