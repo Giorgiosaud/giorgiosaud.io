@@ -22,4 +22,4 @@ const selfHealingMiddleware=(path:string,collection:ContentCollectionKey)=>async
     return response;
 }
 
-export const onRequest = sequence(selfHealingMiddleware('notebook','notes'),selfHealingMiddleware('es/cuaderno','notas'))
+export const onRequest = sequence(selfHealingMiddleware('notebook','notes'),selfHealingMiddleware('es/cuaderno','notas'),selfHealingMiddleware('team','team'),selfHealingMiddleware('es/equipo','equipo')) 

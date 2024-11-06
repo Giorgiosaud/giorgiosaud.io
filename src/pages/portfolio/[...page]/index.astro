@@ -5,6 +5,7 @@ import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import type { GetStaticPaths, Page } from 'astro';
 import CloudinaryImage from "@components/ui/cloudinaryImage.astro";
+import { getLangFromUrl, useTranslatedPath } from "@i18n/utils";
 
 export const getStaticPaths:GetStaticPaths=async({paginate}) =>{
     const publishedWorks = await getCollection("portfolio", ({ data }) => {
@@ -25,9 +26,12 @@ type Props = {
 };
 const { page:jobs } = Astro.props;
 const privateJobs=jobs.data.filter(job=>job.data.category==='Private Site');
-const otherJobs=jobs.data.filter(job=>job.data.category!=='Private Site');
+// const otherJobs=jobs.data.filter(job=>job.data.category!=='Private Site'); 
+const langToTranslate = getLangFromUrl(Astro.url)==="en"?"es":"en";
+const {translatePath} = useTranslatedPath(langToTranslate);
+const translateActualPath=translatePath('portfolio',langToTranslate);
 ---
-<Layout title="Portfolio">
+<Layout title="Portfolio" translateActualPath={translateActualPath}>
     <Container>
         <Sectionhead>
             <Fragment slot="title">My Portfolio</Fragment>

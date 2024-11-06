@@ -7,7 +7,7 @@ resume: "Giorgio discusses the benefits and implementation of micro frontend arc
 image: { src: "microfrontend_klswbm", alt: "Micro Frontend Architecture" }
 publishDate: "2023-05-08 11:39"
 category: "architecture"
-author: "jorge-saud"
+author: "000001-jorge-saud"
 tags: [microfrontend, architecture]
 ---
 

@@ -21,6 +21,8 @@ interface Props {
 }
 // Get the entry directly from the prop on render
 const { entry } = Astro.props;
+const hash= entry.id.match(/\d{6}/)?.[0];
+const translateActualPath='/notebook/'+hash
 
 const { Content } = await render(entry);
 const cld = new Cloudinary({
@@ -53,9 +55,10 @@ const article={
 }
 
 const author=await getEntry(entry.data.author);
+console.log(author);
 ---
 
-<Layout title={entry.data.title} description={entry.data.resume} image={entry.data.image.src} article={article}>
+<Layout title={entry.data.title} description={entry.data.resume} image={entry.data.image.src} article={article} translateActualPath={translateActualPath}>
   <Container>
     <div class="mx-auto max-w-3xl mt-14">
       <NoteHeader
@@ -68,7 +71,7 @@ const author=await getEntry(entry.data.author);
         imageSrc={entry.data.image.src}
         imageAlt={entry.data.image.alt}
         authorAlias={author.data.alias}
-        authorLink=`/equipo/${entry.data.author.slug}`
+        authorLink=`/es/equipo/${entry.data.author.id}`
         tags={entry.data.tags} 
        />
 </div>

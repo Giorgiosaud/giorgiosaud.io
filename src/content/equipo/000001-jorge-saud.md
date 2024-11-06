@@ -2,7 +2,9 @@
 draft: false
 name: "Jorge Saud"
 alias: "Giorgio Saud"
+selfHealing: "000001"
 title: "Giorgio Saud"
+resume: "Soy un desarrollador que ama compartir conocimientos"
 avatar: { src: "My Photo in team", alt: "Giorgio Saud" }
 classes: "bg-clip-text text-transparent bg-gradient-to-r"
 publishDate: "2024-05-14 12:06"

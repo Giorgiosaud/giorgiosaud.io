@@ -12,24 +12,28 @@ export const languages=[
     code:"es",
     path:'/es'
   }
-]
-export const showDefaultLang = false;
+] as const;
+export const showDefaultLang = false as const;
 
-export const defaultLang = "en";
+export const defaultLang = "en" as const;
 export const routes = {
-  en: {
-    "/": "/",
-    notebook: "notebook",
-    about: "about",
-    contact: "contact",
+  notebook:{
+    es:"cuaderno",
+    en: "notebook",
   },
-  es: {
-    "/": "/es",
-    notebook: "cuaderno",
-    about: "acerca-de-mi",
-    contact: "contactame",
+  about:{
+    es:"acerca-de-mi",
+    en: "about",
   },
-};
+  contact:{
+    es:"contactame",
+    en: "contact",
+  },
+  portfolio:{
+    es:"mi-portfolio",
+    en: "portfolio",
+  },
+} as const;
 export const ui = {
   en: {
     ...enTranslations,

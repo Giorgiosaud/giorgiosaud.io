@@ -6,7 +6,7 @@ resume: "En este post, hablaré de como desarrollar una funcionalidad de self-he
 image: { src: "selfhealing_url_lygv2g", alt: "Imagen autocorregidas" }
 publishDate: "2024-07-19 11:39"
 category: "astro"
-author: "jorge-saud"
+author: "000001-jorge-saud"
 tags: [astro, functional-features]
 ---
 
