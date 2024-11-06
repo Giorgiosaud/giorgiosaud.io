@@ -10,6 +10,7 @@ import DebuggerTagManager from "@components/debuggerTagManager.astro";
 
 export interface Props {
   lang?: string;
+  translateActualPath?: string;
   title?: string;
   canonical?: string;
   image?: string;
@@ -36,7 +37,7 @@ const resolvedImageWithDomain = new URL(
 Astro.site
 ).toString();
 
-const { title, description,image, article,canonical,lang="en" } = Astro.props;
+const { title, description,image, article,translateActualPath,lang="en" } = Astro.props;
 const imgSrc=(!image?.startsWith('http'))?cloudinarySrc('notebook-posts/'+  image):resolvedImageWithDomain;
 const makeDescription= description ?? "A seasoned solution architect sharing practical web development insights and solutions for developers from beginners to experts.";
 const seoProps:SEOProps={
@@ -181,7 +182,7 @@ if(article){
 </head>
 <body>
   <DebuggerTagManager/>
-    <Navbar />
+    <Navbar translateActualPath={translateActualPath}/>
     <slot />
     <Footer />
     <style is:global>

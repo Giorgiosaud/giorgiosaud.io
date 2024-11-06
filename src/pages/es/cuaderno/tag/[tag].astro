@@ -6,6 +6,7 @@ import Note from "@components/note.astro";
 import { getUniqueObjectsByKey } from "@utils/getUniqueObjectsByKey";
 
 import {getCollection,getEntries} from 'astro:content';
+import { getLangFromUrl, useTranslatedPath } from "@i18n/utils";
 export async function getStaticPaths() {
   const publishedNotes = await getCollection("notas", ({ data }) => {
         return !data.draft && data.publishDate < new Date();
@@ -26,9 +27,11 @@ const authors = getUniqueObjectsByKey(entries.map((entry) => {
     return entry.data.author;
 }),"slug");
 const authorsData=await getEntries(authors);
-
+const langToTranslate = getLangFromUrl(Astro.url)==="en"?"es":"en";
+const {translatePath} = useTranslatedPath(langToTranslate);
+const translateActualPath=translatePath('notebook',langToTranslate);
 ---
-<Layout title="Blog">
+<Layout title={`Anotacion en cuaderno por #${tag}`} translateActualPath={translateActualPath}>
   <Container>
       <Sectionhead>
           <Fragment slot="title">My tag #{tag}</Fragment>
@@ -37,7 +40,6 @@ const authorsData=await getEntries(authors);
           <ul class="grid gap-16 max-w-4xl mx-auto">
               {
                   entries.map((noteEntry, index) => (
-                  <li>
                       <Note 
                       link={`/es/cuaderno/${noteEntry.id}`}
                       imageSrc={noteEntry.data.image.src} 
@@ -62,7 +64,6 @@ const authorsData=await getEntries(authors);
                       }}
                       tagsBase="/es/cuaderno/tag/"
                       />
-  </li>
   ))
 }
 </ul>

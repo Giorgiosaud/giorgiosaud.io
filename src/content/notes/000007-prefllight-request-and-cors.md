@@ -7,7 +7,7 @@ image:
   { src: "preflight-request-12", alt: "Preflight request and Cors Updated" }
 publishDate: "2024-05-30 17:46"
 category: "integration"
-author: "jorge-saud"
+author: "000001-jorge-saud"
 tags:
   [
     frontend,

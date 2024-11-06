@@ -6,7 +6,7 @@ resume: "In this post, I will talk about how to develop a functionality of self-
 image: { src: "selfhealing_url_lygv2g", alt: "Self Healing paint" }
 publishDate: "2024-07-19 11:39"
 category: "architecture"
-author: "jorge-saud"
+author: "000001-jorge-saud"
 tags: [architecture, functionalfeatures]
 ---
 

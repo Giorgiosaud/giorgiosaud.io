@@ -17,12 +17,16 @@ interface Props {
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+const hash= entry.id.match(/\d{6}/)?.[0];
+const translateActualPath='/team/'+hash
+
 ---
 
 <Layout
   title={entry.data.title}
   description={entry.data.resume}
   image={entry.data.avatar.src}
+  translateActualPath={translateActualPath}
 >
   <Container>
     <div class="mx-auto max-w-3xl mt-14">
