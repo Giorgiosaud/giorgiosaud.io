@@ -2,96 +2,124 @@
 import CloudinaryImage from "./ui/cloudinaryImage.astro";
 const url=Astro.url;
 interface Props {
-    link: string;
-    imageSrc: string;
-    imageAlt: string;
-    index:number;
-    slug:string;
-    category:string;
-    title: string;
-    authorAlias?:string;
-    authorLink:string;
-    publishDate: Date;
-    resume:string;
-    tags?:string[];
-    tagsBase:string;
-    hideTags:boolean;
-    localization:{
-        lang:string;
-        options:Intl.DateTimeFormatOptions;
-    }
+link: string;
+imageSrc: string;
+imageAlt: string;
+index:number;
+slug:string;
+category:string;
+title: string;
+authorAlias?:string;
+authorLink:string;
+publishDate: Date;
+resume:string;
+tags?:string[];
+tagsBase:string;
+hideTags:boolean;
+localization:{
+    lang:string;
+    options:Intl.DateTimeFormatOptions;
+}
 }
 const { 
-    link,
-    imageSrc,
-    imageAlt,
-    index,
-    slug,
-    title,
-    category,
-    resume,
-    authorAlias,
-    authorLink,
-    publishDate,
-    localization,
-    hideTags,
-    tagsBase,
-    tags,
+link,
+imageSrc,
+imageAlt,
+index,
+slug,
+title,
+category,
+resume,
+authorAlias,
+authorLink,
+publishDate,
+localization,
+hideTags,
+tagsBase,
+tags,
 } = Astro.props as Props;
 ---
 <li class="note-card">
-    <div class="note">
+<div class="note">
+    <a href={link}>
+        <CloudinaryImage
+            class="w-full rounded-md object-cover object-center bg-white aspect-square"
+            src={`notebook-posts/${imageSrc}`}
+            alt={imageAlt}
+            aspectRatio="1"
+            loading={index <= 2 ? "eager" : "lazy"}
+            decoding={index <= 2 ? "sync" : "async"}
+            transition:name=`${slug}_img`
+        />
+    </a>
+    <div>
         <a href={link}>
-            <CloudinaryImage
-                class="w-full rounded-md object-cover object-center bg-white aspect-square"
-                src={`notebook-posts/${imageSrc}`}
-                alt={imageAlt}
-                aspectRatio="1"
-                loading={index <= 2 ? "eager" : "lazy"}
-                decoding={index <= 2 ? "sync" : "async"}
-                transition:name=`${slug}_img`
-            />
+            <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
+                transition:name=`${slug}_category`>
+                {category}
+            </span>
+            <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug}_title`>
+                {title}
+            </h2>
         </a>
-        <div>
-            <a href={link}>
-                <span class="text-blue-400 uppercase tracking-wider text-sm font-medium"
-                    transition:name=`${slug}_category`>
-                    {category}
-                </span>
-                <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 "  transition:name=`${slug}_title`>
-                    {title}
-                </h2>
+        <div class="flex gap-2 mt-3 align-start"
+            transition:name=`${slug}_meta`>
+            <a class="text-gray-400" href={authorLink}>
+                {authorAlias}
             </a>
-            <div class="flex gap-2 mt-3 align-start"
-                transition:name=`${slug}_meta`>
-                <a class="text-gray-400" href={authorLink}>
-                    {authorAlias}
+            <span class="text-gray-400">• </span>
+            <time
+                class="text-gray-400"
+                transition:name=`${slug}_date` 
+                datetime={publishDate.toISOString()}>
+                {publishDate.toLocaleDateString(localization.lang,{
+                    ...localization.options
+                })}
+            </time>
+        </div>
+        <p class="text-slate-500">
+            {resume}
+        </p>
+        <div class="mt-4 flex gap-2 flex-wrap">
+            {!hideTags && tags?.map((tag)=>(
+                <a href={`${tagsBase}/${tag}`} class="text-blue-300 transition duration-700 text-sm font-medium hover:text-blue-700 ">
+                    #{tag}
                 </a>
-                <span class="text-gray-400">• </span>
-                <time
-                    class="text-gray-400"
-                    transition:name=`${slug}_date` 
-                    datetime={publishDate.toISOString()}>
-                    {publishDate.toLocaleDateString(localization.lang,{
-                        ...localization.options
-                    })}
-                </time>
-            </div>
-            <p class="text-slate-500">
-                {resume}
-            </p>
-            <div class="mt-4 flex gap-2 flex-wrap">
-                {!hideTags && tags?.map((tag)=>(
-                    <a href={`${tagsBase}/${tag}`} class="text-blue-300 transition duration-700 text-sm font-medium hover:text-blue-700 ">
-                        #{tag}
-                    </a>
-                ))}
-            </div>
+            ))}
         </div>
     </div>
+</div>
 </li>
 <style>
     .note{
         @apply grid md:grid-cols-2 gap-5 md:gap-10 items-center;
+    }
+    
+</style>
+<style is:raw>
+    .note-card{
+        animation: reveal both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 40%;
+    }
+    @keyframes reveal{
+        from{
+            opacity:0;
+            translate: 100px 100px;
+        }
+        to{
+            opacity:1;
+            translate: 0 0;
+        }
+    }
+    @keyframes reveal{
+        from{
+            opacity:0;
+            translate: 100px 100px;
+        }
+        to{
+            opacity:1;
+            translate: 0 0;
+        }
     }
 </style>
