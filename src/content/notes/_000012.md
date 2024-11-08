@@ -6,7 +6,7 @@ resume: "The coupling between the microfrontend and the backend is strictly prot
 image: { src: "singleton_hbupze", alt: "Recicle Singleton image" }
 publishDate: "2023-11-14 11:39"
 category: "architecture"
-author: "000001-jorge-saud"
+author: 000001-jorge-saud
 tags: [microfrontend, architecture, alignment]
 ---
 

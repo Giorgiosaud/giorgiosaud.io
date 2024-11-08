@@ -6,7 +6,7 @@ resume: "Explica el uso eficiente y efectivo de la etiqueta <img> en HTML, enfoc
 image: { src: "link_siloo8", alt: "desarrollo web full stack" }
 publishDate: "2023-05-08 11:39"
 category: "Tutoriales"
-author: "000001-jorge-saud"
+author: 000001-jorge-saud
 tags: [desarrollo web, frontend, img, srcset]
 ---
 

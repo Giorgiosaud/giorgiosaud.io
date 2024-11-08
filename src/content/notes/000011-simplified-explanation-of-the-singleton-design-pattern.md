@@ -6,7 +6,7 @@ resume: "The primary purpose of this pattern is to restrict the instantiation of
 image: { src: "singleton_hbupze", alt: "Recicle Singleton image" }
 publishDate: "2023-11-14 11:39"
 category: "development"
-author: "000001-jorge-saud"
+author: 000001-jorge-saud
 tags: [design-patterns, development]
 ---
 
