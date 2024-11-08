@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2024-05-21 09:45"
 category: "Development"
-author: "000001-jorge-saud"
+author: 000001-jorge-saud
 tags: [astro,next, nuxt, frontent, backend]
 ---
 

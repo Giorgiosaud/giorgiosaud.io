@@ -9,7 +9,7 @@ image: {
 }
 publishDate: "2024-05-21 09:45"
 category: "Architecture"
-author: "000001-jorge-saud"
+author: 000001-jorge-saud
 tags: [microfrontend,development, frontend, backend]
 ---
 En el mundo del desarrollo frontend, gestionar los datos de manera eficiente es crucial para construir aplicaciones escalables y mantenibles. Un patrón arquitectónico que ha demostrado ser altamente efectivo para lograr este objetivo es el **Patrón de Repositorio**. Tradicionalmente utilizado en el desarrollo backend, el Patrón de Repositorio se está adoptando cada vez más en el desarrollo frontend por su capacidad para desacoplar la lógica de acceso a datos de la lógica de negocio.

@@ -6,7 +6,7 @@ resume: "Explica el uso eficiente y eficaz de la etiqueta <img> en HTML, centrá
 image: { src: "link_siloo8", alt: "link tag" }
 publishDate: "2023-05-08 11:39"
 category: "Tutorials"
-author: "000001-jorge-saud"
+author: 000001-jorge-saud
 tags: [webdev, frontend, img, srcset]
 ---
 
