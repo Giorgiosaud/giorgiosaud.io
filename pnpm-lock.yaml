@@ -30,8 +30,8 @@ importers:
         specifier: ^5.1.2
         version: 5.1.2(astro@5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0))(tailwindcss@3.4.14)
       '@astrojs/vercel':
-        specifier: 8.0.0-beta.3
-        version: 8.0.0-beta.3(astro@5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0))(react@18.3.1)
+        specifier: 8.0.0-beta.2
+        version: 8.0.0-beta.2(astro@5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0))(react@18.3.1)
       '@astrojs/vue':
         specifier: 5.0.0-beta.1
         version: 5.0.0-beta.1(astro@5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0))(rollup@2.79.2)(vite@6.0.0-beta.6(@types/node@22.9.0)(jiti@1.21.6)(terser@5.36.0)(yaml@2.6.0))(vue@3.5.12(typescript@5.6.3))
@@ -240,8 +240,8 @@ packages:
     resolution: {integrity: sha512-/ca/+D8MIKEC8/A9cSaPUqQNZm+Es/ZinRv0ZAzvu2ios7POQSsVD+VOj7/hypWNsNM3T7RpfgNq7H2TU1KEHA==}
     engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
 
-  '@astrojs/vercel@8.0.0-beta.3':
-    resolution: {integrity: sha512-QawKiUFR6BTZGCjICyC58U7p/OAlumIsuXDT5MNOc7a6/psKPu0TUHc4aQ/TEUvCuZX0qhaAOg7NhixLNmn6KA==}
+  '@astrojs/vercel@8.0.0-beta.2':
+    resolution: {integrity: sha512-luaXHkBP/pwTDFGxjrGw6L6lfE2fBc4pJxWPEupEq5PEtIk1gbOBajN4F51PZ27VGAoB0+1sZWK9c9O6tNuC8Q==}
     peerDependencies:
       astro: ^5.0.0-alpha.8
 
@@ -5040,6 +5040,9 @@ packages:
   web-namespaces@2.0.1:
     resolution: {integrity: sha512-bKr1DkiNa2krS7qxNtdrtHAmzuYGFQLiQ13TsorsdT6ULTkPLKuu5+GsFpDlg6JFjUTwX2DyhMPG2be8uPrqsQ==}
 
+  web-vitals@3.5.2:
+    resolution: {integrity: sha512-c0rhqNcHXRkY/ogGDJQxZ9Im9D19hDihbzSQJrsioex+KnFgmMzBiy57Z1EjkhX/+OjyBpclDCzz2ITtjokFmg==}
+
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -5413,15 +5416,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/vercel@8.0.0-beta.3(astro@5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0))(react@18.3.1)':
+  '@astrojs/vercel@8.0.0-beta.2(astro@5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0))(react@18.3.1)':
     dependencies:
       '@astrojs/internal-helpers': 0.4.1
       '@vercel/analytics': 1.3.2(react@18.3.1)
       '@vercel/edge': 1.1.2
       '@vercel/nft': 0.27.6
       astro: 5.0.0-beta.7(@types/node@22.9.0)(jiti@1.21.6)(rollup@2.79.2)(terser@5.36.0)(typescript@5.6.3)(yaml@2.6.0)
-      esbuild: 0.24.0
+      esbuild: 0.21.5
       fast-glob: 3.3.2
+      web-vitals: 3.5.2
     transitivePeerDependencies:
       - encoding
       - next
@@ -11150,6 +11154,8 @@ snapshots:
       typescript: 5.6.3
 
   web-namespaces@2.0.1: {}
+
+  web-vitals@3.5.2: {}
 
   webidl-conversions@3.0.1: {}
 
