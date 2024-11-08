@@ -4,7 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import serviceWorker from "astrojs-service-worker";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
