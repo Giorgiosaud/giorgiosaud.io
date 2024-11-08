@@ -4,7 +4,7 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import serviceWorker from "astrojs-service-worker";
-import vercel from "@astrojs/vercel";
+import vercel from "@astrojs/vercel/serverless";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
@@ -13,7 +13,7 @@ const rootDir = new URL(".", import.meta.url).pathname;
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
+  output: "static",
   site: "https://giorgiosaud.io",
   i18n: {
     locales: ["en", "es"],
