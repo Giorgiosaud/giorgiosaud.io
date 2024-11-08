@@ -13,6 +13,7 @@ const rootDir = new URL(".", import.meta.url).pathname;
 
 // https://astro.build/config
 export default defineConfig({
+  output: "server",
   site: "https://giorgiosaud.io",
   i18n: {
     locales: ["en", "es"],
