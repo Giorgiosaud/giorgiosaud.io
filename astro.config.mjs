@@ -4,12 +4,10 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import serviceWorker from "astrojs-service-worker";
-import vercel from "@astrojs/vercel/serverless";
+import vercel from "@astrojs/vercel";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
-const rootDir = new URL(".", import.meta.url).pathname;
-//const modulePath = resolve(rootDir, "src", "generated", "sriHashes.mjs");
 
 // https://astro.build/config
 export default defineConfig({
@@ -43,28 +41,21 @@ export default defineConfig({
   security: {
     checkOrigin: true,
   },
-  integrations: [
-    serviceWorker(),
-    tailwind(),
-    mdx(),
-    sitemap({
-      entryLimit: 10000,
-      changefreq: "weekly",
-      priority: 0.7,
-      lastmod: new Date(),
-    }),
-    icon({
-      iconDir: "src/components/ui/icons",
-      include: {
-        uil: ["*"],
-        bx: ["*"],
-        "simple-icons": ["*"],
-      },
-    }),
-    vue(),
-    react(),
-    svelte(),
-  ],
+  integrations: [serviceWorker(), tailwind(), mdx(), sitemap({
+    entryLimit: 10000,
+    changefreq: "weekly",
+    priority: 0.7,
+    lastmod: new Date(),
+  }), icon({
+    iconDir: "src/components/ui/icons",
+    include: {
+      uil: ["*"],
+      bx: ["*"],
+      "simple-icons": ["*"],
+    },
+  }), vue(), 
+  react(), 
+  svelte()],
   image: {
     domains: ["https://res.cloudinary.com"],
   },
