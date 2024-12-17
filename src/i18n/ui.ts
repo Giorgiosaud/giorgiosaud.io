@@ -79,6 +79,7 @@ export const ui = {
     "contact.message.placeholder": "Your Message",
     "contact.message.error": "Please provide your message.",
     "contact.submit": "Send Message",
+    "badges.title": "Some badges that i had",
   },
   es: {
     ...esTranslations,
@@ -124,5 +125,7 @@ export const ui = {
     "contact.message.placeholder": "Tu mensaje",
     "contact.message.error": "Por Favor, escriba un mensaje",
     "contact.submit": "Enviar mensaje",
+    "badges.title": "Algunas insignias que he tenido",
+
   },
 } as const;
