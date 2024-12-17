@@ -6,6 +6,7 @@ import "@fontsource-variable/inter/index.css";
 import { cloudinarySrc } from "@utils/cludinarySrc";
 import  SpeedInsights  from "@vercel/speed-insights/astro"
 import HeadTagManager from "@components/headTagManager.astro";
+import ServiceWorker from "@components/ServiceWorker.astro";
 import DebuggerTagManager from "@components/debuggerTagManager.astro";
 
 export interface Props {
@@ -127,6 +128,7 @@ if(article){
 <head>
   <meta charset="UTF-8" />
   <HeadTagManager/>
+  <ServiceWorker />
   <meta name="viewport" content="width=device-width" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="icon" type="image/png" href="/favicon.png">

@@ -3,7 +3,6 @@ import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
-import serviceWorker from "astrojs-service-worker";
 import vercel from "@astrojs/vercel";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
@@ -41,7 +40,7 @@ export default defineConfig({
   security: {
     checkOrigin: true,
   },
-  integrations: [serviceWorker(), tailwind(), mdx(), sitemap({
+  integrations: [ tailwind(), mdx(), sitemap({
     entryLimit: 10000,
     changefreq: "weekly",
     priority: 0.7,
