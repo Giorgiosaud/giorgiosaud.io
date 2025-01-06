@@ -6,14 +6,12 @@ import Hero from "@components/hero.astro";
 import Badges from "@components/badges.astro";
 import Logos from "@components/logos.astro";
 import Layout from "@layouts/Layout.astro";
-import { getLangFromUrl, useTranslations } from "@i18n/utils";
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
 ---
 
 <Layout title="My notebook">
   <Container>
-    <Hero title={t("hero.title")} description={t("hero.description")} />
+    <h1>Offline</h1>
+    <Hero title="We are offline" description="Sory when you get network I will try to fix it" /> 
     <Features />
     <Logos />
     <Cta />
