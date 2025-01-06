@@ -9,7 +9,7 @@
     "build": "astro build",
     "eslint": "eslint 'src/**/*.{js,astro}'",
     "test": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test show-report=all",
     "test:e2e:ui": "playwright test --ui",
     "preview": "astro preview",
     "astro": "astro",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@astrojs/mdx": "4.0.2",
+    "@astrojs/node": "^9.0.0",
     "@astrojs/partytown": "^2.1.2",
     "@astrojs/react": "^4.1.1",
     "@astrojs/rss": "^4.0.10",

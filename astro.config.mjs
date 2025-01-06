@@ -4,9 +4,17 @@ import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 import vercel from "@astrojs/vercel";
+import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
+let adapter = vercel({
+  isr: true,
+});
+    
+if (process.argv[3] === "--node" || process.argv[4] === "--node") {
+  adapter = node({ mode: "standalone" });
+}
 
 // https://astro.build/config
 export default defineConfig({
@@ -58,11 +66,7 @@ export default defineConfig({
   image: {
     domains: ["https://res.cloudinary.com"],
   },
-  adapter: vercel({
-    // webAnalytics: { enabled: true },
-    isr: true,
-
-  }),
+  adapter,
   markdown: {
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
