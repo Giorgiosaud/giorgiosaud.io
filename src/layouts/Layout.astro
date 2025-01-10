@@ -191,10 +191,19 @@ if(article){
       @view-transition {
         navigation: auto;
       }
+      *{
+        box-sizing: border-box;
+      }
       /* Improve Page speed */
       /* https://css-tricks.com/almanac/properties/c/content-visibility/ */
       img {
         content-visibility: auto;
+      }
+      h1,h2,h3,h4,h5,h6 {
+        text-wrap: balance;
+      }
+      p,span,div,li,a {
+        text-wrap: pretty;
       }
     </style>
   </body>
