@@ -33,7 +33,7 @@ By incorporating the Repository Pattern, frontend developers can create applicat
 
 ## Example
 
-In this example, i will explore how to implement the Repository Pattern in a React application using TypeScript. I will create a folder structure that includes repositories for fetching data from an API and a mock data source. This setup allows us to switch bet
+In this example, I will explore how to implement the Repository Pattern in a React application using TypeScript. I will create a folder structure that includes repositories for fetching data from an API and a mock data source. This setup allows us to switch bet
 en real and mock data sources seamlessly, demonstrating the flexibility and ease of testing that the Repository Pattern provides.
 
 ### Folder Structure

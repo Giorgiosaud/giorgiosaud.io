@@ -8,7 +8,6 @@ import {
   useTranslations,
 } from "@i18n/utils";
 const lang = getLangFromUrl(Astro.url);
-const otherLang=lang==='es'?'en':'es';
 const t = useTranslations(lang);
 const {translatePath} = useTranslatedPath(lang);
 import type { MenuItemsInterface } from "@components/definitions/MenuItemsInterface";

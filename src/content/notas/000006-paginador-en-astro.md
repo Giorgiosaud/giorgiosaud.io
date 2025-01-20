@@ -2,7 +2,7 @@
 draft: false
 selfHealing: "000006"
 title: "Paginator in astro"
-resume: "Paginate a website in Astro or any other framework like next.js or nuxt is a challenge but not because is difficult to implement but because is difficult to understand, in this post i will try to illustrate how the paginator of this website was made."
+resume: "Paginate a website in Astro or any other framework like next.js or nuxt is a challenge but not because is difficult to implement but because is difficult to understand, in this post I will try to illustrate how the paginator of this website was made."
 image: {
     src: "paginator",
     alt: "Full pages with an indiator"

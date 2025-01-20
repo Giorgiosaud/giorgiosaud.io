@@ -1,0 +1,8 @@
+{"name.error": "Por favor, escriba su nombre completo.",
+    "name.placeholder": "Nombre completo",
+    "email.placeholder": "Dirección de correo electrónico",
+    "email.error": "Por favor, escriba su correo electrónico.",
+    "message.placeholder": "Tu mensaje",
+    "message.error": "Por Favor, escriba un mensaje",
+    "submit": "Enviar mensaje"
+  }

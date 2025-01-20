@@ -1,8 +1,17 @@
-import { ui, defaultLang, routes, showDefaultLang } from "@i18n/ui";
+import { defaultLang, routes, showDefaultLang } from "@i18n/ui";
+import { resources } from "./locales";
 
+type DeepKeyOf<T> = T extends object
+  ? {
+      [K in keyof T]: K extends string | number
+        ? `${K}` | `${K}.${DeepKeyOf<T[K]>}`
+        : never;
+    }[keyof T]
+  : never;
+type NestedKeys = DeepKeyOf<typeof resources["en"]>;
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split("/");
-  if (lang in ui) return lang as keyof typeof ui;
+  if (lang in resources) return lang as keyof typeof resources;
   return defaultLang;
 }
 export function getRouteFromUrl(url: URL): string | undefined {
@@ -36,14 +45,26 @@ export function getRouteFromUrl(url: URL): string | undefined {
 
   return undefined;
 }
-export function useTranslations(lang: keyof typeof ui) {
-  return function t(key: keyof (typeof ui)[typeof defaultLang]) {
-    return ui[lang][key] || ui[defaultLang][key] || key;
+const get = (obj:unknown, path, defaultValue = ''):string => { 
+  const travel = regexp =>
+    String.prototype.split
+      .call(path, regexp)
+      .filter(Boolean)
+      .reduce((res, key) => {
+        return (res !== null && res !== undefined ? res[key] : res)
+      }, obj );
+
+  const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
+  return result === undefined || result === obj ? defaultValue : result;
+};
+export function useTranslations(lang: keyof typeof resources) {
+  return function t(key: NestedKeys) {
+    return get(resources,`${lang}.${key}`,get(resources,`${defaultLang}.${key}`,(key as string)));
   };
 }
-export function useTranslatedPath(lang: keyof typeof ui) {
+export function useTranslatedPath(lang: keyof typeof resources) {
 
-  const translatePath=(path: string, l: string = lang) =>{ 
+  const translatePath=(path: string, l: string = (lang as string)) =>{ 
     
     const pathName = path.replaceAll("/", "");
     const hasTranslation = routes[pathName] !== undefined;

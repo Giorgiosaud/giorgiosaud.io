@@ -44,4 +44,4 @@ Before rendering my 404 page I will try to detect the self-healing ID and redire
 
 For use this functionality we must me in hybrid mode.
 
-> Thanks to [Tim Neubauer](https://timneubauer.dev/blog/copy-code-button-in-astro/) for the copy code button i use it only touching the css, and a little copilot refactor but it was great.
+> Thanks to [Tim Neubauer](https://timneubauer.dev/blog/copy-code-button-in-astro/) for the copy code button I use it only touching the css, and a little copilot refactor but it was great.
