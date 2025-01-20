@@ -6,7 +6,6 @@ const selfHealingMiddleware=(path:string,collection:CollectionKey)=>async (_,nex
     const splittedUrl = url.pathname.split("/");
     const requestedSlug=splittedUrl.pop();
     const hashToHeal = requestedSlug.match(/\d{6}/)?.[0]; 
-    console.log({hashToHeal,requestedSlug,splittedUrl});
     if(url.pathname.includes(`/${path}/`) && hashToHeal){
         const entrySlug = ((await getCollection(collection, ({id }) => {
             return id;

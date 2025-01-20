@@ -23,9 +23,7 @@ export default defineConfig({
   i18n: {
     locales: ["en", "es"],
     defaultLocale: "en",
-    routing: {
-      prefixDefaultLocale: false,
-    },
+    routing: "manual",
   },
   redirects: {
     "/atributos-srcset-y-sizes-en-un-tag-de-imagen-img": {
