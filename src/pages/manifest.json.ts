@@ -1,12 +1,15 @@
 export async function GET({ params, request }) {
   return new Response(
     JSON.stringify({
+      id: "mynotebook/v1",
       name: "Giorgiosaud Personal Notebook",
+      orientation:"natural",
       short_name: "Giorgiosaud.io",
       description: "A personal notebook for Giorgiosaud",
       start_url: "/",
-      display: "standalone",
-      background_color: "#f7f7f7",
+      display: "minimal-ui",
+      display_override: ["fullscreen", "standalone"],
+      background_color: "#f1f5f9",
       theme_color: "#f7f7f7",
       icons: [
         {
