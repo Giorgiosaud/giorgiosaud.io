@@ -17,11 +17,6 @@ export async function GET({ params, request }) {
           sizes: "16x16",
           type: "image/ico",
         },
-        {
-          src: "/android-icon-192x192.png",
-          sizes: "192x192",
-          type: "image/png",
-        },
       ],
       screenshots: [
         {

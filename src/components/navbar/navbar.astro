@@ -7,10 +7,13 @@ import {
   useTranslatedPath,
   useTranslations,
 } from "@i18n/utils";
+import type { MenuItemsInterface } from "@components/definitions/MenuItemsInterface";
+import Navigation from "./navigation.astro";
+import LogoNavigation from "./logo-navigation.astro";
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const {translatePath} = useTranslatedPath(lang);
-import type { MenuItemsInterface } from "@components/definitions/MenuItemsInterface";
 interface Props{
   translateActualPath?:string
 }
@@ -48,7 +51,12 @@ const menuItems: MenuItemsInterface[] = [
 
 <div class="sticky top-0 z-50 bg-slate-100 py-5 opacity-85">
   <Container>
+    <header>
+      <LogoNavigation />
+      <Navigation menuItems={menuItems}/>
+    </header>
     <header class="flex flex-col lg:flex-row justify-between items-center">
+      
       <Astronav>
         <div class="flex w-full lg:w-auto items-center justify-between">
           <a href={translatePath("/", lang)} class="text-lg"
@@ -93,7 +101,7 @@ const menuItems: MenuItemsInterface[] = [
         </ul>
 
       </MenuItems>
-    </Astronav>
-  </header>
+      </Astronav>
+    </header>
 </Container>
 </div>

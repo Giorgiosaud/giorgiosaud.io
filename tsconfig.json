@@ -8,6 +8,7 @@
     "strictNullChecks": true,
     "types": ["astro/client"],
     "paths": {
+      "@firebase/*": ["firebase/*"],
       "@lib/*": ["lib/*"],
       "@i18n/*": ["i18n/*"],
       "@utils/*": ["utils/*"],

@@ -1,0 +1,48 @@
+---
+import { app } from "../firebase/server";
+import { getAuth } from "firebase-admin/auth";
+import Layout from "../layouts/Layout.astro";
+import { getRedirectResult, GoogleAuthProvider } from "firebase/auth";
+import Container from "@components/container.astro";
+import GoogleLoginButton from "@components/ui/GoogleLoginButton.astro";
+/* Check if the user is authenticated */
+const auth = getAuth(app);
+try{
+  // const result= await getRedirectResult(auth);
+  // const credential = GoogleAuthProvider.credentialFromResult(result);
+  // const token = credential.accessToken;
+  // const user = result.user;
+  // return Astro.redirect("/dashboard");
+
+}catch(e){
+  throw e;
+  // Handle Errors here.
+  // const errorCode = error.code;
+  // const errorMessage = error.message;
+  //   // The email of the user's account used.
+  // const email = error.customData.email;
+  //   // The AuthCredential type that was used.
+  // const credential = GoogleAuthProvider.credentialFromError(error);
+}
+
+---
+
+<Layout title="Sign in">
+  <Container>
+  <GoogleLoginButton></GoogleLoginButton>
+</Container>
+
+  <!--p>New here? <a href="/register">Create an account</a></p-->
+  <!--form action="/api/auth/signin" method="post">
+    <label for="email" for="email">Email</label>
+    <input type="email" name="email" id="email" />
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" />
+    <button type="submit">Login</button>
+    <button id="google">Sign in with Google</button>
+
+  </form-->
+</Layout>
+<script>
+  
+</script>

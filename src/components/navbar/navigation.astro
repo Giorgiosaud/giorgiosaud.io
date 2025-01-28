@@ -1,0 +1,32 @@
+---
+import type { MenuItemsInterface } from '@components/definitions/MenuItemsInterface'
+
+interface Props{
+  menuItems:MenuItemsInterface[]
+}
+const {menuItems} = Astro.props
+console.log(menuItems)
+---
+<nav aria-label="Main Navigation">
+  <ul role="menubar">
+    {menuItems.map(menuEl=>(
+      <li role="none"><a role="menuitem" href={menuEl.path}>
+        <span>
+          {menuEl.title}
+        </span>
+        {menuEl.badge && (
+          <span class="ml-1 px-2 py-0.5 text-[10px] animate-pulse font-semibold uppercase text-white bg-indigo-600 rounded-full">
+            New
+          </span>
+        )}
+      </a>
+    </li>
+    ))}
+  </ul>
+</nav>
+<style>
+  nav {
+    display: block;
+    width: 100%;
+  }
+</style>
