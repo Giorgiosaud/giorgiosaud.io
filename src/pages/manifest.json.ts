@@ -22,6 +22,13 @@ export async function GET({ params, request }) {
       ],
       screenshots: [
         {
+          src: "https://res.cloudinary.com/giorgiosaud/image/upload/v1738025420/blog/mobile_screenshot_x1nr2x.png",
+          sizes: "1280x720",
+          type: "image/webp",
+          form_factor: "narrow",
+          label: "Homescreen of Awesome App",
+        },
+        {
           src: "https://res.cloudinary.com/giorgiosaud/image/upload/v1718219196/blog/home-screenshot_fjnul6?_a=DATAdtIIZAA0",
           sizes: "1280x720",
           type: "image/webp",
