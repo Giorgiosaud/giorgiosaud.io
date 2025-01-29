@@ -1,5 +1,7 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
+/// <reference types="firebase-admin/auth" />
+/// <reference types="firebaseui" />
 interface ImportMetaEnv {
   readonly CLOUDINARY_API_KEY: string;
   readonly CLOUDINARY_API_SECRET: string;
@@ -18,4 +20,16 @@ interface ImportMetaEnv {
 
 interface ImportMeta {
   readonly env: ImportMetaEnv;
+}
+
+declare namespace App {
+  interface Locals {
+    user: UserRecord;
+  }
+}
+declare namespace firebaseui {
+  firebaseui
+}
+declare module 'firebaseui' {
+  export * from 'firebaseui/dist/firebaseui.js';
 }

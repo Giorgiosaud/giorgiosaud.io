@@ -1,5 +1,4 @@
-import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
+import { defineConfig, envField } from "astro/config";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
@@ -8,10 +7,12 @@ import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
+import tailwindcss from "@tailwindcss/vite";
+
 let adapter = vercel({
   isr: true,
 });
-    
+
 if (process.argv[3] === "--node" || process.argv[4] === "--node") {
   adapter = node({ mode: "standalone" });
 }
@@ -19,6 +20,12 @@ if (process.argv[3] === "--node" || process.argv[4] === "--node") {
 // https://astro.build/config
 export default defineConfig({
   output: "static",
+  experimental:{
+    svg: true,
+  },
+  devToolbar:{
+    enabled:false,
+  },
   site: "https://giorgiosaud.io",
   i18n: {
     locales: ["en", "es"],
@@ -45,8 +52,9 @@ export default defineConfig({
   },
   security: {
     checkOrigin: true,
+    
   },
-  integrations: [ tailwind(), mdx(), sitemap({
+  integrations: [mdx(), sitemap({
     entryLimit: 10000,
     changefreq: "weekly",
     priority: 0.7,
@@ -87,4 +95,38 @@ export default defineConfig({
       transformers: [],
     },
   },
+  server:{
+    headers:{
+      "x-content-type-options":"nosniff",
+      "x-frame-options":"DENY",
+      "x-xss-protection":"1; mode=block",
+      "referrer-policy":"strict-origin-when-cross-origin",
+      "permissions-policy":"",//camera=(), microphone=(), geolocation=(), interest-cohort=()
+      // "cross-origin-embedder-policy":"require-corp",
+      "cross-origin-opener-policy":"same-origin-allow-popups",
+      "content-security-policy-report":"default-src 'self'; script-src 'self' 'unsafe-inline' https://vercel.live https://gist.github.com/Giorgiosaud https://static.cloudflareinsights.com https://www.googletagmanager.com/; script-src-elem 'self' 'unsafe-inline' https://g.dev/ https://cdn.credly.com https://vercel.live https://gist.github.com/Giorgiosaud https://static.cloudflareinsights.com https://www.googletagmanager.com/ ;style-src 'self' 'unsafe-inline';style-src-elem 'self' 'unsafe-inline' https://vercel.live/fonts; img-src 'self' data: https://res.cloudinary.com/ https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' wss://ws-us3.pusher.com/app/7d55ac978a3647512f45 https://res.cloudinary.com/ https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://api.web3forms.com; frame-src 'self' https://www.credly.com/ https://www.youtube.com https://vercel.live/; object-src 'self'; media-src 'self'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';manifest-src 'self'"
+    }
+  },
+  
+  env:{
+    schema:{
+      CLOUDINARY_API_KEY:envField.string({context:'server',access:'secret'}) ,
+      CLOUDINARY_API_SECRET:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_PRIVATE_KEY_ID:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_PRIVATE_KEY:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_PROJECT_ID:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_CLIENT_EMAIL:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_CLIENT_ID:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_AUTH_URI:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_TOKEN_URI:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_AUTH_CERT_URL:envField.string({context:'server',access:'secret'}) ,
+      FIREBASE_CLIENT_CERT_URL:envField.string({context:'server',access:'secret'}) ,
+      NOTEBOOK_PER_PAGE:envField.number({context:'server',access:'secret'}) ,
+      WEB_FORMS3_API_KEY:envField.string({context:'server',access:'secret'}) ,
+    }
+  },
+  vite:{
+    plugins:[tailwindcss()]
+  }
+
 });
