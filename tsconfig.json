@@ -10,6 +10,7 @@
     "paths": {
       "@firebase/*": ["firebase/*"],
       "@lib/*": ["lib/*"],
+      "@styles/*": ["styles/*"],
       "@i18n/*": ["i18n/*"],
       "@utils/*": ["utils/*"],
       "@components/*": ["components/*"],

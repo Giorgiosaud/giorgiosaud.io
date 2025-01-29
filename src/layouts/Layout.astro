@@ -4,7 +4,7 @@ import Navbar from "@components/navbar/navbar.astro";
 import "@fontsource-variable/inter/index.css";
 import Head from "./Head.astro";
 import DebuggerTagManager from "@components/debuggerTagManager.astro";
-import LogoNavigation from "@components/navbar/logo-navigation.astro";
+import "@styles/global.css";
 
 export interface Props {
   lang?: string;
@@ -36,7 +36,9 @@ const { title, description,image, article,translateActualPath,lang="en" } = Astr
   <Head image={image} description={description} title={title} article={article}  version={version}/>
   <body>
     <DebuggerTagManager />
+    <header>
     <Navbar translateActualPath={translateActualPath}/>
+  </header>
     <slot />
     <Footer />
     <style is:global>

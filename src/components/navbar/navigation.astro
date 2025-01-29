@@ -7,10 +7,11 @@ interface Props{
 const {menuItems} = Astro.props
 console.log(menuItems)
 ---
-<nav aria-label="Main Navigation">
-  <ul role="menubar">
+<nav aria-label="Main Navigation" class="flex md:w-full md:justify-center md:align-middle md:items-center max-md:fixed max-md:top-0 max-md:left-0 max-md:z-40 max-md:h-screen max-md:p-4 max-md:overflow-y-auto max-md:transition-transform max-md:bg-white w-64 max-md:dark:bg-gray-80 group-[:not(.opened)]:max-md:-translate-x-full" >
+  <!--max-md:-translate-x-full -->
+  <ul role="menubar" class="flex flex-col md:flex-row gap-5 w-full pt-10 md:pt-0 md:justify-center">
     {menuItems.map(menuEl=>(
-      <li role="none"><a role="menuitem" href={menuEl.path}>
+      <li role="none"><a role="menuitem" class="w-full" href={menuEl.path}>
         <span>
           {menuEl.title}
         </span>
@@ -24,9 +25,3 @@ console.log(menuItems)
     ))}
   </ul>
 </nav>
-<style>
-  nav {
-    display: block;
-    width: 100%;
-  }
-</style>
