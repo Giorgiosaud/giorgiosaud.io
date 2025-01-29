@@ -1,5 +1,4 @@
 import { defineConfig, envField } from "astro/config";
-import tailwind from "@astrojs/tailwind";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
@@ -8,6 +7,8 @@ import node from "@astrojs/node";
 import vue from "@astrojs/vue";
 import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
+import tailwindcss from "@tailwindcss/vite";
+
 let adapter = vercel({
   isr: true,
 });
@@ -19,6 +20,9 @@ if (process.argv[3] === "--node" || process.argv[4] === "--node") {
 // https://astro.build/config
 export default defineConfig({
   output: "static",
+  experimental:{
+    svg: true,
+  },
   devToolbar:{
     enabled:false,
   },
@@ -50,7 +54,7 @@ export default defineConfig({
     checkOrigin: true,
     
   },
-  integrations: [ tailwind(), mdx(), sitemap({
+  integrations: [mdx(), sitemap({
     entryLimit: 10000,
     changefreq: "weekly",
     priority: 0.7,
@@ -120,5 +124,9 @@ export default defineConfig({
       NOTEBOOK_PER_PAGE:envField.number({context:'server',access:'secret'}) ,
       WEB_FORMS3_API_KEY:envField.string({context:'server',access:'secret'}) ,
     }
+  },
+  vite:{
+    plugins:[tailwindcss()]
   }
+
 });
