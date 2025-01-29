@@ -35,6 +35,20 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+        env: 
+          CLOUDINARY_API_KEY: ${{ secrets.CLOUDINARY_API_KEY }}
+          CLOUDINARY_API_SECRET: ${{ secrets.CLOUDINARY_API_SECRET }}
+          FIREBASE_PRIVATE_KEY_ID: ${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+          FIREBASE_PRIVATE_KEY: ${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_CLIENT_EMAIL: ${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_CLIENT_ID: ${{ secrets.FIREBASE_CLIENT_ID }}
+          FIREBASE_AUTH_URI: ${{ secrets.FIREBASE_AUTH_URI }}
+          FIREBASE_TOKEN_URI: ${{ secrets.FIREBASE_TOKEN_URI }}
+          FIREBASE_AUTH_CERT_URL: ${{ secrets.FIREBASE_AUTH_CERT_URL }}
+          FIREBASE_CLIENT_CERT_URL: ${{ secrets.FIREBASE_CLIENT_CERT_URL }}
+          NOTEBOOK_PER_PAGE: ${{ secrets.NOTEBOOK_PER_PAGE }}
+          WEB_FORMS3_API_KEY: ${{ secrets.WEB_FORMS3_API_KEY }}
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
