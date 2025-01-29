@@ -4,3 +4,4 @@ export { default as hero } from "./hero.json";
 export { default as cta } from "./cta.json";
 export { default as badges } from "./badges.json";
 export { default as logos } from "./logos.json";
+export { default as contact } from "./contact.json";
