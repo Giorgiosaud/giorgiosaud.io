@@ -127,13 +127,15 @@ self.addEventListener('fetch', event => {
         if (cachedResponse) {
           return cachedResponse;
         }
-
+        if(event.request.method === 'POST'){
+          return event.response;       
+         }
         return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
           return fetch(event.request).then(response => {
             // Put a copy of the response in the runtime cache.
             return cache.put(event.request, response.clone()).then(() => {
               return response;
-            });
+            }).catch(err=>console.log(err));
           });
         });
       })
