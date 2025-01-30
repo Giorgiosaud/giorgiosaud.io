@@ -119,9 +119,26 @@ self.addEventListener('activate', (event) => {
   return self.clients.claim();
 });
 
-self.addEventListener('fetch', (event) => {
-  //avoid cache post requests
-  if (!NO_DYNAMIC_PATH.some(path => event.request.url.includes(path)) && event.request.method === 'GET') {
-    event.respondWith(manageResponseInFetch(event));
+self.addEventListener('fetch', event => {
+  // Skip cross-origin requests, like those for Google Analytics.
+  if (event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        if(event.request.method === 'POST'){
+          return event.response;       
+         }
+        return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
+          return fetch(event.request).then(response => {
+            // Put a copy of the response in the runtime cache.
+            return cache.put(event.request, response.clone()).then(() => {
+              return response;
+            }).catch(err=>console.log(err));
+          });
+        });
+      })
+    );
   }
 });
