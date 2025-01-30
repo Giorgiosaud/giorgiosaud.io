@@ -1,8 +1,8 @@
-import { app } from "@firebase/server";
+// import { app } from "@firebase/server";
 import { defineAction } from "astro:actions";
 import { z } from "astro:schema";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { getAuth } from "firebase-admin/auth";
+// import { createUserWithEmailAndPassword } from "firebase/auth";
+// import { getAuth } from "firebase-admin/auth";
 
 export default defineAction({
   accept:"form",
@@ -18,9 +18,10 @@ export default defineAction({
     return true;
   }),
   handler:async ({name,email,password})=>{
-    const auth = getAuth(app);
+    console.log({name,email,password})
+    // const auth = getAuth(app);
 
-    await auth.createUser({email,password,displayName:name});
+    // await auth.createUser({email,password,displayName:name});
     return 'ok';
   },
 })
