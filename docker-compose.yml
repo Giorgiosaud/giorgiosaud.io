@@ -1,0 +1,9 @@
+services:
+  playwright-runner:
+    container_name: Node
+    image: mcr.microsoft.com/playwright:v1.50.0-noble
+    volumes:
+      - .:/app
+    working_dir: /app
+    tty: true
+
