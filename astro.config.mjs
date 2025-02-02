@@ -39,7 +39,7 @@ export default defineConfig({
       status: 302,
       destination: "/notebook/tag-link",
     },
-    "/tag/*": {
+    "/tag/(.*)": {
       status: 302,
       destination: "/notebook",
     },
