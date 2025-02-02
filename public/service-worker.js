@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-1.0.1';
-const CACHE_DYNAMIC_NAME = 'dynamic-1.0.1';
+const CACHE_STATIC_NAME = 'static-1.0.3';
+const CACHE_DYNAMIC_NAME = 'dynamic-1.0.3';
 
 const STATIC_FILES = ['/', '/offline'];
 const TRIM_EXP_IN_DYN = ['https://www.giorgiosaud.io'];
@@ -120,8 +120,9 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', event => {
+  
   // Skip cross-origin requests, like those for Google Analytics.
-  if (event.request.url.startsWith(self.location.origin)) {
+  if (event.request.url.startsWith(self.location.origin)&& self.location.origin==='https://www.giorgiosaud.io') {
     event.respondWith(
       caches.match(event.request).then(cachedResponse => {
         if (cachedResponse) {
@@ -129,7 +130,7 @@ self.addEventListener('fetch', event => {
         }
         if(event.request.method === 'POST'){
           return event.response;       
-         }
+        }
         return caches.open(CACHE_DYNAMIC_NAME).then(cache => {
           return fetch(event.request).then(response => {
             // Put a copy of the response in the runtime cache.
