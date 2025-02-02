@@ -9,6 +9,8 @@ import react from "@astrojs/react";
 import svelte from "@astrojs/svelte";
 import tailwindcss from "@tailwindcss/vite";
 
+import db from "@astrojs/db";
+
 let adapter = vercel({
   isr: true,
 });
@@ -37,7 +39,7 @@ export default defineConfig({
       status: 302,
       destination: "/notebook/tag-link",
     },
-    "/tag/*": {
+    "/tag/(.*)": {
       status: 302,
       destination: "/notebook",
     },
@@ -66,9 +68,7 @@ export default defineConfig({
       bx: ["*"],
       "simple-icons": ["*"],
     },
-  }), vue(), 
-  react(), 
-  svelte()],
+  }), vue(), react(), svelte(), db()],
   image: {
     domains: ["https://res.cloudinary.com"],
   },
