@@ -14,7 +14,6 @@ test('Contact Form works', async () => {
       const formData = new FormData(e.target); // Capture the form data
       const payload = Object.fromEntries(formData.entries());
       expect(payload).toEqual({
-        "access_key": "",
         "name": "jorge",
         "email": "jorge@gmail.com",
         "message": "hola"
@@ -27,7 +26,7 @@ el?.addEventListener('submit', mockSubmit);
 
   expect(el).toBeTruthy();
   expect(el?.method).toBe('POST');
-  expect(el?.action).toBe('https://api.web3forms.com/submit');
+  expect(el?.action).toBe("http://localhost:3000/?_action=sendEmail");
   expect(result).toContain('name="botcheck"');
   const nameInput = getByLabelText<HTMLInputElement>(document.body, 'Full Name')
   const emailInput = getByLabelText<HTMLInputElement>(document.body, 'Email Address')

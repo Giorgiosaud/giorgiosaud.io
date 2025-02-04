@@ -52,6 +52,8 @@ export default defineConfig({
       destination: "/notebook/microfrontend",
     },
   },
+  trailingSlash: "never",
+
   security: {
     checkOrigin: true,
     
@@ -107,7 +109,7 @@ export default defineConfig({
       "content-security-policy-report":"default-src 'self'; script-src 'self' 'unsafe-inline' https://vercel.live https://gist.github.com/Giorgiosaud https://static.cloudflareinsights.com https://www.googletagmanager.com/; script-src-elem 'self' 'unsafe-inline' https://g.dev/ https://cdn.credly.com https://vercel.live https://gist.github.com/Giorgiosaud https://static.cloudflareinsights.com https://www.googletagmanager.com/ ;style-src 'self' 'unsafe-inline';style-src-elem 'self' 'unsafe-inline' https://vercel.live/fonts; img-src 'self' data: https://res.cloudinary.com/ https://www.googletagmanager.com; font-src 'self' data:; connect-src 'self' https://fonts.googleapis.com https://res.cloudinary.com/ https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.googletagmanager.com https://api.web3forms.com; frame-src 'self' https://www.credly.com/ https://www.youtube.com https://vercel.live/; object-src 'self'; media-src 'self'; worker-src 'self' blob:; base-uri 'self'; form-action 'self';manifest-src 'self'"
     }
   },
-  
+
   env:{
     schema:{
       CLOUDINARY_API_KEY:envField.string({context:'server',access:'secret'}) ,
@@ -125,8 +127,8 @@ export default defineConfig({
       WEB_FORMS3_API_KEY:envField.string({context:'server',access:'secret'}) ,
     }
   },
-  vite:{
-    plugins:[tailwindcss()]
-  }
 
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
