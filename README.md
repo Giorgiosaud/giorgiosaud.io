@@ -4,6 +4,7 @@ This blog started from [Astroship](https://astroship.web3templates.com/)*
 
 but the live site is in [Giorgiosaud.io](https://giorgiosaud.io)
 
+
 I added some functionalities as i18n, added frameworks support for some components and some others features like contact form and so on.
 
 ## Installation

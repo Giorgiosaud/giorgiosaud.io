@@ -1,8 +1,8 @@
 /// <reference types="vitest" />
+
 import path from 'path'
 import { getViteConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'vitest/config';
 
 const alias={
   '@': path.resolve(__dirname, './src'),
@@ -18,15 +18,13 @@ const alias={
 }
 export default getViteConfig({
   test: {
-    include:['tests/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     environment: 'happy-dom',
-    env:
-    {
-      "NODE_ENV": "test",
-      "ASTRO_DATABASE_FILE":'test.db'
-    },
     alias,
   },
+
+  plugins:[
+    tailwindcss(),
+  ],
   resolve: {
     alias,
   },
