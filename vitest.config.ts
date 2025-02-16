@@ -1,8 +1,6 @@
 /// <reference types="vitest" />
 import path from 'path'
 import { getViteConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
-import { defineConfig } from 'vitest/config';
 
 const alias={
   '@': path.resolve(__dirname, './src'),
