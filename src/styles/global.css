@@ -44,6 +44,5 @@ p:not([class]){
 }
 a{
   *:not([class]){
-    @apply text-blue-600;
   }
 }
