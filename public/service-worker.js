@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-1.0.4';
-const CACHE_DYNAMIC_NAME = 'dynamic-1.0.4';
+const CACHE_STATIC_NAME = 'static-1.0.5';
+const CACHE_DYNAMIC_NAME = 'dynamic-1.0.5';
 
 const STATIC_FILES = ['/', '/offline'];
 const TRIM_EXP_IN_DYN = ['https://www.giorgiosaud.io'];
