@@ -1,5 +1,5 @@
-const CACHE_STATIC_NAME = 'static-1.0.5';
-const CACHE_DYNAMIC_NAME = 'dynamic-1.0.5';
+const CACHE_STATIC_NAME = 'static-1.0.6';
+const CACHE_DYNAMIC_NAME = 'dynamic-1.0.6';
 
 const STATIC_FILES = ['/', '/offline'];
 const TRIM_EXP_IN_DYN = ['https://www.giorgiosaud.io'];
@@ -17,7 +17,7 @@ const NO_DYNAMIC_PATH = [
 ];
 
 const CACHES_USED_NAMES = [
-  "giorgio-runtime-v1",
+  "giorgio-runtime-v2",
   CACHE_STATIC_NAME,
   CACHE_DYNAMIC_NAME,
 ];

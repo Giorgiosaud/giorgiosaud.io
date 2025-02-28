@@ -72,7 +72,7 @@ const author=await getEntry(entry.data.author);
         tags={entry.data.tags} 
       />
 </div>
-<div class="mx-auto prose prose-lg mt-6 max-w-3xl">
+<div class="mx-auto prose prose-lg mt-6 max-w-3xl content-inner">
   <Content />
 </div>
 <blockquote class="md:hidden text-xs mx-auto prose prose-lg mt-6 max-w-3xl">
@@ -132,6 +132,7 @@ document.getElementById('back').addEventListener('click',(e)=>{
     
     const copyButton = document.createElement("button");
     copyButton.className = "copy-code";
+    copyButton.classList.add('absolute','top-2','right-2','text-xs','cursor-pointer','bg-slate-100','text-blue-400','px-2','py-1','rounded-md','hover:bg-slate-400','hover:text-blue-100','hover:scale-110','hover:shadow-2xl','transition');
     copyButton.textContent = "Copy Code";
     codeBlock.setAttribute("tabindex", "0");
     wrapper.appendChild(copyButton);
@@ -145,20 +146,5 @@ document.getElementById('back').addEventListener('click',(e)=>{
     });
   });
 </script> 
-<style is:inline>
-  .copy-code{
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    background: #60a5fa;
-    padding: 0 .5rem;
-    color:rgb(7 1 62);
-  }
-  .copy-code:hover{
-    background: #3b82f6;
-  }
-</style>
 
 

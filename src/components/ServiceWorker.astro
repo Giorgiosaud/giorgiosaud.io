@@ -30,7 +30,11 @@ const requestNotificationPermission = async () => {
   }
 };
 checkPermission();
-registerServiceWorker();
+if(location.url.includes("localhost")){
+  console.log("Running in localhost, skipping service worker registration");
+}else{
+  registerServiceWorker();
+}
 
 //requestNotificationPermission();
 </script>

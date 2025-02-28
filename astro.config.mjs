@@ -58,7 +58,8 @@ export default defineConfig({
     checkOrigin: true,
     
   },
-  integrations: [mdx(), sitemap({
+  integrations: [mdx({
+  }), sitemap({
     entryLimit: 10000,
     changefreq: "weekly",
     priority: 0.7,
@@ -79,17 +80,20 @@ export default defineConfig({
     shikiConfig: {
       // Choose from Shiki's built-in themes (or add your own)
       // https://shiki.style/themes
-      theme: "vitesse-dark",
+      themes: {
+        light: 'github-light',
+        dark: 'github-dark',
+      },
       // Alternatively, provide multiple themes
       // See note below for using dual light/dark themes
       // Disable the default colors
       // https://shiki.style/guide/dual-themes#without-default-color
       // (Added in v4.12.0)
-      defaultColor: false,
+      // defaultColor: false,
       // Add custom languages
       // Note: Shiki has countless langs built-in, including .astro!
       // https://shiki.style/languages
-      langs: [],
+      langs: ['javascript','html','css','jsx','stylus','typescript','tsx','json','yaml','markdown','bash','shell','sh','sql','graphql','php','dockerfile','plaintext'],
       // Enable word wrap to prevent horizontal scrolling
       wrap: true,
       // Add custom transformers: https://shiki.style/guide/transformers

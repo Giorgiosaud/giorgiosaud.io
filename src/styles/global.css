@@ -13,10 +13,7 @@ pre.astro-code{
 code:not([class]){
   @apply bg-gray-100 px-1 py-0.5 italic;
 }
-p:not([class]),a:not([class]){
-  @apply text-gray-800 py-4;
-  text-wrap: pretty;
-}
+
 h1:not([class]),h2:not([class]),h3:not([class]),h4:not([class]),h5:not([class]),h6:not([class]){
   @apply font-bold text-gray-900 pt-4;
   text-wrap: balance;
@@ -41,8 +38,4 @@ h6:not([class]){
 }
 p:not([class]){
   @apply text-base py-4;
-}
-a{
-  *:not([class]){
-  }
 }
