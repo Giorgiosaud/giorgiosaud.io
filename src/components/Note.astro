@@ -1,0 +1,156 @@
+---
+import { cloudinarySrc } from "@helpers/cloudinary";
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+const lang = getLangFromUrl(Astro.url)
+const {note}=Astro.props;
+const t = useTranslations(lang)
+const imgSrc = note.data.image ?  cloudinarySrc('notebook-posts/'+note.data.image.src, {
+    width: 500
+}) : note.data.image;
+const link=lang=='es'?`/es/cuaderno/${note.id}`:`/notebook/${note.id}`;
+---
+<article aria-label={note.data.title}>
+    <div class="wrapper">
+        <div class="title">
+            <a href={link}>
+                <h2>{note.data.title}</h2>
+            </a>
+        </div>
+        <img src={imgSrc} alt={note.data.title} >
+        <div class="metadata">
+            <time datetime={note.data.publishDate}>{Intl.DateTimeFormat('Es-es').format(note.data.publishDate)}</time>
+            <div class="collections">
+                Collections: {(note.data.collections).map((el:{id:string})=>el.id).join(',')}
+            </div>
+            <ul class="tags">
+                {note.data.tags.map((tag:string)=>(<li class="tag">{tag}</li>))}
+            </ul>
+        </div>
+        <div class="description">
+            <p>{note.data.resume}</p>
+        </div>
+        <div class="buttons">
+            <a class="button button-primary" href={link}>{t('notes.read-more')}</a>
+        </div>
+    </div>
+</article>
+<style>
+    article{
+        container: note/normal;
+        
+        --_color:var(--color,light-dark(var(--color-dark),var(--color-light)));
+        --_background-color:var(--background-color,light-dark(var(--color-light),var(--color-dark)));
+        --_border-radius:var(--border-radius,0);
+        
+        border-radius: var(--_border-radius);
+        background-color: var(--_background-color);
+        color: var(--_color);
+        display: grid;
+        grid-template-rows: subgrid;
+        grid-row: title/buttons-end;
+    }
+    .wrapper{
+        display: grid;
+        --_gap: var(--gap, .5rem);
+        --_grid-template: var(--grid-template,
+        "title" 
+        "image" 
+        "metadata" 
+        "description"
+        "buttons");
+        --_place-content: var(--place-content, center);
+        --_padding-block:var(--padding-block,1rem);
+        --_padding-inline:var(--padding-inline,1rem);
+        --_margin-inline:var(--margin-inline,1rem);
+        
+        place-items:center;
+        padding-block: var(--_padding-block);
+        padding-inline: var(--_padding-inline);
+        display: grid;
+        place-content: var(--_place-content);
+        grid-template: var(--_grid-template);
+        gap: var(--_gap);
+        grid-template-rows: subgrid;
+        grid-row: title/buttons-end;
+        .title{
+            grid-area: title;
+            margin-inline: var(--_margin-inline);
+            h2{
+                font-size: clamp(1.5rem, 2vw + 1rem, 2rem);
+            }
+        }
+        img{
+            --_border-radius: var(--border-radius, 0);
+            grid-area: image;
+            mask-image: linear-gradient(rgb(0 0 0 / 100%),rgb(0 0 0 / 100%) 80%, transparent);
+            border-radius: var(--_border-radius);
+            
+            margin: auto;
+        }
+        .metadata{
+            grid-area: metadata;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            place-self: stretch;
+            
+            .tags {
+                display: flex;
+                width: 100%;
+                gap: 1rem;
+                align-items: center;
+                justify-content: center;
+                margin-block: 1rem;
+                flex-wrap: wrap;
+                .tag{
+                    background: light-dark(var(--color-dark),var(--color-light));
+                    color: light-dark(var(--color-light),var(--color-dark));
+                    opacity: .8;
+                    border-radius: 5px;
+                    padding: 0.2rem 0.5rem;
+                    margin: 0;
+                }
+            }
+        }
+        .description{
+            grid-area: description;
+            margin-inline: var(--_margin-inline);
+            p{
+                margin: 0;
+                
+            }
+        }
+        .buttons{
+            --_padding-inline: var(--padding-inline, 1rem);
+            --padding-inline: 1rem;
+            
+            grid-area: buttons;
+            width: 100%;
+            place-self: stretch;
+            padding-inline: var(--_padding-inline);
+            
+            a{
+                text-align: center;
+                display: block;
+            }
+        }
+        
+        @container note (width > 90ch) {
+            --grid-template: 
+            "image image image title title" 
+            "image image image description description" 
+            "image image image metadata metadata" 
+            "buttons buttons buttons buttons buttons";
+            --padding-inline: 0;
+            
+            img{
+                --border-radius:  0 50px 50px 0;
+            }
+            .metadata{
+                margin-inline: var(--_margin-inline);
+                place-self: stretch;
+            }
+            
+        }
+    }
+</style>

@@ -1,0 +1,15 @@
+{
+  "name": {
+    "error": "Please provide your full name.",
+    "placeholder": "Full Name"
+  },
+  "email": {
+    "placeholder": "Email Address",
+    "error": "Please provide your email."
+  },
+  "message": {
+    "placeholder": "Your Message",
+    "error": "Please provide your message."
+  },
+  "submit": "Send Message"
+}

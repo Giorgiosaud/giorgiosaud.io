@@ -1,0 +1,28 @@
+{
+  "name": "new-giorgiosaud-io",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^4.3.0",
+    "@astrojs/react": "^4.3.0",
+    "@astrojs/svelte": "^7.1.0",
+    "@astrojs/vercel": "^8.2.0",
+    "@astrojs/vue": "^5.1.0",
+    "@cloudinary/url-gen": "^1.21.0",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "astro": "^5.9.0",
+    "lottie-web": "^5.12.2",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "svelte": "^5.34.8",
+    "typescript": "^5.8.3",
+    "vue": "^3.5.17"
+  }
+}

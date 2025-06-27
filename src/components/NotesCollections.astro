@@ -1,0 +1,105 @@
+---
+import { getCollection } from 'astro:content';
+import { getLangFromUrl, useTranslations } from '@i18n/utils';
+import Note from './Note.astro';
+
+const lang=getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+interface Props{
+    collection: "collections"|"colecciones";
+    notes: "notes"|"notas";
+}
+const { collection,notes } = Astro.props;
+const collections = await getCollection(collection);
+const fullNotes= await getCollection(notes);
+---
+
+
+
+<h2>
+    {t('notes.collections.title')}
+</h2>
+<hr />
+{
+    collections.map((collection) => (
+    <details>
+        <summary>
+            {collection.data.title} {collection.data.icon}
+        </summary>
+        <ul>
+            {
+                fullNotes
+                .filter(note =>{
+                    return note.data.collections.map(col=>col.id).some(id=>id===collection.id)
+                })
+                .map((note) => (
+                <li>
+                    <Note note={note} />
+                </li>
+                ))
+            }
+        </ul>
+    </details>
+    ))
+}
+<style>
+    *{
+        interpolate-size: allow-keywords;
+    }
+    ul{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    grid-auto-columns: minmax(30rem, 1fr);
+    grid-template-rows: [title] auto [title-end image] auto [image-end metadata] auto [metadata-end description] auto [description-end buttons] auto [buttons-end];
+    gap: 1rem;
+    place-items: center stretch;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    li{
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-row: title/buttons-end;
+      
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+    }
+  }
+    h3{
+        display: inline-block;
+    }
+    
+    details {
+        background: var(--color-main);
+        color: var(--color-light);
+        border: 1px solid light-dark(var(--color-light), var(--color-dark));
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+    
+    /* don't add margin/padding to this, add it to the actual
+    stuff inside the details content */
+    details::details-content {
+        color: var(--color-light);
+        font-size: 1rem;
+        block-size: 0;
+        transition: block-size 1s, content-visibility 1s;
+        transition-behavior: allow-discrete;
+    }
+    
+    details:open::details-content {
+        block-size: auto;
+    }
+    details>*{
+        font-size: clamp(1.25rem, 2vw, 1.5rem);
+    }
+    summary::marker {
+        font-size: 0.75em;
+        color: var(--color-light)
+    }
+    details::details-content{
+        --border-radius:10px
+    }
+</style>

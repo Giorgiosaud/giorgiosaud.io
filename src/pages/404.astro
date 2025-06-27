@@ -1,0 +1,17 @@
+---
+import Hero from "@components/Hero.astro";
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+import Base from "@templates/Base.astro";
+import _404Image from "@images/404.png";
+const lang=getLangFromUrl(Astro.url);
+const t=useTranslations(lang);
+
+---
+
+<Base title="Not Found" pathToTranslate="home">
+  <Hero
+  description={t("notFound.description")}
+  title={t("notFound.title")}
+  imageUrl={_404Image.src}
+  />
+</Base>

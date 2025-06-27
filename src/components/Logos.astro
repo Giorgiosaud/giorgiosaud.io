@@ -1,0 +1,68 @@
+---
+import { getEntry } from "astro:content";
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+import Icon from "@components/Icon.astro";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const TechCollection = await getEntry("technologies","techs");
+const Technologies:string[] = TechCollection?.data.techs.map((tech:string) => tech)||[];
+---
+
+<section class="">
+  <header>
+    <h2 class="">{t("logos.title")}</h2>
+  </header>
+  <div class="technologies">
+    {Technologies.map(tech=>(
+      <div class="technology" tabindex="0">
+        <Icon
+        name={tech}
+        />
+        <span>{tech}</span>
+      </div>
+      ))}
+    </div>
+  </div>
+</section>
+<style>
+  section {
+    padding: calc(var(--spacing) * 16) 0;
+  }
+  header {
+    text-align: center;
+  }
+  .technologies{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
+
+    .technology{
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      width: 100%;
+      position: relative;
+      span{ 
+        background-color: hsl(from var(--color-main) h s l / .01);
+        backdrop-filter: blur(20px);
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        place-items: center;
+        opacity: 0;
+        transition-property: display,opacity;
+        transition-duration: 1s;
+        transition-behavior: allow-discrete;
+
+      }
+      &:hover,&:active,&:focus{
+         span{
+          opacity: 1;
+          display: grid;
+        } 
+      }
+    
+    }
+  }
+</style>

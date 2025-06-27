@@ -1,0 +1,42 @@
+---
+import Hero from "@components/Hero.astro";
+import Features from "@components/Features/index.astro";
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+import Base from "@templates/Base.astro";
+import Logos from "@components/Logos.astro";
+import Badges from "@components/Badges/index.astro";
+
+const lang = getLangFromUrl(Astro.url);
+
+const t = useTranslations(lang);
+---
+
+<Base pathToTranslate="home">
+  <Hero
+    description={t("hero.description")}
+    title={t("hero.title")}
+    cloudinaryImageId="blog/home-notebook"
+  />
+  <Features />
+  <Badges title={t("badges.title")} readMore={t("badges.readMore")} />
+  <section class="full-width">
+    <h3>
+      {t("cta.description")}
+    </h3>
+  </section>
+  <style>
+    section {
+      text-align: center;
+      background-image: radial-gradient(
+        circle,
+        var(--color-main) 10%,
+        var(--color-light) 100%
+      );
+    }
+    h3 {
+      padding: 8rem 0;
+      color: var(--color-light);
+    }
+  </style>
+  <Logos />
+</Base>

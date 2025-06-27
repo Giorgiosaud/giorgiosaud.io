@@ -1,0 +1,85 @@
+---
+import {
+  getLangFromUrl,
+  useTranslations,
+} from "@i18n/utils";
+import Feature from "./Feature.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const features = [
+  {
+    title: t("features.list.0.title"),
+    description: t("features.list.0.description"),
+    icon: "Integration",
+  },
+  {
+    title: t("features.list.1.title"),
+    description: t("features.list.1.description"),
+    icon: "Patterns",
+  },
+  {
+    title: t("features.list.2.title"),
+    description: t("features.list.2.description"),
+    icon: "Frameworks",
+  },
+  {
+    title: t("features.list.3.title"),
+    description: t("features.list.3.description"),
+    icon: "API",
+  },
+  {
+    title: t("features.list.4.title"),
+    description: t("features.list.4.description"),
+    icon: "Globe",
+  },
+  {
+    title: t("features.list.5.title"),
+    description: t("features.list.5.description"),
+    icon: "Community",
+  },
+];
+---
+
+<section class="scrolll-animated">
+  <header>
+    <h2>
+      {t("features.title")}
+    </h2>
+    <p>
+      {t("features.description")}
+    </p>
+  </header>
+
+  <div class="features">
+    {
+      features.map(({ icon, title, description }) => (
+        <Feature
+          description={description}
+          icon={icon}
+          title={title}
+        />
+      ))
+    }
+  </div>
+</section>
+<style>
+  .features {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(200px, 1fr));
+    gap: calc(var(--spacing) * 8);
+    @media screen and (min-width: 48rem) {
+      grid-template-columns: repeat(2, minmax(200px, 1fr));
+    }
+    @media screen and (min-width: 64rem) {
+      grid-template-columns: repeat(3, minmax(200px, 1fr));
+    }
+  }
+  header {
+    padding: calc(var(--spacing) * 4) 0;
+    text-align: center;
+  }
+  p {
+    text-align: center;
+  }
+</style>

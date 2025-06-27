@@ -1,0 +1,19 @@
+---
+export interface Props{
+    version?: string;
+}
+const {version="v1"}= Astro.props
+---
+<link
+    href={`/manifest.json?v=${version}`}
+    rel="manifest"
+  />
+  <meta
+    content="#ffffff"
+    name="msapplication-TileColor"
+  />
+  
+  <meta
+    content="#ffffff"
+    name="theme-color"
+  />

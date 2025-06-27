@@ -1,0 +1,128 @@
+---
+import Icon from '@components/Icon.astro';
+
+interface Props{
+    title: string,
+    imgSrc:string,
+    description:string,
+    cardColor:string,
+    category:string,
+    poweredBy:string,
+    readMore?:string
+}
+const {imgSrc, title, description,cardColor,category,poweredBy,readMore}=Astro.props;
+const slugify = (str: string) => {
+    return '--'+str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+};
+---
+<div class="badge">
+    <article>
+        <header>
+            <img src={imgSrc} alt={title}>
+        </header>
+        <h3>{title}</h3>
+        
+        <!--div class="resume">
+            <p>{description}</p>            
+        </div-->
+        <div class="read-more">
+            <button class="button button-primary" popovertarget={slugify(title)}>{readMore??'Details'}</button>
+        </div>  
+        <p class="full" id={slugify(title)} popover>{description}</p>
+        <div class="poweredBy">
+            <Icon name={poweredBy}></Icon>
+        </div>
+        <div class="category">
+            {category}
+        </div>
+    </article>
+    
+</div>
+<style define:vars={{cardColor,anchorName:slugify(title)}}>
+    .badge{
+        container: badge/normal;
+        display: grid;
+        grid-template-rows:subgrid;
+        grid-row: header-start / category-end;
+        
+    }
+    
+    article {
+        grid-template-rows: subgrid;
+        grid-row: header-start / category-end;
+        width: 35ch;
+        display: grid;
+        border-radius: 1rem;
+        background-color: light-dark(var(--color-light),var(--color-dark));
+        box-shadow: 1px 1px 10px light-dark(var(--color-light),var(--color-dark));
+        padding: 0.5rem;
+        text-align: center;
+        place-items:center;
+        color:light-dark(var(--color-dark),var(--color-light));
+        
+        header{
+            place-items:center;
+            grid-row: header-start / title-start;
+            display: grid;
+            border-radius: 1rem 1rem 8rem 1rem;
+            width: 100%;
+            aspect-ratio: 1;
+            background-image: linear-gradient(220deg,var(--cardColor), hsl(from var(--cardColor) h s calc(l*1.05)) 20%,hsl(from var(--cardColor) h s calc(l*1.3)) 100%);
+            img{
+                max-width: 25ch;
+                width: 100%;
+            }
+        }
+        h3{
+            grid-row: title-start / description-start;
+            font-size: clamp(1.2rem,1.5cqi,1.5rem);
+        }
+        .full{
+            position-anchor: var(--anchorName);
+            position-area: center;
+            position: fixed;
+            width: 350px;
+            background: light-dark(var(--color-dark),var(--color-light));
+            border: none;
+            box-shadow: 1px 1px 10px light-dark(var(--color-dark),var(--color-light));
+            padding: .5rem;
+            color: light-dark(var(--color-light),var(--color-dark));
+            
+        }
+        .resume{
+            grid-row: description-start / read-more-start;
+            p{
+                font-size: clamp(1rem,1.3cqi,1.3rem);
+                text-align: center;
+                margin-block: 1lh ;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                line-clamp: 2; 
+            }
+                
+            }
+        }
+        .read-more{
+            grid-row: read-more-start/poweredby-start;
+            anchor-name: var(--anchorName);
+            margin: 1lh 0;
+            
+        }
+        .poweredBy{
+            grid-row: poweredby-start / category-start;
+            min-height: 2rem;
+            width: 50%;
+        }
+        .category{
+            grid-row: category-start / category-end;
+            padding: .5rem 1rem;
+            border-radius: 2rem;
+            text-align: center;
+            width: 70%;
+            margin: 1lh 0;
+            background-image: linear-gradient(270deg,var(--cardColor), hsl(from var(--cardColor) h s calc(l*1.05)) 20%,hsl(from var(--cardColor) h s calc(l*1.3)) 100%);
+        }
+    }
+</style>

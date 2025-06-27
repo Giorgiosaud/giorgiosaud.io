@@ -1,0 +1,54 @@
+---
+import {
+  getLangFromUrl,
+  useTranslatedPath,
+  useTranslations,
+} from "@i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const { translatePath } = useTranslatedPath(lang);
+---
+
+<a
+aria-label="Giorgiosaud.io logo"
+class="logo"
+href={translatePath("home", lang)}
+>
+<span>Giorgiosaud</span>
+<span class="logo_accent">.io</span>
+</a>
+<style>
+  .logo {
+    width: 100%;
+    align-self: start;
+    grid-column: logo / menu;
+    --default-font-family:'Roboto Mono';
+    font-family: var(
+      --default-font-family,
+      ui-sans-serif,
+      system-ui,
+      sans-serif,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji"
+    );
+    flex: 1;
+    text-wrap-mode: nowrap;
+    z-index: 110;
+    color: light-dark(var(--color-dark), var(--color-light));
+    text-decoration: none;
+    display: flex;
+    font-weight: 800;
+    justify-content:center;
+    @media screen and (width >= 48rem) {
+      justify-content:start;
+    }
+    .logo_accent {
+      color: light-dark(var(--color-main), var(--color-main));
+    }
+    a {
+    }
+  }
+</style>

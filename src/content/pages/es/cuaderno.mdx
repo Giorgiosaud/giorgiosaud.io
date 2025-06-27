@@ -1,0 +1,17 @@
+---
+title: Notebook
+description: This is my personal notebook where I share thoughts, ideas, and insights on web development, architecture, and more.
+pathToTranslate: notebook
+---
+
+import NotesStarred from '@components/NotesStarred.astro';
+import NotesLatest from '@components/NotesLatest.astro';
+import NotesCollections from '@components/NotesCollections.astro';
+
+# Mi Cuaderno
+
+<NotesLatest collection="notas" />
+
+<NotesStarred collection="notas" />
+
+<NotesCollections collection="colecciones" notes="notas"/>

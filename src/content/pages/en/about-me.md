@@ -1,0 +1,42 @@
+---
+title: About Me
+description: A curious mind who became a developer not by title.
+pathToTranslate: about-me
+---
+# 👨‍💻 About Me
+
+Hey there! I’m **Jorge Luis Saud Rosal** — a curious mind who became a developer not by title, but by solving problems. I’m an Industrial Engineer by degree, a Solution Architect by trade, and a dad by heart. 👨‍👦
+
+This site is my **digital notebook** — a space where I unpack technical ideas in simple words. I created it for developers like me: those who had to figure things out on the go, who learned by doing, breaking, and rebuilding.
+
+## 🛠 From Engineer to Architect
+
+My journey into development wasn’t linear. I started out in logistics, sales, and even real estate appraisal. But whenever a challenge needed a digital fix, I was the one rolling up my sleeves — coding, configuring, and delivering.
+
+Over the past 15+ years, I’ve gone from building WordPress sites at my own company in Venezuela to leading architecture for financial platforms in Chile. Now, at [Modyo](https://www.modyo.com), I help teams design decoupled frontends, integrate APIs, and build solid, scalable systems.
+
+## 🧠 Why This Notebook Exists
+
+I built this notebook to explain complex concepts in a way that anyone on a team — from junior dev to product owner — can understand. It’s not about being the smartest in the room, it’s about making sure **everyone gets it**.
+
+Here you’ll find:
+- Real-life notes from projects using **Vue**, **TypeScript**, **Stencil.js**, and microfrontends
+- Solutions for challenges like **SSO**, **API integration**, and **SPA SEO**
+- Architecture insights from working with major banks and financial institutions across Latin America
+- Lessons learned from balancing tech leadership with the chaos (and joy) of parenthood
+
+## 💡 My Motto
+
+> A day without learning is a lost day.
+
+Whether I’m debugging code, mentoring a teammate, or helping my son discover how things work — I’m always learning, and I believe sharing what we learn makes us all stronger.
+
+## 🌎 Let's Connect
+
+- 📫 Email: [giorgiosaud@gmail.com](mailto:giorgiosaud@gmail.com)  
+- 💼 LinkedIn: [linkedin.com/in/giorgiosaud](https://www.linkedin.com/in/giorgiosaud/)  
+- 🧠 Blog: [giorgiosaud.io/notebook](https://giorgiosaud.io/notebook/)
+
+---
+
+Thanks for visiting — and if you find something useful here, that means this notebook is doing its job.
