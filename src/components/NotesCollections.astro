@@ -76,24 +76,6 @@ const fullNotes= await getCollection(notes);
         padding: 0.5rem 1rem;
         border-radius: 0.25rem;
         margin-bottom: 1rem;
-        overflow: hidden;
-    }
-    
-    /* don't add margin/padding to this, add it to the actual
-    stuff inside the details content */
-    details::details-content {
-        color: var(--color-light);
-        font-size: 1rem;
-        block-size: 0;
-        transition: block-size 1s, content-visibility 1s;
-        transition-behavior: allow-discrete;
-    }
-    
-    details:open::details-content {
-        block-size: auto;
-    }
-    details>*{
-        font-size: clamp(1.25rem, 2vw, 1.5rem);
     }
     summary::marker {
         font-size: 0.75em;
@@ -102,4 +84,6 @@ const fullNotes= await getCollection(notes);
     details::details-content{
         --border-radius:10px
     }
+
+    
 </style>
