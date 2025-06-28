@@ -1,24 +1,49 @@
 {
-  "extends": "astro/tsconfigs/base",
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "extends": "astro/tsconfigs/strict",
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist"
+  ],
   "compilerOptions": {
     "baseUrl": "src",
-    "moduleResolution": "Bundler",
-    "strictNullChecks": true,
-    "types": ["astro/client"],
     "paths": {
-      "@firebase/*": ["firebase/*"],
-      "@lib/*": ["lib/*"],
-      "@styles/*": ["styles/*"],
-      "@i18n/*": ["i18n/*"],
-      "@utils/*": ["utils/*"],
-      "@components/*": ["components/*"],
-      "@layouts/*": ["layouts/*"],
-      "@assets/*": ["assets/*"],
-      "@pages/*": ["pages/*"]
+      "@templates/*": [
+        "global/templates/*"
+      ],
+      "@icons/*": [
+        "icons/*"
+      ],
+      "@global-components/*": [
+        "global/components/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@example-components/*": [
+        "example-components/*"
+      ],
+      "@global-styles/*": [
+        "global/styles/*"
+      ],
+      "@images/*": [
+        "images/*"
+      ],
+      "@i18n/*": [
+        "global/i18n/*"
+      ],
+      "@helpers/*": [
+        "helpers/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ]
     },
-    "jsx": "react-jsx",
+    "strictNullChecks": true,
+    "allowJs": true,
+    "jsx": "preserve",
     "jsxImportSource": "react"
   }
 }

@@ -1,0 +1,24 @@
+  h1,blockquote,li{ margin-bottom: 0.5lh; }
+p{
+    margin-bottom: 1lh;
+}
+.text-center{
+    text-align: center;
+}
+.focus{
+  background-color: light-dark(var(--color-dark), var(--color-light));
+  color: light-dark(var(--color-light), var(--color-dark));
+  font-size: clamp(2rem,3vw,2rem);
+  padding: 1lh;
+  margin: 1lh;
+}
+blockquote{
+  font-style: italic;
+  position: relative;
+  padding: 1ch;
+  &::before{
+    content: open-quote;
+    position: absolute;
+    left: 0;
+  }
+}

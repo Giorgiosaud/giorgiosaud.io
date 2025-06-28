@@ -1,0 +1,31 @@
+---
+import { getLangFromUrl, useTranslatedPath, useTranslations, type RouteNames } from '@i18n/utils';
+import Icon from '@components/Icon.astro';
+import { getEntries } from 'astro:content';
+import { getCollection } from 'astro:content';
+
+interface Props{
+    pathToTranslate: RouteNames;
+}
+
+const { pathToTranslate } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const { translatePath } = useTranslatedPath(lang);
+const langToTranslate=lang==='es'?'en':'es';
+const iconToShow=lang==='es'?'USA':'Venezuela';
+const lastPath = Astro.url.pathname.split("/").pop();
+let pathToTranslateNote = ""
+if(pathToTranslate==="internal-note"){
+  const id=lastPath?.split('-').shift()||'';
+  if(lang==="en"){
+    pathToTranslateNote =(await getCollection("notas")).find(nota=>nota.id.includes(id))?.id||'';
+  }else{
+    pathToTranslateNote =(await getCollection("notes")).find(nota=>nota.id.includes(id))?.id||'';
+  }
+}
+
+---
+
+<a href={translatePath(pathToTranslate,langToTranslate,pathToTranslateNote)}>
+  <Icon name={iconToShow}>
+</a>

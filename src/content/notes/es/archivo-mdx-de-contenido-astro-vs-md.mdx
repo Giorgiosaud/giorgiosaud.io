@@ -1,0 +1,73 @@
+---
+draft: false
+selfHealing: "000009"
+title: "Archivo MDX en Astro como contenido vs archivo MD"
+resume: "Como puedo mostrarte, en Astro podemos tener al menos 2 formas de crear contenido: archivos .md y archivos .mdx. La diferencia entre ellos es que los archivos .mdx pueden tener código JSX y los archivos .md no."
+image: { src: "md_engine", alt: "Este es un motor MDX." }
+publishDate: "2024-07-01 16:22"
+category: "astro"
+author: 000001-jorge-saud
+collections: [frontend,astro]
+tags: ["microfrontend", "arquitectura"]
+---
+
+import ButtonSvelte from "@example-components/svelte/buttonSvelte.svelte";
+import ButtonVue from "@example-components/vue/buttonVue.vue";
+import ButtonReact from "@example-components/react/buttonReact";
+export const draft = false;
+export const title = "Archivo MDX en Astro como contenido vs archivo MD";
+export const resume = "Este es un archivo MDX";
+export const image = {
+  src: "md_engine",
+  alt: "Contenido de Markdown en Astro",
+};
+export const publishDate = "2023-05-08 11:39";
+export const category = "arquitectura";
+export const author = "Giorgio Saud";
+export const tags = ["micro-frontend", "arquitectura"];
+
+Como puedo mostrarte, en Astro podemos tener al menos 2 formas de crear contenido: archivos .md y archivos .mdx. La diferencia entre ellos es que los archivos .mdx pueden tener código JSX y los archivos .md no.
+
+Como en este ejemplo en Astro, podemos usar componentes de diferentes frameworks en la misma página, usando la característica de Dynamic Island. Aquí tienes un ejemplo:
+
+## Aquí está Svelte
+
+Un componente renderizado del lado del servidor cargado en el lado del cliente.
+<div >
+<ButtonSvelte client:load></ButtonSvelte>
+</div>
+## Aquí está React
+
+Un componente renderizado del lado del servidor cargado cuando el cliente está inactivo.
+<div >
+
+<ButtonReact
+  client:idle
+  title="Incrementar contador en React"
+/>
+</div>
+<div class="h-screen"></div>
+
+## Aquí está Vue
+
+Un componente renderizado del lado del servidor pero cargado con reactividad cuando es visible.
+<div >
+<ButtonVue client:visible />
+</div>
+
+En un archivo .md no podemos hacer esto porque está más orientado a contenido estático y no podemos usar código JSX en él.
+
+Aunque el formato .md es una excelente herramienta porque es como crear HTML sin complejidad, MDX es genial porque mezcla todo en un solo archivo, solo separando un párrafo con un componente JSX.
+
+Permite importar componentes y todo lo que necesites, incluso usando todo el poder de Markdown.
+
+```md
+# hola mundo en h1
+
+## hola mundo en h2
+
+este es un párrafo
+
+> Texto de cita
+> Este es un archivo MDX 💌
+```

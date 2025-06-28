@@ -1,0 +1,66 @@
+---
+import Icon from '@components/Icon.astro';
+
+interface Props {
+  icon: string;
+  title: string;
+  description: string;
+}
+const { icon, title, description } = Astro.props;
+---
+
+<div class="feature">
+  <article>
+    <header>
+      <div class="icon">
+        <Icon name={icon} />
+      </div>
+      <h3>{title}</h3>
+    </header>
+    <p>{description}</p>
+  </article>
+</div>
+<style>
+  .feature {
+    container: feature/inline-size;
+  }
+  article {
+    display: grid;
+    grid-template-rows: subgrid;
+    
+  }
+  header {
+    display: flex;
+    flex-direction: column;
+    
+    align-items: center;
+    padding: calc(var(--spacing) * 4) 0;
+    @container feature (width>320px){
+      flex-direction: row;
+    }
+    .icon {
+      border-radius: 50%;
+      color: var(--color-light);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 1;
+      width: 80px;
+      &>svg{
+        width: 100%;
+      }
+    }
+    h3 {
+      font-size: clamp(1.3rem, 2vw, 1.5rem);
+      margin-left: calc(var(--spacing) * 4);
+      @container card (width > 48ch){
+      margin-left: 0;
+        text-align: center;
+      }
+      
+    }
+    @container card (width> 48ch) {
+      flex-direction: column;
+    }
+  }
+</style>

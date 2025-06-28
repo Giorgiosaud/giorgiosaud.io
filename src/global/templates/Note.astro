@@ -1,0 +1,74 @@
+---
+import "@global-styles/reset.css";
+import "@global-styles/grid.css";
+import "@global-styles/global.css";
+
+import Head from "@global-components/Head/index.astro";
+import Header from "@global-components/Header.astro";
+import Footer from "@global-components/Footer.astro";
+import DebuggerTagManager from "@global-components/DebuggerTagManager.astro";
+import type { RouteNames } from "@i18n/utils";
+
+export interface Props {
+  lang?: string;
+  title?: string;
+  description?: string;
+  pathToTranslate?: RouteNames;
+  image:string;
+  publishedAt: Date;
+  draft: boolean;
+}
+const {
+  title,
+  description,
+  image,
+  lang = "en",
+  pathToTranslate = "internal-note",
+  publishedAt,
+} = Astro.props;
+const structuredData={
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": title,
+      "image": [image,
+      ],
+      "datePublished": publishedAt.toISOString(),
+      "dateModified": publishedAt.toISOString(),
+      "author": [{
+        "@type": "Person",
+        "name": "Jorge saud",
+        "url": "https://www.giorgiosaud.io/about-me"
+      },{
+        "@type": "Person",
+        "name": "Jorge saud",
+        "url": "https://www.giorgiosaud.io/about-me"
+      }]
+    }
+---
+
+<!doctype html>
+<html lang={lang}>
+<Head
+title={title}
+description={description}
+structuredData={JSON.stringify(structuredData)}
+>  
+</Head>
+
+<body>
+  <DebuggerTagManager />
+  <Header pathToTranslate={pathToTranslate} />
+  <main class="content-grid">
+    <slot />
+  </main>
+  <Footer />
+</body>
+</html>
+<style>
+  :global(.opened) + main{
+    padding-top: 68px;
+    @media (width >= 48rem) {
+      padding: 0;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import { getCollection } from 'astro:content';
+import Note from './Note.astro';
+import { getLangFromUrl, useTranslations } from '@i18n/utils';
+
+const lang=getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+interface Props{
+    collection: "notes"|"notas";
+}
+const { collection } = Astro.props;
+const latestNotesIds = ((await getCollection(collection)).filter(note=>!note.data.draft).sort((a,b)=>a.data.publishDate<b.data.publishDate ? 1 : -1).slice(0,4)).map(note=>note.id);
+
+const notes = (await getCollection(collection))
+  .filter(note=>note.data.starred && !note.data.draft)
+  .filter(note=>!latestNotesIds.includes(note.id))
+  .sort((a,b)=>a.data.publishDate<b.data.publishDate ? 1 : -1).slice(0,4);
+---
+
+<section class="starred-notes" aria-label={t('notes.starred.title')}>
+    <h2>
+    {t('notes.starred.title')}
+    </h2>
+    <ul>
+        {notes.map(note=>(<li><Note note={note} /></li>))}
+    </ul>
+    
+</section>
+<style>
+  ul{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    grid-auto-columns: minmax(30rem, 1fr);
+    grid-template-rows: [title] auto [title-end image] auto [image-end metadata] auto [metadata-end description] auto [description-end buttons] auto [buttons-end];
+    gap: 1rem;
+    place-items: center stretch;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+  }
+  li{
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: title/buttons-end;
+
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+  h2{
+    margin-bottom: 1rem;
+  }
+</style>

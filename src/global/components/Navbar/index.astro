@@ -1,0 +1,95 @@
+---
+import {
+type RouteNames,
+} from "@i18n/utils";
+import Navigation from "./Navigation.astro";
+import LogoNavigation from "./LogoNavigation.astro";
+import HamburgerIcon from "./HamburgerIcon.astro";
+import TranslateButton from "./TranslateButton.astro";
+const { pathToTranslate } = Astro.props;
+
+interface Props {
+  pathToTranslate: RouteNames;
+}
+
+
+---
+
+<nav aria-label="Main" >
+  <LogoNavigation />
+  <Navigation/>
+  <div class="actions">
+    <TranslateButton pathToTranslate={pathToTranslate} />
+    <button id="hamburger-menu">
+      <HamburgerIcon />
+    </button>
+  </div>
+  
+</nav>
+<script>
+  const Menu = document.getElementById("menu") as HTMLElement;
+  const MenuButton = document.getElementById("hamburger-menu") as HTMLElement;
+  
+  const Header = document.querySelector("header") as HTMLElement;
+  MenuButton?.addEventListener("click", () => {
+    Menu.dataset.opened = "true";
+    MenuButton.classList.toggle("opened");
+    Header.classList.toggle("opened");
+    if (!MenuButton.classList.contains("opened")) {
+      Menu.dataset.opened = "false";
+    }
+  });
+  (function () {
+    const hamburger = document.getElementById('hamburger-menu') as HTMLElement;
+    let scrollTimeout:NodeJS.Timeout;
+    
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    
+    function onScroll() {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          
+          if (Math.abs(currentScrollY - lastScrollY) > 5) {
+            hamburger.classList.add('hamburger-hidden');
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+              hamburger.classList.remove('hamburger-hidden');
+            }, 200); // Show again after 200ms of no scroll
+          }
+          
+          lastScrollY = currentScrollY;
+          ticking = false;
+        });
+        
+        ticking = true;
+      }
+    }
+    
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+</script>
+<style>
+  nav{
+    display: grid;
+    place-items: center;
+    grid-template-columns: [logo] auto [menu] 1fr [actions] auto [end-actions];
+    color: light-dark(var(--color-dark), var(--color-light));
+    .actions{
+      grid-column: actions / end-actions;
+      display: flex;
+      place-items: center;
+      align-self: start;
+      gap:1rem;
+      z-index: 10;;
+    }
+    #hamburger-menu{
+      width: 2ch;
+      @media screen and (width >= 48rem) {
+        display: none;
+      }
+    }
+  }
+  
+</style>

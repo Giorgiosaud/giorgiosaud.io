@@ -1,0 +1,126 @@
+---
+import {
+  getLangFromUrl,
+  useTranslations,
+  useTranslatedPath,
+} from "@i18n/utils";
+import Icon from "@components/Icon.astro";
+import { cloudinarySrc } from "helpers/cloudinary";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const { translatePath } = useTranslatedPath(lang);
+// set props of hero component
+interface Props {
+  title: string;
+  description: string;
+  cloudinaryImageId?: string;
+  imageUrl?: string;
+  showButtons?: boolean;
+}
+const { title, description, cloudinaryImageId, imageUrl, showButtons = true } = Astro.props;
+const imgSrc = cloudinaryImageId ?  cloudinarySrc(cloudinaryImageId, {
+  width: 500
+}) : imageUrl;
+---
+
+<section id="hero" class="hero__container scrolll-animated">
+  <div class="hero">
+    <h1 class="hero__title">
+      {title}
+    </h1>
+    <div class="hero__image">
+      <img src={imgSrc} alt="Astronaut" width="500">
+    </div>
+    <p class="hero__description">
+      {description}
+    </p>
+    {showButtons &&(
+      <div class="hero__buttons">
+        <a
+        class="button button-block button-primary"
+        
+        href={translatePath("notebook", lang)}
+        >
+        <Icon name="Note" />
+        {t("hero.notebook")}
+      </a>
+      <a
+      href="https://github.com/giorgiosaud"
+      rel="noopener"
+      target="_blank"
+      class="button button-block button-outline"
+      ><Icon name="GitHub" />
+      <span>{t("hero.githubProfileButton")}</span>
+    </a>
+  </div>
+  )}
+</div>
+</section>
+<style>
+  .hero__container {
+    container: hero/inline-size;
+    padding-block: 2lh;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: [text image]1fr[text-end  image-end];
+    @container hero (width > 90ch) {
+      grid-template-columns: [text]2fr[text-end image]1fr[image-end];
+      grid-template-rows: repeat(3,1fr);
+      
+    }
+    /* grid-template: "image" "title"  "description" "buttons"; */
+    align-items: center;
+    color: var(--color-main);
+    
+    .hero__title {
+      /* grid-area: title; */
+    }
+    .hero__description {
+      /* grid-area: description; */
+      font-size: clamp(0.75rem, 5vw, 1.3rem);
+      padding-block: 1lh ;
+    }
+    .hero__image {
+      /* grid-area: image; */
+      grid-row: span 3;
+      margin: auto;
+      padding: calc(var(--spacing) * 4);
+      place-items: center;
+      img{
+        border-radius:50%;
+        width: 80%;
+        aspect-ratio: 1;
+        box-shadow: 10px 10px 15px -10px light-dark(var(--color-main),var(--color-light));
+        @container (width > 48ch) {
+          width: 100%;
+        }
+      }
+      @media (prefers-color-scheme: dark) {
+        filter: sepia(1);
+      }
+    }
+    .hero__buttons {
+      /* grid-area: buttons; */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: calc(var(--spacing) * 4);
+      margin-top: calc(var(--spacing) * 8);
+    }
+    @container hero (width > 48ch) {
+      /* grid-template:
+      "title title  image image image"
+      "description description  image image image"
+      "buttons buttons  image image image"; */
+      /* grid-template-rows: repeat(3, 1fr); */
+      /* grid-template-columns: [text]2fr[text-end image]1fr[image-end]; */
+      
+      .hero__buttons {
+        flex-direction: row;
+        justify-content: start;
+      }
+    }
+  }
+</style>

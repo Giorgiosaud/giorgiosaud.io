@@ -1,0 +1,13 @@
+---
+import {TAG_MANAGER_ID} from 'astro:env/client'
+---
+{
+TAG_MANAGER_ID &&<noscript>
+  <iframe
+    height="0"
+    src={`https://www.googletagmanager.com/ns.html?id=${TAG_MANAGER_ID}`}
+    style="display:none;visibility:hidden"
+    width="0"
+  ></iframe>
+  <noscript></noscript></noscript>
+  }

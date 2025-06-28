@@ -1,0 +1,51 @@
+---
+import type { RouteNames } from "@i18n/utils";
+import Navbar from "./Navbar/index.astro";
+interface Props{
+  pathToTranslate: RouteNames;
+  notePath?: string;
+}
+const { pathToTranslate, notePath } = Astro.props;
+---
+<header >
+  <div class="content-grid">
+    <Navbar pathToTranslate={pathToTranslate} />
+  </div>
+</header>
+<style>
+  header{
+    view-transition-name: header;
+    background-color: light-dark(var(--color-light), var(--color-dark));
+    animation-timeline: scroll();
+    animation-duration: 1ms;
+    animation-range: 0px 30%;
+    animation-fill-mode: forwards;
+    animation-name: scroll-down;
+    height: fit-content;
+    padding-block: 1lh;
+    position: sticky;
+    top: 0px;
+    isolation: isolate;
+    z-index: 100;
+    background-color: light-dark(
+        hsl(from var(--color-light) h s l /.7),
+        hsl(from var(--color-dark) h s l /.7)
+      );
+    &:has([data-opened="true"]) {
+      height: 100dvh;
+      width: 100dvw;
+      position: fixed;
+    }
+
+  }
+   @keyframes scroll-down {
+    to {
+      background-color: light-dark(
+        hsl(from var(--color-light) h s l /.2),
+        hsl(from var(--color-dark) h s l /.2)
+      );
+      backdrop-filter: blur(10px);
+      padding: calc(var(--spacing) * 4) 0;
+    }
+  }
+</style>
