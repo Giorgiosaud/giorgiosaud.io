@@ -26,8 +26,8 @@ Creé este cuaderno para explicarle temas técnicos a todo el equipo, no solo a 
 
 ## 💡 Mi filosofía
 
-<section class="breakout text-center focus">
-Un día sin aprender es un día perdido.
+<section class="full-width text-center focus">
+<h2>  Un día sin aprender es un día perdido.</h2>
 </section>
 
 > Ya sea corrigiendo un bug, acompañando a un colega o explicándole a mi hijo cómo funciona algo, siempre estoy aprendiendo. Y creo que compartir lo que aprendemos nos hace mejores a todos.

@@ -1,6 +1,7 @@
-@layer reset,root,global, grid;
+@layer reset, root, global, grid;
+
 @layer root {
-  
+
   :root {
     color-scheme: light dark;
     --color-main: #62748e;
@@ -9,100 +10,130 @@
     --spacing: 0.25rem;
     --breakpoint-lg: 48rem;
     --font-size: 1rem;
-    --default-font-family:'Poppins';
+    --default-font-family: 'Poppins';
   }
+
   body {
-    font-family: var(
-    --default-font-family,
-    ui-sans-serif,
-    system-ui,
-    sans-serif,
-    "Apple Color Emoji",
-    "Segoe UI Emoji",
-    "Segoe UI Symbol",
-    "Noto Color Emoji"
-    );
+    font-family: var(--default-font-family,
+        ui-sans-serif,
+        system-ui,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      );
   }
+
   @view-transition {
     navigation: auto;
   }
 }
 
 @layer global {
-  h1, h2 {
-    --_color:light-dark(var(--color-dark), var(--color-light));
-    color: var(--color,var(--_color));
+
+  h1,
+  h2 {
+    --_color: light-dark(var(--color-dark), var(--color-light));
+    color: inherit;
     font-weight: 700;
   }
-  h3, h4, h5, h6 {
-    --_color:light-dark(var(--color-dark), var(--color-light));
-    color: var(--color,var(--_color));
+
+  h3,
+  h4,
+  h5,
+  h6 {
+    --_color: light-dark(var(--color-dark), var(--color-light));
+    color: inherit;
     font-weight: 600;
   }
+
   h1 {
-    font-size: clamp(2.5rem, 6vw, 4rem);   /* 40px–64px, scales well for hero titles */
+    font-size: clamp(2.5rem, 6vw, 4rem);
   }
+
   h2 {
-    font-size: clamp(2rem, 4vw, 3rem);     /* 32px–48px */
+    font-size: clamp(2rem, 4vw, 3rem);
   }
+
   h3 {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);/* 24px–36px */
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
   }
+
   h4 {
-    font-size: clamp(1.25rem, 2vw, 1.75rem);/* 20px–28px */
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
   }
+
   h5 {
-    font-size: clamp(1.1rem, 1.5vw, 1.3rem);/* 17.6px–20.8px */
+    font-size: clamp(1.1rem, 1.5vw, 1.3rem);
   }
+
   h6 {
-    font-size: clamp(1rem, 1vw, 1.1rem);   /* 16px–17.6px */
+    font-size: clamp(1rem, 1vw, 1.1rem);
   }
-  body, p, a, li, dl, dt, dd {
-    font-size: clamp(1rem, 1.2vw, 1.125rem); /* 16px–18px for normal text */
+
+  body,
+  p,
+  a,
+  li,
+  dl,
+  dt,
+  dd {
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
   }
+
   a {
     color: inherit;
     font-weight: normal;
     text-decoration: none;
   }
-  a,p,dl {
-    --_color:light-dark(var(--color-dark), var(--color-light));
-    font-size: clamp(1rem, 1.2vw, 1.125rem); /* 16px–18px for normal text */
-    color: var(--color,var(--_color));
+
+  a,
+  p,
+  dl {
+    --_color: inherit;
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    color: var(--color, var(--_color));
   }
+
   dl {
     dt {
       font-weight: 600;
     }
+
     dd {
       margin-left: calc(var(--spacing) * 4);
     }
   }
-  .sr-only{
+
+  .sr-only {
     display: none;
   }
-  
+
   svg,
   svg * {
     color: inherit;
   }
+
   main section.scrolll-animated {
     animation: fade-in 1s ease-in-out;
     animation-fill-mode: forwards;
     animation-timeline: view();
     animation-range: entry 10% cover 40%;
   }
+
   @keyframes fade-in {
     from {
       opacity: 0;
       transform: translateX(10px), scale(0.3);
     }
+
     to {
       opacity: 1;
       transform: translateX(0), scale(1);
     }
   }
-  
+
   .button {
     cursor: pointer;
     line-height: 1.3;
@@ -110,43 +141,45 @@
     padding: .75rem;
     border: 0;
     border-radius: .5rem;
-    
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: .25rem;
   }
-  
+
   .button>svg {
     width: 1.75rem;
     margin: 0 .5rem;
     aspect-ratio: 1;
   }
-  .button-block{
+
+  .button-block {
     width: 100%;
   }
+
   .button-primary {
-    --_color: light-dark(var(--color-light),var(--color-dark));
-    --_background-color:var(--background-color,light-dark(var(--color-dark),var(--color-main)));
-    color: var(--color,var(--_color));
-    background-color: var(--background-color,var(--_background-color));
-    
+    --_color: light-dark(var(--color-light), var(--color-dark));
+    --_background-color: var(--background-color, light-dark(var(--color-dark), var(--color-main)));
+    color: var(--color, var(--_color));
+    background-color: var(--background-color, var(--_background-color));
+
     transition: opacity 200ms;
   }
-  
+
   .button-primary:is(:hover, :focus-visible) {
     outline-color: var(--color-main);
     opacity: .8;
   }
-  
+
   .button-outline {
     background: transparent;
-    border: 2px solid light-dark(var(--color-light),var(--color-dark));
+    border: 2px solid light-dark(var(--color-light), var(--color-dark));
   }
-  
+
   .button-outline:is(:hover, :focus-visible) {
-    border-color: light-dark(var(--color-dark),var(--color-light));
-    background-color: light-dark(var(--color-light),var(--color-dark));
+    border-color: light-dark(var(--color-dark), var(--color-light));
+    background-color: light-dark(var(--color-light), var(--color-dark));
     outline-color: var(--color-main);
   }
 }

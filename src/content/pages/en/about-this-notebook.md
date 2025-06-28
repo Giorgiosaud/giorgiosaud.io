@@ -40,8 +40,10 @@ Real-world problems (sometimes slightly anonymized), and practical solutions—e
 ### 🧪 Framework examples  
 Code snippets and patterns in tools like **Vue**, **React**, **Stencil**, and plain **JavaScript**—always focused on clarity and maintainability.
 
-<section class="breakout text-center focus">
-Whether you're debugging your first API call or designing a scalable frontend system, there’s something here for you.
+<section class="full-width text-center focus">
+
+## Whether you're debugging your first API call or designing a scalable frontend system, there’s something here for you.
+
 </section>
 
 ### 💬 Personal experiences  
