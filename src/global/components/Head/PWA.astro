@@ -5,7 +5,7 @@ export interface Props{
 const {version="v1"}= Astro.props
 ---
 <link
-    href={`/manifest.json?v=${version}`}
+    href={`/manifest.json?v=1${version}`}
     rel="manifest"
   />
   <meta
@@ -17,3 +17,8 @@ const {version="v1"}= Astro.props
     content="#ffffff"
     name="theme-color"
   />
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js');
+    }
+  </script>
