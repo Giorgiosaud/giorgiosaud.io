@@ -1,0 +1,94 @@
+---
+import Icon from '@components/Icon.astro';
+
+interface Props{
+    title: string,
+    imgSrc:string,
+    description:string,
+    cardColor:string,
+    category:string,
+    poweredBy:string,
+    readMore?:string
+}
+const {imgSrc, title, description,cardColor,category,poweredBy,readMore}=Astro.props;
+const slugify = (str: string) => {
+    return '--'+str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+};
+---
+<div class="badge">
+    <article tabindex="0">
+        <img src={imgSrc} alt={title}>
+        <button class="body" popovertarget={slugify(title)}>
+        <strong>{title}</strong>
+
+        </button>
+        <p class="full" id={slugify(title)} popover>{description}</p>
+        <!--div class="resume">
+            <p>{description}</p>            
+        </div-->
+        <!--div class="read-more">
+            <button class="button button-primary" popovertarget={slugify(title)}>{readMore??'Details'}</button>
+        </div>  
+        
+        <div class="poweredBy">
+            <Icon name={poweredBy}></Icon>
+        </div>
+        <div class="category">
+            {category}
+        </div-->
+    </article>
+    
+</div>
+<style define:vars={{cardColor,anchorName:slugify(title)}}>
+    .badge{
+        container: badge/normal;
+    }
+    article{
+        position: relative;
+        display: block;
+        aspect-ratio: 1;
+        width: 350px;
+        overflow: hidden;
+        anchor-name: var(--anchorName);
+
+    }
+    img{
+        width: 100%;
+    }
+    .body{
+        position: absolute;
+        bottom:0;
+        background-color: hsl(215.45deg 18.33% 47.06%/0.7);
+        -webkit-mask-image: linear-gradient( black,black 90%,transparent);
+        mask-image: linear-gradient( black,black 90%,transparent);
+        color: var(--color-light);
+        width: 100%;
+        display: flex;
+        padding: 2rem 1rem;
+        translate: 0 100%;
+        backdrop-filter: blur(10px);
+        transition: translate 300ms ease-in-out;
+        border-radius: 10px;
+        justify-content: center;
+    }
+    article:hover .body,
+    article:focus .body{
+        opacity: 1;
+        translate: 0 0;
+
+    }
+    .full{
+            position-anchor: var(--anchorName);
+            position-area: center;
+            position: fixed;
+            width: 350px;
+            background: light-dark(var(--color-dark),var(--color-light));
+            border: none;
+            box-shadow: 1px 1px 10px light-dark(var(--color-dark),var(--color-light));
+            padding: .5rem;
+            color: light-dark(var(--color-light),var(--color-dark));
+            -webkit-mask-image: radial-gradient(circle, black,black 90%,transparent);
+            mask-image: radial-gradient( circle,black,black 90%,transparent);
+            
+        }
+</style>
