@@ -9,6 +9,7 @@ export const equipo = defineCollection({
     name: z.string(),
     title: z.string(),
     resume: z.string(),
+    pathToTranslate: z.string(),
     avatar: z.object({
       src: z.string(),
       alt: z.string(),
@@ -25,6 +26,7 @@ export const team = defineCollection({
     name: z.string(),
     title: z.string(),
     resume: z.string(),
+    pathToTranslate: z.string(),
     avatar: z.object({
       src: z.string(),
       alt: z.string(),

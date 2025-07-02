@@ -1,0 +1,27 @@
+
+
+---
+import { getCollection, render } from "astro:content";
+import Base from "@templates/Base.astro";
+import { isRouteName } from "@i18n/utils";
+import '@global-styles/md.css';
+
+export async function getStaticPaths() {
+  const pages = await getCollection("team");
+  return pages.map(page => ({
+    params: { slug: page.id },
+    props: { page },
+  }));
+  
+}
+
+const { page } = Astro.props;
+
+const { Content } = await render(page);
+
+---
+<Base pathToTranslate={'home'}
+  description={page.data.resume}
+  title={page.data.title}>
+<Content/>
+</Base>

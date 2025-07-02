@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 name: "Jorge Saud"
 alias: "Giorgio Saud"
 selfHealing: "000001"
@@ -7,106 +7,95 @@ title: "Giorgio Saud"
 avatar: { src: "My Photo in team", alt: "Giorgio Saud" }
 classes: "bg-clip-text text-transparent bg-gradient-to-r"
 resume: "I am a developer that loves to share knowledge"
+pathToTranslate: "/"
 publishDate: "2024-05-14 12:06"
 ---
 
-### Jorge Luis Saud Rosal
+# Jorge Luis Saud Rosal
 
-**Contact Information:**
-
-- Email: <jorgelsaud@gmail.com>
-- Phone: +56940303597
-- LinkedIn: [linkedin.com/in/giorgiosaud](https://www.linkedin.com/in/giorgiosaud/)
-- Website: [giorgiosaud.io](https://giorgiosaud.io)
+**Solutions Architect | Front-End Specialist**  
+📍 Santiago, Chile  
+📧 jorgelsaud@gmail.com | 📞 +56 9 4030 3597  
+[LinkedIn](https://www.linkedin.com/in/giorgiosaud/) | [Website](https://giorgiosaud.io) | [GitHub](https://github.com/giorgiosaud)
 
 ---
 
-**Professional Summary:**
-Solution Architect with over 14 years of experience in front-end development, including more than 6 years specializing in architecture. Skilled in creating scalable and efficient web applications, designing and implementing decoupled architecture solutions, optimizing integration processes, and mentoring development teams. Currently working at Modyo, a platform to build decoupled web apps, focusing on frontend development for financial institutions. Passionate about continuous learning and sharing knowledge through a publicly accessible blog.
+## 🧠 Professional Summary
+
+Solutions Architect and Front-End Developer with over 15 years of experience designing and implementing scalable web applications for financial and business clients in Latin America and North America. Proven track record in micro-frontend architectures, performance optimization, and leading multidisciplinary teams to deliver on time. Industrial Engineer turned technologist, combining business vision with a strong technical foundation. Currently seeking a role as a Solutions Architect focused on front-end excellence.
 
 ---
 
-**Experience:**
+## 🛠️ Key Competencies
 
-**Solution Architect | Modyo**
-_Chile_ | _2022 – Present_
-
-- Lead the design and implementation of decoupled architecture solutions for various clients, focusing on frontend development.
-- Provided technical guidance and support to development teams, ensuring best practices and high-quality code.
-- Managed complex integration projects, ensuring seamless connectivity and performance.
-- Implemented decoupled architecture in all projects for Modyo.
-
-**Front End Architect | Modyo**
-_Chile_ | _2019 – 2022_
-
-- Architected front-end solutions for large-scale web applications, focusing on performance, scalability, and maintainability.
-- Collaborated with cross-functional teams to define requirements and deliver robust solutions.
-- Mentored junior developers, fostering a culture of continuous learning and improvement.
-- Conducted front-end optimizations to improve performance and user experience.
-
-**Front End Developer | Modyo**
-_Chile_ | _2018 – 2019_
-
-- Developed and maintained front-end components for various web applications.
-- Worked closely with designers and back-end developers to create seamless user experiences.
-- Implemented responsive design principles to ensure applications functioned well across different devices.
-
-**CTO | Zonapro**
-_Venezuela_ | _2010 – 2016_
-
-- Led the development of self-manageable websites using WordPress and advanced websites with Laravel.
-- Managed the technical team and ensured high-quality deliverables.
-- Developed a contest management system for Diproinduca, a Canadian company, allowing children of workers to participate in an art contest. The system has been used annually since about 2009.
+- JavaScript | TypeScript | HTML5/CSS3  
+- Vue.js, React, Stencil.js, Web Components  
+- Micro-frontend and Decoupled Application Architecture  
+- Integration with REST and GraphQL APIs  
+- AWS Fundamentals and Cloud-native Design  
+- CI/CD, Git, Agile, and DevOps Collaboration  
+- Performance Optimization and SEO for SPAs  
+- Technical Leadership and Stakeholder Management  
 
 ---
 
-**Education:**
+## 💼 Professional Experience
 
-**Industrial Engineer | Universidad Católica Andrés Bello**
-_Venezuela_ | _Graduated 2008_
+### **Modyo – Santiago, Chile**
 
-- Served as a math assistant from the 3rd semester to the last semester of the 5-year program.
+**Solutions Architect**  
+_May 2023 – Present_  
+- Architectural leadership in digital banking solutions for major Chilean banks.  
+- Reduced average onboarding time for new teams by 30%.  
+- Technical governance across more than 10 simultaneous projects.
 
----
+**Front-End Architect**  
+_May 2020 – Apr 2023_  
+- SEO and indexing improvements for JavaScript-heavy sites like “Full Copec”.  
+- Mentored a team of 8 developers, introduced TypeScript and testing.  
+- Reduced bugs by 40% through refactoring and CI best practices.
 
-**Skills:**
-
-- Front-end development: HTML, CSS, JavaScript, TypeScript, React, Angular
-- Architecture: Monolithic and decoupled architecture
-- Integration solutions
-- Performance optimization
-- Team mentoring and leadership
-- Mobile development: Android, Swift
-
----
-
-**Certifications:**
-
-- Studied for AWS Cloud Practitioner Certificate (course not completed)
-- Udemy Courses:
-  - Web Components with Stencil.js
-  - PWA
-  - React Complete Guide
-  - Vue Advanced
+**Front-End Developer**  
+_May 2019 – Apr 2020_  
+- Developed modular applications in Vue.js with SSO and payment APIs.  
+- Met accessibility standards (WCAG 2.1).
 
 ---
 
-**Projects:**
+### **Zonapro, C.A. – Caracas, Venezuela & Remote**
 
-- **Decoupled Architecture Implementation for Modyo:** Implemented decoupled architecture in all projects for Modyo, improving system performance and scalability.
-- **Front-end Optimization for Modyo:** Conducted front-end optimizations to improve performance and user experience.
-
----
-
-**Languages:**
-
-- Spanish, Native
-- English, Fluent
+**Co-Founder and CTO**  
+_2010 – 2016_  
+- Delivered custom solutions in WordPress and Laravel for clients in the US, Spain, and Canada.  
+- Architected a contest platform for Diproinduca, operational since 2009.  
+- Closed contracts exceeding USD 250,000 annually.
 
 ---
 
-**Interests:**
+## 🎓 Education
 
-- Continuous learning
-- Web development
-- Blogging about web development concepts
+**Industrial Engineer**  
+Universidad Católica Andrés Bello, Venezuela – 2008
+
+---
+
+## 📚 Additional Training
+
+- AWS Cloud Practitioner (training completed in 2024) – certification in progress  
+- Udemy: Web Components with Stencil.js; PWA Development; React – Complete Guide; Advanced Vue.js  
+- Continuous self-learning: repository patterns, API design, container queries
+
+---
+
+## 🚀 Featured Projects
+
+- **Larrainvial Private Site**: Lead front-end for investment platform.  
+- **Fundación de la Mujer**: Portal architecture with SSO and micro-frontends in 3 months.  
+- **Full Copec**: SPA with external integration and functional SEO.
+
+---
+
+## 🌍 Languages
+
+- Spanish – Native  
+- English

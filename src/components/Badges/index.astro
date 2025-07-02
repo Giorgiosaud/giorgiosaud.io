@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import Badge from "./Badge.astro";
+import MinimalBadge from "./MinimalBadge.astro";
 const badges= await getCollection("badges");
 interface Props {
     title: string,
@@ -15,7 +15,7 @@ const { title, readMore } = Astro.props as Props;
     <ul class="badges-carousel" data-name="badges-carousel">
         {badges.map(badge=>(
             <li data-name={badge.data.title} data-title={badge.data.title}>
-                <Badge imgSrc={badge.data.imgSrc} 
+                <MinimalBadge imgSrc={badge.data.imgSrc} 
                 title={badge.data.title} 
                 description={badge.data.description}
                 cardColor={badge.data.cardColor}
