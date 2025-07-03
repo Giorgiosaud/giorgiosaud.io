@@ -23,22 +23,11 @@ const slugify = (str: string) => {
 
         </button>
         <p class="full" id={slugify(title)} popover>{description}</p>
-        <!--div class="resume">
-            <p>{description}</p>            
-        </div-->
-        <!--div class="read-more">
-            <button class="button button-primary" popovertarget={slugify(title)}>{readMore??'Details'}</button>
-        </div>  
-        
-        <div class="poweredBy">
-            <Icon name={poweredBy}></Icon>
-        </div>
-        <div class="category">
-            {category}
-        </div-->
+   
     </article>
     
 </div>
+
 <style define:vars={{cardColor,anchorName:slugify(title)}}>
     .badge{
         container: badge/normal;
@@ -90,5 +79,8 @@ const slugify = (str: string) => {
             -webkit-mask-image: radial-gradient(circle, black,black 90%,transparent);
             mask-image: radial-gradient( circle,black,black 90%,transparent);
             
+        }
+        [popover] {
+            position: absolute; /* Important for manual positioning */
         }
 </style>
