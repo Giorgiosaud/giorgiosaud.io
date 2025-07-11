@@ -9,9 +9,11 @@ import svelte from "@astrojs/svelte";
 
 import vercel from "@astrojs/vercel";
 
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [mdx(), react(), vue(), svelte()],
+  integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
   experimental: {
     // csp:{
