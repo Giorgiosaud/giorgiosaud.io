@@ -13,6 +13,7 @@ import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://giorgiosaud.io',
   integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
   experimental: {
