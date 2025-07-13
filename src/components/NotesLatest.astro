@@ -19,7 +19,7 @@ const notes = (await getCollection(collection)).filter(note=>!note.data.draft).s
     {t('notes.latest.title')}
   </h2>
   <ul>
-    {notes.map(note=>(<li ><Note note={note} /></li>))}
+    {notes.map(note=>(<li ><Note note={note} context="latest" /></li>))}
   </ul>
 </section>
 <style>
