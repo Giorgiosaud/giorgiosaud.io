@@ -50,6 +50,9 @@ export default defineConfig({
       PUBLIC_CLOUDINARY_CLOUD_NAME: envField.string({ context: "server", access: "public", optional: true }),
       CLOUDINARY_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       CLOUDINARY_API_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      RECAPTCHA_KEY: envField.string({ context: "client", access: "public", optional: true }),
+      RECAPTCHA_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      RESEND_API_KEY: envField.string({ context: "server", access: "secret", optional: true })
     }
   },
 
