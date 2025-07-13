@@ -2,12 +2,14 @@
 import { cloudinarySrc } from "@helpers/cloudinary";
 import { getLangFromUrl, useTranslations } from "@i18n/utils";
 const lang = getLangFromUrl(Astro.url)
-const {note}=Astro.props;
+const {note,context="no-context"}=Astro.props;
 const t = useTranslations(lang)
 const imgSrc = note.data.image ?  cloudinarySrc('notebook-posts/'+note.data.image.src, {
     width: 500
 }) : note.data.image;
 const link=lang=='es'?`/es/cuaderno/${note.id}`:`/notebook/${note.id}`;
+const nameImage=`${note.id}-${context}`;
+
 ---
 <article aria-label={note.data.title}>
     <div class="wrapper">
@@ -34,7 +36,7 @@ const link=lang=='es'?`/es/cuaderno/${note.id}`:`/notebook/${note.id}`;
         </div>
     </div>
 </article>
-<style>
+<style define:vars={{nameImage}}>
     article{
         container: note/normal;
         
@@ -81,6 +83,7 @@ const link=lang=='es'?`/es/cuaderno/${note.id}`:`/notebook/${note.id}`;
         }
         img{
             --_border-radius: var(--border-radius, 0);
+            view-transition-name: var(--nameImage);
             grid-area: image;
             mask-image: linear-gradient(rgb(0 0 0 / 100%),rgb(0 0 0 / 100%) 80%, transparent);
             border-radius: var(--_border-radius);
