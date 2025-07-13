@@ -18,7 +18,8 @@ const {version="v1"}= Astro.props
     name="theme-color"
   />
   <script>
-    if ('serviceWorker' in navigator) {
+
+    if ('serviceWorker' in navigator && location.hostname === 'giorgiosaud.io') {
       navigator.serviceWorker.register('service-worker.js');
     }
   </script>

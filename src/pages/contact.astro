@@ -1,0 +1,118 @@
+
+---
+import { actions } from 'astro:actions';
+
+import Base from "@templates/Base.astro";
+
+export const prerender = false;
+
+import { getLangFromUrl, useTranslations } from "@i18n/utils"
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang)
+const result = Astro.getActionResult(actions.sendEmail);
+---
+<Base pathToTranslate="contact" title="Contact Me" description="Get in touch with me for collaboration, questions, or just to say hi!">
+<h1 id="-contact-me">📬 Contact Me</h1>
+<blockquote>
+<p>Let&#39;s connect and build something great.</p>
+</blockquote>
+<p>Whether you have a question, want to collaborate, or just want to say hi — I’d love to hear from you. I believe that the best ideas often come from conversations, and I’m always open to chatting about web development, architecture, or anything tech-related.</p>
+<p>Feel free to reach out via any of the channels below:</p>
+<ul>
+<li>📧 Email: <a href="mailto:jorgelsaud@gmail.com">jorgelsaud@gmail.com</a></li>
+<li>💼 LinkedIn: <a href="https://www.linkedin.com/in/giorgiosaud/">linkedin.com/in/giorgiosaud</a></li>
+<li>🌐 Website: <a href="https://giorgiosaud.io">giorgiosaud.io</a></li>
+<li>📝 Blog: <a href="https://giorgiosaud.io/notebook">giorgiosaud.io/notebook</a></li>
+</ul>
+<p>If you&#39;re a fellow developer, architect, or just getting started — I’d be happy to connect and exchange ideas.</p>
+<p>Thanks for stopping by!</p>
+{result && !result.error && (
+  <p class="success">Email sent successfully!</p>
+)}
+
+<form method="POST" action={actions.sendEmail} class="contact-form">
+    <div class="form-control">
+    <label for="name">{t("contact.name.placeholder")}</label>
+    <input type="text" id="name" name="name" required>
+    </div>
+    <div class="form-control">
+    <label for="email">{t("contact.email.placeholder")}</label>
+    <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-control">
+    <label for="message">{t("contact.message.placeholder")}</label>
+    <textarea id="message" name="message" required></textarea>
+    </div>
+    <button class="button button-primary" type="submit">{t("contact.submit")}</button>
+</form>
+</Base>
+
+<style>
+    .success {
+        color: green;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        width: 100%;
+        display: block;
+        text-align: center;
+        background-color: #e0ffe0;
+        padding: 0.5rem;
+        border: #ccc 1px solid;
+        border-radius: 0.25rem;
+        animation: fadeOut 3s ease-in-out forwards;
+        animation-delay: 3s;
+
+    }
+    @keyframes fadeOut {
+        0% { opacity: 1; height: 100%;}
+        100% { opacity: 0; height: 0;}
+    }
+    
+    form {
+        padding-top: 1lh;
+        display: grid;
+        grid-template: "name" "email" "message" "button";
+        gap: 1rem;
+        @media screen and (min-width: 48rem) {
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas:
+                "name email"
+                "message message"
+                "button button";
+            
+        }
+    }
+    .form-control {
+        &:has([name="name"]){
+            grid-area: name;
+        }
+        &:has([name="email"]){
+            grid-area: email;
+        }
+        &:has([name="message"]){
+            grid-area: message;
+        }
+    }
+    button {
+        grid-area: button;
+        align-self: center;
+        justify-self: center;
+    }
+    label{
+        font-weight: bold;
+    }
+    input, textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        transition: border-color 0.3s ease, border-width 0.3s ease;
+        &:focus{
+            border-color: var(--color-primary);
+            outline: none;
+            border-width: 2px;
+        }
+    }
+</style>
