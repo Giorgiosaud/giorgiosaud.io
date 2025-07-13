@@ -19,7 +19,7 @@ const {draft,title,resume,starred,selfHealing,image,publishDate,author,category,
 const imgSrc = image ?  cloudinarySrc('notebook-posts/'+image.src, {
     width: 500
 }) : image;
-
+const imageName = `${page.id}-latest`;
 ---
 <NoteTemplate
   description={resume}
@@ -35,13 +35,14 @@ const imgSrc = image ?  cloudinarySrc('notebook-posts/'+image.src, {
 <h1>{title}</h1>
 <Content/>
 </NoteTemplate>
-<style>
+<style define:vars={{imageName}}>
   figure{
     text-align: center;
     padding-top: 1lh;
     img{
       margin: auto;
-      border-radius: 10px;;
+      border-radius: 10px;
+      view-transition-name: var(--imageName);
     }
   }
 </style>
