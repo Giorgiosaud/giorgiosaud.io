@@ -35,6 +35,9 @@
 }
 
 @layer global {
+  .astro-code {
+    padding: 1rem;
+  }
 
   h1,
   h2 {
