@@ -1,9 +1,9 @@
 {
   "id": "mynotebook/v1",
   "name": "Giorgiosaud Personal Notebook",
-  "orientation": "natural",
+  "orientation": "portrait",
   "short_name": "Giorgiosaud.io",
-  "description": "A personal notebook for Giorgiosaud",
+  "description": "A personal notebook for Web developers",
   "start_url": "/",
   "display": "minimal-ui",
   "display_override": [
