@@ -10,7 +10,7 @@ interface Props{
     poweredBy:string,
     readMore?:string
 }
-const {imgSrc, title, description,cardColor,category,poweredBy,readMore}=Astro.props;
+const {imgSrc, title, description,cardColor}=Astro.props;
 const slugify = (str: string) => {
     return '--'+str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 };
