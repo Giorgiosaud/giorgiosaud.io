@@ -33,6 +33,8 @@ const fonts=[
     name="generator"
     />
     <meta name="description" content={description}>
+    <slot name="meta" />
+
     <title>{fixedTitle}</title>
     <Favicons/>
     <PWA />
