@@ -3,16 +3,16 @@ import { routes } from "./routes";
 
 export type RouteNames = keyof typeof routes;
 
-export type SupportedLanguages =keyof typeof resources;
+export type SupportedLanguages = keyof typeof resources;
 
 type DeepKeyOf<T> = T extends object
   ? {
-      [K in Extract<keyof T, string>]: T[K] extends object
-        ? T[K] extends Array<any>
-          ? `${K}` // Don't recurse into arrays
-          : `${K}` | `${K}.${DeepKeyOf<T[K]>}`
-        : `${K}`;
-    }[Extract<keyof T, string>]
+    [K in Extract<keyof T, string>]: T[K] extends object
+    ? T[K] extends Array<any>
+    ? `${K}` // Don't recurse into arrays
+    : `${K}` | `${K}.${DeepKeyOf<T[K]>}`
+    : `${K}`;
+  }[Extract<keyof T, string>]
   : never;
 
 export type NestedKeys = DeepKeyOf<(typeof resources)["en"]>;
@@ -26,7 +26,7 @@ export function isRouteName(route: string): route is RouteNames {
 }
 export function getLangFromUrl(url: URL): SupportedLanguages {
   const [, lang] = url.pathname.split("/");
-  if(isSupportedLanguage(lang))
+  if (isSupportedLanguage(lang))
     return lang;
   return defaultLang;
 }
@@ -55,18 +55,18 @@ export function useTranslations(lang: SupportedLanguages) {
 }
 
 export function useTranslatedPath(lang: keyof typeof resources) {
-  const translatePath = (path: RouteNames, l: SupportedLanguages="en", notePath?: string) => {
-    if(path=="internal-note" ){
-      if(l=="en" && notePath){
+  const translatePath = (path: RouteNames, l: SupportedLanguages = "en", notePath?: string) => {
+    if (path == "internal-note") {
+      if (l == "en" && notePath) {
         return `/notebook/${notePath}`;
       }
-      if(l="es" && notePath){
+      if (l == "es" && notePath) {
         return `/es/cuaderno/${notePath}`;
       }
     }
-    const innerPath= routes[path][l];
-    if(l===defaultLang){
-      return '/'+innerPath;
+    const innerPath = routes[path][l];
+    if (l === defaultLang) {
+      return '/' + innerPath;
     }
     return `/${l}/${innerPath}`;
   };
