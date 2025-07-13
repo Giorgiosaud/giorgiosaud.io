@@ -18,7 +18,7 @@ const Technologies:string[] = TechCollection?.data.techs.map((tech:string) => te
         <Icon
         name={tech}
         />
-        <span>{tech}</span>
+        <span></span>
       </div>
       ))}
     </div>
@@ -47,7 +47,7 @@ const Technologies:string[] = TechCollection?.data.techs.map((tech:string) => te
       animation-timeline: view();
       animation-range: entry 40% cover 100%;
       animation-fill-mode: both;
-      
+      transition: opacity 0.3s ease-in-out;
       span{ 
         background-color: hsl(from var(--color-main) h s l / .01);
         backdrop-filter: blur(20px);
@@ -74,6 +74,11 @@ const Technologies:string[] = TechCollection?.data.techs.map((tech:string) => te
     
     }
   }
+  .technology.in-view{
+    opacity: 1;
+    animation-name:none
+
+  }
   @keyframes logos {
     0% {
       opacity: 0.1;
@@ -90,3 +95,18 @@ const Technologies:string[] = TechCollection?.data.techs.map((tech:string) => te
    
   }
 </style>
+<script>
+import { isSafari } from "@global-scripts/isSafari";
+
+  if(isSafari()){
+    const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("in-view");
+    }
+  });
+});
+
+document.querySelectorAll(".technology").forEach(el => observer.observe(el));
+  };
+</script>

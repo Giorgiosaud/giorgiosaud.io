@@ -1,63 +1,42 @@
-# Giorgiosaud blog
+# Giorgiosaud.io
 
-This blog started from [Astroship](https://astroship.web3templates.com/)*
+## Overview
 
-but the live site is in [Giorgiosaud.io](https://giorgiosaud.io)
+**Giorgiosaud.io** is a personal web developer notebook built with Astro and the Astroship theme. It serves as a space to document investigations, share knowledge, and support the web development community.
 
+## Main Sections
 
-I added some functionalities as i18n, added frameworks support for some components and some others features like contact form and so on.
+- **Front End Tools/Frameworks:** Insights and resources for modern frontend development.
+- **Code Design Patterns:** Explanations and solutions for common design patterns from real-world experience.
+- **Code Snippets:** Useful gists and code samples to save time and improve productivity.
+- **Integration Issues:** Solutions and tips for integrating various systems and libraries.
+- **SEO Things:** Technical SEO advice and myth-busting for developers.
+- **Community:** Guidance on building and growing a developer community.
+- **Badges & Achievements:** Showcases earned badges and certifications from Google, AWS, and other platforms.
+- **Technologies Worked On:** Logos and references to technologies used in professional projects.
 
-## Installation
+## Features
 
-I use pnpm to manage the dependencies, you can use yarn or npm.
+- Simple, clean design focused on content and learning.
+- Responsive layout for desktop and mobile.
+- Image and badge gallery for achievements and technologies.
+- Links to GitHub profile and notebook.
+- Multilingual support (English and Spanish).
 
-### 1. Clone the repo
+## How to Use
 
-```bash
-git clone https://github.com/surjithctly/astroship.git myProjectName
-# or
-git clone https://github.com/surjithctly/astroship.git .
-```
+Browse the notebook to find articles, code snippets, and solutions for web development challenges. Join the community to share knowledge and collaborate.
 
-The `.` will clone it to the current directory so make sure you are inside your project folder first.
+## Tech Stack
 
-### 2. Install Dependencies
+- [Astro](https://astro.build/)
+- Astroship theme
+- Various web technologies (React, Node.js, AWS, Google APIs, etc.)
 
-```bash
-pnpm install
-```
+## Author
 
-### 3. Start development Server
+[Giorgio Saud](https://github.com/giorgiosaud)
 
-```bash
-pnpm dev
-```
+## License
 
-### Preview & Build
-
-```bash
-pnpm preview
-pnpm build
-```
-
-We recommend using [pnpm](https://pnpm.io/) to save disk space on your computer.
-
-### Other Commands
-
-```bash
-pnpm astro ...
-pnpm astro add
-pnpm astro --help
-```
-
-## TailwindCSS
-
-TailwindCSS is already configured in this repo, so you can start using it without any installation.
-
-## Credits and Thanks
-
-This is a fork of [Astroship](https://astroship.web3templates.com/) template.
-
-Caiyon is the ia for the images on the website.
-
-I also use cloudinary to manage the images.
+Copyleft © 2025 Giorgiosaud.io — None rights reserved.

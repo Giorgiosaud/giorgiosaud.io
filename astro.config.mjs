@@ -9,9 +9,12 @@ import svelte from "@astrojs/svelte";
 
 import vercel from "@astrojs/vercel";
 
+import sitemap from "@astrojs/sitemap";
+
 // https://astro.build/config
 export default defineConfig({
-  integrations: [mdx(), react(), vue(), svelte()],
+  site: 'https://giorgiosaud.io',
+  integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
   experimental: {
     // csp:{
@@ -47,6 +50,9 @@ export default defineConfig({
       PUBLIC_CLOUDINARY_CLOUD_NAME: envField.string({ context: "server", access: "public", optional: true }),
       CLOUDINARY_API_KEY: envField.string({ context: "server", access: "secret", optional: true }),
       CLOUDINARY_API_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      RECAPTCHA_KEY: envField.string({ context: "client", access: "public", optional: true }),
+      RECAPTCHA_SECRET: envField.string({ context: "server", access: "secret", optional: true }),
+      RESEND_API_KEY: envField.string({ context: "server", access: "secret", optional: true })
     }
   },
 

@@ -28,6 +28,9 @@
       "@global-styles/*": [
         "global/styles/*"
       ],
+      "@global-scripts/*": [
+        "global/scripts/*"
+      ],
       "@images/*": [
         "images/*"
       ],

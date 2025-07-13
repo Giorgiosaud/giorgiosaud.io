@@ -43,6 +43,8 @@ const { title, readMore } = Astro.props as Props;
             border-radius: 30px;
         }
         ul{
+            position: relative;
+            isolation: isolate;
             padding: 0;
             margin: 3.5rem;
             list-style:none;
@@ -117,3 +119,21 @@ const { title, readMore } = Astro.props as Props;
             }
         }
     </style>
+    <script>
+        import {isSafari} from '@global-scripts/isSafari'
+    if(isSafari()){
+        const triggers = document.querySelectorAll<HTMLButtonElement>("[popovertarget]");
+        triggers.forEach((trigger) => {
+            trigger.addEventListener('click',(e:MouseEvent)=>{
+                const trigger=e.target as HTMLButtonElement
+                const popover = (trigger.closest('article') as HTMLElement).querySelector('.full') as HTMLElement
+                const rect = trigger.getBoundingClientRect();
+                popover.style.top = `${rect.
+                bottom + window.scrollY}px`;
+                popover.style.left = `${rect.left + window.scrollX}px`;
+            })
+
+        
+        });
+    }
+</script>
