@@ -1,7 +1,7 @@
 ---
 draft: false
 selfHealing: "FLBTNB"
-title: "De la Carga del Legado a la Brillantez Nativa: Mi Viaje de Migración Web"
+title: "De Código Legado a Innovación Nativa: Mi Transformación Web"
 resume: "¿Enfrentando un código legado lento? Descubre mi viaje de migración a CSS y HTML modernos, mejorando el rendimiento web, la accesibilidad y la experiencia del desarrollador."
 image: { src: "from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo", alt: "Del legado a la brillantez nativa" }
 publishDate: "2025-07-13"
