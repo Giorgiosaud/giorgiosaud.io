@@ -17,26 +17,7 @@ export default defineConfig({
   integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
   experimental: {
-    // csp:{
-    //     algorithm:"SHA-512",
-    //     directives:[
-    //         "default-src 'self' https://*.cloudinary.com https://*.cloudinary.com https://*.google-analytics.com https://*.googletagmanager.com",
-    //         "img-src 'self' https://*.cloudinary.com https://developers.google.com https://images.credly.com",
-    //         "font-src 'self' https://fonts.gstatic.com",
-    //     ],
-    //     styleDirective:{
-    //         hashes: [
-    //             "sha384-styleHash",
-    //             "sha512-styleHash",
-    //             "sha256-styleHash"
-    //         ],
-    //         resources: [
-    //             "self",
-    //             "https://styles.cdn.example.com"
-    //         ]
-    //     }
 
-    // },
     contentIntellisense: true,
   },
 

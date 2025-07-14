@@ -1,4 +1,4 @@
-export const Technologies=[
+export const Technologies = [
     "Modyo",
     "Keycloak",
     "Directus",
@@ -35,7 +35,6 @@ export const Technologies=[
     "Chartjs",
     "CloudflareWorkers",
     "Codesandbox",
-    "Coursera",
     "CSS",
     "CSSOld",
     "Cypress",
@@ -112,5 +111,4 @@ export const Technologies=[
     "Prettier",
     "ChadUI",
     "ThreeJS",
-    "Udemy",
 ];
