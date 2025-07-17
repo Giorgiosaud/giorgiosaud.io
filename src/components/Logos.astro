@@ -1,11 +1,13 @@
 ---
 import { getEntry } from "astro:content";
-import { getLangFromUrl, useTranslations } from "@i18n/utils";
 import Icon from "@components/Icon.astro";
+import { getLangFromUrl, useTranslations } from "@i18n/utils";
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const TechCollection = await getEntry("technologies","techs");
-const Technologies:string[] = TechCollection?.data.techs.map((tech:string) => tech)||[];
+const TechCollection = await getEntry("technologies", "techs");
+const Technologies: string[] =
+	TechCollection?.data.techs.map((tech: string) => tech) || [];
 ---
 
 <section class="">

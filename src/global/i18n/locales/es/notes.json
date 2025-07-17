@@ -1,18 +1,18 @@
 {
-    "starred":{ 
-        "title":"🌟 Notas Destacadas",
-        "carousel":{
-            "title":"Carousel de Notas Destacadas"
-        }
-    },
-    "latest":{
-        "title":"🗓️ Últimas Notas",
-        "carousel":{
-            "title":"Carousel de Últimas Notas"
-        }
-    },
-    "collections":{
-        "title": "Colecciones"
-    },
-    "read-more": "Continuar Lectura"
+	"starred": {
+		"title": "🌟 Notas Destacadas",
+		"carousel": {
+			"title": "Carousel de Notas Destacadas"
+		}
+	},
+	"latest": {
+		"title": "🗓️ Últimas Notas",
+		"carousel": {
+			"title": "Carousel de Últimas Notas"
+		}
+	},
+	"collections": {
+		"title": "Colecciones"
+	},
+	"read-more": "Continuar Lectura"
 }

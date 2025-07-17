@@ -1,9 +1,10 @@
 ---
 import type { RouteNames } from "@i18n/utils";
 import Navbar from "./Navbar/index.astro";
-interface Props{
-  pathToTranslate: RouteNames;
-  notePath?: string;
+
+interface Props {
+	pathToTranslate: RouteNames;
+	notePath?: string;
 }
 const { pathToTranslate, notePath } = Astro.props;
 ---

@@ -1,18 +1,15 @@
 ---
-import {
-type RouteNames,
-} from "@i18n/utils";
-import Navigation from "./Navigation.astro";
-import LogoNavigation from "./LogoNavigation.astro";
+import { type RouteNames } from "@i18n/utils";
 import HamburgerIcon from "./HamburgerIcon.astro";
+import LogoNavigation from "./LogoNavigation.astro";
+import Navigation from "./Navigation.astro";
 import TranslateButton from "./TranslateButton.astro";
+
 const { pathToTranslate } = Astro.props;
 
 interface Props {
-  pathToTranslate: RouteNames;
+	pathToTranslate: RouteNames;
 }
-
-
 ---
 
 <nav aria-label="Main" >

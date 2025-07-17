@@ -1,7 +1,7 @@
-import { sendEmail } from './sendEmail';
+import { sendEmail } from "./sendEmail";
 
 export const server = {
-  // register,
-  // signin,
-  sendEmail
-}
+	// register,
+	// signin,
+	sendEmail,
+};

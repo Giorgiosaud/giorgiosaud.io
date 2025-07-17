@@ -1,32 +1,37 @@
 ---
-import { useTranslations, useTranslatedPath, getLangFromUrl } from "@i18n/utils";
+import {
+	getLangFromUrl,
+	useTranslatedPath,
+	useTranslations,
+} from "@i18n/utils";
 import type { MenuItemsInterface } from "./MenuItemsInterface";
+
 const lang = getLangFromUrl(Astro.url);
 
 const t = useTranslations(lang);
 const { translatePath } = useTranslatedPath(lang);
-const menuItems:MenuItemsInterface[] =[
-{
-  title: t("nav.about-this"),
-  path: translatePath("about-this", lang),
-},
-{
-  title: t("nav.about-me"),
-  path: translatePath("about-me", lang),
-},
-{
-  title: t("nav.acknowledgements"),
-  path: translatePath("acknowledgements", lang),
-},
-{
-  title: t("nav.title"),
-  path: translatePath("notebook", lang),
-},
-{
-  title: t("nav.contact"),
-  path: translatePath("contact", lang),
-},
-];;
+const menuItems: MenuItemsInterface[] = [
+	{
+		title: t("nav.about-this"),
+		path: translatePath("about-this", lang),
+	},
+	{
+		title: t("nav.about-me"),
+		path: translatePath("about-me", lang),
+	},
+	{
+		title: t("nav.acknowledgements"),
+		path: translatePath("acknowledgements", lang),
+	},
+	{
+		title: t("nav.title"),
+		path: translatePath("notebook", lang),
+	},
+	{
+		title: t("nav.contact"),
+		path: translatePath("contact", lang),
+	},
+];
 ---
 
 <div id="menu">
