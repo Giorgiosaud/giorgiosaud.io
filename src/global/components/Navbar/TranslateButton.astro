@@ -1,5 +1,4 @@
 ---
-import type { DataEntry } from "astro:content";
 import { getCollection, getEntry } from "astro:content";
 import Icon from "@components/Icon.astro";
 import {
@@ -24,11 +23,15 @@ if (pathToTranslate === "internal-note") {
 	if (lang === "en") {
 		const note =
 			(await getCollection("notes")).find((n) => n.id === lastPath) || null;
-		pathToTranslateNote = note?.data.selfHealing || "";
+		const nota=	(await getCollection("notas")).find((n) => n.data.selfHealing === note?.data.selfHealing) || null;
+		
+		pathToTranslateNote = nota?.id || "";
 	} else {
-		const note =
+		const nota =
 			(await getCollection("notas")).find((n) => n.id === lastPath) || null;
-		pathToTranslateNote = note?.data.selfHealing || "";
+		const note=	(await getCollection("notes")).find((n) => n.data.selfHealing === nota?.data.selfHealing) || null;
+
+		pathToTranslateNote = note?.id || "";
 	}
 }
 ---
