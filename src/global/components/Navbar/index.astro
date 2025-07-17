@@ -5,10 +5,11 @@ import LogoNavigation from "./LogoNavigation.astro";
 import Navigation from "./Navigation.astro";
 import TranslateButton from "./TranslateButton.astro";
 
-const { pathToTranslate } = Astro.props;
+const { pathToTranslate, pathToTranslateNote } = Astro.props;
 
 interface Props {
 	pathToTranslate: RouteNames;
+  pathToTranslateNote?: string;
 }
 ---
 
@@ -16,7 +17,7 @@ interface Props {
   <LogoNavigation />
   <Navigation/>
   <div class="actions">
-    <TranslateButton pathToTranslate={pathToTranslate} server:defer/>
+    <TranslateButton pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
     <button id="hamburger-menu">
       <HamburgerIcon />
     </button>

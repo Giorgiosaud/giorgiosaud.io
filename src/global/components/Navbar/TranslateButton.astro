@@ -10,30 +10,16 @@ import {
 
 interface Props {
 	pathToTranslate: RouteNames;
+	pathToTranslateNote?:string;
 }
 
-const { pathToTranslate } = Astro.props;
+const { pathToTranslate, pathToTranslateNote } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
 const { translatePath } = useTranslatedPath(lang);
 const langToTranslate = lang === "es" ? "en" : "es";
 const iconToShow = lang === "es" ? "USA" : "Venezuela";
 const lastPath = Astro.url.pathname.split("/").pop() || "";
-let pathToTranslateNote = "";
-if (pathToTranslate === "internal-note") {
-	if (lang === "en") {
-		const note =
-			(await getCollection("notes")).find((n) => n.id === lastPath) || null;
-		const nota=	(await getCollection("notas")).find((n) => n.data.selfHealing === note?.data.selfHealing) || null;
-		
-		pathToTranslateNote = nota?.id || "";
-	} else {
-		const nota =
-			(await getCollection("notas")).find((n) => n.id === lastPath) || null;
-		const note=	(await getCollection("notes")).find((n) => n.data.selfHealing === nota?.data.selfHealing) || null;
 
-		pathToTranslateNote = note?.id || "";
-	}
-}
 ---
 
 <a href={translatePath(pathToTranslate,langToTranslate,pathToTranslateNote)}>

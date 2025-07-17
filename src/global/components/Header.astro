@@ -5,12 +5,13 @@ import Navbar from "./Navbar/index.astro";
 interface Props {
 	pathToTranslate: RouteNames;
 	notePath?: string;
+	pathToTranslateNote?: string;
 }
-const { pathToTranslate, notePath } = Astro.props;
+const { pathToTranslate, pathToTranslateNote } = Astro.props;
 ---
 <header >
   <div class="content-grid">
-    <Navbar pathToTranslate={pathToTranslate} />
+    <Navbar pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
   </div>
 </header>
 <style>
