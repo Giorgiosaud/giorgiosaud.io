@@ -2,7 +2,7 @@
 draft: false
 selfHealing: "NCSSPG"
 starred: true
-title: "Cómo Estoy Usando Nuevas Propiedades Globales de CSS en Mi Sitio Web y Algunos Ejemplos""
+title: "Cómo Estoy Usando Nuevas Propiedades Globales de CSS en Mi Sitio Web y Algunos Ejemplos"
 resume: "Este post habla sobre nuevas propiedades de CSS que permiten crear una excelente experiencia de usuario con pasos simples."
 image: { src: "css-global-props", alt: "Propiedades Globales de CSS" }
 publishDate: "2025-07-17 11:42"
