@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 const count = ref(0);
 onMounted(async () => {
-  setTimeout(() => count.value++, 1000);
+	setTimeout(() => count.value++, 1000);
 });
 </script>
 

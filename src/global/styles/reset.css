@@ -1,75 +1,109 @@
 @layer reset {
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-  
-  /* Remove default margin and padding */
-  body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol, li, pre, form, fieldset, legend, input, textarea, button {
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Remove list styles on ul, ol elements */
-  ul, ol {
-    list-style: none;
-  }
-  
-  /* Remove default border */
-  fieldset, img {
-    border: 0;
-  }
-  
-  /* Set core body defaults */
-  body {
-    min-height: 100vh;
-    text-rendering: optimizeSpeed;
-    line-height: 1.5;
-  }
-  
-  /* Remove anchor underline by default */
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-  
-  /* Make images, videos, etc. responsive */
-  img, picture, video, canvas, svg {
-    display: block;
-    max-width: 100%;
-    height: auto;
-  }
-  /* inspired by @kevin-powell */
-  img{
-    font-style: italic;
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
 
-    background-repeat: no-repeat;
-    background-size: cover;
+	/* Remove default margin and padding */
+	body,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	figure,
+	blockquote,
+	dl,
+	dd,
+	ul,
+	ol,
+	li,
+	pre,
+	form,
+	fieldset,
+	legend,
+	input,
+	textarea,
+	button {
+		margin: 0;
+		padding: 0;
+	}
 
-    shape-margin: 1rem;
+	/* Remove list styles on ul, ol elements */
+	ul,
+	ol {
+		list-style: none;
+	}
 
-    max-width: 100%;
-    height: auto;
-    vertical-align: middle;
-  }
-  
-  /* Remove button and input styles */
-  button, input, select, textarea {
-    font: inherit;
-    color: inherit;
-    background: none;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    appearance: none;
-  }
-  
-  /* Remove animations and transitions for users who prefer reduced motion */
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-      scroll-behavior: auto !important;
-    }
-  }
+	/* Remove default border */
+	fieldset,
+	img {
+		border: 0;
+	}
+
+	/* Set core body defaults */
+	body {
+		min-height: 100vh;
+		text-rendering: optimizeSpeed;
+		line-height: 1.5;
+	}
+
+	/* Remove anchor underline by default */
+	a {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	/* Make images, videos, etc. responsive */
+	img,
+	picture,
+	video,
+	canvas,
+	svg {
+		display: block;
+		max-width: 100%;
+		height: auto;
+	}
+	/* inspired by @kevin-powell */
+	img {
+		font-style: italic;
+
+		background-repeat: no-repeat;
+		background-size: cover;
+
+		shape-margin: 1rem;
+
+		max-width: 100%;
+		height: auto;
+		vertical-align: middle;
+	}
+
+	/* Remove button and input styles */
+	button,
+	input,
+	select,
+	textarea {
+		font: inherit;
+		color: inherit;
+		background: none;
+		border: none;
+		outline: none;
+		box-shadow: none;
+		appearance: none;
+	}
+
+	/* Remove animations and transitions for users who prefer reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
 }

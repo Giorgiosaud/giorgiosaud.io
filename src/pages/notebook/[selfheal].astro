@@ -9,16 +9,16 @@ const selfhealPath = Astro.params.selfheal;
 const selfHealRegex = /(?<=^|-)[^-]{6}(?=-|$)/g;
 const selfHealing = selfhealPath?.match(selfHealRegex) || [];
 if (selfHealing.length) {
-    for (const sh of selfHealing) {
-        const note = notes.find((note) => note.data.selfHealing === sh);
-        if (note) {
-            Astro.response.status = 301;
-            Astro.response.headers.set("location", `/notebook/${note.id}`);
-            break;
-        }
-    }
+	for (const sh of selfHealing) {
+		const note = notes.find((note) => note.data.selfHealing === sh);
+		if (note) {
+			Astro.response.status = 301;
+			Astro.response.headers.set("location", `/notebook/${note.id}`);
+			break;
+		}
+	}
 } else {
-    Astro.response.status = 404;
+	Astro.response.status = 404;
 }
 ---
 

@@ -5,33 +5,33 @@ import "@global-styles/md.css";
 import { cloudinarySrc } from "@helpers/cloudinary";
 
 export async function getStaticPaths() {
-  const pages = await getCollection("notas");
-  return pages.map((page) => ({
-    params: { note: page.id },
-    props: { page },
-  }));
+	const pages = await getCollection("notas");
+	return pages.map((page) => ({
+		params: { note: page.id },
+		props: { page },
+	}));
 }
 
 const { page } = Astro.props;
 const { Content } = await render(page);
 const {
-  draft,
-  title,
-  resume,
-  starred,
-  selfHealing,
-  image,
-  publishDate,
-  author,
-  category,
-  collections,
-  tags,
+	draft,
+	title,
+	resume,
+	starred,
+	selfHealing,
+	image,
+	publishDate,
+	author,
+	category,
+	collections,
+	tags,
 } = page.data;
 const imgSrc = image
-  ? cloudinarySrc("notebook-posts/" + image.src, {
-      width: 500,
-    })
-  : image;
+	? cloudinarySrc("notebook-posts/" + image.src, {
+			width: 500,
+		})
+	: image;
 ---
 
 <NoteTemplate

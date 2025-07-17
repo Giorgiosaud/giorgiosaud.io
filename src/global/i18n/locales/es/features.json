@@ -1,30 +1,30 @@
 {
-  "title": "Temas a tratar en este cuaderno",
-  "description": "Todos los temas relacionados con el desarrollo web como frameworks frontend o backend, pretendiendo ser lo más agnóstico e imparcial posible.",
-  "features": [
-    {
-      "title": "Herramientas/Frameworks de Front",
-      "description": "Aunque tengo un profundo aprecio por JavaScript vanilla, proporcionaré comparaciones de varios frameworks frontend que he usado, desde los más elegantes hasta los menos atractivos."
-    },
-    {
-      "title": "Patrones de diseño de código",
-      "description": "Simplificaré y explicaré varios patrones de diseño y problemas que he resuelto en mis roles como Desarrollador Frontend, Arquitecto y Arquitecto de Soluciones."
-    },
-    {
-      "title": "Fragmentos de código",
-      "description": "Compartiré gists útiles y fragmentos de código, incluidas llamadas a GitHub, para simplificar tanto tu vida como la mía, ahorrando tiempo y dinero en el proceso."
-    },
-    {
-      "title": "Problemas de integración",
-      "description": "Abordaré problemas comunes que he encontrado al integrar varios sistemas y bibliotecas, proporcionando soluciones e ideas."
-    },
-    {
-      "title": "Cosas de SEO",
-      "description": "Explicaremos algunas implementaciones técnicas básicas de SEO y desmitificaremos algunas técnicas de SEO antiguas con un toque de realidad pero conociendo el lado oscuro de la luna del SEO."
-    },
-    {
-      "title": "Comunidad",
-      "description": "Mi idea principal es hacer una comunidad que se ayude mutuamente a resolver algunos problemas o simplemente a compartir conocimientos, por lo que intentaré hacer algunas publicaciones sobre cómo hacer una comunidad y cómo hacerla crecer."
-    }
-  ]
+	"title": "Temas a tratar en este cuaderno",
+	"description": "Todos los temas relacionados con el desarrollo web como frameworks frontend o backend, pretendiendo ser lo más agnóstico e imparcial posible.",
+	"features": [
+		{
+			"title": "Herramientas/Frameworks de Front",
+			"description": "Aunque tengo un profundo aprecio por JavaScript vanilla, proporcionaré comparaciones de varios frameworks frontend que he usado, desde los más elegantes hasta los menos atractivos."
+		},
+		{
+			"title": "Patrones de diseño de código",
+			"description": "Simplificaré y explicaré varios patrones de diseño y problemas que he resuelto en mis roles como Desarrollador Frontend, Arquitecto y Arquitecto de Soluciones."
+		},
+		{
+			"title": "Fragmentos de código",
+			"description": "Compartiré gists útiles y fragmentos de código, incluidas llamadas a GitHub, para simplificar tanto tu vida como la mía, ahorrando tiempo y dinero en el proceso."
+		},
+		{
+			"title": "Problemas de integración",
+			"description": "Abordaré problemas comunes que he encontrado al integrar varios sistemas y bibliotecas, proporcionando soluciones e ideas."
+		},
+		{
+			"title": "Cosas de SEO",
+			"description": "Explicaremos algunas implementaciones técnicas básicas de SEO y desmitificaremos algunas técnicas de SEO antiguas con un toque de realidad pero conociendo el lado oscuro de la luna del SEO."
+		},
+		{
+			"title": "Comunidad",
+			"description": "Mi idea principal es hacer una comunidad que se ayude mutuamente a resolver algunos problemas o simplemente a compartir conocimientos, por lo que intentaré hacer algunas publicaciones sobre cómo hacer una comunidad y cómo hacerla crecer."
+		}
+	]
 }

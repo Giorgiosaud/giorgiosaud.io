@@ -1,7 +1,7 @@
 {
-  "title": "Mi cuaderno de desarrollo web",
-  "description": "Este sitio web está hecho con Astro y basado en un tema de Astroship, pero es un lugar simple para tomar mis notas mentales y recordar mis investigaciones porque me resulta muy difícil mantenerme concentrado en la navegación web, y necesito un lugar para concentrarme en las cosas buenas.",
-  "notebook": "Mi cuaderno",
-  "githubProfileButton": "Mi perfil de Github",
-  "imageAlt": "Astronauta en el aire"
+	"title": "Mi cuaderno de desarrollo web",
+	"description": "Este sitio web está hecho con Astro y basado en un tema de Astroship, pero es un lugar simple para tomar mis notas mentales y recordar mis investigaciones porque me resulta muy difícil mantenerme concentrado en la navegación web, y necesito un lugar para concentrarme en las cosas buenas.",
+	"notebook": "Mi cuaderno",
+	"githubProfileButton": "Mi perfil de Github",
+	"imageAlt": "Astronauta en el aire"
 }
