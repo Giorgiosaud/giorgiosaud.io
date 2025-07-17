@@ -17,6 +17,7 @@ export interface Props {
 	image: string;
 	publishedAt: Date;
 	draft: boolean;
+	pathToTranslateNote?: string;
 }
 const {
 	title,
@@ -25,6 +26,7 @@ const {
 	lang = "en",
 	pathToTranslate = "internal-note",
 	publishedAt,
+	pathToTranslateNote = ""
 } = Astro.props;
 const structuredData = {
 	"@context": "https://schema.org",
@@ -83,7 +85,7 @@ structuredData={JSON.stringify(structuredData)}
 
 <body>
   <DebuggerTagManager />
-  <Header pathToTranslate={pathToTranslate} />
+  <Header pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
   <main class="content-grid">
     <slot />
   </main>

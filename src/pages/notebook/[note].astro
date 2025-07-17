@@ -6,14 +6,20 @@ import { cloudinarySrc } from "@helpers/cloudinary";
 
 export async function getStaticPaths() {
 	const pages = await getCollection("notes");
-	return pages.map((page) => ({
-		params: { note: page.id },
-		props: { page },
-	}));
+	const pagesTranslated = await getCollection("notas");
+	return pages.map((page) => {
+    const pathToTranslateNote = pagesTranslated.find((translatedPage) =>
+      translatedPage.data.selfHealing &&
+      translatedPage.data.selfHealing === page.data.selfHealing
+    )?.id || '';
+    return {
+      params: { note: page.id },
+      props: { page, pathToTranslateNote },
+    };
+  });
 }
-export const prerender = true;
 
-const { page } = Astro.props;
+const { page, pathToTranslateNote } = Astro.props;
 const { Content } = await render(page);
 const {
 	draft,
@@ -35,6 +41,7 @@ const imageName = `${page.id}-latest`;
   title={title}
   image={image.src}
   publishedAt={publishDate}
+  pathToTranslateNote={pathToTranslateNote}
 >
 <figure>
 <img src={imgSrc} alt={image.alt}>
