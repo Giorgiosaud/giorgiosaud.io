@@ -16,7 +16,7 @@ interface Props {
   <LogoNavigation />
   <Navigation/>
   <div class="actions">
-    <TranslateButton pathToTranslate={pathToTranslate} />
+    <TranslateButton pathToTranslate={pathToTranslate} server:defer/>
     <button id="hamburger-menu">
       <HamburgerIcon />
     </button>
