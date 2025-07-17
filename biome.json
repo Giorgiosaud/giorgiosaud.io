@@ -37,7 +37,8 @@
 				"rules": {
 					"correctness": {
 						"noUnusedImports": "off",
-						"noUnusedVariables": "off"
+						"noUnusedVariables": "off",
+						"useHookAtTopLevel":"off"
 					},
 					"style": { "useConst": "off", "useImportType": "off" }
 				}
