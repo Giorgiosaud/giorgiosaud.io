@@ -37,14 +37,22 @@
 				"rules": {
 					"correctness": {
 						"noUnusedImports": "off",
-						"noUnusedVariables": "off",
-						"useHookAtTopLevel":"off"
+						"noUnusedVariables": "off"
 					},
 					"style": { "useConst": "off", "useImportType": "off" }
 				}
 			}
 		},
-		{ "includes": ["*.astro"] }
+		{
+			 "includes": ["**/*.astro"],
+			 "linter":{
+				 "rules": {
+					 "correctness": {
+						 "useHookAtTopLevel":"off"
+					 }
+				 }
+			 }
+	 	}
 	],
 	"assist": {
 		"enabled": true,
