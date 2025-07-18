@@ -1,41 +1,41 @@
 ---
-import { getLangFromUrl, useTranslations } from "@i18n/utils";
-import Feature from "./Feature.astro";
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import Feature from './Feature.astro'
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 const features = [
-	{
-		title: t("features.list.0.title"),
-		description: t("features.list.0.description"),
-		icon: "Integration",
-	},
-	{
-		title: t("features.list.1.title"),
-		description: t("features.list.1.description"),
-		icon: "Patterns",
-	},
-	{
-		title: t("features.list.2.title"),
-		description: t("features.list.2.description"),
-		icon: "Frameworks",
-	},
-	{
-		title: t("features.list.3.title"),
-		description: t("features.list.3.description"),
-		icon: "API",
-	},
-	{
-		title: t("features.list.4.title"),
-		description: t("features.list.4.description"),
-		icon: "Globe",
-	},
-	{
-		title: t("features.list.5.title"),
-		description: t("features.list.5.description"),
-		icon: "Community",
-	},
-];
+  {
+    title: t('features.list.0.title'),
+    description: t('features.list.0.description'),
+    icon: 'Integration',
+  },
+  {
+    title: t('features.list.1.title'),
+    description: t('features.list.1.description'),
+    icon: 'Patterns',
+  },
+  {
+    title: t('features.list.2.title'),
+    description: t('features.list.2.description'),
+    icon: 'Frameworks',
+  },
+  {
+    title: t('features.list.3.title'),
+    description: t('features.list.3.description'),
+    icon: 'API',
+  },
+  {
+    title: t('features.list.4.title'),
+    description: t('features.list.4.description'),
+    icon: 'Globe',
+  },
+  {
+    title: t('features.list.5.title'),
+    description: t('features.list.5.description'),
+    icon: 'Community',
+  },
+]
 ---
 
 <section class="scrolll-animated">

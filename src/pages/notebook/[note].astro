@@ -1,39 +1,35 @@
 ---
-import { getCollection, render } from "astro:content";
-import NoteTemplate from "@templates/Note.astro";
-import "@global-styles/md.css";
-import { cloudinarySrc } from "@helpers/cloudinary";
+import { getCollection, render } from 'astro:content'
+import NoteTemplate from '@templates/Note.astro'
+import '@global-styles/md.css'
+import { cloudinarySrc } from '@helpers/cloudinary'
 
 export async function getStaticPaths() {
-	const pages = await getCollection("notes");
-	const pagesTranslated = await getCollection("notas");
-	return pages.map((page) => {
-    const pathToTranslateNote = pagesTranslated.find((translatedPage) =>
-      translatedPage.data.selfHealing &&
-      translatedPage.data.selfHealing === page.data.selfHealing
-    )?.id || '';
+  const pages = await getCollection('notes')
+  const pagesTranslated = await getCollection('notas')
+  return pages.map((page) => {
+    const pathToTranslateNote =
+      pagesTranslated.find(
+        (translatedPage) =>
+          translatedPage.data.selfHealing &&
+          translatedPage.data.selfHealing === page.data.selfHealing,
+      )?.id || ''
     return {
       params: { note: page.id },
       props: { page, pathToTranslateNote },
-    };
-  });
+    }
+  })
 }
 
-const { page, pathToTranslateNote } = Astro.props;
-const { Content } = await render(page);
-const {
-	draft,
-	title,
-	resume,
-	image,
-	publishDate,
-} = page.data;
+const { page, pathToTranslateNote } = Astro.props
+const { Content } = await render(page)
+const { draft, title, resume, image, publishDate } = page.data
 const imgSrc = image
-	? cloudinarySrc("notebook-posts/" + image.src, {
-			width: 500,
-		})
-	: image;
-const imageName = `${page.id}-latest`;
+  ? cloudinarySrc('notebook-posts/' + image.src, {
+      width: 500,
+    })
+  : image
+const imageName = `${page.id}-latest`
 ---
 <NoteTemplate
   description={resume}

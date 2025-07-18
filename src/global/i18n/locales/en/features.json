@@ -1,30 +1,30 @@
 {
-	"title": "Topics to talk in this notebook",
-	"description": "All the topics related with web development like frontend or backend frameworks, pretending to be the most agnostic and imparcial as possible.",
-	"list": [
-		{
-			"title": "Front end Tools/Frameworks",
-			"description": "All the topics related with web development like frontend or backend frameworks, pretending to be the most agnostic and imparcial as possible."
-		},
-		{
-			"title": "Code Design patterns",
-			"description": "I will simplify and explain various design patterns and issues I've resolved in my roles as a Frontend Developer, Architect, and Solution Architect."
-		},
-		{
-			"title": "Code Snippets",
-			"description": "I'll share useful gists and code snippets, including GitHub calls, to simplify both your life and mine, saving time and money in the process."
-		},
-		{
-			"title": "Integration issues",
-			"description": "I'll address common issues I've encountered while integrating various systems and libraries, providing solutions and insights."
-		},
-		{
-			"title": "SEO Things",
-			"description": "We will be explaining some basic technical SEO implementations an dismitifyng some old SEO techniques with a touch of reality but knowing the obscure side of the SEO moon."
-		},
-		{
-			"title": "Community",
-			"description": "My main idea is to make a community that helps each other to resolve some issues or just to share some knowledge, so I will try to make some posts about how to make a community and how to make it grow."
-		}
-	]
+  "title": "Topics to talk in this notebook",
+  "description": "All the topics related with web development like frontend or backend frameworks, pretending to be the most agnostic and imparcial as possible.",
+  "list": [
+    {
+      "title": "Front end Tools/Frameworks",
+      "description": "All the topics related with web development like frontend or backend frameworks, pretending to be the most agnostic and imparcial as possible."
+    },
+    {
+      "title": "Code Design patterns",
+      "description": "I will simplify and explain various design patterns and issues I've resolved in my roles as a Frontend Developer, Architect, and Solution Architect."
+    },
+    {
+      "title": "Code Snippets",
+      "description": "I'll share useful gists and code snippets, including GitHub calls, to simplify both your life and mine, saving time and money in the process."
+    },
+    {
+      "title": "Integration issues",
+      "description": "I'll address common issues I've encountered while integrating various systems and libraries, providing solutions and insights."
+    },
+    {
+      "title": "SEO Things",
+      "description": "We will be explaining some basic technical SEO implementations an dismitifyng some old SEO techniques with a touch of reality but knowing the obscure side of the SEO moon."
+    },
+    {
+      "title": "Community",
+      "description": "My main idea is to make a community that helps each other to resolve some issues or just to share some knowledge, so I will try to make some posts about how to make a community and how to make it grow."
+    }
+  ]
 }

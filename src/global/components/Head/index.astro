@@ -1,26 +1,26 @@
 ---
-import Favicons from "./Favicons.astro";
-import PWA from "./PWA.astro";
+import Favicons from './Favicons.astro'
+import PWA from './PWA.astro'
 export interface Props {
-	title?: string;
-	description?: string;
-	structuredData?: string;
+  title?: string
+  description?: string
+  structuredData?: string
 }
 const {
-	title,
-	structuredData,
-	description = "This is a web developers Notebook site",
-} = Astro.props;
-const fixedTitle = `Giorgiosaud.io | ${title || "Notebook"}`;
+  title,
+  structuredData,
+  description = 'This is a web developers Notebook site',
+} = Astro.props
+const fixedTitle = `Giorgiosaud.io | ${title || 'Notebook'}`
 const fonts = [
-	"https://fonts.gstatic.com/s/poppins/v23/pxiEyp8kv8JHgFVrJJfecnFHGPc.woff2",
-	"https://fonts.gstatic.com/s/poppins/v23/pxiGyp8kv8JHgFVrJJLucHtAOvWDSA.woff2",
-	"https://fonts.gstatic.com/s/robotomono/v30/L0x5DF4xlVMF-BfR8bXMIjhLq3-cXbKD.woff2",
-	"https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLCz7Z1xlFd2JQEk.woff2",
-	"https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLEj6Z1xlFd2JQEk.woff2",
-];
+  'https://fonts.gstatic.com/s/poppins/v23/pxiEyp8kv8JHgFVrJJfecnFHGPc.woff2',
+  'https://fonts.gstatic.com/s/poppins/v23/pxiGyp8kv8JHgFVrJJLucHtAOvWDSA.woff2',
+  'https://fonts.gstatic.com/s/robotomono/v30/L0x5DF4xlVMF-BfR8bXMIjhLq3-cXbKD.woff2',
+  'https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLCz7Z1xlFd2JQEk.woff2',
+  'https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLEj6Z1xlFd2JQEk.woff2',
+]
 
-import { TAG_MANAGER_ID } from "astro:env/client";
+import { TAG_MANAGER_ID } from 'astro:env/client'
 ---
 <head view-transition-name: header;
 >

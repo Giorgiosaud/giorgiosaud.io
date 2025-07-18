@@ -1,15 +1,15 @@
 {
-	"name": {
-		"error": "Por favor, escriba su nombre completo.",
-		"placeholder": "Nombre completo"
-	},
-	"email": {
-		"placeholder": "Dirección de correo electrónico",
-		"error": "Por favor, escriba su correo electrónico."
-	},
-	"message": {
-		"placeholder": "Tu mensaje",
-		"error": "Por Favor, escriba un mensaje"
-	},
-	"submit": "Enviar mensaje"
+  "name": {
+    "error": "Por favor, escriba su nombre completo.",
+    "placeholder": "Nombre completo"
+  },
+  "email": {
+    "placeholder": "Dirección de correo electrónico",
+    "error": "Por favor, escriba su correo electrónico."
+  },
+  "message": {
+    "placeholder": "Tu mensaje",
+    "error": "Por Favor, escriba un mensaje"
+  },
+  "submit": "Enviar mensaje"
 }

@@ -1,8 +1,8 @@
 ---
 export interface Props {
-	version?: string;
+  version?: string
 }
-const { version = "v1" } = Astro.props;
+const { version = 'v1' } = Astro.props
 ---
 <link
     href={`/manifest.json?v=1${version}`}

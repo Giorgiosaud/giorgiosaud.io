@@ -1,53 +1,53 @@
 ---
-import "@global-styles/reset.css";
-import "@global-styles/grid.css";
-import "@global-styles/global.css";
+import '@global-styles/reset.css'
+import '@global-styles/grid.css'
+import '@global-styles/global.css'
 
-import DebuggerTagManager from "@global-components/DebuggerTagManager.astro";
-import Footer from "@global-components/Footer.astro";
-import Head from "@global-components/Head/index.astro";
-import Header from "@global-components/Header.astro";
-import type { RouteNames } from "@i18n/utils";
+import DebuggerTagManager from '@global-components/DebuggerTagManager.astro'
+import Footer from '@global-components/Footer.astro'
+import Head from '@global-components/Head/index.astro'
+import Header from '@global-components/Header.astro'
+import type { RouteNames } from '@i18n/utils'
 
 export interface Props {
-	lang?: string;
-	title?: string;
-	description?: string;
-	pathToTranslate?: RouteNames;
-	image: string;
-	publishedAt: Date;
-	draft: boolean;
-	pathToTranslateNote?: string;
+  lang?: string
+  title?: string
+  description?: string
+  pathToTranslate?: RouteNames
+  image: string
+  publishedAt: Date
+  draft: boolean
+  pathToTranslateNote?: string
 }
 const {
-	title,
-	description,
-	image,
-	lang = "en",
-	pathToTranslate = "internal-note",
-	publishedAt,
-	pathToTranslateNote = ""
-} = Astro.props;
+  title,
+  description,
+  image,
+  lang = 'en',
+  pathToTranslate = 'internal-note',
+  publishedAt,
+  pathToTranslateNote = '',
+} = Astro.props
 const structuredData = {
-	"@context": "https://schema.org",
-	"@type": "BlogPosting",
-	headline: title,
-	image: [image],
-	datePublished: publishedAt.toISOString(),
-	dateModified: publishedAt.toISOString(),
-	author: [
-		{
-			"@type": "Person",
-			name: "Jorge saud",
-			url: "https://www.giorgiosaud.io/about-me",
-		},
-		{
-			"@type": "Person",
-			name: "Jorge saud",
-			url: "https://www.giorgiosaud.io/about-me",
-		},
-	],
-};
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: title,
+  image: [image],
+  datePublished: publishedAt.toISOString(),
+  dateModified: publishedAt.toISOString(),
+  author: [
+    {
+      '@type': 'Person',
+      name: 'Jorge saud',
+      url: 'https://www.giorgiosaud.io/about-me',
+    },
+    {
+      '@type': 'Person',
+      name: 'Jorge saud',
+      url: 'https://www.giorgiosaud.io/about-me',
+    },
+  ],
+}
 ---
 
 <!doctype html>
@@ -85,7 +85,9 @@ structuredData={JSON.stringify(structuredData)}
 
 <body>
   <DebuggerTagManager />
-  <Header pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
+  <Header 
+	 pathToTranslate={pathToTranslate}
+   	pathToTranslateNote={pathToTranslateNote} />
   <main class="content-grid">
     <slot />
   </main>
