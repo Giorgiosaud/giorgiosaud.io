@@ -30,6 +30,7 @@
   }
 
   @view-transition {
+    /* biome-ignore lint/correctness/noUnknownProperty: <https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition> */
     navigation: auto;
   }
 }
