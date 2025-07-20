@@ -56,8 +56,94 @@ const imgSrc = image
   </figure>
   <h1>{title}</h1>
   <Content />
+  <section class="share">
+<p>Share this note:</p>
+  <p id="notification">Link copied to clipboard!</p>
+  <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
+</section>
 </NoteTemplate>
+<script define:vars={{selfHealing}}>
+        notification = document.getElementById('notification');
+
+const shareButton = document.getElementById('share');
+  const urlToShare = `${window.location.href}-${selfHealing}`;
+  const copyLink = async (link)=>{
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(link);
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 2000);
+        console.log('Link copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy link: ', err);
+        throw err
+      }
+    }
+    else{
+      console.log('Clipboard API not supported');
+      throw new Error('Clipboard API not supported');
+    }
+  }
+  const shareViaShareApi=async ({title, text, url})=>{
+    if (navigator.share) {
+      try{
+        await navigator.share({title, text, url});
+        console.log('Successful share');
+      } catch (error) {
+        console.error('Error sharing:', error);
+        throw error
+      }
+  }
+    else{
+      console.log('Share API not supported');
+      throw new Error('Share API not supported');
+    }
+  }
+
+  const shareContent = async () => {
+    const shareData = {
+      title: document.querySelector('h1').textContent,
+      text: document.querySelector('meta[name="description"]').content,
+      url: urlToShare,
+    };
+    try{
+      await shareViaShareApi(shareData);
+    } catch (error) {
+      try {
+        // Fallback to copying the link if Share API fails
+        await copyLink(shareData.url);
+      } catch (error) {
+        console.error('Error copying link:', error);
+      }
+    }
+  };
+  shareButton.addEventListener('click', shareContent);
+
+</script>
 <style>
+    #share{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+    color: light-dark(var(--color-light), var(--color-dark));
+    anchor-name: --share-button;
+  }
+  #notification{
+    display:none;
+    position: fixed;
+    right: 10px;
+    background-color: var(--color-main);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    position-anchor: --share-button;
+    bottom: calc(anchor(top) + 10px);
+  }
   figure {
     text-align: center;
     padding-top: 1lh;
