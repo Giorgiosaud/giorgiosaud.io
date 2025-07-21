@@ -30,7 +30,6 @@ Browse the notebook to find articles, code snippets, and solutions for web devel
 ## Tech Stack
 
 - [Astro](https://astro.build/)
-- Astroship theme
 - Various web technologies (React, Node.js, AWS, Google APIs, etc.)
 
 ## Author
