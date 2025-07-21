@@ -1,27 +1,30 @@
 ---
-import { getCollection, render } from "astro:content";
-import Base from "@templates/Base.astro";
-import { isRouteName, type RouteNames } from "@i18n/utils";
-import "@global-styles/md.css";
-
+import { getCollection, render } from 'astro:content'
+import { isRouteName, type RouteNames } from '@i18n/utils'
+import Base from '@templates/Base.astro'
+import '@global-styles/md.css'
 
 export async function getStaticPaths() {
-  const pages = await getCollection("pages");
-  return pages.map(page => ({
+  const pages = await getCollection('pages')
+  return pages.map((page) => ({
     params: { slug: page.id },
     props: { page },
-  }));
+  }))
 }
 
-const { page } = Astro.props;
-if(!isRouteName(page.data.pathToTranslate)) {
-  throw new Error(`Invalid route name: ${Astro.params.slug}`);
+const { page } = Astro.props
+if (!isRouteName(page.data.pathToTranslate)) {
+  throw new Error(`Invalid route name: ${Astro.params.slug}`)
 }
-const { Content } = await render(page);
-
+const { Content } = await render(page)
 ---
 <Base pathToTranslate={page.data.pathToTranslate}
   description={page.data.description}
   title={page.data.title}>
 <Content/>
 </Base>
+<style>
+	h1{
+		padding-block: 2lh;
+	}
+</style>

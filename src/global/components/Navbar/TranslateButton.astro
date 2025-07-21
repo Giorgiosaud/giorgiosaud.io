@@ -1,31 +1,24 @@
 ---
-import { getLangFromUrl, useTranslatedPath, useTranslations, type RouteNames } from '@i18n/utils';
-import Icon from '@components/Icon.astro';
-import { getEntry } from 'astro:content';
-import type { DataEntry } from 'astro:content';
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content'
+import Icon from '@components/Icon.astro'
+import {
+  getLangFromUrl,
+  type RouteNames,
+  useTranslatedPath,
+  useTranslations,
+} from '@i18n/utils'
 
-interface Props{
-    pathToTranslate: RouteNames;
+interface Props {
+  pathToTranslate: RouteNames
+  pathToTranslateNote?: string
 }
 
-const { pathToTranslate } = Astro.props;
-const lang = getLangFromUrl(Astro.url);
-const { translatePath } = useTranslatedPath(lang);
-const langToTranslate=lang==='es'?'en':'es';
-const iconToShow=lang==='es'?'USA':'Venezuela';
-const lastPath = Astro.url.pathname.split("/").pop() || '';
-let pathToTranslateNote = ""
-if(pathToTranslate==="internal-note"){
-  if(lang==="en"){
-    const note= (await getCollection("notes")).find((n) => n.id === lastPath) || null;
-    pathToTranslateNote=note?.data.selfHealing||'';
-  }else{
-    const note= (await getCollection("notas")).find((n) => n.id === lastPath) || null;
-    pathToTranslateNote=note?.data.selfHealing||'';
-  }
-}
-
+const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const { translatePath } = useTranslatedPath(lang)
+const langToTranslate = lang === 'es' ? 'en' : 'es'
+const iconToShow = lang === 'es' ? 'USA' : 'Venezuela'
+const lastPath = Astro.url.pathname.split('/').pop() || ''
 ---
 
 <a href={translatePath(pathToTranslate,langToTranslate,pathToTranslateNote)}>

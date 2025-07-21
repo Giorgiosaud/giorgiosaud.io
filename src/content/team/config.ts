@@ -1,8 +1,8 @@
-import { glob } from "astro/loaders";
-import { defineCollection, z } from "astro:content";
+import { defineCollection, z } from 'astro:content'
+import { glob } from 'astro/loaders'
 
 export const equipo = defineCollection({
-  loader: glob({ base: "src/content/team/es", pattern: "*.(md|mdx)" }),
+  loader: glob({ base: 'src/content/team/es', pattern: '*.(md|mdx)' }),
   schema: z.object({
     draft: z.boolean(),
     alias: z.string(),
@@ -16,10 +16,10 @@ export const equipo = defineCollection({
     }),
     publishDate: z.string().transform((str) => new Date(str)),
   }),
-});
+})
 
 export const team = defineCollection({
-  loader: glob({ base: "src/content/team/en", pattern: "*.(md|mdx)" }),
+  loader: glob({ base: 'src/content/team/en', pattern: '*.(md|mdx)' }),
   schema: z.object({
     draft: z.boolean(),
     alias: z.string(),
@@ -33,8 +33,8 @@ export const team = defineCollection({
     }),
     publishDate: z.string().transform((str) => new Date(str)),
   }),
-});
+})
 export default {
   team,
-  equipo
+  equipo,
 }

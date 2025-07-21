@@ -1,15 +1,17 @@
 
 ---
-import { actions } from 'astro:actions';
+import { actions } from 'astro:actions'
 
-import Base from "@templates/Base.astro";
+import '@global-styles/md.css'
+import Base from '@templates/Base.astro'
 
-export const prerender = false;
+export const prerender = false
 
-import { getLangFromUrl, useTranslations } from "@i18n/utils"
-const lang = getLangFromUrl(Astro.url);
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
-const result = Astro.getActionResult(actions.sendEmail);
+const result = Astro.getActionResult(actions.sendEmail)
 ---
 <Base pathToTranslate="contact" title="Contact Me" description="Get in touch with me for collaboration, questions, or just to say hi!">
 <h1 id="-contact-me">📬 Contact Me</h1>

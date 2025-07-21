@@ -1,17 +1,17 @@
 ---
-import { getCollection } from 'astro:content';
-import { getLangFromUrl, useTranslations } from '@i18n/utils';
-import Note from './Note.astro';
+import { getCollection } from 'astro:content'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import Note from './Note.astro'
 
-const lang=getLangFromUrl(Astro.url)
+const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
-interface Props{
-    collection: "collections"|"colecciones";
-    notes: "notes"|"notas";
+interface Props {
+  collection: 'collections' | 'colecciones'
+  notes: 'notes' | 'notas'
 }
-const { collection,notes } = Astro.props;
-const collections = await getCollection(collection);
-const fullNotes= await getCollection(notes);
+const { collection, notes } = Astro.props
+const collections = await getCollection(collection)
+const fullNotes = await getCollection(notes)
 ---
 
 

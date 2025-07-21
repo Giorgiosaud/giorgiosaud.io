@@ -1,11 +1,11 @@
 ---
-import Hero from "@components/Hero.astro";
-import { getLangFromUrl, useTranslations } from "@i18n/utils";
-import Base from "@templates/Base.astro";
-import _404Image from "@images/404.png";
-const lang=getLangFromUrl(Astro.url);
-const t=useTranslations(lang);
+import Hero from '@components/Hero.astro'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import _404Image from '@images/404.png'
+import Base from '@templates/Base.astro'
 
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
 ---
 
 <Base title="Not Found" pathToTranslate="home">

@@ -1,27 +1,31 @@
 ---
-import {
-  getLangFromUrl,
-  useTranslations,
-  useTranslatedPath,
-} from "@i18n/utils";
-import Icon from "@components/Icon.astro";
-import { cloudinarySrc } from "helpers/cloudinary";
+import Icon from '@components/Icon.astro'
+import { getLangFromUrl, useTranslatedPath, useTranslations } from '@i18n/utils'
+import { cloudinarySrc } from 'helpers/cloudinary'
 
-const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
-const { translatePath } = useTranslatedPath(lang);
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const { translatePath } = useTranslatedPath(lang)
 // set props of hero component
 interface Props {
-  title: string;
-  description: string;
-  cloudinaryImageId?: string;
-  imageUrl?: string;
-  showButtons?: boolean;
+  title: string
+  description: string
+  cloudinaryImageId?: string
+  imageUrl?: string
+  showButtons?: boolean
 }
-const { title, description, cloudinaryImageId, imageUrl, showButtons = true } = Astro.props;
-const imgSrc = cloudinaryImageId ?  cloudinarySrc(cloudinaryImageId, {
-  width: 500
-}) : imageUrl;
+const {
+  title,
+  description,
+  cloudinaryImageId,
+  imageUrl,
+  showButtons = true,
+} = Astro.props
+const imgSrc = cloudinaryImageId
+  ? cloudinarySrc(cloudinaryImageId, {
+      width: 500,
+    })
+  : imageUrl
 ---
 
 <section id="hero" class="hero__container scrolll-animated">

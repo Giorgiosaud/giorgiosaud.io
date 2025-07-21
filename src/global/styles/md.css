@@ -1,22 +1,50 @@
-  h1,blockquote,li{ margin-bottom: 0.5lh; }
-p{
-    margin-bottom: 1lh;
+* {
+  --_color: var(--color, light-dark(var(--color-main), var(--color-light)));
+  color: var(--_color);
 }
-.text-center{
-    text-align: center;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  --_padding-block: var(--padding-block, 0.5lh);
+  padding-block: var(--_padding-block);
 }
-.focus{
-  background-color: light-dark(var(--color-dark), var(--color-light));
-  color: light-dark(var(--color-light), var(--color-dark));
-  font-size: clamp(2rem,3vw,2rem);
-  padding: 1lh;
-  margin: 1lh;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balanced;
 }
-blockquote{
+p {
+  text-wrap: pretty;
+}
+a {
+  text-decoration: underline;
+}
+.text-center {
+  text-align: center;
+}
+.focus {
+  --padding-block: 1lh;
+  --color: light-dark(var(--color-light), var(--color-dark));
+
+  --_background-color: var(
+    --background-color,
+    light-dark(var(--color-dark), var(--color-light))
+  );
+
+  background-color: var(--_background-color);
+  font-size: clamp(2rem, 3vw, 2rem);
+}
+blockquote {
   font-style: italic;
   position: relative;
-  padding: 1ch;
-  &::before{
+  &::before {
     content: open-quote;
     position: absolute;
     left: 0;

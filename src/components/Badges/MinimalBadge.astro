@@ -1,19 +1,25 @@
 ---
-import Icon from '@components/Icon.astro';
+import Icon from '@components/Icon.astro'
 
-interface Props{
-    title: string,
-    imgSrc:string,
-    description:string,
-    cardColor:string,
-    category:string,
-    poweredBy:string,
-    readMore?:string
+interface Props {
+  title: string
+  imgSrc: string
+  description: string
+  cardColor: string
+  category: string
+  poweredBy: string
+  readMore?: string
 }
-const {imgSrc, title, description,cardColor}=Astro.props;
+const { imgSrc, title, description, cardColor } = Astro.props
 const slugify = (str: string) => {
-    return '--'+str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-};
+  return (
+    '--' +
+    str
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+  )
+}
 ---
 <div class="badge">
     <article tabindex="0">

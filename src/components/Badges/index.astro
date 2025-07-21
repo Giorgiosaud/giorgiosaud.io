@@ -1,12 +1,13 @@
 ---
-import { getCollection } from "astro:content";
-import MinimalBadge from "./MinimalBadge.astro";
-const badges= await getCollection("badges");
+import { getCollection } from 'astro:content'
+import MinimalBadge from './MinimalBadge.astro'
+
+const badges = await getCollection('badges')
 interface Props {
-    title: string,
-    readMore: string
+  title: string
+  readMore: string
 }
-const { title, readMore } = Astro.props as Props;
+const { title, readMore } = Astro.props as Props
 ---
 <section class="full-width">
     <header>

@@ -1,16 +1,19 @@
 ---
-import { getCollection } from 'astro:content';
-import Note from './Note.astro';
-import { getLangFromUrl, useTranslations } from '@i18n/utils';
+import { getCollection } from 'astro:content'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import Note from './Note.astro'
 
-const lang=getLangFromUrl(Astro.url)
+const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
-interface Props{
-  collection: "notes"|"notas";
+interface Props {
+  collection: 'notes' | 'notas'
 }
-const { collection } = Astro.props;
+const { collection } = Astro.props
 
-const notes = (await getCollection(collection)).filter(note=>!note.data.draft).sort((a,b)=>a.data.publishDate<b.data.publishDate ? 1 : -1).slice(0,4);
+const notes = (await getCollection(collection))
+  .filter((note) => !note.data.draft)
+  .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
+  .slice(0, 4)
 // const notesCount=notes.length;
 ---
 

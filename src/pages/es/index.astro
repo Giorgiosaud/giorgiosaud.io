@@ -1,14 +1,14 @@
 ---
-import Hero from "@components/Hero.astro";
-import Features from "@components/Features/index.astro";
-import { getLangFromUrl, useTranslations } from "@i18n/utils";
-import Base from "@templates/Base.astro";
-import Logos from "@components/Logos.astro";
-import Badges from "@components/Badges/index.astro";
+import Badges from '@components/Badges/index.astro'
+import Features from '@components/Features/index.astro'
+import Hero from '@components/Hero.astro'
+import Logos from '@components/Logos.astro'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import Base from '@templates/Base.astro'
 
-const lang = getLangFromUrl(Astro.url);
+const lang = getLangFromUrl(Astro.url)
 
-const t = useTranslations(lang);
+const t = useTranslations(lang)
 ---
 
 <Base pathToTranslate="home">

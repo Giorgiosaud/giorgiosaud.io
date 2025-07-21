@@ -1,25 +1,36 @@
 ---
-import { getCollection, render } from "astro:content";
-import NoteTemplate from "@templates/Note.astro";
-import '@global-styles/md.css';
-import { cloudinarySrc } from "@helpers/cloudinary";
-
+import { getCollection, render } from 'astro:content'
+import NoteTemplate from '@templates/Note.astro'
+import '@global-styles/md.css'
+import { cloudinarySrc } from '@helpers/cloudinary'
 
 export async function getStaticPaths() {
-  const pages = await getCollection("notes");
-  return pages.map(page => ({
-    params: { note: page.id },
-    props: { page },
-  }));
+  const pages = await getCollection('notes')
+  const pagesTranslated = await getCollection('notas')
+  return pages.map((page) => {
+    const pathToTranslateNote =
+      pagesTranslated.find(
+        (translatedPage) =>
+          translatedPage.data.selfHealing &&
+          translatedPage.data.selfHealing === page.data.selfHealing,
+      )?.id || ''
+    return {
+      params: { note: page.id },
+      props: { page, pathToTranslateNote },
+    }
+  })
 }
 
-const { page } = Astro.props;
-const { Content } = await render(page);
-const {draft,title,resume,starred,selfHealing,image,publishDate,author,category,collections,tags} = page.data;
-const imgSrc = image ?  cloudinarySrc('notebook-posts/'+image.src, {
-    width: 500
-}) : image;
-const imageName = `${page.id}-latest`;
+const { page, pathToTranslateNote } = Astro.props
+const { Content } = await render(page)
+const { draft, title, resume, image, publishDate } = page.data
+const imgSrc = image
+  ? cloudinarySrc('notebook-posts/' + image.src, {
+      width: 500,
+    })
+  : image
+const imageName = `${page.id}-latest`
+const selfHealing = page.data.selfHealing || page.id
 ---
 <NoteTemplate
   description={resume}
@@ -27,6 +38,7 @@ const imageName = `${page.id}-latest`;
   title={title}
   image={image.src}
   publishedAt={publishDate}
+  pathToTranslateNote={pathToTranslateNote}
 >
 <figure>
 <img src={imgSrc} alt={image.alt}>
@@ -34,8 +46,94 @@ const imageName = `${page.id}-latest`;
 </figure>
 <h1>{title}</h1>
 <Content/>
+<section class="share">
+<p>Share this note:</p>
+  <p id="notification">Link copied to clipboard!</p>
+  <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
+</section>
 </NoteTemplate>
+<script define:vars={{selfHealing}}>
+        notification = document.getElementById('notification');
+
+const shareButton = document.getElementById('share');
+  const urlToShare = `${window.location.href}-${selfHealing}`;
+  const copyLink = async (link)=>{
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(link);
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 2000);
+        console.log('Link copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy link: ', err);
+        throw err
+      }
+    }
+    else{
+      console.log('Clipboard API not supported');
+      throw new Error('Clipboard API not supported');
+    }
+  }
+  const shareViaShareApi=async ({title, text, url})=>{
+    if (navigator.share) {
+      try{
+        await navigator.share({title, text, url});
+        console.log('Successful share');
+      } catch (error) {
+        console.error('Error sharing:', error);
+        throw error
+      }
+  }
+    else{
+      console.log('Share API not supported');
+      throw new Error('Share API not supported');
+    }
+  }
+
+  const shareContent = async () => {
+    const shareData = {
+      title: document.querySelector('h1').textContent,
+      text: document.querySelector('meta[name="description"]').content,
+      url: urlToShare,
+    };
+    try{
+      await shareViaShareApi(shareData);
+    } catch (error) {
+      try {
+        // Fallback to copying the link if Share API fails
+        await copyLink(shareData.url);
+      } catch (error) {
+        console.error('Error copying link:', error);
+      }
+    }
+  };
+  shareButton.addEventListener('click', shareContent);
+
+</script>
 <style define:vars={{imageName}}>
+  #share{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 1rem;
+    color: light-dark(var(--color-light), var(--color-dark));
+    anchor-name: --share-button;
+  }
+  #notification{
+    display:none;
+    position: fixed;
+    right: 10px;
+    background-color: var(--color-main);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    position-anchor: --share-button;
+    bottom: calc(anchor(top) + 10px);
+  }
   figure{
     text-align: center;
     padding-top: 1lh;
@@ -45,4 +143,5 @@ const imageName = `${page.id}-latest`;
       view-transition-name: var(--imageName);
     }
   }
+
 </style>
