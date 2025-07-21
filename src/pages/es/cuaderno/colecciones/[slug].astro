@@ -1,11 +1,11 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
-	const pages = await getCollection("colecciones");
-	return pages.map((page) => ({
-		params: { slug: page.id },
-		props: { page },
-	}));
+  const pages = await getCollection('colecciones')
+  return pages.map((page) => ({
+    params: { slug: page.id },
+    props: { page },
+  }))
 }
 ---

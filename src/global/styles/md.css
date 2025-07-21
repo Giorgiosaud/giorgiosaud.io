@@ -1,39 +1,52 @@
-*{
-	--_color:var(--color,light-dark(var(--color-main), var(--color-light)));
-	color: var(--_color);
+* {
+  --_color: var(--color, light-dark(var(--color-main), var(--color-light)));
+  color: var(--_color);
 }
- h1, h2, h3, h4, h5, h6, p {
-
-	--_padding-block: var(--padding-block,.5lh);
-	padding-block: var(--_padding-block);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  --_padding-block: var(--padding-block, 0.5lh);
+  padding-block: var(--_padding-block);
 }
- h1, h2, h3, h4, h5, h6{
-	text-wrap: balanced;
- }
-p{
-	text-wrap: pretty;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balanced;
 }
-a{
-	text-decoration: underline;
+p {
+  text-wrap: pretty;
+}
+a {
+  text-decoration: underline;
 }
 .text-center {
-	text-align: center;
+  text-align: center;
 }
 .focus {
-	--padding-block: 1lh;
-	--color: light-dark(var(--color-light), var(--color-dark));
+  --padding-block: 1lh;
+  --color: light-dark(var(--color-light), var(--color-dark));
 
-	--_background-color:var(--background-color,light-dark(var(--color-dark), var(--color-light)));
+  --_background-color: var(
+    --background-color,
+    light-dark(var(--color-dark), var(--color-light))
+  );
 
-	background-color: var(--_background-color);
-	font-size: clamp(2rem, 3vw, 2rem);
+  background-color: var(--_background-color);
+  font-size: clamp(2rem, 3vw, 2rem);
 }
 blockquote {
-	font-style: italic;
-	position: relative;
-	&::before {
-		content: open-quote;
-		position: absolute;
-		left: 0;
-	}
+  font-style: italic;
+  position: relative;
+  &::before {
+    content: open-quote;
+    position: absolute;
+    left: 0;
+  }
 }

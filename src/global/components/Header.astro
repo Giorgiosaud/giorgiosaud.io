@@ -1,13 +1,13 @@
 ---
-import type { RouteNames } from "@i18n/utils";
-import Navbar from "./Navbar/index.astro";
+import type { RouteNames } from '@i18n/utils'
+import Navbar from './Navbar/index.astro'
 
 interface Props {
-	pathToTranslate: RouteNames;
-	notePath?: string;
-	pathToTranslateNote?: string;
+  pathToTranslate: RouteNames
+  notePath?: string
+  pathToTranslateNote?: string
 }
-const { pathToTranslate, pathToTranslateNote } = Astro.props;
+const { pathToTranslate, pathToTranslateNote } = Astro.props
 ---
 <header >
   <div class="content-grid">

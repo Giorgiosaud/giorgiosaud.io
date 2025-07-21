@@ -1,25 +1,24 @@
 ---
-import { getCollection, getEntry } from "astro:content";
-import Icon from "@components/Icon.astro";
+import { getCollection, getEntry } from 'astro:content'
+import Icon from '@components/Icon.astro'
 import {
-	getLangFromUrl,
-	type RouteNames,
-	useTranslatedPath,
-	useTranslations,
-} from "@i18n/utils";
+  getLangFromUrl,
+  type RouteNames,
+  useTranslatedPath,
+  useTranslations,
+} from '@i18n/utils'
 
 interface Props {
-	pathToTranslate: RouteNames;
-	pathToTranslateNote?:string;
+  pathToTranslate: RouteNames
+  pathToTranslateNote?: string
 }
 
-const { pathToTranslate, pathToTranslateNote } = Astro.props;
-const lang = getLangFromUrl(Astro.url);
-const { translatePath } = useTranslatedPath(lang);
-const langToTranslate = lang === "es" ? "en" : "es";
-const iconToShow = lang === "es" ? "USA" : "Venezuela";
-const lastPath = Astro.url.pathname.split("/").pop() || "";
-
+const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const { translatePath } = useTranslatedPath(lang)
+const langToTranslate = lang === 'es' ? 'en' : 'es'
+const iconToShow = lang === 'es' ? 'USA' : 'Venezuela'
+const lastPath = Astro.url.pathname.split('/').pop() || ''
 ---
 
 <a href={translatePath(pathToTranslate,langToTranslate,pathToTranslateNote)}>

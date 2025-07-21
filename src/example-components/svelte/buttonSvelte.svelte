@@ -1,14 +1,14 @@
 <script>
-import { onMount } from "svelte";
+import { onMount } from 'svelte'
 
-let count = 0;
+let count = 0
 
 const incrementCount = () => {
-	count++;
-};
+  count++
+}
 onMount(async () => {
-	setTimeout(incrementCount, 1000);
-});
+  setTimeout(incrementCount, 1000)
+})
 </script>
 
 <style>
