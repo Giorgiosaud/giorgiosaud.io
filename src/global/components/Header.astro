@@ -14,6 +14,12 @@ const { pathToTranslate, pathToTranslateNote } = Astro.props
     <Navbar pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
   </div>
 </header>
+<link
+    rel="alternate"
+    type="application/rss+xml"
+    title="Your Site's Title"
+    href={new URL("rss.xml", Astro.site)}
+/>
 <style>
   header{
     view-transition-name: header;
