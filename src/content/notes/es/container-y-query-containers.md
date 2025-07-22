@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "CQE001"
+selfHealing: "CQX001"
 starred: true
 title: "Consultas de contenedor y @container explicadas: cómo las usé en este proyecto"
 resume: "Aquí explico cómo utilicé la consulta @container en el rediseño de mi notebook"
