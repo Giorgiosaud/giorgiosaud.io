@@ -5,7 +5,7 @@ starred: true
 title: "Consultas de contenedor y @container explicadas: cómo las usé en este proyecto"
 resume: "Aquí explico cómo utilicé la consulta @container en el rediseño de mi notebook"
 image: { src: "container-query", alt: "Animaciones de scroll en CSS" }
-publishDate: "2025-02-10 15:15"
+publishDate: "2025-10-22 15:15"
 category: "development"
 author: 000001-jorge-saud
 collections: [frontend]

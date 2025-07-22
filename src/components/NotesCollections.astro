@@ -79,7 +79,9 @@ const fullNotes = await getCollection(notes)
     }
     summary::marker {
         font-size: 0.75em;
-        color: var(--color-light)
+    }
+    summary{
+        color: light-dark(var(--color-light), var(--color-dark));
     }
     details::details-content{
         --border-radius:10px

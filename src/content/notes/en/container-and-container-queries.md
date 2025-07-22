@@ -5,7 +5,7 @@ starred: true
 title: "Container and @container Queries Explained how I used in this project"
 resume: "Here I will explain how I used the @container query in my redesign of notebook"
 image: { src: "container-query", alt: "Css scroll animations" }
-publishDate: "2025-02-10 15:15"
+publishDate: "2025-10-22 15:15"
 category: "development"
 author: 000001-jorge-saud
 collections: [frontend]
