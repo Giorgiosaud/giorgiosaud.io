@@ -1,0 +1,28 @@
+<div class="centered">
+<div class="badge-base LI-profile-badge" id="linkedin-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="giorgiosaud" data-version="v1"><a class="badge-base__link LI-simple-link" href="https://cl.linkedin.com/in/giorgiosaud?trk=profile-badge">Jorge Saud Rosal</a></div>
+
+
+</div>
+<style>
+.centered{
+    display:grid;
+    place-content:center;
+    text-align:center;
+    gap: 1rem;
+}
+#linkedin-badge {
+    display: grid;
+    gap: 1rem;
+}
+</style>
+<script>
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const linkedinBadge=document.getElementById('linkedin-badge');
+    if(isDarkMode){
+        linkedinBadge.setAttribute('data-theme','dark');
+    }else{
+        linkedinBadge.setAttribute('data-theme','light');
+    }
+
+</script>
+<script src="https://platform.linkedin.com/badges/js/profile.js" async defer type="text/javascript"></script>
