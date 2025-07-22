@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "CQE001"
+selfHealing: "CQX001"
 starred: true
 title: "Container and @container Queries Explained how I used in this project"
 resume: "Here I will explain how I used the @container query in my redesign of notebook"
@@ -11,6 +11,7 @@ author: 000001-jorge-saud
 collections: [frontend]
 tags: [design-patterns, development, css]
 ---
+
 Container queries are a Baseline 2023 feature, now available in all major browsers including Chrome, Edge, Firefox, and Safari.
 
 - [Here is the specification](https://developer.mozilla.org/en-US/docs/Web/CSS/@container)
