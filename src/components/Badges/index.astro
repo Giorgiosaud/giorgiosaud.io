@@ -15,126 +15,94 @@ const { title, readMore } = Astro.props as Props
     </header>
     <ul class="badges-carousel" data-name="badges-carousel">
         {badges.map(badge=>(
-            <li data-name={badge.data.title} data-title={badge.data.title}>
-                <MinimalBadge imgSrc={badge.data.imgSrc} 
-                title={badge.data.title} 
-                description={badge.data.description}
-                cardColor={badge.data.cardColor}
-                category={badge.data.category}
-                poweredBy={badge.data.poweredBy}
-                readMore={readMore}/>
-            </li>
-            )
-            
-            )}
-        </ul>
-    </section>
-    <style>
-        header{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .count{
-            margin-left: 0.5rem;
-            font-size: 0.8rem;
-            color: var(--color-light);
-            background-color: var(--color-main);
-            padding: 0.2rem 1.5rem;
-            border-radius: 30px;
-        }
-        ul{
-            position: relative;
-            isolation: isolate;
-            padding: 0;
-            margin: 3.5rem;
-            list-style:none;
-            overflow-x: scroll;
-            display: grid;
-            grid-template-rows: [header-start] auto
-            [title-start] auto
-            [description-start] auto
-            [read-more-start] auto
-            [poweredby-start] auto
-            [category-start] auto [category-end];
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none;
-            anchor-name: --badges-carousel;
-            scroll-behavior: smooth;;
-            gap: 0 2rem;
-            scroll-marker-group: after;
-            &::scroll-button(*){
-                position-anchor: --badges-carousel;
-                position: fixed;
-                border-radius: 50%;
-                width: 40px;
-                aspect-ratio: 1;
-                background-color: light-dark(var(--color-light), var(--color-dark));
-                color: light-dark(var(--color-dark), var(--color-light));
-                font-size: 1.5rem;
-                font-weight: bold;
-                border-color: transparent;
-            }
-            &::scroll-button(left){
-                content: "←"/"Scroll Left";    
-                position-area: left center;
-                margin-right: 1rem;
-            }
-            &::scroll-button(right){
-                content: "→"/"Scroll Right";
-                position-area: right center;
-                margin-left: 1rem;
-            }
-            &::scroll-marker-group{
-                position-anchor: --badges-carousel;
-                position: fixed;
-                position-area: block-end;
-                margin-block: 20px;
-                
-                display: grid;
-                grid-auto-columns: auto;
-                gap:10px;
-                grid-auto-flow: column;
-            }
-        }
-        li{
-            display: grid;
-            grid-template-rows:subgrid;
-            grid-row: header-start / category-end;
-            scroll-snap-align: center;
-            scroll-snap-stop: always;
-            &::scroll-marker{
-                content: ""/attr(data-name);
-                width: 20px;
-                height: 20px;
-                background-color: light-dark(var(--color-light),var(--color-dark));
-                border-radius: 50%;
-                transition: width 0.3s ease-in-out, background-color .3s ease-in-out;
-                transition-delay: background-color .3s;
-            }
-            &::scroll-marker:target-current {
-                background-color: light-dark(var(--color-main),var(--color-light));
-                width: 40px;
-                border-radius: 20px;
-
-            }
-        }
-    </style>
-    <script>
-        import {isSafari} from '@global-scripts/isSafari'
-    if(isSafari()){
-        const triggers = document.querySelectorAll<HTMLButtonElement>("[popovertarget]");
-        triggers.forEach((trigger) => {
-            trigger.addEventListener('click',(e:MouseEvent)=>{
-                const trigger=e.target as HTMLButtonElement
-                const popover = (trigger.closest('article') as HTMLElement).querySelector('.full') as HTMLElement
-                const rect = trigger.getBoundingClientRect();
-                popover.style.top = `${rect.
-                bottom + window.scrollY}px`;
-                popover.style.left = `${rect.left + window.scrollX}px`;
-            })
-
-        
-        });
+        <li data-name={badge.data.title} data-title={badge.data.title}>
+            <MinimalBadge imgSrc={badge.data.imgSrc} 
+            title={badge.data.title} 
+            description={badge.data.description}
+            cardColor={badge.data.cardColor}
+            category={badge.data.category}
+            poweredBy={badge.data.poweredBy}
+            readMore={readMore}/>
+        </li>
+        ))}
+    </ul>
+</section>
+<style>
+   section{
+    margin-block:1lh;
+   }
+    header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
+    .count{
+        margin-left: 0.5rem;
+        font-size: 0.8rem;
+        color: var(--color-light);
+        background-color: var(--color-main);
+        padding: 0.2rem 1.5rem;
+        border-radius: 30px;
+    }
+    ul{
+        display: grid;
+        grid-auto-flow: column;
+        overflow-x: scroll;
+        width: 100%;
+        margin-block: calc(var(--spacing) * 20);
+        anchor-name: --badges-carousel;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+        scroll-behavior: smooth;;
+        scroll-marker-group: after;
+        &::scroll-marker-group{
+            position-anchor: --badges-carousel;
+            position: fixed;
+            position-area: block-end;
+            margin-block: 20px;
+            
+            display: grid;
+            grid-auto-columns: auto;
+            gap:10px;
+            grid-auto-flow: column;
+        } 
+    }
+    li{
+        width: 250px;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        &::scroll-marker{
+            content: ""/attr(data-name);
+            width: 20px;
+            height: 20px;
+            background-color: light-dark(var(--color-light),var(--color-dark));
+            border-radius: 50%;
+            transition: width 0.3s ease-in-out, background-color .3s ease-in-out;
+            transition-delay: background-color .3s;
+        }
+        &::scroll-marker:target-current {
+            background-color: light-dark(var(--color-main),var(--color-light));
+            width: 40px;
+            border-radius: 20px;
+
+        }
+    }
+</style>
+<script>
+    import {isSafari} from '@global-scripts/isSafari'
+if(isSafari()){
+    const triggers = document.querySelectorAll<HTMLButtonElement>("[popovertarget]");
+    triggers.forEach((trigger) => {
+        trigger.addEventListener('click',(e:MouseEvent)=>{
+            const trigger=e.target as HTMLButtonElement
+            const popover = (trigger.closest('article') as HTMLElement).querySelector('.full') as HTMLElement
+            const rect = trigger.getBoundingClientRect();
+            popover.style.top = `${rect.
+            bottom + window.scrollY}px`;
+            popover.style.left = `${rect.left + window.scrollX}px`;
+        })
+
+    
+    });
+}
 </script>
