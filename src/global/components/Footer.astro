@@ -11,7 +11,8 @@
     background: light-dark(var(--color-light),var(--color-dark));
     padding: calc(var(--spacing) * 2) 0;
     p {
-      font-size: calc(var(--font-size) * 0.8);
+      --_font-size: var(--font-size, clamp(.4rem, .6cqw, 1rem));
+      font-size: var(--_font-size);
     }
   }
 </style>
