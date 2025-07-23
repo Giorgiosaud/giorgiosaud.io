@@ -13,149 +13,82 @@ const imgSrc = note.data.image
 const link = lang == 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`
 const nameImage = `${note.id}-${context}`
 ---
-<article aria-label={note.data.title}>
+<article aria-label={note.data.title} data-link={link} id={nameImage}>
     <div class="wrapper">
-        <div class="title">
-            <a href={link}>
-                <h2>{note.data.title}</h2>
-            </a>
+        <div class="title" title={note.data.title}>
+            <h2>{note.data.title}</h2>
         </div>
-        <img src={imgSrc} alt={note.data.title} >
-        <div class="metadata">
-            <time datetime={note.data.publishDate}>{Intl.DateTimeFormat('Es-es').format(note.data.publishDate)}</time>
-            <div class="collections">
-                Collections: {(note.data.collections).map((el:{id:string})=>el.id).join(',')}
-            </div>
-            <ul class="tags">
-                {note.data.tags.map((tag:string)=>(<li class="tag">{tag}</li>))}
-            </ul>
-        </div>
-        <div class="description">
+        <figure>
+            <img class="img" src={imgSrc} alt={note.data.title} >
+        </figure>
+    
+        <div class="description" title={note.data.resume}>
             <p>{note.data.resume}</p>
-        </div>
-        <div class="buttons">
-            <a class="button button-primary" href={link}>{t('notes.read-more')}</a>
         </div>
     </div>
 </article>
 <style define:vars={{nameImage}}>
     article{
-        container: note/normal;
-        
+        container: note/inline-size;
+      
+    }
+    .wrapper{
         --_color:var(--color,light-dark(var(--color-dark),var(--color-light)));
         --_background-color:var(--background-color,light-dark(var(--color-light),var(--color-dark)));
-        --_border-radius:var(--border-radius,0);
-        
+        --_border-radius:var(--border-radius,10px);
+        display: grid;
         border-radius: var(--_border-radius);
         background-color: var(--_background-color);
         color: var(--_color);
-        display: grid;
-        grid-template-rows: subgrid;
-        grid-row: title/buttons-end;
-    }
-    .wrapper{
-        display: grid;
-        --_gap: var(--gap, .5rem);
-        --_grid-template: var(--grid-template,
-        "title" 
-        "image" 
-        "metadata" 
-        "description"
-        "buttons");
-        --_place-content: var(--place-content, center);
-        --_padding-block:var(--padding-block,1rem);
-        --_padding-inline:var(--padding-inline,1rem);
-        --_margin-inline:var(--margin-inline,1rem);
-        
-        place-items:center;
-        padding-block: var(--_padding-block);
-        padding-inline: var(--_padding-inline);
-        display: grid;
-        place-content: var(--_place-content);
-        grid-template: var(--_grid-template);
-        gap: var(--_gap);
-        grid-template-rows: subgrid;
-        grid-row: title/buttons-end;
+        width: 100%;
+
         .title{
-            grid-area: title;
-            margin-inline: var(--_margin-inline);
+            --_padding-inline: var(--padding-inline, 1rem);
+
+            padding-inline: var(--_padding-inline);
             h2{
-                font-size: clamp(1.5rem, 2vw + 1rem, 2rem);
+                --_font-size: var(--font-size, clamp(1rem, 7cqw, 2rem));
+                font-size: var(--_font-size);
+                text-wrap: balance;
+                text-decoration: none;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;  
+                overflow: hidden;
+                height: 4.5lh;
+
             }
         }
-        img{
-            --_border-radius: var(--border-radius, 0);
-            view-transition-name: var(--nameImage);
-            grid-area: image;
-            mask-image: linear-gradient(rgb(0 0 0 / 100%),rgb(0 0 0 / 100%) 80%, transparent);
-            border-radius: var(--_border-radius);
-            
-            margin: auto;
-        }
-        .metadata{
-            grid-area: metadata;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            place-self: stretch;
-            
-            .tags {
-                display: flex;
+        figure{
+            img{
                 width: 100%;
-                gap: 1rem;
-                align-items: center;
-                justify-content: center;
-                margin-block: 1rem;
-                flex-wrap: wrap;
-                .tag{
-                    background: light-dark(var(--color-dark),var(--color-light));
-                    color: light-dark(var(--color-light),var(--color-dark));
-                    opacity: .8;
-                    border-radius: 5px;
-                    padding: 0.2rem 0.5rem;
-                    margin: 0;
-                }
             }
         }
         .description{
-            grid-area: description;
-            margin-inline: var(--_margin-inline);
-            p{
-                margin: 0;
-                
-            }
-        }
-        .buttons{
-            --_padding-inline: var(--padding-inline, 1rem);
-            --padding-inline: 1rem;
-            
-            grid-area: buttons;
-            width: 100%;
-            place-self: stretch;
+             --_padding-inline: var(--padding-inline, 1rem);
+             --_padding-block: var(--padding-block, 1rem);
+
             padding-inline: var(--_padding-inline);
-            
-            a{
-                text-align: center;
-                display: block;
+            padding-block: var(--_padding-block);
+            p{
+                 --_font-size: var(--font-size, clamp(1rem, 7cqw, 1.5rem));
+                font-size: var(--_font-size);
+                text-wrap: pretty;
+                text-decoration: none;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;  
+                overflow: hidden;
+                height: 4.5lh;
             }
-        }
-        
-        @container note (width > 90ch) {
-            --grid-template: 
-            "image image image title title" 
-            "image image image description description" 
-            "image image image metadata metadata" 
-            "buttons buttons buttons buttons buttons";
-            --padding-inline: 0;
-            
-            img{
-                --border-radius:  0 50px 50px 0;
-            }
-            .metadata{
-                margin-inline: var(--_margin-inline);
-                place-self: stretch;
-            }
-            
         }
     }
 </style>
+<script define:vars={{nameImage}}>
+    const article = document.querySelector(`#${nameImage}`);
+    article.addEventListener('click',(e)=>{
+        link=e.currentTarget.dataset.link;
+        window.location.href=link;
+    })
+
+</script>
