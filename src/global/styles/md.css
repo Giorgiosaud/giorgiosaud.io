@@ -1,3 +1,4 @@
+@layer global{
 * {
   --_color: var(--color, light-dark(var(--color-main), var(--color-light)));
   color: var(--_color);
@@ -49,4 +50,6 @@ blockquote {
     position: absolute;
     left: 0;
   }
+}
+
 }
