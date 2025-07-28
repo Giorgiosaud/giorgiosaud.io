@@ -13,8 +13,7 @@ const { collection } = Astro.props
 const notes = (await getCollection(collection))
   .filter((note) => !note.data.draft)
   .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
-  .slice(0, 4)
-// const notesCount=notes.length;
+  .slice(0, 6)
 ---
 
 <section class="latest-notes" aria-label={t('notes.latest.title')}>
@@ -25,22 +24,19 @@ const notes = (await getCollection(collection))
     {notes.map(note=>(<li ><Note note={note} context="latest" /></li>))}
   </ul>
 </section>
+
 <style>
   ul{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
-    grid-auto-columns: minmax(30rem, 1fr);
-    grid-template-rows: [title] auto [title-end image] auto [image-end metadata] auto [metadata-end description] auto [description-end buttons] auto [buttons-end];
-    gap: 1rem;
-    place-items: center stretch;
+    grid-auto-flow: column;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)));
+    gap:1rem;
     overflow-x: scroll;
     scrollbar-width: none;
     scroll-snap-type: x mandatory;
+    
     li{
-      display: grid;
-      grid-template-rows: subgrid;
-      grid-row: title/buttons-end;
-      
+      width: 200px;
       scroll-snap-align: center;
       scroll-snap-stop: always;
     }

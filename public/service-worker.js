@@ -1,5 +1,5 @@
 // Name of the cache used in this version of the service worker.
-const PRECACHE = 'precache-v12'
+const PRECACHE = 'precache-v13'
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
