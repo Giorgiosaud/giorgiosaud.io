@@ -1,29 +1,29 @@
-import { defineCollection, z } from 'astro:content'
-import { glob } from 'astro/loaders'
+import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
+
+const collectionSchema = z.object({
+  title: z.string(),
+  icon: z.string(),
+  description: z.string(),
+});
 
 export const collections = defineCollection({
   loader: glob({
-    pattern: '**\/[^_]*.md',
+    pattern: '**/[^_]*.md',
     base: './src/content/collections/en',
   }),
-  schema: z.object({
-    title: z.string(),
-    icon: z.string(),
-    description: z.string(),
-  }),
-})
+  schema: collectionSchema,
+});
+
 export const colecciones = defineCollection({
   loader: glob({
-    pattern: '**\/[^_]*.md',
+    pattern: '**/[^_]*.md',
     base: './src/content/collections/es',
   }),
-  schema: z.object({
-    title: z.string(),
-    icon: z.string(),
-    description: z.string(),
-  }),
-})
+  schema: collectionSchema,
+});
+
 export default {
   collections,
   colecciones,
-}
+};

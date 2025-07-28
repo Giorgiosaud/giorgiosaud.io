@@ -56,6 +56,24 @@ export default defineConfig({
         access: 'secret',
         optional: true,
       }),
+      RESEND_TO_EMAIL: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'jorgelsaud@gmail.com'
+      }),
+      RESEND_FROM_EMAIL: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'notebook@web.giorgiosaud.io'
+      }),
+      RESEND_FROM_NAME: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'Notebook'
+      })
     },
   },
 

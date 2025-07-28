@@ -1,5 +1,5 @@
 import { ActionError, defineAction } from 'astro:actions'
-import { RESEND_API_KEY } from 'astro:env/server'
+import { RESEND_API_KEY, RESEND_FROM_EMAIL, RESEND_FROM_NAME, RESEND_TO_EMAIL } from 'astro:env/server'
 
 import { Resend } from 'resend'
 
@@ -17,8 +17,8 @@ export const sendEmail = defineAction({
   }),
   handler: async (input) => {
     const { data, error } = await resend.emails.send({
-      from: 'Website <notebook@web.giorgiosaud.io>',
-      to: ['jorgelsaud@gmail.com'],
+      from: `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>`,
+      to: [RESEND_TO_EMAIL],
       subject: `Email from ${input.name} in Website Form`,
       html: `
             <h1>New message from ${input.name}</h1>
