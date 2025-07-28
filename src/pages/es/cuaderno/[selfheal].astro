@@ -1,25 +1,12 @@
 ---
-import { getCollection } from 'astro:content'
-import NotFound from '@pages/404.astro'
+import { selfHeal } from '@helpers/selfHeal';
+import NotFound from '@pages/404.astro';
 
-export const prerender = false
+export const prerender = false;
 
-const notes = await getCollection('notas')
-const selfhealPath = Astro.params.selfheal
-const selfHealRegex = /(?<=^|-)[^aeiouAEIOU-]{6}(?=-|$)/g
-const selfHealing = selfhealPath?.match(selfHealRegex) || []
-
-if (selfHealing.length) {
-  for (const sh of selfHealing) {
-    const note = notes.find((note) => note.data.selfHealing === sh)
-    if (note) {
-      Astro.response.status = 301
-      Astro.response.headers.set('location', `/es/cuaderno/${note.id}`)
-      break
-    }
-  }
-} else {
-  Astro.response.status = 404
+const redirect = await selfHeal(Astro, 'notas');
+if (redirect) {
+  return redirect;
 }
 ---
 
