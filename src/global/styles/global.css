@@ -29,7 +29,7 @@
   }
 
   @view-transition {
-    /* biome-ignore lint/correctness/noUnknownProperty: <https://developer.mozilla.org/en-US/docs/Web/CSS/@view-transition> */
+    /* biome-ignore lint/correctness/noUnknownProperty: This is a standard-track CSS View Transition property. */
     navigation: auto;
   }
 }
@@ -192,5 +192,11 @@
     border-color: light-dark(var(--color-dark), var(--color-light));
     background-color: light-dark(var(--color-light), var(--color-dark));
     outline-color: var(--color-main);
+  }
+}
+.opened + main{
+  padding-top: 68px;
+  @media (width >= 48rem) {
+    padding: 0;
   }
 }
