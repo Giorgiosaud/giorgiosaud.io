@@ -23,12 +23,7 @@ const fonts = [
   'https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLCz7Z1xlFd2JQEk.woff2',
   'https://fonts.gstatic.com/s/poppins/v23/pxiByp8kv8JHgFVrLEj6Z1xlFd2JQEk.woff2',
 ]
-
-const imgSrc=image.includes('opengraph.jpg')?image:cloudinarySrc(image);
 const lang = getLangFromUrl(Astro.url)
-
-import { TAG_MANAGER_ID } from 'astro:env/client'
-import { cloudinarySrc } from '@helpers/cloudinary'
 ---
 <head>
   <!-- Google Tag Manager -->
@@ -71,14 +66,14 @@ import { cloudinarySrc } from '@helpers/cloudinary'
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url || 'https://giorgiosaud.io/'} />
-    <meta property="og:image" content={imgSrc} />
+    <meta property="og:image" content={image} />
     <meta property="og:site_name" content="Giorgiosaud.io" />
     <meta property="og:locale" content={lang=='en'?'en_US':'es_VE'} />
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fixedTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={imgSrc} />
+    <meta name="twitter:image" content={image} />
     <meta name="twitter:site" content="@giorgiosaud" />
   <Favicons/>
   <PWA />
