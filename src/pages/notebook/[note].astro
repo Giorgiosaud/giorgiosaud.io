@@ -24,11 +24,11 @@ export async function getStaticPaths() {
 const { page, pathToTranslateNote } = Astro.props
 const { Content } = await render(page)
 const { draft, title, resume, image, publishDate } = page.data
-const imgSrc = image
-  ? cloudinarySrc('notebook-posts/' + image.src, {
+const imgSrc = image.src.includes('http://')
+  ? image.src
+  : cloudinarySrc('notebook-posts/' + image.src, {
       width: 500,
-    })
-  : image
+    });
 const imageName = `${page.id}-latest`
 const selfHealing = page.data.selfHealing || page.id
 ---
