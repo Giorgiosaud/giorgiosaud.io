@@ -60,20 +60,20 @@ export default defineConfig({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'jorgelsaud@gmail.com'
+        default: 'jorgelsaud@gmail.com',
       }),
       RESEND_FROM_EMAIL: envField.string({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'notebook@web.giorgiosaud.io'
+        default: 'notebook@web.giorgiosaud.io',
       }),
       RESEND_FROM_NAME: envField.string({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'Notebook'
-      })
+        default: 'Notebook',
+      }),
     },
   },
 
