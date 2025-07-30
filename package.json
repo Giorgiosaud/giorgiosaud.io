@@ -14,23 +14,22 @@
     "@astrojs/mdx": "4.3.1",
     "@astrojs/react": "^4.3.0",
     "@astrojs/rss": "^4.0.12",
-    "@astrojs/sitemap": "^3.4.1",
+    "@astrojs/sitemap": "^3.4.2",
     "@astrojs/svelte": "^7.1.0",
-    "@astrojs/vercel": "8.2.2",
+    "@astrojs/vercel": "8.2.3",
     "@astrojs/vue": "^5.1.0",
     "@cloudinary/url-gen": "^1.21.0",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
-    "astro": "5.12.0",
-    "lottie-web": "^5.12.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "resend": "^4.6.0",
-    "svelte": "^5.34.8",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "astro": "5.12.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "resend": "^4.7.0",
+    "svelte": "^5.37.1",
     "typescript": "^5.8.3",
-    "vue": "^3.5.17"
+    "vue": "^3.5.18"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.2"
+    "@biomejs/biome": "2.1.3"
   }
 }
