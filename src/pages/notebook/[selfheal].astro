@@ -1,12 +1,12 @@
 ---
-import { selfHeal } from '@helpers/selfHeal';
-import NotFound from '@pages/404.astro';
+import { selfHeal } from '@helpers/selfHeal'
+import NotFound from '@pages/404.astro'
 
-export const prerender = false;
+export const prerender = false
 
-const redirect = await selfHeal(Astro, 'notes');
+const redirect = await selfHeal(Astro, 'notes')
 if (redirect) {
-  return redirect;
+  return redirect
 }
 ---
 

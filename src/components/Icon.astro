@@ -1,29 +1,29 @@
 ---
-const modules = import.meta.glob('../icons/**/*.{astro,svg}');
+const modules = import.meta.glob('../icons/**/*.{astro,svg}')
 
 export interface Props {
-  name: string;
+  name: string
 }
-const { name } = Astro.props;
+const { name } = Astro.props
 
-let IconComponent = null;
+let IconComponent = null
 
 // Find the correct module path
-const path = Object.keys(modules).find(p => {
-    const pathParts = p.split('/');
-    const fileNameWithExt = pathParts.pop() || '';
-    const fileName = fileNameWithExt.split('.')[0];
+const path = Object.keys(modules).find((p) => {
+  const pathParts = p.split('/')
+  const fileNameWithExt = pathParts.pop() || ''
+  const fileName = fileNameWithExt.split('.')[0]
 
-    if (fileName === 'index') {
-        const parentDir = pathParts.pop();
-        return parentDir === name;
-    }
-    return fileName === name;
-});
+  if (fileName === 'index') {
+    const parentDir = pathParts.pop()
+    return parentDir === name
+  }
+  return fileName === name
+})
 
 if (path) {
-    const module = await modules[path]();
-    IconComponent = module.default;
+  const module = await modules[path]()
+  IconComponent = module.default
 }
 ---
 

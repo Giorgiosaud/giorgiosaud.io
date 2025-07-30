@@ -1,9 +1,11 @@
 {
   "extends": "astro/tsconfigs/strict",
+
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
     "baseUrl": "src",
+    "types": ["astro/client"],
     "paths": {
       "@templates/*": ["global/templates/*"],
       "@icons/*": ["icons/*"],
@@ -12,7 +14,7 @@
       "@example-components/*": ["example-components/*"],
       "@global-styles/*": ["global/styles/*"],
       "@global-scripts/*": ["global/scripts/*"],
-      "@images/*": ["images/*"],
+      "@images/*": ["assets/images/*"],
       "@i18n/*": ["global/i18n/*"],
       "@helpers/*": ["helpers/*"],
       "@pages/*": ["pages/*"]
