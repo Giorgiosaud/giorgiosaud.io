@@ -30,6 +30,7 @@
     "vue": "^3.5.18"
   },
   "devDependencies": {
+    "@astrojs/ts-plugin": "^1.10.4",
     "@biomejs/biome": "2.1.3"
   }
 }
