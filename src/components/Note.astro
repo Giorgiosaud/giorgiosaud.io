@@ -48,16 +48,20 @@ const nameImage = `${note.id}-${context}`
             --_padding-inline: var(--padding-inline, 1rem);
 
             padding-inline: var(--_padding-inline);
+            height: 6.5lh;
+            place-content: center;
+            padding-block: .5rem;
             h2{
                 --_font-size: var(--font-size, clamp(1rem, 7cqw, 2rem));
                 font-size: var(--_font-size);
                 text-wrap: balance;
                 text-decoration: none;
                 display: -webkit-box;
-                -webkit-line-clamp: 2;
+                -webkit-line-clamp: 3;
                 -webkit-box-orient: vertical;  
                 overflow: hidden;
-                height: 4.5lh;
+                line-height: 1.5;
+                max-height: 3.5lh;
 
             }
         }
