@@ -3,7 +3,7 @@ draft: false
 selfHealing: '0JSCRS'
 title: "Lo que se viene: Carruseles sin JS casi aqui ya en chrome"
 resume: "Cómo construir carruseles interactivos usando solo HTML y CSS, gracias a las nuevas propiedades scroll-marker y scroll-marker-group."
-image: { src: "css-carousel", alt: "Ejemplo de carrusel solo con CSS" }
+image: { src: "css-carousels", alt: "Ejemplo de carrusel solo con CSS" }
 publishDate: "2025-07-30 12:00"
 category: "development"
 author: 000001-jorge-saud
