@@ -25,6 +25,7 @@ const nameImage = `${note.id}-${context}`
         <div class="description" title={note.data.resume}>
             <p>{note.data.resume}</p>
         </div>
+        <a href={link} class="link"></a>
     </div>
 </article>
 <style define:vars={{nameImage}}>
@@ -33,6 +34,7 @@ const nameImage = `${note.id}-${context}`
       
     }
     .wrapper{
+        position: relative;
         --_color:var(--color,light-dark(var(--color-dark),var(--color-light)));
         --_background-color:var(--background-color,light-dark(var(--color-light),var(--color-dark)));
         --_border-radius:var(--border-radius,10px);
@@ -83,12 +85,18 @@ const nameImage = `${note.id}-${context}`
             }
         }
     }
+    .link{
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        display: block;
+    }
 </style>
-<script define:vars={{nameImage}}>
+<!-- <script define:vars={{nameImage}}>
     const article = document.querySelector(`#${nameImage}`);
     article.addEventListener('click',(e)=>{
         link=e.currentTarget.dataset.link;
         window.location.href=link;
     })
 
-</script>
+</script> -->
