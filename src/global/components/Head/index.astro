@@ -23,90 +23,84 @@ const fonts = [
 import { TAG_MANAGER_ID } from 'astro:env/client'
 ---
 <head>
-<!-- Google Tag Manager -->
-<script>
-import { TAG_MANAGER_ID } from "astro:env/client";
-(function(
-  w: Window & { [key: string]: any },
-  d: Document,
-  s: string,
-  l: string,
-  i: string
-) {
-  w[l] = w[l] || [];
-  w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-  var f = d.getElementsByTagName(s)[0],
-    j = d.createElement(s),
-    dl = l != 'dataLayer' ? '&l=' + l : '';
-  if (j instanceof HTMLScriptElement) {
-    j.async = true;
-    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-  }
-  f.parentNode?.insertBefore(j, f);
-})(window as Window & { [key: string]: any }, document, 'script', 'dataLayer', TAG_MANAGER_ID || '');
-</script>
-<!-- End Google Tag Manager -->
-    <meta charset="UTF-8" />
-    <meta
-    content="width=device-width, initial-scale=1.0"
-    name="viewport"
-    />
-    <meta
-    content="Jorge Saud"
-    name="author"
-    />
-    <meta
-    content={Astro.generator}
-    name="generator"
-    />
-    <meta name="description" content={description}>
-    <slot name="meta" />
-
-    <title>{fixedTitle}</title>
-    <Favicons/>
-    <PWA />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
-    {fonts.map(font=>(
-        <link
-        rel="preload"
-        href={font}
-        as="font"
-        type="font/woff2"/>
-        ))
-    }
+  <!-- Google Tag Manager -->
+  <script>
+    import { TAG_MANAGER_ID } from "astro:env/client";
+    (function(w: Window & { [key: string]: any },d: Document,s: string,l: string,i: string) {  
+      w[l] = w[l] || [];
+      w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != 'dataLayer' ? '&l=' + l : '';
+      if (j instanceof HTMLScriptElement) {
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      }
+      f.parentNode?.insertBefore(j, f);
+    })(window as Window & { [key: string]: any }, document, 'script', 'dataLayer', TAG_MANAGER_ID || '');
+  </script>
+  <!-- End Google Tag Manager -->
+  <meta charset="UTF-8" />
+  <meta
+  content="width=device-width, initial-scale=1.0"
+  name="viewport"
+  />
+  <meta
+  content="Jorge Saud"
+  name="author"
+  />
+  <meta
+  content={Astro.generator}
+  name="generator"
+  />
+  <meta name="description" content={description}>
+  <slot name="meta" />
+  
+  <title>{fixedTitle}</title>
+  <Favicons/>
+  <PWA />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  {fonts.map(font=>(
     <link
-    href="/sitemap-index.xml"
-    rel="sitemap"
-    />
-
-    <script type="speculationrules">
-        {
-            "prerender": [
-            {
-                "source": "document",
-                "where": {
-                    "and": [
-                    { 
-                        "href_matches": "/*" 
-                    },
-                    { 
-                        "not": {
-                            "href_matches": "/logout/*" 
-                        } 
-                    }
-                    ]
-                },
-                "eagerness": "moderate"
-            }
-            ]
-        }
-    </script>
+    rel="preload"
+    href={font}
+    as="font"
+    type="font/woff2"/>
+    ))
+  }
+  <link
+  href="/sitemap-index.xml"
+  rel="sitemap"
+  />
+  
+  <script type="speculationrules">
     {
-        structuredData &&
-        <script type="application/ld+json" set:html={structuredData}>
-        </script>
+      "prerender": [
+      {
+        "source": "document",
+        "where": {
+          "and": [
+          { 
+            "href_matches": "/*" 
+          },
+          { 
+            "not": {
+              "href_matches": "/logout/*" 
+            } 
+          }
+          ]
+        },
+        "eagerness": "moderate"
+      }
+      ]
     }
-    
+  </script>
+  {
+    structuredData &&
+    <script type="application/ld+json" set:html={structuredData}>
+    </script>
+  }
+  
 </head>

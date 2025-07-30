@@ -1,5 +1,10 @@
 import { ActionError, defineAction } from 'astro:actions'
-import { RESEND_API_KEY, RESEND_FROM_EMAIL, RESEND_FROM_NAME, RESEND_TO_EMAIL } from 'astro:env/server'
+import {
+  RESEND_API_KEY,
+  RESEND_FROM_EMAIL,
+  RESEND_FROM_NAME,
+  RESEND_TO_EMAIL,
+} from 'astro:env/server'
 
 import { Resend } from 'resend'
 

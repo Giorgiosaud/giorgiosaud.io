@@ -194,7 +194,7 @@
     outline-color: var(--color-main);
   }
 }
-.opened + main{
+.opened + main {
   padding-top: 68px;
   @media (width >= 48rem) {
     padding: 0;

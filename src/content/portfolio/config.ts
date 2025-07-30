@@ -1,5 +1,5 @@
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { defineCollection, z } from 'astro:content'
+import { glob } from 'astro/loaders'
 
 const portfolioSchema = z.object({
   draft: z.boolean(),
@@ -18,19 +18,19 @@ const portfolioSchema = z.object({
   }),
   publishDate: z.string().transform((str) => new Date(str)),
   technologies: z.array(z.string()),
-});
+})
 
 export const portfolio = defineCollection({
   loader: glob({ pattern: '*.(md|mdx)', base: './src/content/portfolio/en' }),
   schema: portfolioSchema,
-});
+})
 
 export const portafolio = defineCollection({
   loader: glob({ pattern: '*.(md|mdx)', base: './src/content/portfolio/es' }),
   schema: portfolioSchema,
-});
+})
 
 export default {
   portafolio,
   portfolio,
-};
+}
