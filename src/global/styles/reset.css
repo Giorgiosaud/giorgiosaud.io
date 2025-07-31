@@ -101,6 +101,9 @@
     box-shadow: none;
     appearance: none;
   }
+  div {
+    box-sizing: border-box;
+  }
 
   /* Remove animations and transitions for users who prefer reduced motion */
   @media (prefers-reduced-motion: reduce) {
