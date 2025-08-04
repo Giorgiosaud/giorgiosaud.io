@@ -3,7 +3,7 @@ draft: false
 selfHealing: 'GSWBRL'
 title: "Effortless Grids: A Simpler Way to Build Responsive Layouts based on Kevin Powell"
 resume: "How to build interactive carousels using only HTML and CSS, thanks to the new scroll-marker and scroll-marker-group properties."
-image: { src: "css-carousels", alt: "Pure CSS carousel example" }
+image: { src: "grid-simplified", alt: "Effortless Grids" }
 publishDate: "2025-08-04 18:00"
 category: "development"
 author: 000001-jorge-saud
