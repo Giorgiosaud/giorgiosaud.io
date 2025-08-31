@@ -1,14 +1,25 @@
 ---
 draft: false
-selfHealing: 'GSWBRL'
-title: "Effortless Grids: A Simpler Way to Build Responsive Layouts based on Kevin Powell"
-resume: "How to build interactive carousels using only HTML and CSS, thanks to the new scroll-marker and scroll-marker-group properties."
-image: { src: "grid-simplified", alt: "Effortless Grids" }
-publishDate: "2025-08-04 18:00"
-category: "development"
+selfHealing: GSWBRL
+title: Effortless Grids for Responsive Layouts Made Easy
+resume: "Effortless Grids: A Simpler Way to Build Responsive Layouts based on Kevin Powell"
+description: Create stunning responsive layouts effortlessly with a single grid class. Simplify your design process and enhance your site's flexibility!
+image:
+  src: grid-simplified
+  alt: Effortless Grids
+publishDate: 2025-08-04T22:00:00.000Z
+category: development
 author: 000001-jorge-saud
-collections: [migration, css]
-tags: [css, grid, webdevelopment]
+collections:
+  - migration
+  - css
+tags:
+  - css
+  - grid
+  - webdevelopment
+fmContentType: Notes
+cover: ../../../assets/images/grid-simplified.webp
+coverAlt: Grid elements in preview
 ---
 
 ## Intro

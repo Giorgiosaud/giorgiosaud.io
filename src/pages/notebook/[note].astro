@@ -1,9 +1,9 @@
 ---
+import { Image,Picture } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
 import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
 import { cloudinarySrc } from '@helpers/cloudinary'
-
 export async function getStaticPaths() {
   const pages = await getCollection('notes')
   const pagesTranslated = await getCollection('notas')
@@ -23,17 +23,17 @@ export async function getStaticPaths() {
 
 const { page, pathToTranslateNote } = Astro.props
 const { Content } = await render(page)
-const { draft, title, resume, image, publishDate } = page.data
+const { draft, title, resume, image, publishDate, cover, coverAlt, description } = page.data
 const imgSrc = image.src.includes('http://')
   ? image.src
   : cloudinarySrc('notebook-posts/' + image.src, {
       width: 500,
-    });
+    })
 const imageName = `${page.id}-latest`
 const selfHealing = page.data.selfHealing || page.id
 ---
 <NoteTemplate
-  description={resume}
+  description={description}
   draft={draft}
   title={title}
   image={imgSrc}
@@ -41,7 +41,9 @@ const selfHealing = page.data.selfHealing || page.id
   pathToTranslateNote={pathToTranslateNote}
 >
 <figure>
-<img src={imgSrc} alt={image.alt}>
+  {cover && <Picture src={cover} alt={coverAlt}/>}
+  {!cover && <img src={imgSrc} alt={image.alt}/>}
+
 <figcaption>{image.alt}</figcaption>
 </figure>
 <h1>{title}</h1>

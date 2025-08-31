@@ -1,15 +1,21 @@
 ---
 draft: false
-selfHealing: "CQX001"
+selfHealing: CQX001
 starred: true
-title: "Container and @container Queries Explained how I used in this project"
-resume: "Here I will explain how I used the @container query in my redesign of notebook"
-image: { src: "container-query", alt: "Css scroll animations" }
-publishDate: "2025-07-22 15:15"
-category: "development"
+title: Understanding Container Queries in Web Development
+description: Here I will explain how I used the @container query in my redesign of notebook
+category: development
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [design-patterns, development, css]
+collections:
+  - frontend
+tags:
+  - design-patterns
+  - development
+  - css
+publishDate: 2025-07-22T05:00:00.000Z
+cover: ../../../assets/images/container-query.webp
+fmContentType: Notes
+coverAlt: Containers Wood
 ---
 
 Container queries are a Baseline 2023 feature, now available in all major browsers including Chrome, Edge, Firefox, and Safari.
