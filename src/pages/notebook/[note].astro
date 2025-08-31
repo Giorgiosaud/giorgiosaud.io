@@ -1,5 +1,5 @@
 ---
-import { Image,Picture } from 'astro:assets'
+import { Picture } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
 import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
@@ -23,28 +23,19 @@ export async function getStaticPaths() {
 
 const { page, pathToTranslateNote } = Astro.props
 const { Content } = await render(page)
-const { draft, title, resume, image, publishDate, cover, coverAlt, description } = page.data
-const imgSrc = image.src.includes('http://')
-  ? image.src
-  : cloudinarySrc('notebook-posts/' + image.src, {
-      width: 500,
-    })
-const imageName = `${page.id}-latest`
-const selfHealing = page.data.selfHealing || page.id
+const { draft, title, publishDate, cover, coverAlt, description,selfHealing } = page.data
 ---
 <NoteTemplate
   description={description}
   draft={draft}
   title={title}
-  image={imgSrc}
+  image={cover.src}
   publishedAt={publishDate}
   pathToTranslateNote={pathToTranslateNote}
 >
 <figure>
   {cover && <Picture src={cover} alt={coverAlt}/>}
-  {!cover && <img src={imgSrc} alt={image.alt}/>}
-
-<figcaption>{image.alt}</figcaption>
+<figcaption>{coverAlt}</figcaption>
 </figure>
 <h1>{title}</h1>
 <Content/>
