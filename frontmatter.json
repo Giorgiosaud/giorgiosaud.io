@@ -90,6 +90,92 @@
           "type": "tags"
         }
       ]
+    },
+    {
+      "name": "Notas",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "draft",
+          "name": "draft",
+          "type": "draft"
+        },
+        {
+          "title": "title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "Cover",
+          "name": "cover",
+          "type":"image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "Cover Alt Text",
+          "name": "coverAlt",
+          "type":"string"
+        },
+        {
+          "title": "selfHealing",
+          "name": "selfHealing",
+          "type": "string"
+        },
+        {
+          "title": "image",
+          "name": "image",
+          "type": "fields",
+          "fields": [
+            {
+              "title": "src",
+              "name": "src",
+              "type": "string"
+            },
+            {
+              "title": "alt",
+              "name": "alt",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "title": "publishDate",
+          "name": "publishDate",
+          "type": "datetime"
+        },
+        {
+          "title": "category",
+          "name": "category",
+          "type": "categories"
+        },
+        {
+          "title": "author",
+          "name": "author",
+          "type": "string"
+        },
+        {
+          "title": "collections",
+          "name": "collections",
+          "type": "choice",
+          "choices": [
+            "architecture",
+            "patterns",
+            "astro",
+            "frontend",
+            "css"
+          ]
+        },
+        {
+          "title": "tags",
+          "name": "tags",
+          "type": "tags"
+        }
+      ]
     }
   ],
   "frontMatter.content.pageFolders": [
@@ -98,10 +184,15 @@
       "previewPath": "notebook",
       "path": "[[workspace]]/src/content/notes/en",
       "defaultLocale": "en"
+    },
+    {
+      "title": "Notas",
+      "previewPath": "es/cuaderno",
+      "path": "[[workspace]]/src/content/notes/es",
+      "defaultLocale": "es"
     }
   ],
   "frontMatter.content.publicFolder": {
-    "path": "src/assets",
     "relative": true
   },
   "frontMatter.git.enabled": true
