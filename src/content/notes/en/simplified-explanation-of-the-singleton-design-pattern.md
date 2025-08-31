@@ -2,14 +2,24 @@
 draft: false
 selfHealing: "000011"
 starred: true
-title: "Simplified Explanation of the Singleton Design Pattern"
-resume: "The primary purpose of this pattern is to restrict the instantiation of a class to a single instance. Although its use cases can be rare, Jorge highlights some practical applications."
-image: { src: "singleton_hbupze", alt: "Recicle Singleton image" }
-publishDate: "2023-11-14 11:39"
-category: "development"
+title: Simplified Explanation of the Singleton Design Pattern
+description: Discover the Singleton Design Pattern with simplified explanations and practical examples for effective application configuration and state management.
+image:
+  src: singleton_hbupze
+  alt: Recicle Singleton image
+publishDate: 2023-11-14 11:39
+category: development
 author: 000001-jorge-saud
-collections: [architecture,patterns]
-tags: [design-patterns, development]
+collections:
+  - architecture
+  - patterns
+tags:
+  - design-patterns
+  - development
+cover: ../../../assets/images/singleton_hbupze.webp
+coverAlt: Simplified Explanation of the Singleton Design Pattern
+fmContentType: Notes
+date: 2025-08-31T04:20:03.000Z
 ---
 
 in this blog post, I will try to explain the pattern in a simplified way the Singleton Design Pattern, its main purpose is to reconstruct the instantiation of a class to a singular instance, I need to clarify that the use case is very difficult to find but if you think about it in a deeper way I found some interesting uses.

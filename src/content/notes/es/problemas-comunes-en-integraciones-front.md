@@ -1,18 +1,27 @@
 ---
+fmContentType: Notas
 draft: false
-title: "Content Security Policy (CSP)"
+title: Entendiendo el Header Content Security Policy (CSP)
 selfHealing: "000001"
-resume: "Content Security Policy (CSP), a security layer that mitigates XSS attacks and data injection. To activate CSP, one must set up the server configuration to include the Content-Security-Policy header. Alternatively, a meta tag can be used, although it's not recommended."
+description: Descubre cómo implementar Content Security Policy (CSP) para proteger tu sitio web de ataques XSS e inyección de datos.
 starred: true
-image: {
-  src: "Really common issues integrating frontend",
-  alt: "Really common issues integrating from front-end image",
-}
-publishDate: "2021-05-12 11:39"
-category: "integration"
-collections: [integration,common-issues]
+image:
+  src: Really common issues integrating frontend
+  alt: Really common issues integrating from front-end image
+publishDate: 2021-05-12 11:39
+category: integration
+collections:
+  - integration
+  - common-issues
 author: 000001-jorge-saud
-tags: [frontend, csp, integrations, common, issues]
+tags:
+  - frontend
+  - csp
+  - integrations
+  - common
+  - issues
+cover: ../../../assets/images/Really common issues integrating frontend.webp
+coverAlt: Hombre en pc
 ---
 
 Hola, bienvenido a otra mini publicación. Se trata de CSP. Comencemos definiendo la política de seguridad de contenido de CSP. Esta es una capa de seguridad basada en la mitigación de ataques XSS e inyección de datos.

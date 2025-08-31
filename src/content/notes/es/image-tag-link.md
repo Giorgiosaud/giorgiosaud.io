@@ -1,14 +1,24 @@
 ---
+fmContentType: Notas
 draft: false
-title: "Tag link"
+title: Entendiendo los Tag Links en Desarrollo Web
 selfHealing: "000004"
-resume: "Explica el uso eficiente y eficaz de la etiqueta <img> en HTML, centrándose en los atributos srcset y sizes. Estos atributos optimizan el uso de recursos en función del dispositivo que muestra el contenido, mejorando el rendimiento y la capacidad de respuesta."
-image: { src: "link_siloo8", alt: "link tag" }
-publishDate: "2023-05-08 11:39"
-category: "Tutorials"
+description: Descubre cómo optimizar el rendimiento de tu sitio web con técnicas efectivas para insertar CSS y mejorar la experiencia del usuario.
+image:
+  src: link_siloo8
+  alt: link tag
+publishDate: 2023-05-08 11:39
+category: Tutorials
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [webdev, frontend, img, srcset]
+collections:
+  - frontend
+tags:
+  - webdev
+  - frontend
+  - img
+  - srcset
+cover: ../../../assets/images/link_siloo8.webp
+coverAlt: Link watching pics
 ---
 
 Aquí hay una pequeña historia sobre un pequeño truco que nos puede ayudar a separar restricciones, optimizar el rendimiento y tener una forma genial de insertar estilos en nuestras páginas.

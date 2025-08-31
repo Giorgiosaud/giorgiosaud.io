@@ -2,14 +2,25 @@
 draft: false
 selfHealing: "000008"
 starred: true
-title: "The Repository pattern is called Data Layer Architecture"
-resume: "The Repository Pattern in frontend development is included in the Data Layer architecture because it concerns about Repositories and datasources abstracted from the UI layer and the Domain Layer, only taking the data transmission as part of the scope of its interactions."
-image: { src: "datalayer", alt: "Datalayer pattern" }
-publishDate: "2024-06-21 09:45"
-category: "Architecture"
+title: The Repository pattern is called Data Layer Architecture
+description: The Repository Pattern in frontend development is included in the Data Layer architecture because it concerns about Repositories and datasources abstracted from the UI layer and the Domain Layer, only taking the data transmission as part of the scope of its interactions.
+image:
+  src: datalayer
+  alt: Datalayer pattern
+publishDate: 2024-06-21T13:45:00.000Z
+category: Architecture
 author: 000001-jorge-saud
-collections: [frontend,integration]
-tags: [microfrontend, development, frontend, backend]
+collections:
+  - frontend
+  - integration
+tags:
+  - microfrontend
+  - development
+  - frontend
+  - backend
+fmContentType: Notes
+cover: ../../../assets/images/datalayer.webp
+coverAlt: Dataset pattern invisible
 ---
 
 This post is created because @Kevcastle talk to me about the complex structure of the previous post related to Repository pattern and I try to resolve it in a simples way in more than one post, this is the first of Datalayer series.

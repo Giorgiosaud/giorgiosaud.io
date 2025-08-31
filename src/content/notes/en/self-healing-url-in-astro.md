@@ -1,14 +1,23 @@
 ---
 draft: false
 selfHealing: "000010"
-title: "Self-healing URL in Astro"
-resume: "In this post, I will talk about how to develop a functionality of self-healing URL in Astro project with a simple approach "
-image: { src: "selfhealing_url_lygv2g", alt: "Self Healing paint" }
-publishDate: "2024-07-19 11:39"
-category: "architecture"
+title: Self-healing URL in Astro
+description: "In this post, I will talk about how to develop a functionality of self-healing URL in Astro project with a simple approach "
+image:
+  src: selfhealing_url_lygv2g
+  alt: Self Healing paint
+publishDate: 2024-07-19T15:39:00.000Z
+category: architecture
 author: 000001-jorge-saud
-collections: [astro,integration]
-tags: [architecture, functionalfeatures]
+collections:
+  - astro
+  - integration
+tags:
+  - architecture
+  - functionalfeatures
+fmContentType: Notes
+cover: ../../../assets/images/selfhealing_url_lygv2g.webp
+coverAlt: Self healing symbol
 ---
 
 First start to define what a self-healing URL is, a self-healing URL is like [medium. com](https://giorgiosaud.medium.com) posts a URL that has a unique identifier to allow redirect to a beauty URL path the structure of the URL normally is `https://giorgiosaud.medium.com/arquitectura-de-micro-frontend-trabaja-inteligentemente-no-m%C3%A1s-duro-8995417d821a` this structure is the ${baseUrl}/${post-name}-${id} this is the one which allows us to detect a malformed URL, if this is in the name will be replaced with the original one for example `https://giorgiosaud.medium.com/anything-8995417d821a` will redirect you to the self-healed original URL,

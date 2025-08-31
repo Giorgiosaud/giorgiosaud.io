@@ -1,14 +1,25 @@
 ---
 draft: false
-selfHealing: '0JSCRS'
+selfHealing: 0JSCRS
 title: "Lo que se viene: Carruseles sin JS casi aqui ya en chrome"
-resume: "Cómo construir carruseles interactivos usando solo HTML y CSS, gracias a las nuevas propiedades scroll-marker y scroll-marker-group."
-image: { src: "css-carousels", alt: "Ejemplo de carrusel solo con CSS" }
-publishDate: "2025-07-30 12:00"
-category: "development"
+description: Cómo construir carruseles interactivos usando solo HTML y CSS, gracias a las nuevas propiedades scroll-marker y scroll-marker-group.
+image:
+  src: css-carousels
+  alt: Ejemplo de carrusel solo con CSS
+publishDate: 2025-07-30T16:00:00.000Z
+category: development
 author: 000001-jorge-saud
-collections: [frontend, css]
-tags: [css, carrusel, sinjs, desarrollo-web]
+collections:
+  - frontend
+  - css
+tags:
+  - css
+  - carrusel
+  - sinjs
+  - desarrollo-web
+fmContentType: Notas
+cover: ../../../assets/images/css-carousels.webp
+coverAlt: Ejemplo de carrusel solo con CSS
 ---
 
 ## Carrusel CSS puro con Snap y Dots nativos (¡Sin JS!)

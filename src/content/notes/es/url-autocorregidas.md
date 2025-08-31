@@ -1,14 +1,23 @@
 ---
+fmContentType: Notas
 draft: false
 selfHealing: "000010"
-title: "URLs de post autocorregidas en Astro"
-resume: "En este post, hablaré de como desarrollar una funcionalidad de self-healing URL en el proyecto Astro con una simple aproximación "
-image: { src: "selfhealing_url_lygv2g", alt: "Imagen autocorregidas" }
-publishDate: "2024-07-19 11:39"
-category: "astro"
+title: URLs de post autocorregidas en Astro
+description: Descubre cómo implementar URLs autocorregidas en Astro para mejorar la accesibilidad y la experiencia del usuario en tu blog.
+image:
+  src: selfhealing_url_lygv2g
+  alt: Imagen autocorregidas
+publishDate: 2024-07-19 11:39
+category: astro
 author: 000001-jorge-saud
-collections: [astro,integration]
-tags: [astro, functional-features]
+collections:
+  - astro
+  - integration
+tags:
+  - astro
+  - functional-features
+cover: ../../../assets/images/selfhealing_url_lygv2g.webp
+coverAlt: Imagen que se autocura
 ---
 
 Primero comenzemos por definir que es una url auto sanada, o self-healing URL, esta tecnica la vi por primera vez en [medium. com](https://giorgiosaud.medium.com), cuando hacia post estos generaban una url que contenia un hash este hash es unico por cada publicacion y permite hacer que si alguien escribe mal la URL, esta se corrija automaticamente y pinte la url real, una url en medium puede ser esta `https://giorgiosaud.medium.com/arquitectura-de-micro-frontend-trabaja-inteligentemente-no-m%C3%A1s-duro-8995417d821a` esta sería la estructura de cada post de medium ${baseUrl}/${post-name}-${id} este id es el que nos permitiria detectar una url mal formada, si este existe la url se autocorregira y generara una redireccion a la url real por ejemplo `https://giorgiosaud.medium.com/anything-8995417d821a` con ello logramos hacer que la url real se autocorrija.

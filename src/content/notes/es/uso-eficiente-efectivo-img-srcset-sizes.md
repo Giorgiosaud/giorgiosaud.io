@@ -1,15 +1,25 @@
 ---
 draft: false
 selfHealing: "000002"
-title: "Uso Eficiente y Efectivo de la Etiqueta <img> con los Atributos srcset y sizes"
-resume: "Explica el uso eficiente y efectivo de la etiqueta <img> en HTML, enfocándose en los atributos srcset y sizes. Estos atributos optimizan el uso de recursos según el dispositivo que muestra el contenido, mejorando el rendimiento y la capacidad de respuesta."
-image: { src: "link_siloo8", alt: "desarrollo web full stack" }
-publishDate: "2023-05-08 11:39"
-category: "Tutoriales"
+title: Uso Efectivo de la Etiqueta <img> en HTML
+description: Aprende a usar la etiqueta <img> con srcset y sizes para optimizar imágenes y mejorar el rendimiento en dispositivos variados.
+image:
+  src: link_siloo8
+  alt: desarrollo web full stack
+publishDate: 2023-05-08 11:39
+category: Tutoriales
 author: 000001-jorge-saud
 starred: true
-collections: [frontend]
-tags: [desarrollo web, frontend, img, srcset]
+collections:
+  - frontend
+tags:
+  - desarrollo web
+  - frontend
+  - img
+  - srcset
+fmContentType: Notas
+cover: ../../../assets/images/link_siloo8.webp
+coverAlt: Link of zelda Watching pics
 ---
 
 En este post, Jorge Saud explica el uso eficiente y efectivo de la etiqueta HTML `<img />`, enfocándose en los atributos srcset y sizes. Estos atributos optimizan el uso de recursos según el dispositivo que muestra el contenido, mejorando el rendimiento y la capacidad de respuesta.

@@ -2,14 +2,23 @@
 draft: false
 selfHealing: "000016"
 starred: true
-title: "CSS Scrolling Animations Simplified"
-resume: "This post will resume the simplified version of the CSS Scrolling Animations. and make some examples"
-image: { src: "css-animations", alt: "Css scroll animations" }
-publishDate: "2025-02-10 15:15"
-category: "development"
+title: Mastering CSS Scrolling Animations Easily
+description: Master CSS scrolling animations with our simplified guide, focusing on native solutions using animation-timeline and animation-range.
+image:
+  src: css-animations
+  alt: Css scroll animations
+publishDate: 2025-02-10 15:15
+category: development
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [design-patterns, development, css]
+collections:
+  - frontend
+tags:
+  - design-patterns
+  - development
+  - css
+fmContentType: Notes
+cover: ../../../assets/images/css-animations.webp
+coverAlt: CSS Scrolling Animations Simplified
 ---
 
 ## Introduction

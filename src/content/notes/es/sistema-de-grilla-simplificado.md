@@ -1,14 +1,24 @@
 ---
 draft: false
-selfHealing: 'GSWBRL'
-title: "Grillas sin esfuerzo: Una forma simple de crear layouts responsivos (inspirado en Kevin Powell)"
-resume: "Cómo construir layouts flexibles y bonitos usando una sola clase utilitaria de CSS grid—sin frameworks."
-image: { src: "grid-simplified", alt: "Grillas simplificado" }
-publishDate: "2025-08-04 18:00"
-category: "development"
+selfHealing: GSWBRL
+title: "Grillas Sin Esfuerzo: Crea Layouts Responsivos Fácilmente"
+description: Cómo construir layouts flexibles y bonitos usando una sola clase utilitaria de CSS grid—sin frameworks.
+image:
+  src: grid-simplified
+  alt: Grillas simplificado
+publishDate: 2025-08-04 18:00
+category: development
 author: 000001-jorge-saud
-collections: [migration, css]
-tags: [css, grid, desarrollo-web]
+collections:
+  - migration
+  - css
+tags:
+  - css
+  - grid
+  - desarrollo-web
+preview: /src/assets/images/grid-simplified.webp
+date: 2025-08-31T21:54:52.000Z
+fmContentType: Notas
 ---
 
 ## Introducción

@@ -1,14 +1,24 @@
 ---
 draft: false
 selfHealing: "000002"
-title: "Efficient and Effective Use of the <img> Tag with srcset and sizes Attributes"
-resume: "explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness."
-image: { src: "link_siloo8", alt: "full stack web development" }
-publishDate: "2023-05-08 11:39"
-category: "Tutorials"
+title: Efficient and Effective Use of the <img> Tag with srcset and sizes Attributes
+description: explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness.
+image:
+  src: link_siloo8
+  alt: full stack web development
+publishDate: 2023-05-08T15:39:00.000Z
+category: Tutorials
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [webdev, frontend, img, srcset]
+collections:
+  - frontend
+tags:
+  - webdev
+  - frontend
+  - img
+  - srcset
+fmContentType: Notes
+cover: ../../../assets/images/link_siloo8.webp
+coverAlt: Link from zelds viewen pics
 ---
 
 In this blog post, Jorge Saud explains the efficient and effective use of the

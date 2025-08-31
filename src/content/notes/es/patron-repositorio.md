@@ -1,14 +1,25 @@
 ---
 draft: false
 selfHealing: "000005"
-title: "Repository pattern in frontend"
-resume: "The Repository Pattern in frontend development abstracts data access logic, enhancing code maintainability and testability by encapsulating operations and promoting loose coupling. It fosters modular, scalable codebases adaptable to changing requirements."
-image: { src: "repository pattern", alt: "Repository Pattern" }
-publishDate: "2024-05-21 09:45"
-category: "Architecture"
+title: Mastering the Repository Pattern in Frontend Development
+description: Descubre cómo implementar el Patrón de Repositorio en frontend para mejorar la gestión de datos y la mantenibilidad de tus aplicaciones.
+image:
+  src: repository pattern
+  alt: Repository Pattern
+publishDate: 2024-05-21 09:45
+category: Architecture
 author: 000001-jorge-saud
-collections: [architecture,patterns]
-tags: [microfrontend, development, frontend, backend]
+collections:
+  - architecture
+  - patterns
+tags:
+  - microfrontend
+  - development
+  - frontend
+  - backend
+fmContentType: Notas
+cover: ../../../assets/images/datalayer.webp
+coverAlt: Data transparent
 ---
 
 En el mundo del desarrollo frontend, gestionar los datos de manera eficiente es crucial para construir aplicaciones escalables y mantenibles. Un patrón arquitectónico que ha demostrado ser altamente efectivo para lograr este objetivo es el **Patrón de Repositorio**. Tradicionalmente utilizado en el desarrollo backend, el Patrón de Repositorio se está adoptando cada vez más en el desarrollo frontend por su capacidad para desacoplar la lógica de acceso a datos de la lógica de negocio.
