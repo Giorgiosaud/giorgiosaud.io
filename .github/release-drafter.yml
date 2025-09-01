@@ -30,7 +30,7 @@ categories:
       - 'bug'
   - title: '🧰 Maintenance'
     label: 'chore'
-change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER) $BODY $URL $BASE_REF_NAME $HEAD_REF_NAME'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
   major:
@@ -47,10 +47,3 @@ template: |
   ## Changes
 
   $CHANGES
-  
-  
-  
-  BODY: $BODY
-  URL: $URL
-  BASE_REF_NAME: $BASE_REF_NAME
-  HEAD_REF_NAME: $HEAD_REF_NAME
