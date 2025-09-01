@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Giorgiosaud.io** is a personal web developer notebook built with Astro and the Astroship theme. It serves as a space to document investigations, share knowledge, and support the web development community.
+**Giorgiosaud.io** is a personal web developer notebook built with Astro. It serves as a space to document investigations, share knowledge, and support the web development community.
 
 ## Main Sections
 

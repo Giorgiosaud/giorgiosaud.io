@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content'
+import '@global-styles/md.css'
+
+export async function getStaticPaths() {
+  const pages = await getCollection("notas")
+  return pages.map((page) => {
+    return {
+      params: { note: page.id },
+      props: { page },
+    }
+  })
+}
+
+const { page } = Astro.props
+---
+{page.body}
