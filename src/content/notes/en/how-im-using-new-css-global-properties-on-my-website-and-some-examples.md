@@ -1,15 +1,21 @@
 ---
 draft: false
-selfHealing: "NCSSPG"
+selfHealing: NCSSPG
 starred: true
-title: "How I’m Using New CSS Global Properties on My Website and some Examples"
-resume: "This post will talk about simple new css props that allow us to make a great UX in simple steps"
-image: { src: "css-global-props", alt: "Css Global Props" }
-publishDate: "2025-07-17 11:42"
-category: "migration"
+title: "Using CSS Global Properties: A Practical Guide"
+description: Discover how to enhance your website with new CSS global properties for theme support and smooth transitions, simplifying web development.
+publishDate: 2025-07-17T15:42:00.000Z
+category: migration
 author: 000001-jorge-saud
-collections: [frontend, migration]
-tags: [design-patterns, development, css]
+collections:
+    - frontend
+    - migration
+tags:
+    - design-patterns
+    - development
+    - css
+cover: ../../../assets/images/css-global-props.webp
+coverAlt: Css Global Props
 ---
 In my latest project, I explored some exciting CSS features that simplify web development and enhance the user experience. These tools are perfect for creating modern, dynamic websites with surprisingly little code.
 

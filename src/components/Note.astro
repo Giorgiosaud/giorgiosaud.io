@@ -1,16 +1,12 @@
 ---
+import { Image } from 'astro:assets'
 import { cloudinarySrc } from '@helpers/cloudinary'
 import { getLangFromUrl, useTranslations } from '@i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const { note, context = 'no-context' } = Astro.props
 const t = useTranslations(lang)
-const imgSrc = note.data.image
-  ? cloudinarySrc('notebook-posts/' + note.data.image.src, {
-      width: 500,
-    })
-  : note.data.image
-const link = lang == 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`
+const link = lang === 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`
 const nameImage = `${note.id}-${context}`
 ---
 <article aria-label={note.data.title} data-link={link} id={nameImage} style="position:relative;">
@@ -19,7 +15,7 @@ const nameImage = `${note.id}-${context}`
             <h2>{note.data.title}</h2>
         </div>
         <figure>
-            <img class="img" src={imgSrc} alt={note.data.title} >
+            <Image class="img" src={note.data.cover} alt={note.data.coverAlt} >
         </figure>
         <div class="description" title={note.data.resume}>
             <p>{note.data.resume}</p>

@@ -1,15 +1,22 @@
 ---
+fmContentType: Notas
 draft: false
 selfHealing: "000016"
-title: "Animaciones de Scroll CSS Simplificadas"
-resume: "Este post resumirá la versión simplificada de las Animaciones de Scroll CSS. y hacer algunos ejemplos"
-image: { src: "css-animations", alt: "Css scroll animations" }
-publishDate: "2025-02-10 15:15"
-category: "development"
+title: Guía Rápida de Animaciones de Scroll en CSS
+description: Descubre cómo simplificar las animaciones de scroll en CSS con técnicas efectivas y sin complicaciones. ¡Optimiza tu diseño web hoy!
+publishDate: 2025-02-10T18:15:00.000Z
+category: development
 starred: true
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [design-patterns, development, css]
+collections:
+  - frontend
+tags:
+  - design-patterns
+  - development
+  - css
+cover: ../../../assets/images/css-animations.webp
+coverAlt: mouse and css logo
+slug: css-animaciones-con-scroll-simplificado
 ---
 
 ## Introducción

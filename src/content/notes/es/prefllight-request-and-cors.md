@@ -1,24 +1,25 @@
 ---
 draft: false
-title: "Preflight request and Cors"
+title: Entendiendo peticiones Preflight y CORS
 selfHealing: "000007"
-resume: "When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues"
-image:
-  { src: "preflight-request-12", alt: "Preflight request and Cors Updated" }
-publishDate: "2024-05-30 17:46"
-category: "integration"
-collections: [frontend,integration]
+description: Explora cómo CORS y las solicitudes preflight optimizan la seguridad y el acceso a recursos en aplicaciones web modernas.
+publishDate: 2024-05-30T21:46:00.000Z
+category: integration
+collections:
+  - frontend
+  - integration
 author: 000001-jorge-saud
 tags:
-  [
-    frontend,
-    csp,
-    integrations,
-    cors,
-    preflightrequest,
-    preflight,
-    common-issues,
-  ]
+  - frontend
+  - csp
+  - integrations
+  - cors
+  - preflightrequest
+  - preflight
+  - common-issues
+cover: ../../../assets/images/preflight-request-12.webp
+coverAlt: Entendiendo peticiones Preflight y CORS
+slug: peticiones-preflight
 ---
 
 Cuando hablamos de aplicaciones del lado del cliente, ventajas de los microservicios y micro-frontend, integraciones desde el lado del cliente y cómo hacer que nuestras aplicaciones sean más independientes, estamos hablando de estos problemas comunes, describámoslos brevemente.

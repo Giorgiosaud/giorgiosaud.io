@@ -1,15 +1,22 @@
 ---
 draft: false
-selfHealing: "CQX001"
+selfHealing: CQX001
 starred: true
-title: "Consultas de contenedor y @container explicadas: cómo las usé en este proyecto"
-resume: "Aquí explico cómo utilicé la consulta @container en el rediseño de mi notebook"
-image: { src: "container-query", alt: "Animaciones de scroll en CSS" }
-publishDate: "2025-07-22 15:15"
-category: "development"
+title: "Contenedor y @container: Guía completa para tu proyecto"
+description: Aquí explico cómo utilicé la consulta @container en el rediseño de mi notebook
+publishDate: 2025-07-22T19:15:00.000Z
+category: development
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [design-patterns, development, css]
+collections:
+  - frontend
+tags:
+  - design-patterns
+  - development
+  - css
+fmContentType: Notas
+cover: ../../../assets/images/container-query.webp
+coverAlt: Marquesinas de contenedores
+slug: container-y-query-containers
 ---
 
 Las consultas de contenedor (container queries) son una característica de Baseline 2023, ya disponible en todos los navegadores principales, incluidos Chrome, Edge, Firefox y Safari.

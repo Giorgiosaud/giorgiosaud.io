@@ -1,15 +1,22 @@
 ---
 draft: false
-selfHealing: "LYRCSS"
+selfHealing: LYRCSS
 starred: true
-title: "How I Use `@layer` in CSS to Organize Styles in My Project"
-resume: "Discover how the @layer rule in CSS helps structure and prioritize styles in a modern and maintainable way."
-image: { src: "css-layer", alt: "Example of CSS layers" }
-publishDate: "2025-07-28 12:00"
-category: "migration"
+title: How I Use `@layer` in CSS to Organize Styles in My Project
+description: Discover how the @layer rule in CSS helps structure and prioritize styles in a modern and maintainable way.
+publishDate: 2025-07-28T16:00:00.000Z
+category: migration
 author: 000001-jorge-saud
-collections: [frontend, migration]
-tags: [design-patterns, development, css, layer]
+collections:
+  - frontend
+  - migration
+tags:
+  - design-patterns
+  - development
+  - css
+  - layer
+cover: ../../../assets/images/css-layer.webp
+coverAlt: Css Layers image
 ---
 
 The `@layer` rule is one of the most useful innovations in modern CSS for organizing and controlling CSS in large projects. It allows you to define style layers, making it easier to manage priorities and avoid conflicts between components, utilities, and global styles.
