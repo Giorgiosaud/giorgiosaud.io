@@ -1,14 +1,20 @@
 ---
 draft: false
-title: "Tag link recommendations"
+title: Top Tag Link Recommendations for Better SEO
 selfHealing: "000004"
-resume: "explains the efficient and effective use of the <img> tag in HTML, focusing on the srcset and sizes attributes. These attributes optimize resource usage based on the device displaying the content, enhancing performance and responsiveness."
-image: { src: "link_siloo8", alt: "link tag" }
-publishDate: "2023-05-08 11:39"
-category: "Tutorials"
+description: Discover effective tag link recommendations to optimize CSS performance and enhance your website's loading speed.
+publishDate: 2023-05-08T15:39:00.000Z
+category: Tutorials
 author: 000001-jorge-saud
-collections: [frontend]
-tags: [webdev, frontend, img, srcset]
+collections:
+  - frontend
+tags:
+  - webdev
+  - frontend
+  - img
+  - srcset
+cover: ../../../assets/images/link_siloo8.webp
+coverAlt: Link for SEO
 ---
 
 Here is a short story about a small trick that can help us separate constraints, optimize performance, and have a cool way to insert styles into our pages.

@@ -12,7 +12,7 @@ export async function selfHeal(
 
   if (selfHealing.length) {
     for (const sh of selfHealing) {
-      const note = notes.find((note) => note.data.selfHealing === sh)
+      const note = notes.find(note => note.data.selfHealing === sh)
       if (note) {
         const basePath =
           collectionName === 'notes' ? '/notebook' : '/es/cuaderno'

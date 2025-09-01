@@ -11,7 +11,7 @@ interface Props {
 const { collection } = Astro.props
 
 const notes = (await getCollection(collection))
-  .filter((note) => !note.data.draft)
+  .filter(note => !note.data.draft)
   .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
   .slice(0, 6)
 ---
@@ -39,6 +39,21 @@ const notes = (await getCollection(collection))
     li{
       scroll-snap-align: center;
       scroll-snap-stop: always;
+      scale: .85;
+      transition: scale .3s;
+      
+      &:hover,&:focus-within{
+        scale:1;
+        
+      }
+    }
+    li:has(+ li:hover),li:has(+ li:focus-within) {
+        scale:.9;
+        transition-delay: .1s;
+    }
+    li:hover + li,li:focus-within + li{
+        scale:.9;
+        transition-delay: .1s;
     }
   }
   

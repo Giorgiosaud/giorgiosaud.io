@@ -1,15 +1,24 @@
 ---
+fmContentType: Notas
 draft: false
 selfHealing: "000008"
-title: "El Patrón Repository es una arquitectura de capa de datos o datalayer pattern V1.0"
-resume: "El patrón Repositorio en el desarrollo de frontend es incluido en la arquitectura de capa de datos porque se refiere a repositorios y fuentes de datos abstractas del capa de UI y la capa de dominio, solo tomando la transmisión de datos como parte del alcance de sus interacciones."
-image: { src: "datalayer", alt: "Datalayer pattern" }
-publishDate: "2024-06-21 09:45"
+title: "Arquitectura de Capa de Datos: El Patrón Repository V1.0"
+description: Descubre cómo implementar el patrón de repositorio en la arquitectura de capa de datos para simplificar tus conexiones API y mejorar tu UI.
+publishDate: 2024-06-21T13:45:00.000Z
 starred: true
-category: "Architecture"
+category: Architecture
 author: 000001-jorge-saud
-collections: [frontend,integration]
-tags: [microfrontend, development, frontend, backend]
+collections:
+  - frontend
+  - integration
+tags:
+  - microfrontend
+  - development
+  - frontend
+  - backend
+cover: ../../../assets/images/datalayer.webp
+coverAlt: Transparent Data
+slug: patron-repository-revisitado
 ---
 
 Este post es creado porque @Kevcastle hablaba conmigo sobre la estructura compleja de la publicación anterior relacionada con el patrón de repositorio y trato de resolverlo de una manera simple en más de un post, este es el primer de la serie de Datalayer.

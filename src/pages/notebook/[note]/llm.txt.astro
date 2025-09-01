@@ -4,11 +4,14 @@ import '@global-styles/md.css'
 
 export async function getStaticPaths() {
   const pages = await getCollection('notes')
-  return pages.map((page) => {
-   
+  return pages.map(page => {
     return {
-      params: { note: page.id },
-      props: { page },
+      params: {
+        note: page.id,
+      },
+      props: {
+        page,
+      },
     }
   })
 }

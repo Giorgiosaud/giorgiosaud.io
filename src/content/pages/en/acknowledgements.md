@@ -1,6 +1,6 @@
 ---
 title: Acknowledgements
-description: Acknowledgements for my website.
+description: Expressing heartfelt gratitude to family, the developer community, mentors, and readers for their support in the journey of Giorgiosaud.io.
 pathToTranslate: acknowledgements
 ---
 # 🙏 Acknowledgements

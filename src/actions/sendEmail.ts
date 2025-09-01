@@ -20,10 +20,12 @@ export const sendEmail = defineAction({
     email: z.string().email(),
     message: z.string().min(10).max(500),
   }),
-  handler: async (input) => {
+  handler: async input => {
     const { data, error } = await resend.emails.send({
       from: `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>`,
-      to: [RESEND_TO_EMAIL],
+      to: [
+        RESEND_TO_EMAIL,
+      ],
       subject: `Email from ${input.name} in Website Form`,
       html: `
             <h1>New message from ${input.name}</h1>

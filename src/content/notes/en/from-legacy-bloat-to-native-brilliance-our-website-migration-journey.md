@@ -1,14 +1,24 @@
 ---
 draft: false
-selfHealing: "FLBTNB"
-title: "From Legacy Bloat to Native Brilliance: My Website Migration Journey"
-resume: "Facing a slow, legacy codebase? See my journey of migrating to modern CSS & HTML, improving web performance, accessibility, and developer experience."
-image: { src: "from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo", alt: "From legacy to Native Brilliance" }
-publishDate: "2025-07-13"
-category: "frontend"
+selfHealing: FLBTNB
+title: "Website Migration: A Success Story Unveiled"
+description: Discover my journey of migrating to modern web standards, overcoming challenges, and achieving a faster, more accessible website.
+image:
+  src: from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo
+  alt: From legacy to Native Brilliance
+publishDate: 2025-07-13
+category: frontend
 author: 000001-jorge-saud
-collections: [frontend,patterns]
-tags: [ evolution, frontend]
+collections:
+  - frontend
+  - patterns
+tags:
+  - evolution
+  - frontend
+fmContentType: Notes
+date: 2025-08-31T04:14:38.000Z
+cover: ../../../assets/images/from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo.webp
+coverAlt: "Transforming My Website: A Migration Success Story"
 ---
 
 Over the past year, I embarked on a mission that many developers know but often dread: refactoring my web application. The project, this notebook and portal in the developers knowledge sector, was weighed down by months of accumulated technical debt, heavy frameworks, and a lot of refactors that led me to make the final one. My goal was clear: migrate to modern, native CSS and HTML features to build a faster, more maintainable, and highly accessible platform for the future.

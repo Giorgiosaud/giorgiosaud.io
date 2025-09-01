@@ -1,24 +1,24 @@
 ---
 draft: false
-title: "Preflight request and Cors"
+title: Preflight request and Cors
 selfHealing: "000007"
-resume: "When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues"
-image:
-  { src: "preflight-request-12", alt: "Preflight request and Cors Updated" }
-publishDate: "2024-05-30 17:46"
+description: Understand CORS and Preflight Requests to enhance your web app's security and optimize cross-domain resource sharing.
+publishDate: 2024-05-30T21:46:00.000Z
 category: integration
 author: 000001-jorge-saud
-collections: [frontend,integration]
+collections:
+  - frontend
+  - integration
 tags:
-  [
-    frontend,
-    csp,
-    integrations,
-    cors,
-    preflightrequest,
-    preflight,
-    common-issues,
-  ]
+  - frontend
+  - csp
+  - integrations
+  - cors
+  - preflightrequest
+  - preflight
+  - common-issues
+cover: ../../../assets/images/preflight-request-12.webp
+coverAlt: PReflight plane from pc
 ---
 
 When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues lets describe them briefly.
@@ -46,7 +46,7 @@ With that, we restrict access to our resources consumed directly from the browse
 This kind of request is called Preflight Request and is automatically called directly from the browser, not by the front end code but the browser itself makes the request to optimize the client resources (avoiding the expensive call of an API if it doesn't have security access or is down).
 
 To finalize here is a graphic representing the way that said when the prefight request is called from Wikipedia
-![Preflight schema](https://res.cloudinary.com/giorgiosaud/image/upload/f_auto/q_auto/ar_1.0,c_auto,g_auto/v1/notebook-posts/preflight-request-12?_a=DATAdtIIZAA0)
+![Preflight schema](../../../assets/images/preflight-request-12.webp)
 
 Here is a postman preflight test to validate if the response requires it and if the response of the OPTIONS request is ok
 

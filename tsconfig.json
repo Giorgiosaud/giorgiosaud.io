@@ -1,23 +1,52 @@
 {
   "extends": "astro/tsconfigs/strict",
 
-  "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist"
+  ],
   "compilerOptions": {
     "baseUrl": "src",
-    "types": ["astro/client"],
+    "types": [
+      "astro/client"
+    ],
     "paths": {
-      "@templates/*": ["global/templates/*"],
-      "@icons/*": ["icons/*"],
-      "@global-components/*": ["global/components/*"],
-      "@components/*": ["components/*"],
-      "@example-components/*": ["example-components/*"],
-      "@global-styles/*": ["global/styles/*"],
-      "@global-scripts/*": ["global/scripts/*"],
-      "@images/*": ["assets/images/*"],
-      "@i18n/*": ["global/i18n/*"],
-      "@helpers/*": ["helpers/*"],
-      "@pages/*": ["pages/*"]
+      "@templates/*": [
+        "global/templates/*"
+      ],
+      "@icons/*": [
+        "icons/*"
+      ],
+      "@global-components/*": [
+        "global/components/*"
+      ],
+      "@components/*": [
+        "components/*"
+      ],
+      "@example-components/*": [
+        "example-components/*"
+      ],
+      "@global-styles/*": [
+        "global/styles/*"
+      ],
+      "@global-scripts/*": [
+        "global/scripts/*"
+      ],
+      "@images/*": [
+        "assets/images/*"
+      ],
+      "@i18n/*": [
+        "global/i18n/*"
+      ],
+      "@helpers/*": [
+        "helpers/*"
+      ],
+      "@pages/*": [
+        "pages/*"
+      ]
     },
     "strictNullChecks": true,
     "allowJs": true,

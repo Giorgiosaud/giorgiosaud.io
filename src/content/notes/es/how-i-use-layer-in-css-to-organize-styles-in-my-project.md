@@ -1,15 +1,23 @@
 ---
 draft: false
-selfHealing: "LYRCSS"
+selfHealing: LYRCSS
 starred: true
-title: "Cómo Uso `@layer` en CSS para Organizar Estilos en Mi Proyecto"
-resume: "Descubre cómo la regla @layer de CSS ayuda a estructurar y priorizar estilos de forma moderna y mantenible."
-image: { src: "css-layer", alt: "Ejemplo de capas en CSS" }
-publishDate: "2025-07-28 12:00"
-category: "migración"
+title: Organiza Estilos en CSS con @layer Eficazmente
+description: Descubre cómo la regla @layer de CSS ayuda a estructurar y priorizar estilos de forma moderna y mantenible.
+publishDate: 2025-07-28T16:00:00.000Z
+category: migración
 author: 000001-jorge-saud
-collections: [frontend, migración]
-tags: [patrones-de-diseño, desarrollo, css, layer]
+collections:
+  - frontend
+  - migración
+tags:
+  - patrones-de-diseño
+  - desarrollo
+  - css
+  - layer
+cover: ../../../assets/images/css-layer.webp
+coverAlt: css props and layers examples
+slug: como-uso-layer-en-css-para-organizar-estilos-en-mi-proyecto
 ---
 
 La regla `@layer` es una de las novedades más útiles de CSS moderno para organizar y controlar el css en en proyectos grandes. Permite definir capas (layers) de estilos, facilitando la gestión de prioridades y evitando conflictos entre componentes, utilidades y estilos globales.

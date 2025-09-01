@@ -1,0 +1,503 @@
+{
+  "$schema": "https://frontmatter.codes/frontmatter.schema.json",
+  "frontMatter.framework.id": "astro",
+  "frontMatter.preview.host": "http://localhost:4321",
+  "frontMatter.copilot.family": "gpt-4o-mini",
+  "frontMatter.taxonomy.contentTypes": [
+    {
+      "name": "Pages",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "title": "Description",
+          "type": "string"
+        },
+        {
+          "name": "pathToTranslate",
+          "title": "Path to Translate",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Notes",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "draft",
+          "name": "draft",
+          "type": "draft"
+        },
+        {
+          "title": "title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "Cover",
+          "name": "cover",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "Cover Alt Text",
+          "name": "coverAlt",
+          "type": "string"
+        },
+        {
+          "title": "selfHealing",
+          "name": "selfHealing",
+          "type": "string"
+        },
+        {
+          "title": "slug",
+          "name": "slug",
+          "type": "slug"
+        },
+        {
+          "title": "publishDate",
+          "name": "publishDate",
+          "type": "datetime"
+        },
+        {
+          "title": "category",
+          "name": "category",
+          "type": "categories"
+        },
+        {
+          "title": "author",
+          "name": "author",
+          "type": "string"
+        },
+        {
+          "title": "collections",
+          "name": "collections",
+          "type": "choice",
+          "choices": [
+            "architecture",
+            "patterns",
+            "astro",
+            "frontend",
+            "css"
+          ]
+        },
+        {
+          "title": "tags",
+          "name": "tags",
+          "type": "tags"
+        },
+        {
+          "title": "image",
+          "name": "image",
+          "type": "fields",
+          "fields": [
+            {
+              "title": "src",
+              "name": "src",
+              "type": "string"
+            },
+            {
+              "title": "alt",
+              "name": "alt",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Badges",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "title": "Description",
+          "type": "string"
+        },
+        {
+          "title": "slug",
+          "name": "slug",
+          "type": "string"
+        },
+        {
+          "title": "imgSrc",
+          "name": "imgSrc",
+          "type": "string",
+          "isPreviewImage": true
+        },
+        {
+          "title": "cardColor",
+          "name": "cardColor",
+          "type": "string"
+        },
+        {
+          "title": "category",
+          "name": "category",
+          "type": "categories"
+        },
+        {
+          "title": "link",
+          "name": "link",
+          "type": "string"
+        },
+        {
+          "title": "date",
+          "name": "date",
+          "type": "datetime"
+        },
+        {
+          "title": "poweredBy",
+          "name": "poweredBy",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Collections",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "Description",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "title": "Icon",
+          "name": "icon",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Portfolio",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "draft",
+          "name": "draft",
+          "type": "draft"
+        },
+        {
+          "title": "workingOn",
+          "name": "workingOn",
+          "type": "string"
+        },
+        {
+          "title": "selfHealing",
+          "name": "selfHealing",
+          "type": "string"
+        },
+        {
+          "title": "country",
+          "name": "country",
+          "type": "string"
+        },
+        {
+          "title": "client",
+          "name": "client",
+          "type": "string"
+        },
+        {
+          "title": "category",
+          "name": "category",
+          "type": "string"
+        },
+        {
+          "title": "project",
+          "name": "project",
+          "type": "string"
+        },
+        {
+          "title": "resume",
+          "name": "resume",
+          "type": "string"
+        },
+        {
+          "title": "url",
+          "name": "url",
+          "type": "string"
+        },
+        {
+          "title": "cover",
+          "name": "cover",
+          "type": "image",
+          "isPreviewImage": true
+        },
+        {
+          "title": "coverAlt",
+          "name": "coverAlt",
+          "type": "string"
+        },
+        {
+          "title": "image",
+          "name": "image",
+          "type": "fields",
+          "fields": [
+            {
+              "title": "src",
+              "name": "src",
+              "type": "string"
+            },
+            {
+              "title": "alt",
+              "name": "alt",
+              "type": "string",
+              "isPreviewImage": true
+            }
+          ]
+        },
+        {
+          "title": "publishDate",
+          "name": "publishDate",
+          "type": "datetime"
+        },
+        {
+          "title": "classes",
+          "name": "classes",
+          "type": "string"
+        },
+        {
+          "title": "classesClient",
+          "name": "classesClient",
+          "type": "string"
+        },
+        {
+          "title": "technologies",
+          "name": "technologies",
+          "type": "tags"
+        },
+        {
+          "title": "Title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "title": "Description",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "Team",
+      "pageBundle": false,
+      "fields": [
+        {
+          "title": "draft",
+          "name": "draft",
+          "type": "draft"
+        },
+        {
+          "title": "name",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "title": "alias",
+          "name": "alias",
+          "type": "string"
+        },
+        {
+          "title": "selfHealing",
+          "name": "selfHealing",
+          "type": "string"
+        },
+        {
+          "title": "title",
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "title": "avatar",
+          "name": "avatar",
+          "type": "fields",
+          "fields": [
+            {
+              "title": "src",
+              "name": "src",
+              "type": "string"
+            },
+            {
+              "title": "alt",
+              "name": "alt",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "title": "classes",
+          "name": "classes",
+          "type": "string"
+        },
+        {
+          "title": "resume",
+          "name": "resume",
+          "type": "string"
+        },
+        {
+          "title": "pathToTranslate",
+          "name": "pathToTranslate",
+          "type": "string"
+        },
+        {
+          "title": "publishDate",
+          "name": "publishDate",
+          "type": "datetime"
+        }
+      ]
+    }
+  ],
+  "frontMatter.content.pageFolders": [
+    {
+      "title": "Notes",
+      "contentTypes": [
+        "Notes"
+      ],
+      "previewPath": "notebook",
+      "path": "[[workspace]]/src/content/notes",
+      "defaultLocale": "en",
+      "locales": [
+        {
+          "locale": "es",
+          "title": "Spanish",
+          "path": "es"
+        },
+        {
+          "locale": "en",
+          "title": "English",
+          "path": "en"
+        }
+      ]
+    },
+    {
+      "title": "Pages",
+      "contentTypes": [
+        "Pages"
+      ],
+      "previewPath": "es/",
+      "path": "[[workspace]]/src/content/pages",
+      "defaultLocale": "en",
+      "locales": [
+        {
+          "locale": "es",
+          "title": "Spanish",
+          "path": "es"
+        },
+        {
+          "locale": "en",
+          "title": "English",
+          "path": "en"
+        }
+      ]
+    },
+    {
+      "title": "Badges",
+      "contentTypes": [
+        "Badges"
+      ],
+      "previewPath": "",
+      "path": "[[workspace]]/src/content/badges",
+      "defaultLocale": "en",
+      "locales": [
+        {
+          "locale": "es",
+          "title": "Spanish",
+          "path": "es"
+        },
+        {
+          "locale": "en",
+          "title": "English",
+          "path": "en"
+        }
+      ]
+    },
+    {
+      "title": "Collections",
+      "contentTypes": [
+        "Collections"
+      ],
+      "previewPath": "",
+      "path": "[[workspace]]/src/content/collections",
+      "defaultLocale": "en",
+      "locales": [
+        {
+          "locale": "es",
+          "title": "Spanish",
+          "path": "es"
+        },
+        {
+          "locale": "en",
+          "title": "English",
+          "path": "en"
+        }
+      ]
+    },
+    {
+      "title": "Portfolio",
+      "previewPath": "",
+      "contentTypes": [
+        "Portfolio"
+      ],
+      "path": "[[workspace]]/src/content/portfolio",
+      "defaultLocale": "en",
+      "locales": [
+        {
+          "locale": "es",
+          "title": "Spanish",
+          "path": "es"
+        },
+        {
+          "locale": "en",
+          "title": "English",
+          "path": "en"
+        }
+      ]
+    },
+    {
+      "title": "Team",
+      "previewPath": "",
+      "contentTypes": [
+        "Team"
+      ],
+      "path": "[[workspace]]/src/content/team",
+      "defaultLocale": "en",
+      "locales": [
+        {
+          "locale": "es",
+          "title": "Spanish",
+          "path": "es"
+        },
+        {
+          "locale": "en",
+          "title": "English",
+          "path": "en"
+        }
+      ]
+    }
+  ],
+  "frontMatter.content.publicFolder": {
+    "relative": true
+  },
+  "frontMatter.git.enabled": true
+}

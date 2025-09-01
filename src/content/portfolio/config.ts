@@ -16,17 +16,23 @@ const portfolioSchema = z.object({
     src: z.string(),
     alt: z.string(),
   }),
-  publishDate: z.string().transform((str) => new Date(str)),
+  publishDate: z.string().transform(str => new Date(str)),
   technologies: z.array(z.string()),
 })
 
 export const portfolio = defineCollection({
-  loader: glob({ pattern: '*.(md|mdx)', base: './src/content/portfolio/en' }),
+  loader: glob({
+    pattern: '*.(md|mdx)',
+    base: './src/content/portfolio/en',
+  }),
   schema: portfolioSchema,
 })
 
 export const portafolio = defineCollection({
-  loader: glob({ pattern: '*.(md|mdx)', base: './src/content/portfolio/es' }),
+  loader: glob({
+    pattern: '*.(md|mdx)',
+    base: './src/content/portfolio/es',
+  }),
   schema: portfolioSchema,
 })
 

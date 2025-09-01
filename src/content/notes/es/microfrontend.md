@@ -1,15 +1,20 @@
 ---
+fmContentType: Notas
 draft: false
 selfHealing: "000003"
-
-title: "Micro Frontend Architecture"
-resume: "Giorgio discusses the benefits and implementation of micro frontend architecture, emphasizing its growing popularity and effectiveness in modern web development. He outlines how this architecture enables more efficient, specialized development by dividing frontend applications into smaller, manageable components."
-image: { src: "microfrontend_klswbm", alt: "Micro Frontend Architecture" }
-publishDate: "2023-05-08 11:39"
-category: "architecture"
+title: Micro Frontend Architecture
+description: Mostrando los beneficios de la arquitectura de microfrontend y como aplicarla
+publishDate: 2023-05-08T15:39:00.000Z
+category: architecture
 author: 000001-jorge-saud
-collections: [architecture,patterns]
-tags: [microfrontend, architecture]
+collections:
+    - architecture
+    - patterns
+tags:
+    - microfrontend
+    - architecture
+cover: ../../../assets/images/microfrontend_klswbm.webp
+coverAlt: Multi apps en un page
 ---
 
 En un [artículo anterior](https://es.modyo.com/blog/los-micro-frontends-permiten-a-tus-desarrolladores-crear-mejores-productos-digitales), hablamos de cómo los micro frontends ofrecen más libertad a los equipos y aplicaciones más eficientes. Por ello, se están haciendo populares entre los arquitectos y desarrolladores porque grandes organizaciones y líderes de la industria están gestionando con éxito sus propias aplicaciones web utilizando arquitecturas de micro frontends.

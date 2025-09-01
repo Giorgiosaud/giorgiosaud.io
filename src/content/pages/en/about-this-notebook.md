@@ -1,6 +1,6 @@
 ---
-title: About this notebook
-description: Solutions from the most complex to the simplest — sharing real lessons with developers to grow from zero.
+title: "Understanding This Notebook: A Comprehensive Guide"
+description: Explore a developer's notebook filled with practical notes, code snippets, and insights to simplify your web development journey.
 pathToTranslate: about-this
 ---
 # 📒 About This Notebook

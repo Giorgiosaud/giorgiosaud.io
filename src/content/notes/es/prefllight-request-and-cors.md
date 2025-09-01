@@ -1,24 +1,25 @@
 ---
 draft: false
-title: "Preflight request and Cors"
+title: Entendiendo peticiones Preflight y CORS
 selfHealing: "000007"
-resume: "When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues"
-image:
-  { src: "preflight-request-12", alt: "Preflight request and Cors Updated" }
-publishDate: "2024-05-30 17:46"
-category: "integration"
-collections: [frontend,integration]
+description: Explora cómo CORS y las solicitudes preflight optimizan la seguridad y el acceso a recursos en aplicaciones web modernas.
+publishDate: 2024-05-30T21:46:00.000Z
+category: integration
+collections:
+  - frontend
+  - integration
 author: 000001-jorge-saud
 tags:
-  [
-    frontend,
-    csp,
-    integrations,
-    cors,
-    preflightrequest,
-    preflight,
-    common-issues,
-  ]
+  - frontend
+  - csp
+  - integrations
+  - cors
+  - preflightrequest
+  - preflight
+  - common-issues
+cover: ../../../assets/images/preflight-request-12.webp
+coverAlt: Entendiendo peticiones Preflight y CORS
+slug: peticiones-preflight
 ---
 
 Cuando hablamos de aplicaciones del lado del cliente, ventajas de los microservicios y micro-frontend, integraciones desde el lado del cliente y cómo hacer que nuestras aplicaciones sean más independientes, estamos hablando de estos problemas comunes, describámoslos brevemente.
@@ -45,7 +46,8 @@ Con eso restringimos el acceso a nuestros recursos consumidos directamente desde
 
 Este tipo de solicitud se llama Solicitud Preflight y se llama automáticamente directamente desde el navegador, no por el código del frontend sino que el propio navegador realiza la solicitud para optimizar los recursos del cliente (evitando la costosa llamada a una API si no tiene acceso de seguridad o está inactiva).
 
-Para finalizar aquí les dejo un gráfico que representa la forma en que se dice cuando se llama a la solicitud de preflight desde Wikipedia![Preflight schema](https://res.cloudinary.com/giorgiosaud/image/upload/f_auto/q_auto/ar_1.0,c_auto,g_auto/v1/notebook-posts/preflight-request-12?_a=DATAdtIIZAA0)
+Para finalizar aquí les dejo un gráfico que representa la forma en que se dice cuando se llama a la solicitud de preflight desde Wikipedia!![Preflight schema](../../../assets/images/preflight-request-12.webp)
+
 
 Aquí hay una prueba previa del cartero para validar si la respuesta lo requiere y si la respuesta de la solicitud OPTIONS es correcta
 

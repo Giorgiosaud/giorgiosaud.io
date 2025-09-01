@@ -8,7 +8,7 @@ export type SupportedLanguages = keyof typeof resources
 type DeepKeyOf<T> = T extends object
   ? {
       [K in Extract<keyof T, string>]: T[K] extends object
-        ? T[K] extends Array<any>
+        ? T[K] extends Array<unknown>
           ? `${K}` // Don't recurse into arrays
           : `${K}` | `${K}.${DeepKeyOf<T[K]>}`
         : `${K}`
@@ -36,14 +36,18 @@ const get = (obj: unknown, path: string, defaultValue = ''): string => {
     .replace(/\[(\w+)\]/g, '.$1')
     .replace(/^\./, '')
     .split('.')
-  let result: any = obj
+  let result: unknown = obj
   for (const key of keys) {
-    if (result == null || typeof result !== 'object' || !(key in result)) {
+    if (
+      result == null ||
+      typeof result !== 'object' ||
+      !((key in result) as unknown as Record<string, unknown>)
+    ) {
       return defaultValue
     }
-    result = result[key]
+    result = (result as Record<string, unknown>)[key]
   }
-  return result == null ? defaultValue : result
+  return result == null ? defaultValue : String(result)
 }
 
 export function useTranslations(lang: SupportedLanguages) {
@@ -56,23 +60,23 @@ export function useTranslations(lang: SupportedLanguages) {
   }
 }
 
-export function useTranslatedPath(lang: keyof typeof resources) {
+export function useTranslatedPath(_lang: keyof typeof resources) {
   const translatePath = (
     path: RouteNames,
     l: SupportedLanguages = 'en',
     notePath?: string,
   ) => {
-    if (path == 'internal-note') {
-      if (l == 'en' && notePath) {
+    if (path === 'internal-note') {
+      if (l === 'en' && notePath) {
         return `/notebook/${notePath}`
       }
-      if (l == 'es' && notePath) {
+      if (l === 'es' && notePath) {
         return `/es/cuaderno/${notePath}`
       }
     }
     const innerPath = routes[path][l]
     if (l === defaultLang) {
-      return '/' + innerPath
+      return `/${innerPath}`
     }
     return `/${l}/${innerPath}`
   }

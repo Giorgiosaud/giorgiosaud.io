@@ -1,14 +1,21 @@
 ---
 draft: false
-selfHealing: '0JSCRS'
-title: "Carousels with 0 JS: Using scroll-marker and scroll-marker-group in CSS"
-resume: "How to build interactive carousels using only HTML and CSS, thanks to the new scroll-marker and scroll-marker-group properties."
-image: { src: "css-carousels", alt: "Pure CSS carousel example" }
-publishDate: "2025-07-30 12:00"
-category: "development"
+selfHealing: 0JSCRS
+title: "CSS Carousels Without JavaScript: A Guide"
+description: How to build interactive carousels using only HTML and CSS, thanks to the new scroll-marker and scroll-marker-group properties.
+category: development
+publishDate: 2025-07-30T04:05:05.000Z
 author: 000001-jorge-saud
-collections: [frontend, css]
-tags: [css, carousel, nojs, webdevelopment]
+collections:
+  - frontend
+  - css
+tags:
+  - css
+  - carousel
+  - nojs
+  - webdevelopment
+cover: ../../../assets/images/css-carousels.webp
+coverAlt: "CSS Carousels Without JavaScript: A Guide"
 ---
 
 

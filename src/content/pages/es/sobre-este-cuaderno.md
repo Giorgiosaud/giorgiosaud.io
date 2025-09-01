@@ -1,6 +1,6 @@
 ---
-title: Acerca de este cuaderno
-description: Soluciones desde las más complejas a las más simples — compartiendo lecciones reales a desarrolladores para crecer desde 0.
+title: Todo sobre este cuaderno
+description: Descubre un cuaderno de desarrollo lleno de notas, ejemplos y reflexiones para mejorar tus habilidades como desarrollador web moderno.
 pathToTranslate: about-this
 ---
 # 📒 Sobre este Notebook
