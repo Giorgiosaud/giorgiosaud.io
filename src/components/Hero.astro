@@ -1,7 +1,8 @@
 ---
+import { Image } from 'astro:assets'
 import Icon from '@components/Icon.astro'
 import { getLangFromUrl, useTranslatedPath, useTranslations } from '@i18n/utils'
-import { cloudinarySrc } from 'helpers/cloudinary'
+import HomeNotebook from '@images/home-notebook.webp'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -10,22 +11,9 @@ const { translatePath } = useTranslatedPath(lang)
 interface Props {
   title: string
   description: string
-  cloudinaryImageId?: string
-  imageUrl?: string
   showButtons?: boolean
 }
-const {
-  title,
-  description,
-  cloudinaryImageId,
-  imageUrl,
-  showButtons = true,
-} = Astro.props
-const imgSrc = cloudinaryImageId
-  ? cloudinarySrc(cloudinaryImageId, {
-      width: 500,
-    })
-  : imageUrl
+const { title, description, showButtons = true } = Astro.props
 ---
 
 <section id="hero" class="hero__container scrolll-animated">
@@ -34,7 +22,7 @@ const imgSrc = cloudinaryImageId
       {title}
     </h1>
     <div class="hero__image">
-      <img src={imgSrc} alt="Astronaut" width="500">
+       <Image src={HomeNotebook} alt={title} />
     </div>
     <p class="hero__description">
       {description}

@@ -46,7 +46,7 @@ With that, we restrict access to our resources consumed directly from the browse
 This kind of request is called Preflight Request and is automatically called directly from the browser, not by the front end code but the browser itself makes the request to optimize the client resources (avoiding the expensive call of an API if it doesn't have security access or is down).
 
 To finalize here is a graphic representing the way that said when the prefight request is called from Wikipedia
-![Preflight schema](https://res.cloudinary.com/giorgiosaud/image/upload/f_auto/q_auto/ar_1.0,c_auto,g_auto/v1/notebook-posts/preflight-request-12?_a=DATAdtIIZAA0)
+![Preflight schema](../../../assets/images/preflight-request-12.webp)
 
 Here is a postman preflight test to validate if the response requires it and if the response of the OPTIONS request is ok
 
