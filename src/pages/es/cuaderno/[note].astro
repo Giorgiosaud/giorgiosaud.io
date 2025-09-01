@@ -4,7 +4,6 @@ import { getCollection, render } from 'astro:content'
 
 import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
-import { cloudinarySrc } from '@helpers/cloudinary'
 
 export async function getStaticPaths() {
   const pages = await getCollection('notas')

@@ -46,7 +46,8 @@ Con eso restringimos el acceso a nuestros recursos consumidos directamente desde
 
 Este tipo de solicitud se llama Solicitud Preflight y se llama automáticamente directamente desde el navegador, no por el código del frontend sino que el propio navegador realiza la solicitud para optimizar los recursos del cliente (evitando la costosa llamada a una API si no tiene acceso de seguridad o está inactiva).
 
-Para finalizar aquí les dejo un gráfico que representa la forma en que se dice cuando se llama a la solicitud de preflight desde Wikipedia![Preflight schema](https://res.cloudinary.com/giorgiosaud/image/upload/f_auto/q_auto/ar_1.0,c_auto,g_auto/v1/notebook-posts/preflight-request-12?_a=DATAdtIIZAA0)
+Para finalizar aquí les dejo un gráfico que representa la forma en que se dice cuando se llama a la solicitud de preflight desde Wikipedia!![Preflight schema](../../../assets/images/preflight-request-12.webp)
+
 
 Aquí hay una prueba previa del cartero para validar si la respuesta lo requiere y si la respuesta de la solicitud OPTIONS es correcta
 
