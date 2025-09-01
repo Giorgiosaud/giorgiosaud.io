@@ -5,7 +5,6 @@ import path from 'path'
 
 const alias = {
   '@': path.resolve(__dirname, './src'),
-  '@firebase': path.resolve(__dirname, './src/firebase'),
   '@lib': path.resolve(__dirname, './src/lib'),
   '@style': path.resolve(__dirname, './src/style'),
   '@i18n': path.resolve(__dirname, './src/i18n'),
@@ -13,7 +12,15 @@ const alias = {
   '@components': path.resolve(__dirname, './src/components'),
   '@layouts': path.resolve(__dirname, './src/layouts'),
   '@assets': path.resolve(__dirname, './src/assets'),
-  '@pages': path.resolve(__dirname, './src/pages'),
+  '@template': path.resolve(__dirname, './src/global/templates'),
+  '@icons': path.resolve(__dirname, './src/global/icons'),
+  '@global-components': path.resolve(__dirname, './src/global/components'),
+  '@example-components': path.resolve(__dirname, './src/example-components'),
+  '@global-styles': path.resolve(__dirname, './src/global/styles'),
+  '@global-scripts': path.resolve(__dirname, './src/global/scripts'),
+  '@images': path.resolve(__dirname, './src/assets/images'),
+  '@helpers': path.resolve(__dirname, './src/helpers'),
+  '@pages': path.resolve(__dirname, './src/pages')
 }
 export default getViteConfig({
   test: {
