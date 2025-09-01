@@ -8,13 +8,14 @@ import Footer from '@global-components/Footer.astro'
 import Head from '@global-components/Head/index.astro'
 import Header from '@global-components/Header.astro'
 import type { RouteNames } from '@i18n/utils'
+import type { ImageMetadata } from 'astro'
 
 export interface Props {
   lang?: string
   title?: string
   description?: string
   pathToTranslate?: RouteNames
-  image: string
+  image?: Omit<ImageMetadata, 'orientation'>
   publishedAt: Date
   draft: boolean
   pathToTranslateNote?: string

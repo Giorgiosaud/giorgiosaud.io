@@ -36,12 +36,12 @@ const { draft, title, publishDate, cover, coverAlt, selfHealing, description } =
   description={description}
   draft={draft}
   title={title}
-  image={cover.src}
+  image={cover}
   publishedAt={publishDate}
   pathToTranslateNote={pathToTranslateNote}
 >
   <figure>
-    {cover && <Picture src={cover} alt={coverAlt}/>}
+    {cover && coverAlt && <Picture src={cover} alt={coverAlt}/>}
     <figcaption>{coverAlt}</figcaption>
   </figure>
   <h1>{title}</h1>
