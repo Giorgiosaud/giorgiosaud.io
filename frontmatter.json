@@ -64,7 +64,7 @@
           "title": "slug",
           "name": "slug",
           "type": "slug"
-        }
+        },
         {
           "title": "publishDate",
           "name": "publishDate",
@@ -96,6 +96,23 @@
           "title": "tags",
           "name": "tags",
           "type": "tags"
+        },
+        {
+          "title": "image",
+          "name": "image",
+          "type": "fields",
+          "fields": [
+            {
+              "title": "src",
+              "name": "src",
+              "type": "string"
+            },
+            {
+              "title": "alt",
+              "name": "alt",
+              "type": "string"
+            }
+          ]
         }
       ]
     },
@@ -181,63 +198,62 @@
           "name": "draft",
           "type": "draft"
         },
-        {  
+        {
           "title": "workingOn",
           "name": "workingOn",
           "type": "string"
         },
-        {  
+        {
           "title": "selfHealing",
           "name": "selfHealing",
           "type": "string"
         },
-        {  
+        {
           "title": "country",
           "name": "country",
           "type": "string"
         },
-        {  
+        {
           "title": "client",
           "name": "client",
           "type": "string"
         },
-        {  
+        {
           "title": "category",
           "name": "category",
           "type": "string"
         },
-        {  
+        {
           "title": "project",
           "name": "project",
           "type": "string"
         },
-        {  
+        {
           "title": "resume",
           "name": "resume",
           "type": "string"
         },
-        {  
+        {
           "title": "url",
           "name": "url",
           "type": "string"
         },
-        {  
+        {
           "title": "cover",
           "name": "cover",
           "type": "image",
           "isPreviewImage": true
         },
-        {  
+        {
           "title": "coverAlt",
           "name": "coverAlt",
           "type": "string"
         },
-        {  
+        {
           "title": "image",
           "name": "image",
           "type": "fields",
           "fields": [
-
             {
               "title": "src",
               "name": "src",
@@ -266,10 +282,10 @@
           "name": "classesClient",
           "type": "string"
         },
-        {  
+        {
           "title": "technologies",
           "name": "technologies",
-          "type": "tags"  
+          "type": "tags"
         },
         {
           "title": "Title",
@@ -277,7 +293,7 @@
           "type": "string"
         },
         {
-         "name": "description",
+          "name": "description",
           "title": "Description",
           "type": "string"
         }
@@ -351,12 +367,13 @@
         }
       ]
     }
-
   ],
   "frontMatter.content.pageFolders": [
     {
       "title": "Notes",
-      "contentTypes": ["Notes"],
+      "contentTypes": [
+        "Notes"
+      ],
       "previewPath": "notebook",
       "path": "[[workspace]]/src/content/notes",
       "defaultLocale": "en",
@@ -375,7 +392,9 @@
     },
     {
       "title": "Pages",
-      "contentTypes": ["Pages"],
+      "contentTypes": [
+        "Pages"
+      ],
       "previewPath": "es/",
       "path": "[[workspace]]/src/content/pages",
       "defaultLocale": "en",
@@ -392,10 +411,11 @@
         }
       ]
     },
- 
     {
       "title": "Badges",
-      "contentTypes": ["Badges"],
+      "contentTypes": [
+        "Badges"
+      ],
       "previewPath": "",
       "path": "[[workspace]]/src/content/badges",
       "defaultLocale": "en",
@@ -412,10 +432,11 @@
         }
       ]
     },
-
     {
       "title": "Collections",
-      "contentTypes": ["Collections"],
+      "contentTypes": [
+        "Collections"
+      ],
       "previewPath": "",
       "path": "[[workspace]]/src/content/collections",
       "defaultLocale": "en",
@@ -432,11 +453,12 @@
         }
       ]
     },
-     
     {
       "title": "Portfolio",
       "previewPath": "",
-      "contentTypes": ["Portfolio"],
+      "contentTypes": [
+        "Portfolio"
+      ],
       "path": "[[workspace]]/src/content/portfolio",
       "defaultLocale": "en",
       "locales": [
@@ -455,7 +477,9 @@
     {
       "title": "Team",
       "previewPath": "",
-      "contentTypes": ["Team"],
+      "contentTypes": [
+        "Team"
+      ],
       "path": "[[workspace]]/src/content/team",
       "defaultLocale": "en",
       "locales": [

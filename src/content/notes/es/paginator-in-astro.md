@@ -4,9 +4,6 @@ draft: false
 selfHealing: "000006"
 title: Paginar en Astro
 description: Aprendiendo a paginar en Astro como impacta el performace.
-image:
-  src: paginator
-  alt: Full pages with an indiator
 publishDate: 2024-05-21T13:45:00.000Z
 category: Development
 author: 000001-jorge-saud

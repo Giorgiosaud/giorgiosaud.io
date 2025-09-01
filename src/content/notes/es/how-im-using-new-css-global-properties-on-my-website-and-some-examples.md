@@ -4,9 +4,6 @@ selfHealing: NCSSPG
 starred: true
 title: Uso de Propiedades Globales de CSS en Mi Sitio Web
 description: Descubre cómo usar propiedades globales de CSS para mejorar tu sitio web con soporte de temas y transiciones suaves entre páginas.
-image:
-    src: css-global-props
-    alt: Propiedades Globales de CSS
 publishDate: 2025-07-17T15:42:00.000Z
 category: migración
 author: 000001-jorge-saud
@@ -17,9 +14,9 @@ tags:
     - patrones-de-diseño
     - desarrollo
     - css
-fmContentType: Notas
 cover: ../../../assets/images/css-global-props.webp
 coverAlt: Css Global Props
+slug: como-estoy-usando-nuevas-propiedades-globales-de-css-en-mi-sitio-web-y-algunos-ejemplos
 ---
 
 En mi último proyecto, exploré algunas características emocionantes de CSS que simplifican el desarrollo web y mejoran la experiencia del usuario. Estas herramientas son perfectas para crear sitios web modernos y dinámicos con sorprendentemente poco código.

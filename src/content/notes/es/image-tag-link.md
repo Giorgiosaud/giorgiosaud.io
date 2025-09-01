@@ -4,9 +4,6 @@ draft: false
 title: Entendiendo los Tag Links en Desarrollo Web
 selfHealing: "000004"
 description: Descubre cómo optimizar el rendimiento de tu sitio web con técnicas efectivas para insertar CSS y mejorar la experiencia del usuario.
-image:
-  src: link_siloo8
-  alt: link tag
 publishDate: 2023-05-08T15:39:00.000Z
 category: Tutorials
 author: 000001-jorge-saud

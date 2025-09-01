@@ -16,6 +16,7 @@ tags:
   - css
 cover: ../../../assets/images/css-animations.webp
 coverAlt: mouse and css logo
+slug: css-animaciones-con-scroll-simplificado
 ---
 
 ## Introducción

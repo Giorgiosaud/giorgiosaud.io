@@ -3,9 +3,6 @@ draft: false
 selfHealing: GSWBRL
 title: "Grillas Sin Esfuerzo: Crea Layouts Responsivos Fácilmente"
 description: Cómo construir layouts flexibles y bonitos usando una sola clase utilitaria de CSS grid—sin frameworks.
-image:
-  src: grid-simplified
-  alt: Grillas simplificado
 publishDate: 2025-08-04T22:00:00.000Z
 category: Development
 author: 000001-jorge-saud
@@ -15,7 +12,6 @@ tags:
   - css
   - grid
   - desarrollo-web
-preview: /src/assets/images/grid-simplified.webp
 date: 2025-08-31T21:54:52.000Z
 slug: sistema-de-grilla-simplificado
 cover: ../../../assets/images/grid-simplified.webp

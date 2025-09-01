@@ -2,11 +2,8 @@
 fmContentType: Notas
 draft: false
 selfHealing: "000008"
-title: "El Patrón Repository: Arquitectura de Capa de Datos V1.0"
-description: Descubre cómo implementar el patrón de capa de datos en tu aplicación para simplificar las conexiones de API y mejorar la experiencia del usuario.
-image:
-  src: datalayer
-  alt: Datalayer pattern
+title: "Arquitectura de Capa de Datos: El Patrón Repository V1.0"
+description: Descubre cómo implementar el patrón de repositorio en la arquitectura de capa de datos para simplificar tus conexiones API y mejorar tu UI.
 publishDate: 2024-06-21T13:45:00.000Z
 starred: true
 category: Architecture
@@ -21,6 +18,7 @@ tags:
   - backend
 cover: ../../../assets/images/datalayer.webp
 coverAlt: Transparent Data
+slug: patron-repository-revisitado
 ---
 
 Este post es creado porque @Kevcastle hablaba conmigo sobre la estructura compleja de la publicación anterior relacionada con el patrón de repositorio y trato de resolverlo de una manera simple en más de un post, este es el primer de la serie de Datalayer.

@@ -3,9 +3,6 @@ draft: false
 selfHealing: FLBTNB
 title: "Transformación Web: De Código Legado a Innovación"
 description: Descubre cómo transformé mi aplicación web de código legado a innovaciones nativas, mejorando rendimiento y accesibilidad en el proceso.
-image:
-  src: from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo
-  alt: Del legado a la brillantez nativa
 publishDate: 2025-07-13
 category: frontend
 author: 000001-jorge-saud
@@ -15,9 +12,9 @@ collections:
 tags:
   - evolución
   - frontend
-fmContentType: Notas
 cover: ../../../assets/images/from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo.webp
 coverAlt: Cables y enredos a simpleza led
+slug: de-la-carga-del-legado-a-la-brillantez-nativa-mi-viaje-de-migracion-web
 ---
 
 Durante el último año, emprendí una misión que muchos desarrolladores conocen pero a menudo temen: refactorizar mi aplicación web. El proyecto, este cuaderno y portal en el sector del conocimiento de desarrolladores, estaba cargado con meses de deuda técnica acumulada, frameworks pesados y muchas refactorizaciones que me llevaron a realizar la definitiva. Mi objetivo era claro: migrar a características modernas y nativas de CSS y HTML para construir una plataforma más rápida, más mantenible y altamente accesible para el futuro.

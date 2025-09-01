@@ -3,9 +3,6 @@ draft: false
 title: Entendiendo peticiones Preflight y CORS
 selfHealing: "000007"
 description: Explora cómo CORS y las solicitudes preflight optimizan la seguridad y el acceso a recursos en aplicaciones web modernas.
-image:
-  src: preflight-request-12
-  alt: Entendiendo peticiones Preflight y CORS
 publishDate: 2024-05-30T21:46:00.000Z
 category: integration
 collections:
@@ -22,7 +19,7 @@ tags:
   - common-issues
 cover: ../../../assets/images/preflight-request-12.webp
 coverAlt: Entendiendo peticiones Preflight y CORS
-fmContentType: Notas
+slug: peticiones-preflight
 ---
 
 Cuando hablamos de aplicaciones del lado del cliente, ventajas de los microservicios y micro-frontend, integraciones desde el lado del cliente y cómo hacer que nuestras aplicaciones sean más independientes, estamos hablando de estos problemas comunes, describámoslos brevemente.
