@@ -25,12 +25,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
       - name: Install dependencies
+        run: bun install
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           INTERNAL_PASSWORD: ${{ secrets.INTERNAL_PASSWORD }}
-          run: bun install
       - name: Install Vercel CLI
-        run: bum install --global vercel@latest
+        run: bun install --global vercel@latest
 
       - name: Pull Vercel Environment Variables
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
