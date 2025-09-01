@@ -1,6 +1,6 @@
 ---
-title: Agradecimientos
-description: Agradecimientos de mi website.
+title: "Agradecimientos: Reconociendo el Apoyo Recibido"
+description: Expresa tu gratitud y reconoce a quienes te han apoyado en tu viaje de aprendizaje y creatividad en Giorgiosaud.io.
 pathToTranslate: acknowledgements
 ---
 # 🙏 Agradecimientos
