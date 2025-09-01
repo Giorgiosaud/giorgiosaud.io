@@ -10,13 +10,27 @@ on:
 
 jobs:
   Deploy-Production:
-    environment: production
+    environment: Production
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Cache Bun dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.bun/install/cache # Or the path defined by BUN_INSTALL_CACHE_DIR
+          key: ${{ runner.os }}-bun-${{ hashFiles('bun.lockb') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
+      - name: Install dependencies
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INTERNAL_PASSWORD: ${{ secrets.INTERNAL_PASSWORD }}
+          run: bun install
       - name: Install Vercel CLI
-        run: npm install --global vercel@latest
+        run: bum install --global vercel@latest
 
       - name: Pull Vercel Environment Variables
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
