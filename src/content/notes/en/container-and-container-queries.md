@@ -14,7 +14,6 @@ tags:
   - css
 publishDate: 2025-07-22T05:00:00.000Z
 cover: ../../../assets/images/container-query.webp
-fmContentType: Notes
 coverAlt: Containers Wood
 ---
 

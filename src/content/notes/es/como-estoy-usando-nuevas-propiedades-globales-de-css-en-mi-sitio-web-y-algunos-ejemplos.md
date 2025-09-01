@@ -7,7 +7,7 @@ description: Descubre cómo usar propiedades globales de CSS para mejorar tu sit
 image:
     src: css-global-props
     alt: Propiedades Globales de CSS
-publishDate: 2025-07-17 11:42
+publishDate: 2025-07-17T15:42:00.000Z
 category: migración
 author: 000001-jorge-saud
 collections:

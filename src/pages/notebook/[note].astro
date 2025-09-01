@@ -24,12 +24,14 @@ export async function getStaticPaths() {
 const { page, pathToTranslateNote } = Astro.props
 const { Content } = await render(page)
 const { draft, title, publishDate, cover, coverAlt, description,selfHealing } = page.data
+const imageName = `${page.id}-latest`
+
 ---
 <NoteTemplate
   description={description}
   draft={draft}
   title={title}
-  image={cover.src}
+  image={cover}
   publishedAt={publishDate}
   pathToTranslateNote={pathToTranslateNote}
 >

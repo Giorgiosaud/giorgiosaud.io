@@ -3,9 +3,6 @@ draft: false
 selfHealing: "000005"
 title: Repository pattern in frontend
 description: Discover how the Repository Pattern enhances frontend development by improving data management, testability, and code maintainability.
-image:
-  src: repository pattern
-  alt: Repository Pattern
 publishDate: 2024-05-21T04:00:00.000Z
 category: Architecture
 author: 000001-jorge-saud
@@ -19,7 +16,6 @@ tags:
   - backend
 coverAlt: Repository pattern in frontend
 cover: ../../../assets/images/repository_pattern.webp
-fmContentType: Notes
 ---
 
 In the world of frontend development, managing data efficiently is crucial for building scalable and maintainable applications. One architectural pattern that has proven to be highly effective in achieving this goal is the Repository Pattern. Traditionally used in backend development, the Repository Pattern is increasingly being adopted in frontend development for its ability to decouple data access logic from business logic.

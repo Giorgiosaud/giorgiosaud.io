@@ -3,9 +3,6 @@ draft: false
 selfHealing: "000006"
 title: Paginator in astro do it like a pro
 description: Master pagination in Astro with our pro guide, optimizing your blog for speed and efficiency while enhancing user experience.
-image:
-  src: paginator
-  alt: Full pages with an indiator
 publishDate: 2024-05-21T13:45:00.000Z
 category: Development
 author: 000001-jorge-saud
@@ -17,7 +14,6 @@ tags:
   - nuxt
   - frontend
   - backend
-fmContentType: Notes
 coverAlt: Paginator in astro do it like a pro
 cover: ../../../assets/images/paginator.webp
 ---

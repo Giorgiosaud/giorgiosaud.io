@@ -7,7 +7,7 @@ description: Descubre cómo la regla @layer de CSS ayuda a estructurar y prioriz
 image:
   src: css-layer
   alt: Ejemplo de capas en CSS
-publishDate: 2025-07-28 12:00
+publishDate: 2025-07-28T16:00:00.000Z
 category: migración
 author: 000001-jorge-saud
 collections:

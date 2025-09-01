@@ -3,9 +3,6 @@ draft: false
 selfHealing: "000010"
 title: Self-healing URL in Astro
 description: "In this post, I will talk about how to develop a functionality of self-healing URL in Astro project with a simple approach "
-image:
-  src: selfhealing_url_lygv2g
-  alt: Self Healing paint
 publishDate: 2024-07-19T15:39:00.000Z
 category: architecture
 author: 000001-jorge-saud
@@ -15,7 +12,6 @@ collections:
 tags:
   - architecture
   - functionalfeatures
-fmContentType: Notes
 cover: ../../../assets/images/selfhealing_url_lygv2g.webp
 coverAlt: Self healing symbol
 ---

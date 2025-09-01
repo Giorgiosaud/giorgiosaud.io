@@ -3,9 +3,6 @@ draft: false
 title: Top Tag Link Recommendations for Better SEO
 selfHealing: "000004"
 description: Discover effective tag link recommendations to optimize CSS performance and enhance your website's loading speed.
-image:
-  src: link_siloo8
-  alt: link tag
 publishDate: 2023-05-08T15:39:00.000Z
 category: Tutorials
 author: 000001-jorge-saud
@@ -16,7 +13,6 @@ tags:
   - frontend
   - img
   - srcset
-fmContentType: Notes
 cover: ../../../assets/images/link_siloo8.webp
 coverAlt: Link for SEO
 ---

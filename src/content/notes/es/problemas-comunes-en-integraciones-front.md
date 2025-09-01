@@ -8,7 +8,7 @@ starred: true
 image:
   src: Really common issues integrating frontend
   alt: Really common issues integrating from front-end image
-publishDate: 2021-05-12 11:39
+publishDate: 2021-05-12T15:39:00.000Z
 category: integration
 collections:
   - integration

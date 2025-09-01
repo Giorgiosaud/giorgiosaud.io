@@ -7,7 +7,7 @@ description: Mostrando los beneficios de la arquitectura de microfrontend y como
 image:
     src: microfrontend_klswbm
     alt: Micro Frontend Architecture
-publishDate: 2023-05-08 11:39
+publishDate: 2023-05-08T15:39:00.000Z
 category: architecture
 author: 000001-jorge-saud
 collections:

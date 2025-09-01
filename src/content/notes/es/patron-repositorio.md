@@ -6,7 +6,7 @@ description: Descubre cómo implementar el Patrón de Repositorio en frontend pa
 image:
   src: repository pattern
   alt: Repository Pattern
-publishDate: 2024-05-21 09:45
+publishDate: 2024-05-21T13:45:00.000Z
 category: Architecture
 author: 000001-jorge-saud
 collections:

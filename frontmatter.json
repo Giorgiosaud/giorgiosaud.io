@@ -61,22 +61,10 @@
           "type": "string"
         },
         {
-          "title": "image",
-          "name": "image",
-          "type": "fields",
-          "fields": [
-            {
-              "title": "src",
-              "name": "src",
-              "type": "string"
-            },
-            {
-              "title": "alt",
-              "name": "alt",
-              "type": "string"
-            }
-          ]
-        },
+          "title": "slug",
+          "name": "slug",
+          "type": "slug"
+        }
         {
           "title": "publishDate",
           "name": "publishDate",

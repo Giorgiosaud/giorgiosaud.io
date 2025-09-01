@@ -2,8 +2,8 @@
 fmContentType: Notas
 draft: false
 selfHealing: "000006"
-title: Paginator in astro
-description: Aprendiendo a paginar en astro como impacta el performace.
+title: Paginar en Astro
+description: Aprendiendo a paginar en Astro como impacta el performace.
 image:
   src: paginator
   alt: Full pages with an indiator
@@ -20,6 +20,7 @@ tags:
   - backend
 cover: ../../../assets/images/paginator.webp
 coverAlt: Paginas de libro
+slug: paginador-en-astro
 ---
 
 # Basis of Pagination

@@ -7,10 +7,9 @@ image:
   src: grid-simplified
   alt: Grillas simplificado
 publishDate: 2025-08-04T22:00:00.000Z
-category: development
+category: Development
 author: 000001-jorge-saud
 collections:
-  - migration
   - css
 tags:
   - css
@@ -18,7 +17,9 @@ tags:
   - desarrollo-web
 preview: /src/assets/images/grid-simplified.webp
 date: 2025-08-31T21:54:52.000Z
-fmContentType: Notas
+slug: sistema-de-grilla-simplificado
+cover: ../../../assets/images/grid-simplified.webp
+coverAlt: Sistema de grid
 ---
 
 ## Introducción

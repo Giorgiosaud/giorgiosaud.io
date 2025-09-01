@@ -7,7 +7,7 @@ description: Discover the Singleton Design Pattern with simplified explanations 
 image:
   src: singleton_hbupze
   alt: Recicle Singleton image
-publishDate: 2023-11-14 11:39
+publishDate: 2023-11-14T14:39:00.000Z
 category: development
 author: 000001-jorge-saud
 collections:

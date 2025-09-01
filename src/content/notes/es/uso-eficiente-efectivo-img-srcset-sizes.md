@@ -6,7 +6,7 @@ description: Aprende a usar la etiqueta <img> con srcset y sizes para optimizar 
 image:
   src: link_siloo8
   alt: desarrollo web full stack
-publishDate: 2023-05-08 11:39
+publishDate: 2023-05-08T15:39:00.000Z
 category: Tutoriales
 author: 000001-jorge-saud
 starred: true

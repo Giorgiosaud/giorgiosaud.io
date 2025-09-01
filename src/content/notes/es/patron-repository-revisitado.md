@@ -7,7 +7,7 @@ description: Descubre cómo implementar el patrón de capa de datos en tu aplica
 image:
   src: datalayer
   alt: Datalayer pattern
-publishDate: 2024-06-21 09:45
+publishDate: 2024-06-21T13:45:00.000Z
 starred: true
 category: Architecture
 author: 000001-jorge-saud

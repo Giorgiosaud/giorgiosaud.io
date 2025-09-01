@@ -7,7 +7,7 @@ description: Aquí explico cómo utilicé la consulta @container en el rediseño
 image:
   src: container-query
   alt: Animaciones de scroll en CSS
-publishDate: 2025-07-22 15:15
+publishDate: 2025-07-22T19:15:00.000Z
 category: development
 author: 000001-jorge-saud
 collections:

@@ -2,10 +2,7 @@
 draft: false
 title: Preflight request and Cors
 selfHealing: "000007"
-description: When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues
-image:
-  src: preflight-request-12
-  alt: Preflight request and Cors Updated
+description: Understand CORS and Preflight Requests to enhance your web app's security and optimize cross-domain resource sharing.
 publishDate: 2024-05-30T21:46:00.000Z
 category: integration
 author: 000001-jorge-saud
@@ -20,7 +17,6 @@ tags:
   - preflightrequest
   - preflight
   - common-issues
-fmContentType: Notes
 cover: ../../../assets/images/preflight-request-12.webp
 coverAlt: PReflight plane from pc
 ---

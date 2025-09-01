@@ -4,10 +4,7 @@ draft: false
 selfHealing: "000016"
 title: Guía Rápida de Animaciones de Scroll en CSS
 description: Descubre cómo simplificar las animaciones de scroll en CSS con técnicas efectivas y sin complicaciones. ¡Optimiza tu diseño web hoy!
-image:
-  src: css-animations
-  alt: Css scroll animations
-publishDate: 2025-02-10 15:15
+publishDate: 2025-02-10T18:15:00.000Z
 category: development
 starred: true
 author: 000001-jorge-saud

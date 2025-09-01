@@ -4,9 +4,6 @@ selfHealing: LYRCSS
 starred: true
 title: How I Use `@layer` in CSS to Organize Styles in My Project
 description: Discover how the @layer rule in CSS helps structure and prioritize styles in a modern and maintainable way.
-image:
-  src: css-layer
-  alt: Example of CSS layers
 publishDate: 2025-07-28T16:00:00.000Z
 category: migration
 author: 000001-jorge-saud
@@ -18,7 +15,6 @@ tags:
   - development
   - css
   - layer
-fmContentType: Notes
 cover: ../../../assets/images/css-layer.webp
 coverAlt: Css Layers image
 ---

@@ -4,10 +4,7 @@ selfHealing: "000016"
 starred: true
 title: Mastering CSS Scrolling Animations Easily
 description: Master CSS scrolling animations with our simplified guide, focusing on native solutions using animation-timeline and animation-range.
-image:
-  src: css-animations
-  alt: Css scroll animations
-publishDate: 2025-02-10 15:15
+publishDate: 2025-02-10T18:15:00.000Z
 category: development
 author: 000001-jorge-saud
 collections:
@@ -16,7 +13,6 @@ tags:
   - design-patterns
   - development
   - css
-fmContentType: Notes
 cover: ../../../assets/images/css-animations.webp
 coverAlt: CSS Scrolling Animations Simplified
 ---

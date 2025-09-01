@@ -4,10 +4,7 @@ selfHealing: NCSSPG
 starred: true
 title: "Using CSS Global Properties: A Practical Guide"
 description: Discover how to enhance your website with new CSS global properties for theme support and smooth transitions, simplifying web development.
-image:
-    src: css-global-props
-    alt: Css Global Props
-publishDate: 2025-07-17 11:42
+publishDate: 2025-07-17T15:42:00.000Z
 category: migration
 author: 000001-jorge-saud
 collections:
@@ -17,7 +14,6 @@ tags:
     - design-patterns
     - development
     - css
-fmContentType: Notes
 cover: ../../../assets/images/css-global-props.webp
 coverAlt: Css Global Props
 ---

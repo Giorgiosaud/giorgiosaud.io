@@ -7,7 +7,7 @@ description: Descubre cómo implementar URLs autocorregidas en Astro para mejora
 image:
   src: selfhealing_url_lygv2g
   alt: Imagen autocorregidas
-publishDate: 2024-07-19 11:39
+publishDate: 2024-07-19T15:39:00.000Z
 category: astro
 author: 000001-jorge-saud
 collections:

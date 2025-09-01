@@ -6,7 +6,7 @@ description: Explora cómo CORS y las solicitudes preflight optimizan la segurid
 image:
   src: preflight-request-12
   alt: Entendiendo peticiones Preflight y CORS
-publishDate: 2024-05-30 17:46
+publishDate: 2024-05-30T21:46:00.000Z
 category: integration
 collections:
   - frontend

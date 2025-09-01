@@ -3,9 +3,6 @@ draft: false
 selfHealing: 0JSCRS
 title: "CSS Carousels Without JavaScript: A Guide"
 description: How to build interactive carousels using only HTML and CSS, thanks to the new scroll-marker and scroll-marker-group properties.
-image:
-  src: css-carousels
-  alt: Pure CSS carousel example
 category: development
 publishDate: 2025-07-30T04:05:05.000Z
 author: 000001-jorge-saud
@@ -17,7 +14,6 @@ tags:
   - carousel
   - nojs
   - webdevelopment
-fmContentType: Notes
 cover: ../../../assets/images/css-carousels.webp
 coverAlt: "CSS Carousels Without JavaScript: A Guide"
 ---
