@@ -6,9 +6,13 @@ import '@global-styles/md.css'
 
 export async function getStaticPaths() {
   const pages = await getCollection('paginas')
-  return pages.map((page) => ({
-    params: { slug: page.id },
-    props: { page },
+  return pages.map(page => ({
+    params: {
+      slug: page.id,
+    },
+    props: {
+      page,
+    },
   }))
 }
 

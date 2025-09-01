@@ -11,7 +11,7 @@ interface Props {
 const { collection } = Astro.props
 
 const notes = (await getCollection(collection))
-  .filter((note) => !note.data.draft)
+  .filter(note => !note.data.draft)
   .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
   .slice(0, 6)
 ---

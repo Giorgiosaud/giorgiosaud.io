@@ -10,14 +10,14 @@ interface Props {
 }
 const { collection } = Astro.props
 const latestNotesIds = (await getCollection(collection))
-  .filter((note) => !note.data.draft)
+  .filter(note => !note.data.draft)
   .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
   .slice(0, 4)
-  .map((note) => note.id)
+  .map(note => note.id)
 
 const notes = (await getCollection(collection))
-  .filter((note) => note.data.starred && !note.data.draft)
-  .filter((note) => !latestNotesIds.includes(note.id))
+  .filter(note => note.data.starred && !note.data.draft)
+  .filter(note => !latestNotesIds.includes(note.id))
   .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
   .slice(0, 4)
 ---

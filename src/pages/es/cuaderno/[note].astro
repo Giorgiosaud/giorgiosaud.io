@@ -8,32 +8,29 @@ import '@global-styles/md.css'
 export async function getStaticPaths() {
   const pages = await getCollection('notas')
   const pagesTranslated = await getCollection('notes')
-  return pages.map((page) => {
+  return pages.map(page => {
     const pathToTranslateNote =
       pagesTranslated.find(
-        (translatedPage) =>
+        translatedPage =>
           translatedPage.data.selfHealing &&
           translatedPage.data.selfHealing === page.data.selfHealing,
       )?.id || ''
     return {
-      params: { note: page.id },
-      props: { page, pathToTranslateNote },
+      params: {
+        note: page.id,
+      },
+      props: {
+        page,
+        pathToTranslateNote,
+      },
     }
   })
 }
 const { page, pathToTranslateNote } = Astro.props
 
 const { Content } = await render(page)
-const {
-  draft,
-  title,
-  publishDate,
-  cover,
-  coverAlt,
-  selfHealing,
-  description,
-} = page.data
-
+const { draft, title, publishDate, cover, coverAlt, selfHealing, description } =
+  page.data
 ---
 <NoteTemplate
   description={description}

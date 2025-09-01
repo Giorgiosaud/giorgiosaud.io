@@ -9,7 +9,7 @@ const { name } = Astro.props
 let IconComponent = null
 
 // Find the correct module path
-const path = Object.keys(modules).find((p) => {
+const path = Object.keys(modules).find(p => {
   const pathParts = p.split('/')
   const fileNameWithExt = pathParts.pop() || ''
   const fileName = fileNameWithExt.split('.')[0]

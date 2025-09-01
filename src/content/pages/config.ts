@@ -8,12 +8,18 @@ const pageSchema = z.object({
 })
 
 export const pages = defineCollection({
-  loader: glob({ base: 'src/content/pages/en', pattern: '*.(md|mdx)' }),
+  loader: glob({
+    base: 'src/content/pages/en',
+    pattern: '*.(md|mdx)',
+  }),
   schema: pageSchema,
 })
 
 export const paginas = defineCollection({
-  loader: glob({ base: 'src/content/pages/es', pattern: '*.(md|mdx)' }),
+  loader: glob({
+    base: 'src/content/pages/es',
+    pattern: '*.(md|mdx)',
+  }),
   schema: pageSchema,
 })
 

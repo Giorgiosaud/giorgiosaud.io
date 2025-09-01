@@ -13,12 +13,18 @@ const badgeSchema = z.object({
 })
 
 export const badges = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/badges/en' }),
+  loader: glob({
+    pattern: '**/[^_]*.md',
+    base: './src/content/badges/en',
+  }),
   schema: badgeSchema,
 })
 
 export const insignias = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.md', base: './src/content/badges/es' }),
+  loader: glob({
+    pattern: '**/[^_]*.md',
+    base: './src/content/badges/es',
+  }),
   schema: badgeSchema,
 })
 

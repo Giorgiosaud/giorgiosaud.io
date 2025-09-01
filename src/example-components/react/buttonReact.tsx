@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 export default function MyApp({ title = 'Increment Count React.' }) {
   const [count, setCount] = useState(0)
-  const handleClick = () => setCount((count) => count + 1)
+  const handleClick = () => setCount(count => count + 1)
   useEffect(() => {
-    setTimeout(() => setCount((count) => count + 1), 1000)
+    setTimeout(() => setCount(count => count + 1), 1000)
   }, [])
   return (
     <div
@@ -17,6 +17,7 @@ export default function MyApp({ title = 'Increment Count React.' }) {
         React Button was clicked {count} {count === 1 ? 'time' : 'times'}
       </h3>
       <button
+        type="button"
         style={{
           background: 'blue',
           color: 'white',

@@ -9,7 +9,7 @@ test('Contact Form works', async () => {
   const document = window.document
   document.body.innerHTML = result
   // Mock the form submit event
-  const mockSubmit = vi.fn((e) => {
+  const mockSubmit = vi.fn(e => {
     e.preventDefault() // Prevent actual form submission
     const formData = new FormData(e.target) // Capture the form data
     const payload = Object.fromEntries(formData.entries())
