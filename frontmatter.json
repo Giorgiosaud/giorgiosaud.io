@@ -73,7 +73,7 @@
         {
           "title": "category",
           "name": "category",
-          "type": "categories"
+          "type": "string"
         },
         {
           "title": "author",
@@ -89,30 +89,14 @@
             "patterns",
             "astro",
             "frontend",
-            "css"
+            "css",
+            "ai"
           ]
         },
         {
           "title": "tags",
           "name": "tags",
           "type": "tags"
-        },
-        {
-          "title": "image",
-          "name": "image",
-          "type": "fields",
-          "fields": [
-            {
-              "title": "src",
-              "name": "src",
-              "type": "string"
-            },
-            {
-              "title": "alt",
-              "name": "alt",
-              "type": "string"
-            }
-          ]
         }
       ]
     },
@@ -248,24 +232,6 @@
           "title": "coverAlt",
           "name": "coverAlt",
           "type": "string"
-        },
-        {
-          "title": "image",
-          "name": "image",
-          "type": "fields",
-          "fields": [
-            {
-              "title": "src",
-              "name": "src",
-              "type": "string"
-            },
-            {
-              "title": "alt",
-              "name": "alt",
-              "type": "string",
-              "isPreviewImage": true
-            }
-          ]
         },
         {
           "title": "publishDate",

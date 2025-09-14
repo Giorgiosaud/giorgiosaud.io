@@ -41,7 +41,7 @@ const { draft, title, publishDate, cover, coverAlt, selfHealing, description } =
   pathToTranslateNote={pathToTranslateNote}
 >
   <figure>
-    {cover && coverAlt && <Picture src={cover} alt={coverAlt}/>}
+    {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
     <figcaption>{coverAlt}</figcaption>
   </figure>
   <h1>{title}</h1>
