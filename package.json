@@ -2,6 +2,7 @@
   "name": "new-giorgiosaud-io",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
@@ -24,6 +25,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "resend": "^6.0.2",
+    "sharp": "^0.34.4",
     "svelte": "^5.38.6",
     "typescript": "^5.9.2",
     "vue": "^3.5.20"

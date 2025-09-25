@@ -72,14 +72,6 @@ pathToTranslateNote={pathToTranslateNote}
         });
       }
     };
-    
-    // const availability = await Summarizer.availability();
-    // if (availability === 'unavailable') {
-    //   // The Summarizer API isn't usable.
-    //   return;
-    // }
-    
-    // Check for user activation before creating the summarizer
       const summarizer = await Summarizer.create(options);
       console.log({summarizer})
       const text= document.getElementById('content').innerText;
@@ -208,6 +200,7 @@ shareButton.addEventListener('click', shareContent);
   }
   /** make this border like gemini colors moving around as gradient  */
   #summary.can-summarize{
+    margin-top: 2rem;
     width: 60ch;  
     border-left: 4px solid var(--color-accent);
     animation: gemini-border 1s infinite ease-in cubic-bezier(0.1, -0.6, 0.2, 0);
