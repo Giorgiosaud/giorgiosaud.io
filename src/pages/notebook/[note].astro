@@ -80,9 +80,8 @@ pathToTranslateNote={pathToTranslateNote}
         // The Summarizer API isn't usable.
         return;
       }
-      
+      document.getElementById('summary').addEventListener('click', async () => {
       // Check for user activation before creating the summarizer
-      if (navigator.userActivation.isActive) {
         const summarizer = await Summarizer.create(options);
         console.log({summarizer})
         const text= document.getElementById('content').innerText;
@@ -96,8 +95,7 @@ pathToTranslateNote={pathToTranslateNote}
         summaryElement.innerHTML =
         marked.parse(summaryElement.innerText);
         console.log('Summary generation completed.');
-        
-      }
+      });
       
     };
     summarizeContent();
