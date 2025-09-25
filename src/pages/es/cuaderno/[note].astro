@@ -44,14 +44,54 @@ const { draft, title, publishDate, cover, coverAlt, selfHealing, description } =
     {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
     <figcaption>{coverAlt}</figcaption>
   </figure>
-  <h1>{title}</h1>
-  <Content />
+<div id="summary"></div>
+<div id="content">
+<h1>{title}</h1>
+<Content/>
+</div>
   <section class="share">
 <p>Share this note:</p>
   <p id="notification">Link copiado al portapapeles!</p>
   <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
 </section>
 </NoteTemplate>
+<script type="module">
+  import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+  if ('Summarizer' in self) {
+    const summaryElement = document.getElementById('summary');
+    summaryElement.classList.add('can-summarize');
+    
+    async function summarizeContent(){
+    const options = {
+      sharedContext: 'This is a FrontEnd developers article',
+      type: 'teaser',
+      format: 'markdown',
+      length: 'long',
+      monitor(m) {
+        m.addEventListener('downloadprogress', (e) => {
+          console.log(`Downloaded ${e.loaded * 100}%`);
+        });
+      }
+    };
+      const summarizer = await Summarizer.create(options);
+      console.log({summarizer})
+      const text= document.getElementById('content').innerText;
+      summaryElement.innerText = 'Generating summary...';
+      const summary = await summarizer.summarizeStreaming(text);
+      summaryElement.innerText = '';
+      for await (const chunk of summary.values()) {
+        summaryElement.innerText += chunk;
+      }
+      console.log('Raw summary:', summaryElement.innerText);
+      summaryElement.innerHTML =
+      marked.parse(summaryElement.innerText);
+      console.log('Summary generation completed.');
+      
+      
+  };
+  summarizeContent();
+  };
+</script>
 <script define:vars={{selfHealing}}>
         notification = document.getElementById('notification');
 
@@ -142,4 +182,80 @@ const shareButton = document.getElementById('share');
       border-radius: 10px;
     }
   }
+    #content,#summary{
+    max-width: 80ch;
+    margin: auto;
+    padding: 1rem;
+    font-size: clamp(.8rem, 2vw, 1.125rem);
+    line-height: 1.6;
+  }
+  #summary{
+    max-width: 60ch;
+    background-color: light-dark(var(--color-summary-light), var(--color-summary-dark));
+    border-left: 4px solid var(--color-accent);
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+  /** make this border like gemini colors moving around as gradient  */
+  #summary.can-summarize{
+    margin-top: 2rem;
+    width: 60ch;  
+    border-left: 4px solid var(--color-accent);
+    animation: gemini-border 1s infinite ease-in cubic-bezier(0.1, -0.6, 0.2, 0);
+  }
+  #summary.can-summarize::before{
+    content: '🤖 This summary was generated with AI';
+    display: block;
+    font-size: 0.875rem;
+    color: light-dark(var(--color-accent-dark), var(--color-accent-light));
+    margin-bottom: 0.5rem;
+  }
+  .can-summarize {
+  position: relative;
+  padding: 2rem;
+  border-radius: 1rem;
+  z-index: 0;
+  overflow: hidden;
+}
+.can-summarize:after{
+  background: var(--color-dark);
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-sizing: border-box;
+    border: transparent 41px solid;
+    z-index: -1;
+    margin: 5px;
+    border-radius: 15px;
+}
+.can-summarize::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 4px;
+  background: conic-gradient(
+    from 0deg,
+    #ff00cc,
+    #3333ff,
+    #00ffcc,
+    #ffcc00,
+    #ff00cc
+  );
+  z-index: -1;
+  height: 100%;
+  width: 250%;
+  animation: spin 15s linear infinite;
+}
+
+.can-summarize > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
