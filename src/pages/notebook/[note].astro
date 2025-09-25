@@ -60,15 +60,17 @@ pathToTranslateNote={pathToTranslateNote}
 <script type="module">
   import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
   if ('Summarizer' in self) {
+    console.log('Summarizer is available');
     const summaryElement = document.getElementById('summary');
     summaryElement.classList.add('can-summarize');
     async function summarizeContent(){
       const options = {
-        sharedContext: 'This is a FrontEnd developers article use same language as text for the summary',
+        sharedContext: 'This is a FrontEnd developers article use same language as text for the summary el autor siempre es Giorgiosaud lenguaje tecnico pero cercano al lector',
         type: 'teaser',
         format: 'markdown',
-        length: 'long',
-        language: 'es',
+        length: 'medium',
+        expectedInputLanguages: ["en-US"],
+        outputLanguage: 'en-US',
         monitor(m) {
           m.addEventListener('downloadprogress', (e) => {
             console.log(`Downloaded ${e.loaded * 100}%`);
@@ -85,7 +87,7 @@ pathToTranslateNote={pathToTranslateNote}
         const summarizer = await Summarizer.create(options);
         const text= document.getElementById('content').innerText;
         summaryElement.innerText = 'Generating summary...';
-        const summary = await summarizer.summarizeStreaming(text, { language: 'es' });
+        const summary = await summarizer.summarizeStreaming(text, { language: 'en' });
         summaryElement.innerText = '';
         for await (const chunk of summary.values()) {
           summaryElement.innerText += chunk;
@@ -95,10 +97,12 @@ pathToTranslateNote={pathToTranslateNote}
         marked.parse(summaryElement.innerText);
         console.log('Summary generation completed.');
       });
-      
     };
     summarizeContent();
+
   };
+      console.log('clicking generate summary button',navigator.userActivation.isActive);
+
 </script>
 <script define:vars={{selfHealing}}>
   

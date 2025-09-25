@@ -64,11 +64,12 @@ pathToTranslateNote={pathToTranslateNote}
     summaryElement.classList.add('can-summarize');
     async function summarizeContent(){
       const options = {
-        sharedContext: 'This is a FrontEnd developers article use same language as text for the summary',
+        sharedContext: 'This is a FrontEnd developers article use same language as text for the summary the author is Giorgiosaud and is less formal but technical',
         type: 'teaser',
         format: 'markdown',
-        length: 'long',
-        language: 'es',
+        length: "medium",
+        expectedInputLanguages: ["es-ES"],
+        outputLanguage: 'es-ES',
         monitor(m) {
           m.addEventListener('downloadprogress', (e) => {
             console.log(`Downloaded ${e.loaded * 100}%`);
