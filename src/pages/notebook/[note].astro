@@ -45,8 +45,8 @@ pathToTranslateNote={pathToTranslateNote}
 </figure>
 <div id="summary"></div>
 <div id="content">
-<h1>{title}</h1>
-<Content/>
+  <h1>{title}</h1>
+  <Content/>
 </div>
 <section class="share">
   <p>Share this note:</p>
@@ -57,101 +57,113 @@ pathToTranslateNote={pathToTranslateNote}
 <script type="module">
   import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
   if ('Summarizer' in self) {
+    
     const summaryElement = document.getElementById('summary');
     summaryElement.classList.add('can-summarize');
     
     async function summarizeContent(){
-    const options = {
-      sharedContext: 'This is a FrontEnd developers article',
-      type: 'teaser',
-      format: 'markdown',
-      length: 'long',
-      monitor(m) {
-        m.addEventListener('downloadprogress', (e) => {
-          console.log(`Downloaded ${e.loaded * 100}%`);
-        });
+      const options = {
+        sharedContext: 'This is a FrontEnd developers article',
+        type: 'teaser',
+        format: 'markdown',
+        length: 'long',
+        language: 'en',
+        monitor(m) {
+          m.addEventListener('downloadprogress', (e) => {
+            console.log(`Downloaded ${e.loaded * 100}%`);
+          });
+        }
+      };
+      const availability = await Summarizer.availability();
+      console.log('Summarizer availability:', availability);
+      if (availability === 'unavailable') {
+        // The Summarizer API isn't usable.
+        return;
       }
+      
+      // Check for user activation before creating the summarizer
+      if (navigator.userActivation.isActive) {
+        const summarizer = await Summarizer.create(options);
+        console.log({summarizer})
+        const text= document.getElementById('content').innerText;
+        summaryElement.innerText = 'Generating summary...';
+        const summary = await summarizer.summarizeStreaming(text,{ language: 'en' });
+        summaryElement.innerText = '';
+        for await (const chunk of summary.values()) {
+          summaryElement.innerText += chunk;
+        }
+        console.log('Raw summary:', summaryElement.innerText);
+        summaryElement.innerHTML =
+        marked.parse(summaryElement.innerText);
+        console.log('Summary generation completed.');
+        
+      }
+      
     };
-      const summarizer = await Summarizer.create(options);
-      console.log({summarizer})
-      const text= document.getElementById('content').innerText;
-      summaryElement.innerText = 'Generating summary...';
-      const summary = await summarizer.summarizeStreaming(text);
-      summaryElement.innerText = '';
-      for await (const chunk of summary.values()) {
-        summaryElement.innerText += chunk;
-      }
-      console.log('Raw summary:', summaryElement.innerText);
-      summaryElement.innerHTML =
-      marked.parse(summaryElement.innerText);
-      console.log('Summary generation completed.');
-      
-      
-  };
-  summarizeContent();
+    summarizeContent();
   };
 </script>
 <script define:vars={{selfHealing}}>
   
   // The Summarizer API is supported.
-notification = document.getElementById('notification');
-
-const shareButton = document.getElementById('share');
-const urlToShare = `${window.location.href}-${selfHealing}`;
-const copyLink = async (link)=>{
-  if (navigator.clipboard) {
-    try {
-      await navigator.clipboard.writeText(link);
-      notification.style.display = 'block';
-      setTimeout(() => {
-        notification.style.display = 'none';
-      }, 2000);
-      console.log('Link copied to clipboard');
-    } catch (err) {
-      console.error('Failed to copy link: ', err);
-      throw err
+  notification = document.getElementById('notification');
+  
+  const shareButton = document.getElementById('share');
+  const urlToShare = `${window.location.href}-${selfHealing}`;
+  const copyLink = async (link)=>{
+    if (navigator.clipboard) {
+      try {
+        await navigator.clipboard.writeText(link);
+        notification.style.display = 'block';
+        setTimeout(() => {
+          notification.style.display = 'none';
+        }, 2000);
+        console.log('Link copied to clipboard');
+      } catch (err) {
+        console.error('Failed to copy link: ', err);
+        throw err
+      }
+    }
+    else{
+      console.log('Clipboard API not supported');
+      throw new Error('Clipboard API not supported');
     }
   }
-  else{
-    console.log('Clipboard API not supported');
-    throw new Error('Clipboard API not supported');
+  const shareViaShareApi=async ({title, text, url})=>{
+    if (navigator.share) {
+      try{
+        await navigator.share({title, text, url});
+        console.log('Successful share');
+      } catch (error) {
+        console.error('Error sharing:', error);
+        throw error
+      }
+    }
+    else{
+      console.log('Share API not supported');
+      throw new Error('Share API not supported');
+    }
   }
-}
-const shareViaShareApi=async ({title, text, url})=>{
-  if (navigator.share) {
+  
+  const shareContent = async () => {
+    const shareData = {
+      title: document.querySelector('h1').textContent,
+      text: document.querySelector('meta[name="description"]').content,
+      url: urlToShare,
+    };
     try{
-      await navigator.share({title, text, url});
-      console.log('Successful share');
+      await shareViaShareApi(shareData);
     } catch (error) {
-      console.error('Error sharing:', error);
-      throw error
+      try {
+        // Fallback to copying the link if Share API fails
+        await copyLink(shareData.url);
+      } catch (error) {
+        console.error('Error copying link:', error);
+      }
     }
-  }
-  else{
-    console.log('Share API not supported');
-    throw new Error('Share API not supported');
-  }
-}
-
-const shareContent = async () => {
-  const shareData = {
-    title: document.querySelector('h1').textContent,
-    text: document.querySelector('meta[name="description"]').content,
-    url: urlToShare,
   };
-  try{
-    await shareViaShareApi(shareData);
-  } catch (error) {
-    try {
-      // Fallback to copying the link if Share API fails
-      await copyLink(shareData.url);
-    } catch (error) {
-      console.error('Error copying link:', error);
-    }
-  }
-};
-shareButton.addEventListener('click', shareContent);
-
+  shareButton.addEventListener('click', shareContent);
+  
 </script>
 <style define:vars={{imageName}}>
   #share{
@@ -215,14 +227,14 @@ shareButton.addEventListener('click', shareContent);
     margin-bottom: 0.5rem;
   }
   .can-summarize {
-  position: relative;
-  padding: 2rem;
-  border-radius: 1rem;
-  z-index: 0;
-  overflow: hidden;
-}
-.can-summarize:after{
-  background: var(--color-dark);
+    position: relative;
+    padding: 2rem;
+    border-radius: 1rem;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .can-summarize:after{
+    background: var(--color-dark);
     content: '';
     position: absolute;
     inset: 0;
@@ -231,36 +243,36 @@ shareButton.addEventListener('click', shareContent);
     z-index: -1;
     margin: 5px;
     border-radius: 15px;
-}
-.can-summarize::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  padding: 4px;
-  background: conic-gradient(
+  }
+  .can-summarize::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 4px;
+    background: conic-gradient(
     from 0deg,
     #ff00cc,
     #3333ff,
     #00ffcc,
     #ffcc00,
     #ff00cc
-  );
-  z-index: -1;
-  height: 100%;
-  width: 250%;
-  animation: spin 15s linear infinite;
-}
-
-.can-summarize > * {
-  position: relative;
-  z-index: 1;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+    );
+    z-index: -1;
+    height: 100%;
+    width: 250%;
+    animation: spin 15s linear infinite;
   }
-}
+  
+  .can-summarize > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
   
 </style>
