@@ -1,1 +1,8 @@
-{}
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.biome": "explicit",
+        "source.fixAll.eslint": "explicit",
+    },
+    
+}
