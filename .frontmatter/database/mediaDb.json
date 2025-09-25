@@ -1,0 +1,19 @@
+{
+  "src": {
+    "assets": {
+      "images": {
+        "md_engine.webp": {
+          "title": "Md Engine",
+          "caption": "Md Engine",
+          "alt": "MD engine/ Motor MD "
+        },
+        "404.png": {
+          "title": "astronaut searching unfound",
+          "caption": "",
+          "alt": "astronaut searching unfound"
+        }
+      }
+    },
+    "helpers": {}
+  }
+}
