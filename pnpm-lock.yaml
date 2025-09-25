@@ -29,6 +29,9 @@ importers:
       '@astrojs/vue':
         specifier: ^5.1.0
         version: 5.1.1(@types/node@24.5.2)(astro@5.13.5(@types/node@24.5.2)(@vercel/functions@2.2.13)(rollup@4.52.2)(typescript@5.9.2)(yaml@2.8.1))(rollup@4.52.2)(vue@3.5.21(typescript@5.9.2))(yaml@2.8.1)
+      '@frontmatter/extensibility':
+        specifier: ^0.0.18
+        version: 0.0.18
       '@types/react':
         specifier: ^19.1.12
         version: 19.1.13
@@ -503,6 +506,9 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@frontmatter/extensibility@0.0.18':
+    resolution: {integrity: sha512-9toAfnAzy+g5+5N7cq//wLHxB5eDEQlykPD/IwLvRqm2bN8vJi3/UuTXBk+pL8LwBQai7N1FDMMRw13bhcj84Q==}
+
   '@img/colour@1.0.0':
     resolution: {integrity: sha512-A5P/LfWGFSl6nsckYtjw9da+19jB8hkJ6ACTGcDfEJ0aE+l2n2El7dsVM7UVHZQ9s2lmYMWlrS21YLy2IR1LUw==}
     engines: {node: '>=18'}
@@ -928,6 +934,10 @@ packages:
   '@sindresorhus/merge-streams@4.0.0':
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
+
+  '@skypack/package-check@0.2.2':
+    resolution: {integrity: sha512-T4Wyi9lUuz0a1C2OHuzqZ0aFOCI0AmaGTb2LP9sHgWdoHXlB3JU02gfBpa0Y081G/gFsJYpQ/R0iCJRzF/nknw==}
+    hasBin: true
 
   '@sveltejs/acorn-typescript@1.0.5':
     resolution: {integrity: sha512-IwQk4yfwLdibDlrXVE04jTZYlLnwsTT2PIOQQGNLWfjavGifnk1JD1LcZjZaBTRcxZu2FfPfNLOE04DSu9lqtQ==}
@@ -2721,6 +2731,10 @@ packages:
     engines: {node: '>= 14.6'}
     hasBin: true
 
+  yargs-parser@20.2.9:
+    resolution: {integrity: sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==}
+    engines: {node: '>=10'}
+
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
     engines: {node: '>=12'}
@@ -3271,6 +3285,10 @@ snapshots:
   '@esbuild/win32-x64@0.25.10':
     optional: true
 
+  '@frontmatter/extensibility@0.0.18':
+    dependencies:
+      '@skypack/package-check': 0.2.2
+
   '@img/colour@1.0.0': {}
 
   '@img/sharp-darwin-arm64@0.33.5':
@@ -3630,6 +3648,11 @@ snapshots:
   '@shikijs/vscode-textmate@10.0.2': {}
 
   '@sindresorhus/merge-streams@4.0.0': {}
+
+  '@skypack/package-check@0.2.2':
+    dependencies:
+      kleur: 4.1.5
+      yargs-parser: 20.2.9
 
   '@sveltejs/acorn-typescript@1.0.5(acorn@8.15.0)':
     dependencies:
@@ -5997,6 +6020,8 @@ snapshots:
   yallist@5.0.0: {}
 
   yaml@2.8.1: {}
+
+  yargs-parser@20.2.9: {}
 
   yargs-parser@21.1.1: {}
 
