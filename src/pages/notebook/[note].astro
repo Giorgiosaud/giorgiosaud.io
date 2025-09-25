@@ -78,12 +78,12 @@ pathToTranslateNote={pathToTranslateNote}
         }
       };
       const availability = await Summarizer.availability();
+      console.log({availability})
       if (availability === 'unavailable') {
         // The Summarizer API isn't usable.
         return;
       }
-      const summaryButton = document.getElementById('generate-summary');
-      summaryButton.addEventListener('click', async () => {
+      async function summarizeExec(){
         const summarizer = await Summarizer.create(options);
         const text= document.getElementById('content').innerText;
         summaryElement.innerText = 'Generating summary...';
@@ -96,6 +96,13 @@ pathToTranslateNote={pathToTranslateNote}
         summaryElement.innerHTML =
         marked.parse(summaryElement.innerText);
         console.log('Summary generation completed.');
+      }
+      if(availability==='available'){
+        summarizeExec();
+      }
+      const summaryButton = document.getElementById('generate-summary');
+      summaryButton.addEventListener('click', async () => {
+        summarizeExec();
       });
     };
     summarizeContent();
