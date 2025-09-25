@@ -44,8 +44,15 @@ pathToTranslateNote={pathToTranslateNote}
   {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
   <figcaption>{coverAlt}</figcaption>
 </figure>
-<div id="summary">
-  <button id="generate-summary" class="button button-primary">Generar Resumen</button>
+<!-- Floating bubble button for summary generation -->
+<button id="generate-summary-bubble" class="summary-bubble" title="Generar resumen">
+  <span>🤖</span>
+</button>
+
+<!-- Emergent bubble/modal for summary result -->
+<div id="summary-modal" class="summary-modal">
+  <button id="close-summary-modal" class="close-summary-modal">×</button>
+  <div id="summary-content"></div>
 </div>
 <div id="content">
   <h1>{title}</h1>
@@ -60,11 +67,14 @@ pathToTranslateNote={pathToTranslateNote}
 <script type="module">
   import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
   if ('Summarizer' in self) {
-    const summaryElement = document.getElementById('summary');
-    summaryElement.classList.add('can-summarize');
+    const summaryBubble = document.getElementById('generate-summary-bubble');
+    const summaryModal = document.getElementById('summary-modal');
+    const summaryContent = document.getElementById('summary-content');
+    const closeModalBtn = document.getElementById('close-summary-modal');
+
     async function summarizeContent(){
       const options = {
-        sharedContext: 'This is a FrontEnd developers article use same language as text for the summary the author is Giorgiosaud and is less formal but technical',
+        sharedContext: 'Este es un artículo para desarrolladores FrontEnd, usa el mismo idioma que el texto para el resumen, el autor es Giorgiosaud y el tono es menos formal pero técnico',
         type: 'teaser',
         format: 'markdown',
         length: "medium",
@@ -77,37 +87,39 @@ pathToTranslateNote={pathToTranslateNote}
         }
       };
       const availability = await Summarizer.availability();
-      console.log({availability})
-
-      async function summarizeExec(){
-        summaryElement.innerText = 'Generando resumen...';
-        const summarizer = await Summarizer.create(options);
-        const text= document.getElementById('content').innerText;
-        const summary = await summarizer.summarizeStreaming(text, { language: 'es' });
-        summaryElement.innerText = '';
-        for await (const chunk of summary.values()) {
-          summaryElement.innerText += chunk;
-        }
-        console.log('Raw summary:', summaryElement.innerText);
-        summaryElement.innerHTML =
-        marked.parse(summaryElement.innerText);
-        console.log('Summary generation completed.');
-      }
-      if(availability==='available'){
-        summarizeExec();
-      }
-      if (availability === 'unavailable') {
-        // The Summarizer API isn't usable.
+      if (availability !== 'available') {
+        summaryContent.innerHTML = '<p>La API de resumen no está disponible en este navegador.</p>';
         return;
       }
-      const summaryButton = document.getElementById('generate-summary');
-      summaryButton.addEventListener('click', async () => {
-        summarizeExec();
-      });
+      summaryContent.innerHTML = '<p>Generando resumen...</p>';
+      summaryModal.classList.add('show');
+      const summarizer = await Summarizer.create(options);
+      const text = document.getElementById('content').innerText;
+      const summary = await summarizer.summarizeStreaming(text, { language: 'es' });
       
-    };
-    summarizeContent();
-  };
+      let result = '';
+      for await (const chunk of summary.values()) {
+        result += chunk;
+        summaryContent.innerHTML = marked.parse(result);
+      }
+    }
+
+    summaryBubble.addEventListener('click', () => {
+      summaryModal.classList.add('show');
+      summarizeContent();
+    });
+    closeModalBtn.addEventListener('click', () => {
+      summaryModal.classList.remove('show');
+      summaryContent.innerHTML = '';
+    });
+    // Optional: close modal on outside click
+    summaryModal.addEventListener('click', (e) => {
+      if (e.target === summaryModal) {
+        summaryModal.classList.remove('show');
+        summaryContent.innerHTML = '';
+      }
+    });
+  }
 </script>
 <script define:vars={{selfHealing}}>
   notification = document.getElementById('notification');
@@ -169,7 +181,7 @@ pathToTranslateNote={pathToTranslateNote}
   shareButton.addEventListener('click', shareContent);
   
 </script>
-<style>
+<style >
   #share{
     display: flex;
     justify-content: center;
@@ -290,4 +302,71 @@ pathToTranslateNote={pathToTranslateNote}
       transform: rotate(360deg);
     }
   }
+.summary-bubble {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff00cc, #3333ff, #00ffcc, #ffcc00);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 2000;
+  border: none;
+  transition: transform 0.2s;
+  anchor-name: --summary-bot;
+}
+.summary-bubble:hover {
+  transform: scale(1.1);
+}
+
+
+/* Emergent summary modal styles */
+.summary-modal {
+  position: fixed;
+  position-anchor: --summary-bot;
+  position-area: top left;
+  max-width: 400px;
+  width: 90vw;
+  background: #fff;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  z-index: 2100;
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  animation: bubbleIn 0.3s ease;
+  width: 280px;
+  @media screen and (width > 500px) {
+    width: 100%;
+  }
+}
+.summary-modal.show {
+  display: flex;
+}
+.close-summary-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #333;
+  cursor: pointer;
+}
+#summary-content {
+  font-size: 1rem;
+  color: #222;
+}
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(40px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
 </style>
