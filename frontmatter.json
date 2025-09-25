@@ -58,7 +58,15 @@
         {
           "title": "selfHealing",
           "name": "selfHealing",
-          "type": "string"
+          "type": "string",
+          "singleValueAsString": true,
+          "editable": false
+          // "required": true,
+          // "actions":[{
+          //   "title": "Generate Self Healing ID",
+          //   "script": "frontmatter/scripts/generateSelfHealingId.mjs",
+          //   "command": "~/.volta/bin/node"
+          // }]
         },
         {
           "title": "slug",
@@ -73,17 +81,22 @@
         {
           "title": "category",
           "name": "category",
-          "type": "string"
+          "type": "string",
+          "single": true
         },
         {
           "title": "author",
           "name": "author",
-          "type": "string"
+          "type": "contentRelationship",
+          "contentTypeName": "Team",
+          "contentTypeValue": "slug"
+
         },
         {
           "title": "collections",
           "name": "collections",
           "type": "choice",
+          "multiple": true,
           "choices": [
             "architecture",
             "patterns",
@@ -190,7 +203,7 @@
         {
           "title": "selfHealing",
           "name": "selfHealing",
-          "type": "string"
+          "type": "customField"
         },
         {
           "title": "country",
