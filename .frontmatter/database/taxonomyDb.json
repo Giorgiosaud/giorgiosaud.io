@@ -1,0 +1,39 @@
+{
+  "taxonomy": {
+    "tags": [
+      "architecture",
+      "astro",
+      "backend",
+      "carousel",
+      "common",
+      "common-issues",
+      "cors",
+      "csp",
+      "css",
+      "design-patterns",
+      "development",
+      "evolution",
+      "frontend",
+      "frontent",
+      "functionalfeatures",
+      "grid",
+      "img",
+      "integrations",
+      "issues",
+      "layer",
+      "microfrontend",
+      "next",
+      "nojs",
+      "nuxt",
+      "preflight",
+      "preflightrequest",
+      "srcset",
+      "webdev",
+      "webdevelopment"
+    ],
+    "categories": [
+      "Architecture",
+      "Development"
+    ]
+  }
+}
