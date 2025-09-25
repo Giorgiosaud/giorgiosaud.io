@@ -43,7 +43,10 @@ pathToTranslateNote={pathToTranslateNote}
   {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
   <figcaption>{coverAlt}</figcaption>
 </figure>
-<div id="summary"></div>
+<div id="summary">
+  <button id="generate-summary" class="button button-primary">Generate Summary</button>
+
+</div>
 <div id="content">
   <h1>{title}</h1>
   <Content/>
@@ -57,17 +60,15 @@ pathToTranslateNote={pathToTranslateNote}
 <script type="module">
   import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
   if ('Summarizer' in self) {
-    
     const summaryElement = document.getElementById('summary');
     summaryElement.classList.add('can-summarize');
-    
     async function summarizeContent(){
       const options = {
-        sharedContext: 'This is a FrontEnd developers article',
+        sharedContext: 'This is a FrontEnd developers article use same language as text for the summary',
         type: 'teaser',
         format: 'markdown',
         length: 'long',
-        language: 'en',
+        language: 'es',
         monitor(m) {
           m.addEventListener('downloadprogress', (e) => {
             console.log(`Downloaded ${e.loaded * 100}%`);
@@ -75,18 +76,16 @@ pathToTranslateNote={pathToTranslateNote}
         }
       };
       const availability = await Summarizer.availability();
-      console.log('Summarizer availability:', availability);
       if (availability === 'unavailable') {
         // The Summarizer API isn't usable.
         return;
       }
-      document.getElementById('summary').addEventListener('click', async () => {
-      // Check for user activation before creating the summarizer
+      const summaryButton = document.getElementById('generate-summary');
+      summaryButton.addEventListener('click', async () => {
         const summarizer = await Summarizer.create(options);
-        console.log({summarizer})
         const text= document.getElementById('content').innerText;
         summaryElement.innerText = 'Generating summary...';
-        const summary = await summarizer.summarizeStreaming(text,{ language: 'en' });
+        const summary = await summarizer.summarizeStreaming(text, { language: 'es' });
         summaryElement.innerText = '';
         for await (const chunk of summary.values()) {
           summaryElement.innerText += chunk;
@@ -202,18 +201,25 @@ pathToTranslateNote={pathToTranslateNote}
     font-size: clamp(.8rem, 2vw, 1.125rem);
     line-height: 1.6;
   }
-  #summary{
-    max-width: 60ch;
+  #summary h1 {
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+  }
+  #summary h2 {
+    font-size: clamp(1rem, 2.8vw, 1.5rem);
+  }
+  #summary h3 {
+    font-size: clamp(0.875rem, 2.4vw, 1.25rem);
+  }
+
+  /** make this border like gemini colors moving around as gradient  */
+  #summary.can-summarize{
     width: 90%;
     background-color: light-dark(var(--color-summary-light), var(--color-summary-dark));
     border-left: 4px solid var(--color-accent);
     margin-bottom: 2rem;
     font-style: italic;
-  }
-  /** make this border like gemini colors moving around as gradient  */
-  #summary.can-summarize{
     margin-top: 2rem;
-    width: 60ch;  
+    max-width: 60ch;  
     border-left: 4px solid var(--color-accent);
     animation: gemini-border 1s infinite ease-in cubic-bezier(0.1, -0.6, 0.2, 0);
   }
