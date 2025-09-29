@@ -1,6 +1,14 @@
 {
   "recommendations": [
     "astro-build.astro-vscode",
-    "biomejs.biome"
+    "biomejs.biome",
+    "eliostruyf.vscode-front-matter",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "formulahendry.auto-rename-tag",
+    "github.copilot-chat",
+    "github.copilot",
+    "github.vscode-pull-request-github",
+    "pflannery.vscode-versionlens"
   ]
 }
