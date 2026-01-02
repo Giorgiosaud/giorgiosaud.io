@@ -1,9 +1,8 @@
 ---
-draft: false
 title: "Server Actions in Astro: Forms Done Right"
-description: "Learn how to build secure, type-safe forms with Astro's server actions, including Zod validation, error handling, and bot protection patterns."
+description: Learn how to build secure, type-safe forms with Astro's server actions, including Zod validation, error handling, and bot protection patterns.
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/freepik__pixel-art-quiero-una-imagen-para-este-notebook-pos__50452.jpeg
 coverAlt: Server Actions in Astro illustration
 selfHealing: srvrct
 lang: en
@@ -23,6 +22,7 @@ tags:
 ## Why Server Actions?
 
 Before Astro's server actions, handling forms in static sites meant either:
+
 - Setting up a separate API endpoint
 - Using third-party form services
 - Client-side JavaScript with fetch calls
@@ -35,20 +35,20 @@ Server actions live in `src/actions/`. Here's a real email-sending action:
 
 ```typescript
 // src/actions/sendEmail.ts
-import { ActionError, defineAction } from 'astro:actions'
+import { ActionError, defineAction } from "astro:actions";
 import {
   RESEND_API_KEY,
   RESEND_FROM_EMAIL,
   RESEND_FROM_NAME,
   RESEND_TO_EMAIL,
-} from 'astro:env/server'
-import { Resend } from 'resend'
-import { z } from 'astro:schema'
+} from "astro:env/server";
+import { Resend } from "resend";
+import { z } from "astro:schema";
 
-const resend = new Resend(RESEND_API_KEY)
+const resend = new Resend(RESEND_API_KEY);
 
 export const sendEmail = defineAction({
-  accept: 'form',
+  accept: "form",
 
   input: z.object({
     name: z.string(),
@@ -66,19 +66,21 @@ export const sendEmail = defineAction({
         <p><strong>Email:</strong> ${input.email}</p>
         <p><strong>Message:</strong> ${input.message}</p>
       `,
-    })
+    });
 
-    if (error) throw new ActionError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Failed to send email',
-    })
+    if (error)
+      throw new ActionError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to send email",
+      });
 
-    return data
+    return data;
   },
-})
+});
 ```
 
 Key points:
+
 - `accept: 'form'` - Handles FormData directly from HTML forms
 - `input` - Zod schema validates before handler runs
 - `handler` - Server-side logic, can use secrets safely
@@ -93,17 +95,17 @@ export default defineConfig({
   env: {
     schema: {
       RESEND_API_KEY: envField.string({
-        context: 'server',
-        access: 'secret',
+        context: "server",
+        access: "secret",
       }),
       RESEND_TO_EMAIL: envField.string({
-        context: 'server',
-        access: 'public',
-        default: 'you@example.com',
+        context: "server",
+        access: "public",
+        default: "you@example.com",
       }),
     },
   },
-})
+});
 ```
 
 Now TypeScript knows exactly what environment variables exist and their types.
@@ -115,39 +117,41 @@ Map API errors to user-friendly responses:
 ```typescript
 handler: async (input) => {
   try {
-    const { data, error } = await resend.emails.send({ /* ... */ })
+    const { data, error } = await resend.emails.send({
+      /* ... */
+    });
 
     if (error) {
       // Map specific error types
-      if (error.name === 'validation_error') {
+      if (error.name === "validation_error") {
         throw new ActionError({
-          code: 'BAD_REQUEST',
-          message: 'Invalid email format or content',
-        })
+          code: "BAD_REQUEST",
+          message: "Invalid email format or content",
+        });
       }
-      if (error.name === 'rate_limit_exceeded') {
+      if (error.name === "rate_limit_exceeded") {
         throw new ActionError({
-          code: 'TOO_MANY_REQUESTS',
-          message: 'Too many requests. Please try again later.',
-        })
+          code: "TOO_MANY_REQUESTS",
+          message: "Too many requests. Please try again later.",
+        });
       }
       // Default fallback
       throw new ActionError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to send email. Please try again.',
-      })
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to send email. Please try again.",
+      });
     }
 
-    return data
+    return data;
   } catch (e) {
     // Re-throw ActionErrors, wrap others
-    if (e instanceof ActionError) throw e
+    if (e instanceof ActionError) throw e;
     throw new ActionError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Email service unavailable.',
-    })
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Email service unavailable.",
+    });
   }
-}
+};
 ```
 
 ## Using Actions in Astro Pages
@@ -186,6 +190,7 @@ const result = Astro.getActionResult(actions.sendEmail)
 ```
 
 Notice:
+
 - `export const prerender = false` - Disables static generation for this page
 - `Astro.getActionResult()` - Gets the result after form submission
 - `action={actions.sendEmail}` - Type-safe action reference
@@ -236,12 +241,12 @@ All actions must be exported from `src/actions/index.ts`:
 
 ```typescript
 // src/actions/index.ts
-import { sendEmail } from './sendEmail'
+import { sendEmail } from "./sendEmail";
 
 export const server = {
   sendEmail,
   // Add more actions here
-}
+};
 ```
 
 ## Progressive Enhancement
@@ -249,20 +254,20 @@ export const server = {
 For JavaScript-enhanced UX, you can submit via fetch:
 
 ```javascript
-const form = document.querySelector('form')
+const form = document.querySelector("form");
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const formData = new FormData(form)
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
 
   const response = await fetch(form.action, {
-    method: 'POST',
+    method: "POST",
     body: formData,
-  })
+  });
 
-  const result = await response.json()
+  const result = await response.json();
   // Handle result...
-})
+});
 ```
 
 But the form works without JavaScript too - that's the beauty of server actions.

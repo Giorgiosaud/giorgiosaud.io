@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: api-view-transitions
 title: "View Transitions API: Navegación Fluida entre Páginas"
 description: "Aprende a agregar transiciones suaves entre páginas con una sola regla CSS, personalizar animaciones para elementos específicos y crear experiencias tipo SPA sin JavaScript."
 publishDate: 2026-01-02

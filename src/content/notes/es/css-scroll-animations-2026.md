@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: animaciones-scroll-css-2026
 title: "CSS Scroll Animations 2026: View Timeline Ahora Estable"
 description: "Las animaciones impulsadas por scroll están listas para producción. Aprende view timeline, scroll timeline y animation-range para efectos sin JavaScript."
 publishDate: 2026-01-02
@@ -16,7 +17,7 @@ tags:
   - css
   - scroll-animations
   - animation
-  - 2026
+  - "2026"
 ---
 
 ## Scroll Animations: Ahora Listas para Producción

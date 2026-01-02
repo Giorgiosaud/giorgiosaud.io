@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Type-Safe i18n: Deep Key Extraction in TypeScript"
 description: "Learn how to build a type-safe internationalization system with recursive TypeScript types that provide full autocomplete for nested translation keys."
 publishDate: 2026-01-02

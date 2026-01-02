@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Container Queries 2026: Production-Ready Component Design"
 description: "Container queries are now fully mature with 95%+ browser support. Learn advanced patterns, style queries, and production-ready techniques for truly responsive components."
 publishDate: 2026-01-02
@@ -16,7 +16,7 @@ tags:
   - css
   - container-queries
   - responsive-design
-  - 2026
+  - "2026"
 ---
 
 ## Container Queries: Fully Mature in 2026

@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: ia-nativa-navegador-chrome-summarizer
 title: "IA Nativa del Navegador: API Summarizer de Chrome"
 description: "Aprende a usar la API Summarizer integrada en Chrome para generar resúmenes con IA sin costos de API, incluyendo lazy loading, streaming y soporte multiidioma."
 publishDate: 2026-01-02

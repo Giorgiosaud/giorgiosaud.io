@@ -1,9 +1,9 @@
 ---
-draft: false
+slug: server-actions-formularios-astro
 title: "Server Actions en Astro: Formularios Bien Hechos"
-description: "Aprende a construir formularios seguros y type-safe con server actions de Astro, incluyendo validación con Zod, manejo de errores y patrones de protección contra bots."
+description: Aprende a construir formularios seguros y type-safe con server actions de Astro, incluyendo validación con Zod, manejo de errores y patrones de protección contra bots.
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/freepik__pixel-art-quiero-una-imagen-para-este-notebook-pos__50452.jpeg
 coverAlt: Ilustración de Server Actions en Astro
 selfHealing: srvrct
 lang: es
@@ -23,6 +23,7 @@ tags:
 ## ¿Por Qué Server Actions?
 
 Antes de los server actions de Astro, manejar formularios en sitios estáticos significaba:
+
 - Configurar un endpoint API separado
 - Usar servicios de formularios de terceros
 - JavaScript del lado del cliente con llamadas fetch
@@ -35,20 +36,20 @@ Los server actions viven en `src/actions/`. Aquí hay una action real para envia
 
 ```typescript
 // src/actions/sendEmail.ts
-import { ActionError, defineAction } from 'astro:actions'
+import { ActionError, defineAction } from "astro:actions";
 import {
   RESEND_API_KEY,
   RESEND_FROM_EMAIL,
   RESEND_FROM_NAME,
   RESEND_TO_EMAIL,
-} from 'astro:env/server'
-import { Resend } from 'resend'
-import { z } from 'astro:schema'
+} from "astro:env/server";
+import { Resend } from "resend";
+import { z } from "astro:schema";
 
-const resend = new Resend(RESEND_API_KEY)
+const resend = new Resend(RESEND_API_KEY);
 
 export const sendEmail = defineAction({
-  accept: 'form',
+  accept: "form",
 
   input: z.object({
     name: z.string(),
@@ -66,19 +67,21 @@ export const sendEmail = defineAction({
         <p><strong>Email:</strong> ${input.email}</p>
         <p><strong>Mensaje:</strong> ${input.message}</p>
       `,
-    })
+    });
 
-    if (error) throw new ActionError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Error al enviar email',
-    })
+    if (error)
+      throw new ActionError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Error al enviar email",
+      });
 
-    return data
+    return data;
   },
-})
+});
 ```
 
 Puntos clave:
+
 - `accept: 'form'` - Maneja FormData directamente de formularios HTML
 - `input` - El esquema Zod valida antes de ejecutar el handler
 - `handler` - Lógica del servidor, puede usar secretos de forma segura
@@ -93,17 +96,17 @@ export default defineConfig({
   env: {
     schema: {
       RESEND_API_KEY: envField.string({
-        context: 'server',
-        access: 'secret',
+        context: "server",
+        access: "secret",
       }),
       RESEND_TO_EMAIL: envField.string({
-        context: 'server',
-        access: 'public',
-        default: 'tu@ejemplo.com',
+        context: "server",
+        access: "public",
+        default: "tu@ejemplo.com",
       }),
     },
   },
-})
+});
 ```
 
 Ahora TypeScript sabe exactamente qué variables de entorno existen y sus tipos.
@@ -115,39 +118,41 @@ Mapea errores de API a respuestas amigables para el usuario:
 ```typescript
 handler: async (input) => {
   try {
-    const { data, error } = await resend.emails.send({ /* ... */ })
+    const { data, error } = await resend.emails.send({
+      /* ... */
+    });
 
     if (error) {
       // Mapear tipos de error específicos
-      if (error.name === 'validation_error') {
+      if (error.name === "validation_error") {
         throw new ActionError({
-          code: 'BAD_REQUEST',
-          message: 'Formato de email o contenido inválido',
-        })
+          code: "BAD_REQUEST",
+          message: "Formato de email o contenido inválido",
+        });
       }
-      if (error.name === 'rate_limit_exceeded') {
+      if (error.name === "rate_limit_exceeded") {
         throw new ActionError({
-          code: 'TOO_MANY_REQUESTS',
-          message: 'Demasiadas solicitudes. Intenta más tarde.',
-        })
+          code: "TOO_MANY_REQUESTS",
+          message: "Demasiadas solicitudes. Intenta más tarde.",
+        });
       }
       // Fallback por defecto
       throw new ActionError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Error al enviar email. Intenta de nuevo.',
-      })
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Error al enviar email. Intenta de nuevo.",
+      });
     }
 
-    return data
+    return data;
   } catch (e) {
     // Re-lanzar ActionErrors, envolver otros
-    if (e instanceof ActionError) throw e
+    if (e instanceof ActionError) throw e;
     throw new ActionError({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Servicio de email no disponible.',
-    })
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Servicio de email no disponible.",
+    });
   }
-}
+};
 ```
 
 ## Usando Actions en Páginas Astro
@@ -186,6 +191,7 @@ const result = Astro.getActionResult(actions.sendEmail)
 ```
 
 Nota:
+
 - `export const prerender = false` - Desactiva generación estática para esta página
 - `Astro.getActionResult()` - Obtiene el resultado después del envío
 - `action={actions.sendEmail}` - Referencia a la action type-safe
@@ -236,12 +242,12 @@ Todas las actions deben exportarse desde `src/actions/index.ts`:
 
 ```typescript
 // src/actions/index.ts
-import { sendEmail } from './sendEmail'
+import { sendEmail } from "./sendEmail";
 
 export const server = {
   sendEmail,
   // Agregar más actions aquí
-}
+};
 ```
 
 ## Mejora Progresiva
@@ -249,20 +255,20 @@ export const server = {
 Para UX mejorada con JavaScript, puedes enviar vía fetch:
 
 ```javascript
-const form = document.querySelector('form')
+const form = document.querySelector("form");
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  const formData = new FormData(form)
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const formData = new FormData(form);
 
   const response = await fetch(form.action, {
-    method: 'POST',
+    method: "POST",
     body: formData,
-  })
+  });
 
-  const result = await response.json()
+  const result = await response.json();
   // Manejar resultado...
-})
+});
 ```
 
 Pero el formulario funciona sin JavaScript también - esa es la belleza de los server actions.

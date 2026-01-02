@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: arquitectura-islas-multi-framework
 title: "Islands Architecture: Componentes Multi-Framework"
 description: "Aprende cómo la Arquitectura de Islas de Astro te permite usar React, Vue y Svelte juntos en un proyecto con hidratación selectiva para rendimiento óptimo."
 publishDate: 2026-01-02

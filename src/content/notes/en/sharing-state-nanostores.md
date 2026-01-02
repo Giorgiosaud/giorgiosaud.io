@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Sharing State Between Frameworks with Nanostores"
 description: "Learn how to share reactive state between React, Vue, and Svelte components in Astro's Islands Architecture using Nanostores - a tiny, framework-agnostic state manager."
 publishDate: 2026-01-02

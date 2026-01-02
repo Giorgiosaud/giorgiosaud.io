@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Islands Architecture: Multi-Framework Components"
 description: "Learn how Astro's Islands Architecture lets you use React, Vue, and Svelte together in one project with selective hydration for optimal performance."
 publishDate: 2026-01-02

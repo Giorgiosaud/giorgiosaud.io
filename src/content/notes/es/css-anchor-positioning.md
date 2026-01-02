@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: posicionamiento-css-anchor
 title: "CSS Anchor Positioning: El Futuro del Posicionamiento UI"
 description: "Aprende a usar CSS Anchor Positioning para posicionar tooltips, modales y popovers sin librerías JavaScript. CSS nativo para ubicación precisa de elementos."
 publishDate: 2026-01-02

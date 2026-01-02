@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: container-queries-2026
 title: "Container Queries 2026: Diseño de Componentes Listo para Producción"
 description: "Container queries están completamente maduros con 95%+ de soporte de navegadores. Aprende patrones avanzados, style queries y técnicas listas para producción."
 publishDate: 2026-01-02
@@ -16,7 +17,7 @@ tags:
   - css
   - container-queries
   - responsive-design
-  - 2026
+  - "2026"
 ---
 
 ## Container Queries: Completamente Maduros en 2026

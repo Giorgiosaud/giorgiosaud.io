@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "Browser Native AI: Chrome's Summarizer API"
 description: "Learn how to use Chrome's built-in Summarizer API to generate AI-powered summaries without API costs, including lazy loading, streaming, and multi-language support."
 publishDate: 2026-01-02

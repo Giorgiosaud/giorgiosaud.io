@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: i18n-tipado-seguro-typescript
 title: "i18n Type-Safe: Extracción de Claves Profundas en TypeScript"
 description: "Aprende a construir un sistema de internacionalización type-safe con tipos TypeScript recursivos que proporcionan autocompletado completo para claves de traducción anidadas."
 publishDate: 2026-01-02

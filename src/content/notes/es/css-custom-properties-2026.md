@@ -1,5 +1,6 @@
 ---
-draft: false
+draft: true
+slug: propiedades-personalizadas-css-2026
 title: "CSS Custom Properties 2026: @property Se Vuelve Mainstream"
 description: "Las propiedades personalizadas CSS con @property ahora tienen soporte universal. Aprende variables tipadas, capacidades de animación y control de herencia para sistemas de diseño robustos."
 publishDate: 2026-01-02
@@ -16,7 +17,7 @@ tags:
   - css
   - custom-properties
   - design-systems
-  - 2026
+  - "2026"
 ---
 
 ## CSS Custom Properties: @property Es Ahora Universal

@@ -1,5 +1,5 @@
 ---
-draft: false
+draft: true
 title: "CSS Carousels 2026: Native Scroll Markers Finally Here"
 description: "Build carousels with pure CSS using scroll-marker, scroll-button, and scroll snap. No JavaScript libraries needed for pagination dots and navigation."
 publishDate: 2026-01-02
@@ -16,7 +16,7 @@ tags:
   - css
   - carousels
   - scroll-snap
-  - 2026
+  - "2026"
 ---
 
 ## CSS Carousels: Finally No JavaScript Required
