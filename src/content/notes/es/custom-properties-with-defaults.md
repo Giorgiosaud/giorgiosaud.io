@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: 'LVCSTP'
+selfHealing: "LVCSTP"
 starred: false
 title: Propiedades CSS con valores predeterminados
 description: Aprende a manejar valores predeterminados en variables CSS usando la técnica clásica "pseudo-privada" y la moderna regla @property.
@@ -69,7 +69,7 @@ En lugar de necesitar una variable intermedia "privada", registramos la propieda
 
 ```css
 @property --button-bg {
-  syntax: '<color>';
+  syntax: "<color>";
   initial-value: black;
   inherits: true;
 }
@@ -140,7 +140,7 @@ Para llevar tu arquitectura CSS al siguiente nivel, recomiendo combinar estos pa
 
 /* 5. @property registrada para transiciones suaves */
 @property --card-bg {
-  syntax: '<color>';
+  syntax: "<color>";
   initial-value: #ffffff;
   inherits: false;
 }
