@@ -33,12 +33,14 @@ export interface Props {
   description?: string
   structuredData?: string
   image?: string | ImageMetadata
+  llmPath?: string
 }
 const {
   title,
   structuredData,
   description = 'This is a web developers Notebook site',
   image = 'https://giorgiosaud.io/opengraph.jpg',
+  llmPath,
 } = Astro.props
 const imageUrl = typeof image === 'string' ? image : image?.src || ''
 const fixedTitle = `Giorgiosaud.io | ${title || 'Notebook'}`
@@ -160,5 +162,6 @@ const lang = getLangFromUrl(Astro.url)
   <meta name="theme-color" content="#22223b" />
   <link rel="apple-touch-icon" href="/icons/apple-icon.png" />
   <link rel="alternate" href="https://giorgiosaud.io/" hreflang="en" />
-<link rel="alternate" href="https://giorgiosaud.io/es/" hreflang="es" />
+  <link rel="alternate" href="https://giorgiosaud.io/es/" hreflang="es" />
+  {llmPath && <link rel="alternate" type="text/markdown" title="LLM-friendly version" href={llmPath} />}
 </head>
