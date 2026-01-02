@@ -2,7 +2,7 @@
 draft: false
 slug: server-actions-formularios-astro
 title: "Server Actions en Astro: Formularios Bien Hechos"
-description: Aprende a construir formularios seguros y type-safe con server actions de Astro, incluyendo validación con Zod, manejo de errores y patrones de protección contra bots.
+description: Construye formularios seguros y type-safe con server actions de Astro, incluyendo validación con Zod, manejo de errores y patrones de protección contra bots.
 publishDate: 2026-01-02
 cover: ../../../assets/images/freepik__pixel-art-quiero-una-imagen-para-este-notebook-pos__50452.jpeg
 coverAlt: Ilustración de Server Actions en Astro
