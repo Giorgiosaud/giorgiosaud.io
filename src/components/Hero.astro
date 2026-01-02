@@ -18,12 +18,13 @@ const { title, description, showButtons = true } = Astro.props
 
 <section id="hero" class="hero__container scrolll-animated">
   <div class="hero">
-    <h1 class="hero__title">
-      {title}
-    </h1>
+    <!-- Image first in DOM for LCP priority on mobile -->
     <div class="hero__image">
        <Image src={HomeNotebook} alt={title} loading="eager" fetchpriority="high" />
     </div>
+    <h1 class="hero__title">
+      {title}
+    </h1>
     <p class="hero__description">
       {description}
     </p>
@@ -56,25 +57,33 @@ const { title, description, showButtons = true } = Astro.props
   }
   .hero {
     display: grid;
-    grid-template-columns: [text image]1fr[text-end  image-end];
+    grid-template-columns: 1fr;
+    /* Mobile: image first (DOM order), then reorder visually */
+    grid-template-areas:
+      "image"
+      "title"
+      "description"
+      "buttons";
     @container hero (width > 90ch) {
-      grid-template-columns: [text]2fr[text-end image]1fr[image-end];
-      grid-template-rows: repeat(3,1fr);
-      
+      grid-template-columns: 2fr 1fr;
+      grid-template-rows: auto auto auto;
+      grid-template-areas:
+        "title image"
+        "description image"
+        "buttons image";
     }
-    /* grid-template: "image" "title"  "description" "buttons"; */
     align-items: center;
     color: var(--color-main);
-    
+
     .hero__title {
-      /* grid-area: title; */
+      grid-area: title;
     }
     .hero__description {
-      /* grid-area: description; */
+      grid-area: description;
       font-size: clamp(0.75rem, 5vw, 1.3rem);
       padding-block: 1lh;
       /* Prevent CLS: reserve space for text with min-height */
-      min-height: 10lh;
+      min-height: 8lh;
       @container hero (width > 48ch) {
         min-height: 6lh;
       }
@@ -83,34 +92,30 @@ const { title, description, showButtons = true } = Astro.props
       }
     }
     .hero__image {
-      /* grid-area: image; */
-      grid-row: span 3;
+      grid-area: image;
       margin: auto;
       padding: calc(var(--spacing) * 4);
       place-items: center;
       img{
         border-radius:50%;
-        width: 80%;
+        /* Full width on mobile to be larger than text (LCP) */
+        width: 100%;
+        max-width: 400px;
         aspect-ratio: 1;
         box-shadow: 10px 10px 15px -10px light-dark(var(--color-main),var(--color-light));
-        @container (width > 48ch) {
-          width: 100%;
-        }
       }
       @media (prefers-color-scheme: dark) {
         filter: sepia(1);
       }
     }
     .hero__buttons {
-      /* grid-area: buttons; */
+      grid-area: buttons;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: calc(var(--spacing) * 4);
       margin-top: calc(var(--spacing) * 8);
-    }
-    @container hero (width > 48ch) {
-      .hero__buttons {
+      @container hero (width > 48ch) {
         flex-direction: row;
         justify-content: start;
       }
