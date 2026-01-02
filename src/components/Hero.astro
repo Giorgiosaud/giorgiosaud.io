@@ -22,7 +22,7 @@ const { title, description, showButtons = true } = Astro.props
       {title}
     </h1>
     <div class="hero__image">
-       <Image src={HomeNotebook} alt={title} />
+       <Image src={HomeNotebook} alt={title} loading="eager" fetchpriority="high" />
     </div>
     <p class="hero__description">
       {description}
@@ -72,7 +72,15 @@ const { title, description, showButtons = true } = Astro.props
     .hero__description {
       /* grid-area: description; */
       font-size: clamp(0.75rem, 5vw, 1.3rem);
-      padding-block: 1lh ;
+      padding-block: 1lh;
+      /* Prevent CLS: reserve space for text with min-height */
+      min-height: 10lh;
+      @container hero (width > 48ch) {
+        min-height: 6lh;
+      }
+      @container hero (width > 90ch) {
+        min-height: 4lh;
+      }
     }
     .hero__image {
       /* grid-area: image; */
