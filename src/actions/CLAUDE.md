@@ -18,7 +18,12 @@ Sends emails via Resend API from contact forms.
 **Configuration:**
 - Input: Zod schema with `name`, `email`, `message` fields
 - Accept: `'form'` - handles FormData directly
-- Handler: Sends email using Resend SDK
+- Handler: Sends email using Resend SDK with enhanced error handling
+
+**Error Codes Returned:**
+- `BAD_REQUEST` - Invalid email format or missing required fields
+- `TOO_MANY_REQUESTS` - Rate limit exceeded
+- `INTERNAL_SERVER_ERROR` - Network errors or service unavailable
 
 **Environment Variables Required:**
 - `RESEND_API_KEY` - Resend API key (secret, server-side)

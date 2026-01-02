@@ -122,12 +122,19 @@ Translate the content while maintaining the same voice and structure. Keep techn
 
 ## Self-Healing Field Guide
 
-Generate the `selfHealing` field by extracting consonants from the title:
-- "Observer Pattern" → "bsrvr" or "ptrnsn"
-- "React Hooks" → "rcthks"
+Generate the `selfHealing` field using the CLI tool:
+
+```bash
+bun run generate:selfheal "My Post Title"     # Generate code from title
+bun run generate:selfheal --validate "rhythm" # Validate existing code
+bun run generate:selfheal --alts "Title"      # Generate alternatives
+```
+
+Manual rules:
+- Extract consonants from the title: "Observer Pattern" → "bsrvr" or "ptrnsn"
 - Must be exactly 6 characters
 - No vowels (aeiouAEIOU) or dashes
-- Use regex: `/^[^aeiouAEIOU-]{6}$/`
+- Regex validation: `/^[^aeiouAEIOU-]{6}$/`
 
 ## Category Guidelines
 
