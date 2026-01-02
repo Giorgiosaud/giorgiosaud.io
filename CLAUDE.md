@@ -49,15 +49,21 @@ The content is organized using Astro Content Collections with strict TypeScript 
 
 1. **Loader Pattern**: All collections use `glob` loader with `pattern: '**/[^_]*.(md|mdx)'` (or `*.md`) and `base: './src/content/{collection}/en'` or `/es`. Files starting with `_` are ignored.
 
-2. **Bilingual Collections**: Each collection is defined twice (once per language) with identical schemas but different base paths. Schemas are often shared via constants to maintain consistency.
+2. **Shared Schemas**: Bilingual collections share schemas defined in `src/content/schemas/`. Notes use `noteSchema.ts` for DRY schema definition imported by both `notes` and `notas` collections.
 
-3. **Self-healing URLs**: Notes use a required `selfHealing` field (6 characters, no vowels/dashes, regex: `/^[^aeiouAEIOU-]{6}$/`) for URL stability. When a URL contains this code, the `selfHeal()` helper in `src/helpers/selfHeal.ts` redirects to the current note slug via `/notebook/[selfheal].astro`.
+3. **Collection Query Layer**: Use helpers in `src/helpers/collections.ts` for consistent collection queries:
+   - `getPublishedNotes(lang)` - Returns published notes sorted by date, shows drafts in dev mode
+   - `isDraftInDevMode(data)` - Checks if a post should show DRAFT badge
 
-4. **Type-safe references**: Content collections use Astro's `reference()` for relationships:
+4. **Self-healing URLs**: Notes use a required `selfHealing` field (6 characters, no vowels/dashes, regex defined in `@config/constants`). Generate codes with CLI: `bun run generate:selfheal "Post Title"`.
+
+5. **Type-safe references**: Content collections use Astro's `reference()` for relationships:
    - Notes reference `author: reference('team')`
    - Notes reference `collections: z.array(reference('collections'))`
 
-5. **Date handling**: `publishDate` fields are defined as `z.date()` in schemas. Astro automatically transforms ISO date strings from frontmatter to Date objects.
+6. **Date handling**: `publishDate` fields are defined as `z.date()` in schemas. Astro automatically transforms ISO date strings from frontmatter to Date objects.
+
+7. **Draft Preview**: Drafts are automatically visible in dev mode (`bun run dev`) with a visual "DRAFT" badge. Production builds exclude drafts.
 
 ### Multi-Framework Islands
 
@@ -97,12 +103,14 @@ Configured in `tsconfig.json` for cleaner imports:
 @helpers/*        → src/helpers/*
 @pages/*          → src/pages/*
 @images/*         → src/assets/images/*
+@config/*         → src/config/*
 ```
 
 ### Server Actions
 
 Server actions live in `src/actions/` and are exported from `src/actions/index.ts`:
-- `sendEmail` - Email sending via Resend API
+- `sendEmail` - Email sending via Resend API with enhanced error handling
+  - Returns specific error codes: `BAD_REQUEST`, `TOO_MANY_REQUESTS`, `INTERNAL_SERVER_ERROR`
 - Actions use Astro's form actions feature (available in `.astro` files)
 
 ### Environment Configuration
@@ -167,3 +175,22 @@ Configured with `@astrojs/vercel` adapter in `astro.config.mjs`:
 - Extends `astro/tsconfigs/strict`
 - Strict null checks enabled
 - All imports should use path aliases where appropriate
+
+### Performance Optimizations
+
+**Self-hosted Fonts**: Uses fontsource packages instead of Google Fonts for better performance and privacy:
+- `@fontsource/poppins` (400, 500, 600, 700 weights)
+- `@fontsource/roboto-mono` (400, 500 weights)
+- Imported in `src/global/components/Head/index.astro`
+
+**Lazy Loading**: The AI summarizer (Chrome's Summarizer API) lazy-loads the `marked` markdown library only when the user clicks the summarize button, reducing initial page load.
+
+### Developer Tools
+
+**Self-healing Code Generator**:
+```bash
+bun run generate:selfheal "My Post Title"     # Generate code from title
+bun run generate:selfheal --validate "rhythm" # Validate existing code
+bun run generate:selfheal --alts "Title"      # Generate alternatives
+```
+Located in `scripts/generateSelfHealingCode.ts`.

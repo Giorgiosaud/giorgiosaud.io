@@ -9,6 +9,13 @@ Each collection is defined in `{collection}/config.ts` with:
 - **Schema**: Zod schema for type-safe frontmatter validation
 - **Pattern**: `**/[^_]*.(md|mdx)` ignores files starting with `_`
 
+### Shared Schemas
+
+Reusable schemas are in `src/content/schemas/`:
+- `noteSchema.ts` - Shared schema for notes/notas collections
+
+Import shared schemas in collection configs to maintain DRY principles.
+
 ## Creating New Collections
 
 1. Create directory: `src/content/{name}/`

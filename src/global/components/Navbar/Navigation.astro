@@ -30,8 +30,8 @@ const menuItems: MenuItemsInterface[] = [
 ]
 ---
 
-<div id="menu">
-  <ul>
+<div id="menu" role="navigation" aria-label="Main menu">
+  <ul role="list">
     {
       menuItems.map((menuEl) => (
       <li
@@ -39,10 +39,7 @@ const menuItems: MenuItemsInterface[] = [
         { active: menuEl.path == Astro.url.pathname && menuEl.path != "/" },
         ]}
         >
-        <a
-        href={menuEl.path}
-        role="menuitem"
-        >
+        <a href={menuEl.path}>
         {menuEl.title}
       </a>
     </li>

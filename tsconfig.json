@@ -46,6 +46,9 @@
       ],
       "@pages/*": [
         "pages/*"
+      ],
+      "@config/*": [
+        "config/*"
       ]
     },
     "strictNullChecks": true,

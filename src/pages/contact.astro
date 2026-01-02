@@ -29,7 +29,7 @@ const result = Astro.getActionResult(actions.sendEmail)
 <p>If you&#39;re a fellow developer, architect, or just getting started — I’d be happy to connect and exchange ideas.</p>
 <p>Thanks for stopping by!</p>
 {result && !result.error && (
-  <p class="success">Email sent successfully!</p>
+  <p class="success" role="alert" aria-live="polite">Email sent successfully!</p>
 )}
 
 <form method="POST" action={actions.sendEmail} class="contact-form">

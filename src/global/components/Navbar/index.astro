@@ -18,7 +18,7 @@ interface Props {
   <Navigation/>
   <div class="actions">
     <TranslateButton pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
-    <button id="hamburger-menu">
+    <button id="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menu">
       <HamburgerIcon />
     </button>
   </div>
@@ -33,7 +33,9 @@ interface Props {
     Menu.dataset.opened = "true";
     MenuButton.classList.toggle("opened");
     Header.classList.toggle("opened");
-    if (!MenuButton.classList.contains("opened")) {
+    const isOpened = MenuButton.classList.contains("opened");
+    MenuButton.setAttribute("aria-expanded", String(isOpened));
+    if (!isOpened) {
       Menu.dataset.opened = "false";
     }
   });

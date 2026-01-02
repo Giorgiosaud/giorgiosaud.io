@@ -1,14 +1,17 @@
 ---
 import { Image } from 'astro:assets'
 import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { isDraftInDevMode } from '@helpers/collections'
 
 const lang = getLangFromUrl(Astro.url)
 const { note, context = 'no-context' } = Astro.props
 const t = useTranslations(lang)
 const link = lang === 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`
 const nameImage = `${note.id}-${context}`
+const showDraftBadge = isDraftInDevMode(note.data)
 ---
 <article aria-label={note.data.title} data-link={link} id={nameImage} style="position:relative;">
+    {showDraftBadge && <span class="draft-badge">DRAFT</span>}
     <div class="wrapper">
         <div class="title" title={note.data.title}>
             <h2>{note.data.title}</h2>
@@ -25,6 +28,21 @@ const nameImage = `${note.id}-${context}`
 <style define:vars={{nameImage}}>
     article{
         container: note/inline-size;
+    }
+    .draft-badge {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        z-index: 200;
+        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+        color: white;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.25rem;
+        box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
     }
     .wrapper{
         position: relative;
@@ -56,23 +74,23 @@ const nameImage = `${note.id}-${context}`
         text-align: center;
         --_padding-inline: var(--padding-inline, 1rem);
         padding-inline: var(--_padding-inline);
-        h2{
+        & h2 {
             --_font-size: var(--font-size, clamp(1rem, 7cqw, 2rem));
             font-size: var(--_font-size);
             text-wrap: balance;
             text-decoration: none;
             display: -webkit-box;
             -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;  
+            -webkit-box-orient: vertical;
             overflow: hidden;
             line-height: 1.5;
             max-height: 3.5lh;
         }
     }
-    figure{
+    figure {
         margin: 0;
         position: relative;
-        img{
+        & img {
             width: 100%;
             display: block;
             height: auto;
@@ -130,10 +148,7 @@ const nameImage = `${note.id}-${context}`
         }
         .description {
             display: block !important;
-            --_padding-inline: 0;
-            --_padding-block: 0;
-            padding-inline: 0;
-            padding-block: 0;
+            padding: 0;
         }
         .description p {
             --_font-size: var(--font-size, clamp(.8rem, 5cqw, 1rem));
