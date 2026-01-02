@@ -8,7 +8,7 @@
     --color-light: hsl(from var(--color-main) h s calc(l * 1.8));
     --spacing: 0.25rem;
     --breakpoint-lg: 48rem;
-    --default-font-family: "Poppins";
+    --default-font-family: "Poppins", "Poppins Fallback";
   }
 
   html {

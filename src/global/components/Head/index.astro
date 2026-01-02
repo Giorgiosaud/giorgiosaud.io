@@ -11,6 +11,18 @@ import '@fontsource/poppins/700.css'
 import '@fontsource/roboto-mono/400.css'
 import '@fontsource/roboto-mono/500.css'
 
+// Font metrics fallback to prevent CLS during font swap
+const fontMetricsFallback = `
+@font-face {
+  font-family: 'Poppins Fallback';
+  src: local('Arial');
+  size-adjust: 112%;
+  ascent-override: 105%;
+  descent-override: 35%;
+  line-gap-override: 10%;
+}
+`
+
 export interface Props {
   title?: string
   description?: string
@@ -28,21 +40,45 @@ const fixedTitle = `Giorgiosaud.io | ${title || 'Notebook'}`
 const lang = getLangFromUrl(Astro.url)
 ---
 <head>
-  <!-- Google Tag Manager -->
+  <!-- Font metrics fallback to prevent CLS -->
+  <style set:html={fontMetricsFallback}></style>
+
+  <!-- Google Tag Manager - Deferred for better LCP -->
   <script>
     import { TAG_MANAGER_ID } from "astro:env/client";
-    (function(w: Window & { [key: string]: any },d: Document,s: string,l: string,i: string) {  
-      w[l] = w[l] || [];
-      w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-      var f = d.getElementsByTagName(s)[0],
-      j = d.createElement(s),
-      dl = l != 'dataLayer' ? '&l=' + l : '';
-      if (j instanceof HTMLScriptElement) {
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+
+    // Initialize dataLayer for custom events
+    declare global {
+      interface Window {
+        dataLayer: Record<string, unknown>[];
       }
-      f.parentNode?.insertBefore(j, f);
-    })(window as Window & { [key: string]: any }, document, 'script', 'dataLayer', TAG_MANAGER_ID || '');
+    }
+    window.dataLayer = window.dataLayer || [];
+
+    // Defer GTM loading until after page load or user interaction
+    const loadGTM = () => {
+      if ((window as any).gtmLoaded) return;
+      (window as any).gtmLoaded = true;
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtm.js?id=${TAG_MANAGER_ID || ''}`;
+      document.head.appendChild(script);
+
+      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    };
+
+    // Load GTM after page is interactive or on first user interaction
+    if (document.readyState === 'complete') {
+      setTimeout(loadGTM, 2000);
+    } else {
+      window.addEventListener('load', () => setTimeout(loadGTM, 2000));
+    }
+
+    // Also load on first user interaction for faster tracking
+    ['click', 'scroll', 'keydown', 'touchstart'].forEach(event => {
+      document.addEventListener(event, loadGTM, { once: true, passive: true });
+    });
   </script>
   <!-- End Google Tag Manager -->
   <meta charset="UTF-8" />
