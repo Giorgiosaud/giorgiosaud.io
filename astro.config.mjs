@@ -11,6 +11,11 @@ export default defineConfig({
   site: 'https://giorgiosaud.io',
   integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
+  // Inline all CSS to eliminate render-blocking stylesheets
+  build: {
+    inlineStylesheets: 'always',
+  },
+
   vite: {
     css: {
       transformer: 'lightningcss',
