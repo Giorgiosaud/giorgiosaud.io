@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
 import NoteTemplate from '@templates/Note.astro'
+import AISummarizer from '@components/AISummarizer.astro'
 import '@global-styles/md.css'
 export async function getStaticPaths() {
   const pages = await getCollection('notes')
@@ -43,16 +44,7 @@ pathToTranslateNote={pathToTranslateNote}
   {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
   <figcaption>{coverAlt}</figcaption>
 </figure>
-<!-- Floating bubble button for summary generation -->
-<button id="generate-summary-bubble" class="summary-bubble" title="Generar resumen">
-  <span>🤖</span>
-</button>
-
-<!-- Emergent bubble/modal for summary result -->
-<div id="summary-modal" class="summary-modal">
-  <button id="close-summary-modal" class="close-summary-modal">×</button>
-  <div id="summary-content"></div>
-</div>
+<AISummarizer lang="en" />
 <div id="content">
   <h1>{title}</h1>
   <Content/>
@@ -63,77 +55,6 @@ pathToTranslateNote={pathToTranslateNote}
   <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
 </section>
 </NoteTemplate>
-<script type="module">
-  // Lazy load summarizer - only initialize if browser supports it
-  if ('Summarizer' in self) {
-    const summaryBubble = document.getElementById('generate-summary-bubble');
-    const summaryModal = document.getElementById('summary-modal');
-    const summaryContent = document.getElementById('summary-content');
-    const closeModalBtn = document.getElementById('close-summary-modal');
-
-    // Cache for lazy-loaded marked library
-    let markedModule = null;
-
-    async function getMarked() {
-      if (!markedModule) {
-        const module = await import("https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js");
-        markedModule = module.marked;
-      }
-      return markedModule;
-    }
-
-    async function summarizeContent(){
-      const options = {
-        sharedContext: 'Este es un artículo para desarrolladores FrontEnd, usa el mismo idioma que el texto para el resumen, el autor es Giorgiosaud y el tono es menos formal pero técnico',
-        type: 'teaser',
-        format: 'markdown',
-        length: "medium",
-        expectedInputLanguages: ["en-US"],
-        outputLanguage: 'en-US',
-        monitor(m) {
-          m.addEventListener('downloadprogress', (e) => {
-            console.log(`Downloaded ${e.loaded * 100}%`);
-          });
-        }
-      };
-      const availability = await Summarizer.availability();
-      if (availability !== 'available') {
-        summaryContent.innerHTML = '<p>The summarization API is not available in this browser.</p>';
-        return;
-      }
-      summaryContent.innerHTML = '<p>Generating Summary...</p>';
-      summaryModal.classList.add('show');
-
-      // Lazy load marked only when actually summarizing
-      const marked = await getMarked();
-
-      const summarizer = await Summarizer.create(options);
-      const text = document.getElementById('content').innerText;
-      const summary = await summarizer.summarizeStreaming(text, { language: 'en-US' });
-      let result = '';
-      for await (const chunk of summary.values()) {
-        result += chunk;
-        summaryContent.innerHTML = marked.parse(result);
-      }
-    }
-
-    summaryBubble.addEventListener('click', () => {
-      summaryModal.classList.add('show');
-      summarizeContent();
-    });
-    closeModalBtn.addEventListener('click', () => {
-      summaryModal.classList.remove('show');
-      summaryContent.innerHTML = '';
-    });
-    // Optional: close modal on outside click
-    summaryModal.addEventListener('click', (e) => {
-      if (e.target === summaryModal) {
-        summaryModal.classList.remove('show');
-        summaryContent.innerHTML = '';
-      }
-    });
-  }
-</script>
 <script define:vars={{selfHealing}}>
   notification = document.getElementById('notification');
   
@@ -224,164 +145,11 @@ pathToTranslateNote={pathToTranslateNote}
       border-radius: 10px;
     }
   }
-  #content,#summary{
+  #content {
     width: 100%;
     max-width: 80ch;
     margin: auto;
     padding: 1rem;
     line-height: 1.6;
   }
-  #summary{
-    display: none;
-  }
-  #summary :global(p) {
-    font-size: clamp(.8rem, 2vw, 1.125rem);
-  }
-  #summary :global(h1) {
-    font-size: clamp(1.2rem, 3vw, 1.8rem);
-  }
-  #summary :global(h2) {
-    font-size: clamp(1rem, 2.8vw, 1.5rem);
-  }
-  #summary :global(h3) {
-    font-size: clamp(0.875rem, 2.4vw, 1.25rem);
-  }
-  /** make this border like gemini colors moving around as gradient  */
-  #summary.can-summarize{
-    display: block;
-    margin-top: 2rem;
-    max-width: 60ch;  
-    border-left: 4px solid var(--color-accent);
-    animation: gemini-border 1s infinite ease-in cubic-bezier(0.1, -0.6, 0.2, 0);
-    max-width: 60ch;
-    width: 90%;
-    background-color: light-dark(var(--color-summary-light), var(--color-summary-dark));
-    border-left: 4px solid var(--color-accent);
-    margin-bottom: 2rem;
-    font-style: italic;
-  }
-  #summary.can-summarize::before{
-    content: '🤖 This summary was generated with AI';
-    display: block;
-    font-size: 0.875rem;
-    color: light-dark(var(--color-accent-dark), var(--color-accent-light));
-    margin-bottom: 0.5rem;
-  }
-  .can-summarize {
-    position: relative;
-    padding: 2rem;
-    border-radius: 1rem;
-    z-index: 0;
-    overflow: hidden;
-  }
-  .can-summarize:after{
-    background: var(--color-dark);
-    content: '';
-    position: absolute;
-    inset: 0;
-    box-sizing: border-box;
-    border: transparent 41px solid;
-    z-index: -1;
-    margin: 5px;
-    border-radius: 15px;
-  }
-  .can-summarize::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 4px;
-    background: conic-gradient(
-    from 0deg,
-    #ff00cc,
-    #3333ff,
-    #00ffcc,
-    #ffcc00,
-    #ff00cc
-    );
-    z-index: -1;
-    height: 100%;
-    width: 250%;
-    animation: spin 15s linear infinite;
-  }
-  
-  .can-summarize > * {
-    position: relative;
-    z-index: 1;
-  }
-  
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-.summary-bubble {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #ff00cc, #3333ff, #00ffcc, #ffcc00);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 2rem;
-  cursor: pointer;
-  z-index: 2000;
-  border: none;
-  transition: transform 0.2s;
-  anchor-name: --summary-bot;
-}
-.summary-bubble:hover {
-  transform: scale(1.1);
-}
-
-
-/* Emergent summary modal styles */
-.summary-modal {
-  position: fixed;
-  position-anchor: --summary-bot;
-  position-area: top left;
-  max-width: 400px;
-  width: 90vw;
-  background: #fff;
-  border-radius: 1.5rem;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  z-index: 2100;
-  display: none;
-  flex-direction: column;
-  gap: 1rem;
-  animation: bubbleIn 0.3s ease;
-  width: 280px;
-}
-@media screen and (width > 500px) {
-  .summary-modal {
-    width: 100%;
-  }
-}
-.summary-modal.show {
-  display: flex;
-}
-.close-summary-modal {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #333;
-  cursor: pointer;
-}
-#summary-content {
-  font-size: 1rem;
-  color: #222;
-}
-@keyframes bubbleIn {
-  from { opacity: 0; transform: translateY(40px) scale(0.9); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
 </style>
