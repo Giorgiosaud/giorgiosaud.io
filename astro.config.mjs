@@ -11,6 +11,22 @@ export default defineConfig({
   site: 'https://giorgiosaud.io',
   integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
+  vite: {
+    css: {
+      transformer: 'lightningcss',
+      lightningcss: {
+        drafts: {
+          customMedia: true,
+        },
+        // Don't error on unknown at-rules or pseudo-elements (for bleeding-edge CSS like scroll-marker)
+        errorRecovery: true,
+      },
+    },
+    build: {
+      cssMinify: 'lightningcss',
+    },
+  },
+
   experimental: {
     contentIntellisense: true,
   },
