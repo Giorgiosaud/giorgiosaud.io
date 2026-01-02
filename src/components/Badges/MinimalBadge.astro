@@ -24,7 +24,7 @@ const slugify = (str: string) => {
 <div class="badge">
     <article tabindex="0">
         <figure>
-            <img src={imgSrc} alt={title}>
+            <img src={imgSrc} alt={title} loading="lazy" decoding="async">
             <figcaption>
                 <h4>{title}</h4>
                 <p title={description}>{description}</p>
