@@ -220,7 +220,7 @@ pathToTranslateNote={pathToTranslateNote}
   figure {
     text-align: center;
     padding-top: 1lh;
-    img {
+    & img {
       margin: auto;
       border-radius: 10px;
     }
@@ -358,7 +358,9 @@ pathToTranslateNote={pathToTranslateNote}
   gap: 1rem;
   animation: bubbleIn 0.3s ease;
   width: 280px;
-  @media screen and (width > 500px) {
+}
+@media screen and (width > 500px) {
+  .summary-modal {
     width: 100%;
   }
 }
