@@ -20,7 +20,7 @@ const { title, description, showButtons = true } = Astro.props
   <div class="hero">
     <!-- Image first in DOM for LCP priority on mobile -->
     <div class="hero__image">
-       <Image src={HomeNotebook} alt={title} loading="eager" fetchpriority="high" />
+       <Image src={HomeNotebook} alt={title} loading="eager" fetchpriority="high" decoding="sync" />
     </div>
     <h1 class="hero__title">
       {title}
