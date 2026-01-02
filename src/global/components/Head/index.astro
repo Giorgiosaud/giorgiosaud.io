@@ -7,7 +7,7 @@ export interface Props {
   title?: string
   description?: string
   structuredData?: string
-  image?: string
+  image?: string | ImageMetadata
 }
 const {
   title,
@@ -15,6 +15,7 @@ const {
   description = 'This is a web developers Notebook site',
   image = 'https://giorgiosaud.io/opengraph.jpg',
 } = Astro.props
+const imageUrl = typeof image === 'string' ? image : image?.src || ''
 const fixedTitle = `Giorgiosaud.io | ${title || 'Notebook'}`
 const fonts = [
   'https://fonts.gstatic.com/s/poppins/v23/pxiEyp8kv8JHgFVrJJfecnFHGPc.woff2',
@@ -66,14 +67,14 @@ const lang = getLangFromUrl(Astro.url)
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={Astro.url || 'https://giorgiosaud.io/'} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={imageUrl} />
     <meta property="og:site_name" content="Giorgiosaud.io" />
     <meta property="og:locale" content={lang=='en'?'en_US':'es_VE'} />
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fixedTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image" content={imageUrl} />
     <meta name="twitter:site" content="@giorgiosaud" />
   <Favicons/>
   <PWA />
