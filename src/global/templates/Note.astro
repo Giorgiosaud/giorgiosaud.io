@@ -18,6 +18,7 @@ export interface Props {
   image?: Omit<ImageMetadata, 'orientation'>
   publishedAt: Date
   pathToTranslateNote?: string
+  llmPath?: string
 }
 const {
   title,
@@ -27,6 +28,7 @@ const {
   pathToTranslate = 'internal-note',
   publishedAt,
   pathToTranslateNote = '',
+  llmPath,
 } = Astro.props
 const structuredData = {
   '@context': 'https://schema.org',
@@ -59,6 +61,7 @@ title={title}
 description={description}
 structuredData={JSON.stringify(structuredData)}
 image={image}
+llmPath={llmPath}
 >  
 
 
