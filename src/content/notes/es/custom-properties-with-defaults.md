@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: "LVCSTP"
+selfHealing: LVCSTP
 starred: false
 title: Propiedades CSS con valores predeterminados
 description: Aprende a manejar valores predeterminados en variables CSS usando la técnica clásica "pseudo-privada" y la moderna regla @property.
@@ -13,7 +13,7 @@ tags:
   - css
   - tips
   - design-patterns
-cover: ../../../assets/images/custom-properties-with-defaults.png
+cover: ../../../assets/images/custom-properties-with-defaults.jpeg
 coverAlt: CSS Private and public props
 ---
 

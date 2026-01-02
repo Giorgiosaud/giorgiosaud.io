@@ -1,6 +1,6 @@
 ---
 draft: false
-selfHealing: 'LVCSTP'
+selfHealing: LVCSTP
 starred: false
 title: Modern Custom Properties with Defaults
 description: Learn how to handle default values in CSS variables using the classic "pseudo-private" technique and the modern @property rule.
@@ -13,7 +13,7 @@ tags:
   - css
   - tips
   - design-patterns
-cover: ../../../assets/images/custom-properties-with-defaults.png
+cover: ../../../assets/images/custom-properties-with-defaults.jpeg
 coverAlt: CSS Private and public props
 ---
 
@@ -69,7 +69,7 @@ Instead of needing a "private" intermediate variable, we register the public pro
 
 ```css
 @property --button-bg {
-  syntax: '<color>';
+  syntax: "<color>";
   initial-value: black;
   inherits: true;
 }
@@ -108,8 +108,6 @@ To take your CSS architecture to the next level, I recommend combining these pat
 
 4.  **Fluid Typography with `clamp()`:** Don't use static font sizes. Use `clamp()` to create fluid typography that scales beautifully between mobile and desktop without needing a dozen media queries.
 
-
-
 ```css
 /* 1. Global Setup with @layer and :root tokens */
 @layer tokens, base, components;
@@ -130,14 +128,14 @@ To take your CSS architecture to the next level, I recommend combining these pat
     --_bg: var(--card-bg, #ffffff);
     /* 4. Consistent spacing using calc() */
     --_padding: calc(var(--spacing) * 6);
-    
+
     background: var(--_bg);
     padding: var(--_padding);
     font-size: var(--font-size-base);
     color: var(--color-text);
     border: 1px solid var(--color-primary);
     border-radius: calc(var(--spacing) * 2);
-    
+
     /* Enable transition for the custom property */
     transition: --card-bg 0.3s ease;
   }
