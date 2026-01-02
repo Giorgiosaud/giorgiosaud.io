@@ -64,12 +64,23 @@ pathToTranslateNote={pathToTranslateNote}
 </section>
 </NoteTemplate>
 <script type="module">
-  import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+  // Lazy load summarizer - only initialize if browser supports it
   if ('Summarizer' in self) {
     const summaryBubble = document.getElementById('generate-summary-bubble');
     const summaryModal = document.getElementById('summary-modal');
     const summaryContent = document.getElementById('summary-content');
     const closeModalBtn = document.getElementById('close-summary-modal');
+
+    // Cache for lazy-loaded marked library
+    let markedModule = null;
+
+    async function getMarked() {
+      if (!markedModule) {
+        const module = await import("https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js");
+        markedModule = module.marked;
+      }
+      return markedModule;
+    }
 
     async function summarizeContent(){
       const options = {
@@ -92,6 +103,10 @@ pathToTranslateNote={pathToTranslateNote}
       }
       summaryContent.innerHTML = '<p>Generating Summary...</p>';
       summaryModal.classList.add('show');
+
+      // Lazy load marked only when actually summarizing
+      const marked = await getMarked();
+
       const summarizer = await Summarizer.create(options);
       const text = document.getElementById('content').innerText;
       const summary = await summarizer.summarizeStreaming(text, { language: 'en-US' });
