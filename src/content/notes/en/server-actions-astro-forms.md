@@ -1,4 +1,5 @@
 ---
+draft: false
 title: "Server Actions in Astro: Forms Done Right"
 description: Learn how to build secure, type-safe forms with Astro's server actions, including Zod validation, error handling, and bot protection patterns.
 publishDate: 2026-01-02
