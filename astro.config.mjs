@@ -1,21 +1,15 @@
-import mdx from '@astrojs/mdx'
-import react from '@astrojs/react'
-import sitemap from '@astrojs/sitemap'
-import svelte from '@astrojs/svelte'
-import vercel from '@astrojs/vercel'
-import vue from '@astrojs/vue'
-import { defineConfig, envField } from 'astro/config'
+import mdx from '@astrojs/mdx';
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import svelte from '@astrojs/svelte';
+import vercel from '@astrojs/vercel';
+import vue from '@astrojs/vue';
+import { defineConfig, envField } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://giorgiosaud.io',
-  integrations: [
-    mdx(),
-    react(),
-    vue(),
-    svelte(),
-    sitemap(),
-  ],
+  integrations: [mdx(), react(), vue(), svelte(), sitemap()],
 
   experimental: {
     contentIntellisense: true,
@@ -72,4 +66,4 @@ export default defineConfig({
     skewProtection: true,
     isr: true,
   }),
-})
+});
