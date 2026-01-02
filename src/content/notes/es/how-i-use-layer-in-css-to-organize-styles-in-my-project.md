@@ -149,6 +149,37 @@ Un ejemplo de esto sería:
 ```
 En este caso, `.text-bold` siempre será negrita debido al `!important`, independientemente de que esté en una capa posterior.
 
+## Un detalle avanzado: `@property` y `@layer`
+
+Es común preguntarse si podemos encapsular definiciones de variables usando `@property` dentro de una capa para hacerlas "privadas" o scoped.
+
+La respuesta es: **Sí puedes escribirlo dentro, pero NO se hace privado.**
+
+```css
+@layer components {
+  @property --card-bg {
+    syntax: "<color>";
+    initial-value: #fff;
+    inherits: false;
+  }
+}
+```
+
+Aunque esto es sintácticamente válido y excelente para mantener tu código organizado (manteniendo la definición cerca de su uso), la regla `@property` **siempre es global**. No importa en qué capa la definas, el registro de la variable ocurre para todo el documento.
+
+Sin embargo, **los valores** que asignes a esa variable sí respetan las capas:
+
+```css
+@layer base {
+  :root { --card-bg: blue; }
+}
+@layer components {
+  :root { --card-bg: red; } /* Gana porque 'components' tiene mayor prioridad */
+}
+```
+
+Por lo tanto: úsalo dentro de layers para organizar tu código, pero recuerda que el nombre de la propiedad (`--card-bg`) sigue ocupando el espacio global.
+
 ---
 
 ## Ventajas de usar `@layer`

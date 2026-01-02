@@ -21,6 +21,22 @@
   h6 {
     text-wrap: balance;
   }
+  h1 code,
+  h2 code,
+  h3 code,
+  h4 code,
+  h5 code,
+  h6 code {
+    --_color: var(--color, light-dark(lightsalmon, darkseagreen));
+    --_bg: var(--bg, light-dark(beige, black));
+    background: var(--_bg);
+    padding: 0.5rem;
+    display: inline-block;
+    color: var(--_color);
+    font-family: monospace;
+    border: solid 3px var(--_color);
+    transition: color 0.3s ease, background-color 0.3s ease;
+  }
   p {
     text-wrap: pretty;
   }
