@@ -49,11 +49,64 @@ export default defineConfig({
         access: 'secret',
         optional: false,
       }),
+
+      // Better Auth
+      BETTER_AUTH_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
+      BETTER_AUTH_URL: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: false,
+        default: 'http://localhost:4321',
+      }),
+
+      // OAuth - GitHub
+      GITHUB_CLIENT_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      GITHUB_CLIENT_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+
+      // OAuth - Google
+      GOOGLE_CLIENT_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      GOOGLE_CLIENT_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+
+      // OAuth - Facebook
+      FACEBOOK_CLIENT_ID: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      FACEBOOK_CLIENT_SECRET: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+
+      // Analytics
       TAG_MANAGER_ID: envField.string({
         context: 'client',
         access: 'public',
         optional: true,
       }),
+
+      // reCAPTCHA
       RECAPTCHA_KEY: envField.string({
         context: 'client',
         access: 'public',
@@ -64,6 +117,8 @@ export default defineConfig({
         access: 'secret',
         optional: true,
       }),
+
+      // Email (Resend)
       RESEND_API_KEY: envField.string({
         context: 'server',
         access: 'secret',
