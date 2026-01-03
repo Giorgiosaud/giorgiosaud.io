@@ -8,7 +8,7 @@ export const GET: APIRoute = async () => {
   try {
     // Test database connection with a simple query
     const result = await db.execute(sql`SELECT NOW() as time`)
-    const time = result.rows[0]?.time
+    const time = result[0]?.time
 
     return Response.json({
       status: 'ok',
