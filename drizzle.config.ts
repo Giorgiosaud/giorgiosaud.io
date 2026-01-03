@@ -10,6 +10,8 @@ export default defineConfig({
     // Falls back to DATABASE_URL for local development
     url: process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL!,
   },
+  // Only target public schema to avoid Supabase system table issues
+  schemaFilter: ['public'],
   verbose: true,
   strict: true,
 })
