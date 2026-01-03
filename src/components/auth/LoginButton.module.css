@@ -1,0 +1,212 @@
+.hidden {
+  display: none;
+}
+
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid light-dark(var(--color-main), var(--color-light));
+  border-radius: 0.5rem;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
+}
+
+.button:hover {
+  background: light-dark(var(--color-main), var(--color-light));
+  color: light-dark(var(--color-light), var(--color-main));
+}
+
+.loading {
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 280px;
+  padding: 0.75rem;
+  background: light-dark(var(--color-light), var(--color-dark));
+  border: 1px solid light-dark(var(--color-main), var(--color-light));
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menuItem:hover {
+  background: light-dark(
+    hsl(from var(--color-main) h s l / 0.1),
+    hsl(from var(--color-light) h s l / 0.1)
+  );
+}
+
+.menuItem svg {
+  flex-shrink: 0;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  color: inherit;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: currentcolor;
+  opacity: 0.3;
+}
+
+/* Form styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0;
+  margin-bottom: 0.5rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.backButton:hover {
+  opacity: 1;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.input {
+  padding: 0.625rem 0.75rem;
+  border: 1px solid light-dark(
+    hsl(from var(--color-main) h s l / 0.3),
+    hsl(from var(--color-light) h s l / 0.3)
+  );
+  border-radius: 0.375rem;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: light-dark(var(--color-main), var(--color-light));
+  box-shadow: 0 0 0 2px light-dark(
+    hsl(from var(--color-main) h s l / 0.2),
+    hsl(from var(--color-light) h s l / 0.2)
+  );
+}
+
+.submitButton {
+  padding: 0.75rem 1rem;
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 0.375rem;
+  background: light-dark(var(--color-main), var(--color-light));
+  color: light-dark(var(--color-light), var(--color-dark));
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    opacity 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.switchMode {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  text-align: center;
+  opacity: 0.8;
+}
+
+.switchMode button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: light-dark(var(--color-main), var(--color-light));
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.switchMode button:hover {
+  opacity: 0.8;
+}
+
+.error {
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.375rem;
+  background: hsl(0 70% 50% / 0.1);
+  color: hsl(0 70% 45%);
+  font-size: 0.85rem;
+  text-align: center;
+}

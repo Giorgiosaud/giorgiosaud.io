@@ -27,6 +27,7 @@
     "@astrojs/svelte": "7.2.4",
     "@astrojs/vercel": "9.0.2",
     "@astrojs/vue": "5.1.3",
+    "@better-auth/passkey": "^1.4.10",
     "@fontsource/poppins": "^5.2.7",
     "@fontsource/roboto-mono": "^5.2.8",
     "@frontmatter/extensibility": "^0.0.18",

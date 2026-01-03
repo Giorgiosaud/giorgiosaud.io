@@ -1,5 +1,6 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { passkey } from '@better-auth/passkey'
 import { db } from '@db'
 import * as schema from '@db/schema'
 import {
@@ -45,9 +46,11 @@ export const auth = betterAuth({
   secret: BETTER_AUTH_SECRET,
   baseURL: BETTER_AUTH_URL,
 
-  // Email/password disabled - social only
+  // Email/password authentication
   emailAndPassword: {
-    enabled: false,
+    enabled: true,
+    requireEmailVerification: false, // Set to true in production with email service
+    minPasswordLength: 8,
   },
 
   // Social OAuth providers
@@ -62,6 +65,15 @@ export const auth = betterAuth({
     expiresIn: 60 * 60 * 24 * 7, // 7 days
     updateAge: 60 * 60 * 24, // Update session every day
   },
+
+  // Plugins
+  plugins: [
+    passkey({
+      rpID: import.meta.env.PROD ? 'giorgiosaud.io' : 'localhost',
+      rpName: 'Giorgio Saud Notebook',
+      origin: BETTER_AUTH_URL,
+    }),
+  ],
 
   // Advanced options
   advanced: {
