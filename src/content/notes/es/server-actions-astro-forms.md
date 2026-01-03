@@ -21,11 +21,11 @@ tags:
   - backend
 ---
 
-## ¿Por Qué Server Actions?
+## ¿Porque Server Actions?
 
 Antes de los server actions de Astro, manejar formularios en sitios estáticos significaba:
 
-- Configurar un endpoint API separado
+- Configurar un endpoint API separado con todo lo que la infraestructura backend requiere
 - Usar servicios de formularios de terceros
 - JavaScript del lado del cliente con llamadas fetch
 
@@ -39,15 +39,15 @@ Los server actions viven en `src/actions/`. Aquí hay una action real para envia
 // src/actions/sendEmail.ts
 import { ActionError, defineAction } from "astro:actions";
 import {
-  RESEND_API_KEY,
-  RESEND_FROM_EMAIL,
-  RESEND_FROM_NAME,
-  RESEND_TO_EMAIL,
+  EMAIL_SERVICE_API_KEY,
+  EMAIL_SERVICE_FROM_EMAIL,
+  EMAIL_SERVICE_FROM_NAME,
+  EMAIL_SERVICE_TO_EMAIL,
 } from "astro:env/server";
-import { Resend } from "resend";
+import { EMAIL_SERVICE } from "EMAIL_SERVICE";
 import { z } from "astro:schema";
 
-const resend = new Resend(RESEND_API_KEY);
+const EmailService = new EMAIL_SERVICE(EMAIL_SERVICE_API_KEY);
 
 export const sendEmail = defineAction({
   accept: "form",
@@ -59,9 +59,9 @@ export const sendEmail = defineAction({
   }),
 
   handler: async (input) => {
-    const { data, error } = await resend.emails.send({
-      from: `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>`,
-      to: [RESEND_TO_EMAIL],
+    const { data, error } = await EmailService.emails.send({
+      from: `${EMAIL_SERVICE_FROM_NAME} <${EMAIL_SERVICE_FROM_EMAIL}>`,
+      to: [EMAIL_SERVICE_TO_EMAIL],
       subject: `Email de ${input.name}`,
       html: `
         <h1>Nuevo mensaje de ${input.name}</h1>
@@ -96,11 +96,11 @@ Astro 5 introdujo `astro:env/server` para variables de entorno type-safe:
 export default defineConfig({
   env: {
     schema: {
-      RESEND_API_KEY: envField.string({
+      EMAIL_SERVICE_API_KEY: envField.string({
         context: "server",
         access: "secret",
       }),
-      RESEND_TO_EMAIL: envField.string({
+      EMAIL_SERVICE_TO_EMAIL: envField.string({
         context: "server",
         access: "public",
         default: "tu@ejemplo.com",
@@ -119,7 +119,7 @@ Mapea errores de API a respuestas amigables para el usuario:
 ```typescript
 handler: async (input) => {
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await EMAIL_SERVICE.emails.send({
       /* ... */
     });
 

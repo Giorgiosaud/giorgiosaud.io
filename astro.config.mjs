@@ -1,15 +1,21 @@
-import mdx from '@astrojs/mdx';
-import react from '@astrojs/react';
-import sitemap from '@astrojs/sitemap';
-import svelte from '@astrojs/svelte';
-import vercel from '@astrojs/vercel';
-import vue from '@astrojs/vue';
-import { defineConfig, envField } from 'astro/config';
+import mdx from '@astrojs/mdx'
+import react from '@astrojs/react'
+import sitemap from '@astrojs/sitemap'
+import svelte from '@astrojs/svelte'
+import vercel from '@astrojs/vercel'
+import vue from '@astrojs/vue'
+import { defineConfig, envField } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://giorgiosaud.io',
-  integrations: [mdx(), react(), vue(), svelte(), sitemap()],
+  integrations: [
+    mdx(),
+    react(),
+    vue(),
+    svelte(),
+    sitemap(),
+  ],
 
   vite: {
     css: {
@@ -37,6 +43,12 @@ export default defineConfig({
 
   env: {
     schema: {
+      // Database (Vercel-Supabase integration uses POSTGRES_PRISMA_URL)
+      POSTGRES_PRISMA_URL: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: false,
+      }),
       TAG_MANAGER_ID: envField.string({
         context: 'client',
         access: 'public',
@@ -82,4 +94,4 @@ export default defineConfig({
     skewProtection: true,
     isr: true,
   }),
-});
+})

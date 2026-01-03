@@ -1,30 +1,30 @@
 ---
 interface Props {
-  lang?: "en" | "es";
+  lang?: 'en' | 'es'
 }
 
-const { lang = "en" } = Astro.props;
+const { lang = 'en' } = Astro.props
 
 const i18n = {
   en: {
-    buttonTitle: "Generate summary",
-    loading: "Generating Summary...",
-    unavailable: "The summarization API is not available in this browser.",
-    inputLang: "en",
-    outputLang: "en",
-    streamLang: "en",
+    buttonTitle: 'Generate summary',
+    loading: 'Generating Summary...',
+    unavailable: 'The summarization API is not available in this browser.',
+    inputLang: 'en',
+    outputLang: 'en',
+    streamLang: 'en',
   },
   es: {
-    buttonTitle: "Generar resumen",
-    loading: "Generando resumen...",
-    unavailable: "La API de resumen no está disponible en este navegador.",
-    inputLang: "es",
-    outputLang: "es",
-    streamLang: "es",
+    buttonTitle: 'Generar resumen',
+    loading: 'Generando resumen...',
+    unavailable: 'La API de resumen no está disponible en este navegador.',
+    inputLang: 'es',
+    outputLang: 'es',
+    streamLang: 'es',
   },
-};
+}
 
-const t = i18n[lang];
+const t = i18n[lang]
 ---
 
 <!-- Floating bubble button for summary generation (hidden until API is available) -->
