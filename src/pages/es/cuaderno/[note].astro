@@ -1,9 +1,8 @@
 ---
 import { Image, Picture } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
-
-import NoteTemplate from '@templates/Note.astro'
 import AISummarizer from '@components/AISummarizer.astro'
+import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
 
 export async function getStaticPaths() {
@@ -11,11 +10,11 @@ export async function getStaticPaths() {
   const pagesTranslated = await getCollection('notes')
   return pages.map(page => {
     const pathToTranslateNote =
-    pagesTranslated.find(
-    translatedPage =>
-    translatedPage.data.selfHealing &&
-    translatedPage.data.selfHealing === page.data.selfHealing,
-    )?.id || ''
+      pagesTranslated.find(
+        translatedPage =>
+          translatedPage.data.selfHealing &&
+          translatedPage.data.selfHealing === page.data.selfHealing,
+      )?.id || ''
     return {
       params: {
         note: page.id,
@@ -31,7 +30,7 @@ const { page, pathToTranslateNote } = Astro.props
 
 const { Content } = await render(page)
 const { draft, title, publishDate, cover, coverAlt, selfHealing, description } =
-page.data
+  page.data
 ---
 <NoteTemplate
 description={description}

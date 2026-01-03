@@ -9,7 +9,11 @@ import { SELF_HEALING_REGEX } from '@config/constants'
  * - Type-safe author and collections references
  * - Image handling with Astro's image() helper
  */
-export const noteSchema = ({ image }: { image: () => ReturnType<typeof z.custom> }) =>
+export const noteSchema = ({
+  image,
+}: {
+  image: () => ReturnType<typeof z.custom>
+}) =>
   z.object({
     draft: z.boolean({
       required_error: 'draft is required',

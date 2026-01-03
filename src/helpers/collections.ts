@@ -1,6 +1,6 @@
-import { getCollection, type CollectionEntry } from 'astro:content'
-import type { SupportedLanguages } from '@i18n/utils'
+import { type CollectionEntry, getCollection } from 'astro:content'
 import { PAGINATION_SIZE } from '@config/constants'
+import type { SupportedLanguages } from '@i18n/utils'
 
 /**
  * Get published notes for a given language.
