@@ -1,10 +1,10 @@
-import { DATABASE_URL } from 'astro:env/server'
+import { POSTGRES_PRISMA_URL } from 'astro:env/server'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 import * as schema from './schema'
 
 // Use connection pooler with Transaction mode (disable prepare for Supabase)
-const client = postgres(DATABASE_URL, {
+const client = postgres(POSTGRES_PRISMA_URL, {
   prepare: false,
   max: 10,
 })

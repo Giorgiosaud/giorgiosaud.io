@@ -6,7 +6,9 @@ export default defineConfig({
   schema: './src/db/schema/index.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL!,
+    // Use POSTGRES_PRISMA_URL from Vercel-Supabase integration
+    // Falls back to DATABASE_URL for local development
+    url: process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL!,
   },
   verbose: true,
   strict: true,
