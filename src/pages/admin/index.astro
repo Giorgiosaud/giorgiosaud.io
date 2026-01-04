@@ -1,0 +1,422 @@
+---
+import Base from '@templates/Base.astro'
+import { db } from '@db'
+import { eq, desc, isNull } from 'drizzle-orm'
+import { pushSubscriptions, comments } from '@db/schema'
+import { users } from '@db/schema'
+
+export const prerender = false
+
+// Get stats
+const [activeSubscriptions, recentComments, allUsers] = await Promise.all([
+  db.query.pushSubscriptions.findMany({
+    where: eq(pushSubscriptions.isActive, true),
+  }),
+  db.query.comments.findMany({
+    where: isNull(comments.deletedAt),
+    orderBy: [desc(comments.createdAt)],
+    limit: 20,
+    with: {
+      user: true,
+    },
+  }),
+  db.query.users.findMany({
+    orderBy: [desc(users.createdAt)],
+    limit: 50,
+  }),
+])
+
+const stats = {
+  totalSubscribers: activeSubscriptions.length,
+  totalComments: recentComments.length,
+  totalUsers: allUsers.length,
+}
+---
+
+<Base title="Admin Dashboard" pathToTranslate="home">
+  <div class="admin-container">
+    <h1>Admin Dashboard</h1>
+
+    <nav class="admin-nav">
+      <button type="button" class="tab active" data-tab="broadcast">Notifications</button>
+      <button type="button" class="tab" data-tab="comments">Comments</button>
+      <button type="button" class="tab" data-tab="users">Users</button>
+    </nav>
+
+    <!-- Stats -->
+    <section class="stats">
+      <div class="stat-card">
+        <span class="stat-value">{stats.totalSubscribers}</span>
+        <span class="stat-label">Subscribers</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{stats.totalComments}</span>
+        <span class="stat-label">Comments</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value">{stats.totalUsers}</span>
+        <span class="stat-label">Users</span>
+      </div>
+    </section>
+
+    <!-- Broadcast Tab -->
+    <section id="tab-broadcast" class="tab-content active">
+      <h2>Send Broadcast Notification</h2>
+      <form id="broadcast-form">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" name="title" required maxlength="50" placeholder="New blog post!" />
+        </div>
+        <div class="form-group">
+          <label for="body">Message</label>
+          <textarea id="body" name="body" required maxlength="200" rows="3" placeholder="Check out my latest article..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="url">Link URL (optional)</label>
+          <input type="text" id="url" name="url" placeholder="/notebook/my-new-post" />
+        </div>
+        <button type="submit" class="btn-primary">
+          Send to {stats.totalSubscribers} subscriber{stats.totalSubscribers !== 1 ? 's' : ''}
+        </button>
+      </form>
+      <div id="broadcast-result" class="result" hidden></div>
+    </section>
+
+    <!-- Comments Tab -->
+    <section id="tab-comments" class="tab-content">
+      <h2>Recent Comments</h2>
+      {recentComments.length === 0 ? (
+        <p class="empty">No comments yet.</p>
+      ) : (
+        <ul class="comment-list">
+          {recentComments.map(comment => (
+            <li class="comment-item" data-id={comment.id}>
+              <div class="comment-header">
+                <strong>{comment.user?.name || 'Unknown'}</strong>
+                <span class="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
+              </div>
+              <p class="comment-content">{comment.content.slice(0, 150)}{comment.content.length > 150 ? '...' : ''}</p>
+              <div class="comment-meta">
+                <span>Post: {comment.noteSelfHealing}</span>
+              </div>
+              <div class="comment-actions">
+                <button type="button" class="btn-small btn-danger" onclick={`deleteComment('${comment.id}')`}>Delete</button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div id="comments-result" class="result" hidden></div>
+    </section>
+
+    <!-- Users Tab -->
+    <section id="tab-users" class="tab-content">
+      <h2>Users</h2>
+      <ul class="user-list">
+        {allUsers.map(user => (
+          <li class="user-item" data-id={user.id}>
+            <div class="user-info">
+              {user.image && <img src={user.image} alt="" class="user-avatar" />}
+              <div>
+                <strong>{user.name}</strong>
+                <span class="user-email">{user.email}</span>
+              </div>
+            </div>
+            <div class="user-meta">
+              <span class={`badge ${user.role === 'admin' ? 'badge-admin' : ''} ${user.banned ? 'badge-banned' : ''}`}>
+                {user.banned ? 'Banned' : (user.role || 'user')}
+              </span>
+            </div>
+            <div class="user-actions">
+              {!user.banned ? (
+                <button type="button" class="btn-small btn-danger" onclick={`banUser('${user.id}')`}>Ban</button>
+              ) : (
+                <button type="button" class="btn-small btn-success" onclick={`unbanUser('${user.id}')`}>Unban</button>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div id="users-result" class="result" hidden></div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab')
+  const contents = document.querySelectorAll('.tab-content')
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'))
+      contents.forEach(c => c.classList.remove('active'))
+      tab.classList.add('active')
+      document.getElementById(`tab-${tab.dataset.tab}`)?.classList.add('active')
+    })
+  })
+
+  // Broadcast form
+  const broadcastForm = document.getElementById('broadcast-form') as HTMLFormElement
+  const broadcastResult = document.getElementById('broadcast-result') as HTMLDivElement
+
+  broadcastForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const formData = new FormData(broadcastForm)
+    const title = formData.get('title') as string
+    const body = formData.get('body') as string
+    const url = formData.get('url') as string
+    const submitBtn = broadcastForm.querySelector('button[type="submit"]') as HTMLButtonElement
+    submitBtn.disabled = true
+    submitBtn.textContent = 'Sending...'
+
+    try {
+      const payload: { type: string; title: string; body: string; url?: string } = { type: 'custom', title, body }
+      if (url) payload.url = url
+
+      const response = await fetch('/api/push/broadcast.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      const data = await response.json()
+      broadcastResult.hidden = false
+      broadcastResult.className = response.ok ? 'result success' : 'result error'
+      broadcastResult.textContent = response.ok
+        ? `Sent to ${data.result.sent} subscriber(s). ${data.result.failed} failed.`
+        : (data.error || 'Failed to send')
+      if (response.ok) broadcastForm.reset()
+    } catch {
+      broadcastResult.hidden = false
+      broadcastResult.className = 'result error'
+      broadcastResult.textContent = 'Network error'
+    } finally {
+      submitBtn.disabled = false
+      submitBtn.textContent = 'Send to subscribers'
+    }
+  })
+
+  // Delete comment
+  window.deleteComment = async (id: string) => {
+    if (!confirm('Delete this comment?')) return
+    const result = document.getElementById('comments-result') as HTMLDivElement
+    try {
+      const response = await fetch(`/api/admin/comments/${id}.json`, { method: 'DELETE' })
+      const data = await response.json()
+      result.hidden = false
+      result.className = response.ok ? 'result success' : 'result error'
+      result.textContent = response.ok ? 'Comment deleted' : (data.error || 'Failed')
+      if (response.ok) {
+        document.querySelector(`.comment-item[data-id="${id}"]`)?.remove()
+      }
+    } catch {
+      result.hidden = false
+      result.className = 'result error'
+      result.textContent = 'Network error'
+    }
+  }
+
+  // Ban/Unban user
+  window.banUser = async (id: string) => {
+    const reason = prompt('Ban reason (optional):')
+    if (reason === null) return
+    await updateUserBan(id, true, reason || undefined)
+  }
+
+  window.unbanUser = async (id: string) => {
+    if (!confirm('Unban this user?')) return
+    await updateUserBan(id, false)
+  }
+
+  async function updateUserBan(id: string, ban: boolean, reason?: string) {
+    const result = document.getElementById('users-result') as HTMLDivElement
+    try {
+      const response = await fetch(`/api/admin/users/${id}/ban.json`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ban, reason }),
+      })
+      const data = await response.json()
+      result.hidden = false
+      result.className = response.ok ? 'result success' : 'result error'
+      result.textContent = response.ok ? (ban ? 'User banned' : 'User unbanned') : (data.error || 'Failed')
+      if (response.ok) {
+        setTimeout(() => location.reload(), 1000)
+      }
+    } catch {
+      result.hidden = false
+      result.className = 'result error'
+      result.textContent = 'Network error'
+    }
+  }
+
+  // TypeScript declarations
+  declare global {
+    interface Window {
+      deleteComment: (id: string) => Promise<void>
+      banUser: (id: string) => Promise<void>
+      unbanUser: (id: string) => Promise<void>
+    }
+  }
+</script>
+
+<style>
+  .admin-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  h1 { margin-bottom: 1rem; }
+  h2 { margin-bottom: 1rem; font-size: 1.25rem; }
+
+  .admin-nav {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border, #ddd);
+    padding-bottom: 0.5rem;
+  }
+
+  .tab {
+    padding: 0.5rem 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px 4px 0 0;
+    color: var(--color-muted, #666);
+  }
+
+  .tab:hover { background: var(--color-surface, #f5f5f5); }
+  .tab.active {
+    background: var(--color-main);
+    color: white;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--color-surface, #f5f5f5);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-main);
+  }
+
+  .stat-label { color: var(--color-muted, #666); font-size: 0.875rem; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .form-group { margin-bottom: 1rem; }
+  label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
+  input, textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 4px;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--color-main);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-primary:hover:not(:disabled) { opacity: 0.9; }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .btn-small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .btn-danger { background: var(--color-error, #ef4444); color: white; }
+  .btn-success { background: var(--color-success, #10b981); color: white; }
+
+  .result {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    text-align: center;
+  }
+  .result.success { background: var(--color-success, #10b981); color: white; }
+  .result.error { background: var(--color-error, #ef4444); color: white; }
+
+  .empty { color: var(--color-muted, #666); font-style: italic; }
+
+  .comment-list, .user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .comment-item, .user-item {
+    padding: 1rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .comment-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  .comment-date { color: var(--color-muted, #666); font-size: 0.875rem; }
+  .comment-content { margin: 0.5rem 0; }
+  .comment-meta { font-size: 0.75rem; color: var(--color-muted, #666); margin-bottom: 0.5rem; }
+  .comment-actions { display: flex; gap: 0.5rem; }
+
+  .user-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .user-email {
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-muted, #666);
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: var(--color-surface, #e5e5e5);
+  }
+  .badge-admin { background: var(--color-main); color: white; }
+  .badge-banned { background: var(--color-error, #ef4444); color: white; }
+</style>

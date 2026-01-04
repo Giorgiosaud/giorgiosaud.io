@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     const body = await request.json()
-    const { type, title, body: messageBody, postSlug, postTitle, postExcerpt } = body
+    const { type, title, body: messageBody, url, postSlug, postTitle, postExcerpt } = body
 
     let result: { sent: number; failed: number }
 
@@ -46,7 +46,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         body: messageBody,
         icon: '/favicon.svg',
         tag: `broadcast-${Date.now()}`,
-        data: { url: '/', type: 'broadcast' },
+        data: { url: url || '/', type: 'broadcast' },
       })
     } else {
       return Response.json({ error: 'Invalid type. Use "new-post" or "custom"' }, { status: 400 })

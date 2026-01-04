@@ -1,39 +1,46 @@
 ---
-import { type RouteNames, getLangFromUrl } from '@i18n/utils'
-import HamburgerIcon from './HamburgerIcon.astro'
-import LogoNavigation from './LogoNavigation.astro'
-import Navigation from './Navigation.astro'
-import TranslateButton from './TranslateButton.astro'
-import { LoginButton, UserAvatar } from '@components/auth'
+import { type RouteNames, getLangFromUrl } from "@i18n/utils";
+import HamburgerIcon from "./HamburgerIcon.astro";
+import LogoNavigation from "./LogoNavigation.astro";
+import Navigation from "./Navigation.astro";
+import TranslateButton from "./TranslateButton.astro";
+import { LoginButton, UserAvatar } from "@components/auth";
 
-const { pathToTranslate, pathToTranslateNote } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+const { pathToTranslate, pathToTranslateNote } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
 
 interface Props {
-  pathToTranslate: RouteNames
-  pathToTranslateNote?: string
+  pathToTranslate: RouteNames;
+  pathToTranslateNote?: string;
 }
 ---
 
-<nav aria-label="Main" >
+<nav aria-label="Main">
   <LogoNavigation />
-  <Navigation/>
+  <Navigation />
   <div class="actions">
     <div class="auth-container">
-      <LoginButton client:load lang={lang} />
-      <UserAvatar client:load lang={lang} />
+      <LoginButton client:idle lang={lang} />
+      <UserAvatar client:idle lang={lang} />
     </div>
-    <TranslateButton pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
-    <button id="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menu">
+    <TranslateButton
+      pathToTranslate={pathToTranslate}
+      pathToTranslateNote={pathToTranslateNote}
+    />
+    <button
+      id="hamburger-menu"
+      aria-label="Toggle navigation menu"
+      aria-expanded="false"
+      aria-controls="menu"
+    >
       <HamburgerIcon />
     </button>
   </div>
-  
 </nav>
 <script>
   const Menu = document.getElementById("menu") as HTMLElement;
   const MenuButton = document.getElementById("hamburger-menu") as HTMLElement;
-  
+
   const Header = document.querySelector("header") as HTMLElement;
   MenuButton?.addEventListener("click", () => {
     Menu.dataset.opened = "true";
@@ -46,60 +53,59 @@ interface Props {
     }
   });
   (function () {
-    const hamburger = document.getElementById('hamburger-menu') as HTMLElement;
-    let scrollTimeout:NodeJS.Timeout;
-    
+    const hamburger = document.getElementById("hamburger-menu") as HTMLElement;
+    let scrollTimeout: NodeJS.Timeout;
+
     let lastScrollY = window.scrollY;
     let ticking = false;
-    
+
     function onScroll() {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
-          
+
           if (Math.abs(currentScrollY - lastScrollY) > 5) {
-            hamburger.classList.add('hamburger-hidden');
+            hamburger.classList.add("hamburger-hidden");
             clearTimeout(scrollTimeout);
             scrollTimeout = setTimeout(() => {
-              hamburger.classList.remove('hamburger-hidden');
+              hamburger.classList.remove("hamburger-hidden");
             }, 200); // Show again after 200ms of no scroll
           }
-          
+
           lastScrollY = currentScrollY;
           ticking = false;
         });
-        
+
         ticking = true;
       }
     }
-    
-    window.addEventListener('scroll', onScroll, { passive: true });
+
+    window.addEventListener("scroll", onScroll, { passive: true });
   })();
 </script>
 <style>
-  nav{
+  nav {
     display: grid;
     place-items: center;
     grid-template-columns: [logo] auto [menu] 1fr [actions] auto [end-actions];
     color: light-dark(var(--color-dark), var(--color-light));
-    .actions{
+    .actions {
       grid-column: actions / end-actions;
       display: flex;
       place-items: center;
       align-self: start;
-      gap:1rem;
+      gap: 1rem;
       z-index: 10;
     }
     .auth-container {
       display: flex;
       align-items: center;
     }
-    #hamburger-menu{
+    #hamburger-menu {
       width: 3ch;
       @media screen and (width >= 48rem) {
         display: none;
       }
     }
   }
-  
 </style>
