@@ -56,7 +56,9 @@ llmPath={`/es/cuaderno/${page.id}.md`}
   <p id="notification">Link copiado al portapapeles!</p>
   <button id="share" class="button button-primary" popovertarget="#share-notification">Compartir</button>
 </section>
-<CommentsSection client:load noteId={selfHealing} lang="es" />
+<div class="comments-wrapper">
+  <CommentsSection client:load noteId={selfHealing} lang="es" />
+</div>
 </NoteTemplate>
 <script define:vars={{selfHealing}}>
   notification = document.getElementById('notification');
@@ -119,6 +121,9 @@ llmPath={`/es/cuaderno/${page.id}.md`}
   
 </script>
 <style >
+  .comments-wrapper {
+    grid-column: content;
+  }
   #share{
     display: flex;
     justify-content: center;
