@@ -113,16 +113,16 @@ export default defineConfig({
         optional: true,
       }),
 
-      // Cloudflare Turnstile (bot protection for comments)
+      // Cloudflare Turnstile (bot protection for comments - required)
       TURNSTILE_SITE_KEY: envField.string({
         context: 'client',
         access: 'public',
-        optional: true,
+        optional: false,
       }),
       TURNSTILE_SECRET_KEY: envField.string({
         context: 'server',
         access: 'secret',
-        optional: true,
+        optional: false,
       }),
 
       // Email (Resend)
