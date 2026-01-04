@@ -5,6 +5,7 @@ import svelte from '@astrojs/svelte'
 import vercel from '@astrojs/vercel'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
+import { fileURLToPath } from 'node:url'
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,6 +19,12 @@ export default defineConfig({
   ],
 
   vite: {
+    resolve: {
+      alias: {
+        '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
+        '@db': fileURLToPath(new URL('./src/db', import.meta.url)),
+      },
+    },
     css: {
       transformer: 'lightningcss',
       lightningcss: {

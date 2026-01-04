@@ -1,0 +1,246 @@
+<script lang="ts">
+  import { onMount } from 'svelte'
+  import type { User } from 'better-auth/types'
+  import {
+    $user as userStore,
+    $isAuthenticated as isAuthenticatedStore,
+    $isLoading as isLoadingStore,
+    $isAdmin as isAdminStore,
+    initAuthState,
+    logout,
+  } from '@lib/stores/auth'
+
+  interface Props {
+    lang?: 'en' | 'es'
+  }
+
+  const translations = {
+    en: {
+      dashboard: 'Dashboard',
+      profile: 'Profile',
+      signOut: 'Sign Out',
+      loading: 'Loading...',
+    },
+    es: {
+      dashboard: 'Panel',
+      profile: 'Perfil',
+      signOut: 'Cerrar sesion',
+      loading: 'Cargando...',
+    },
+  }
+
+  let { lang = 'en' }: Props = $props()
+
+  let user = $state<User | null>(null)
+  let isAuthenticated = $state(false)
+  let isLoading = $state(true)
+  let isAdmin = $state(false)
+  let showMenu = $state(false)
+
+  const t = $derived(translations[lang])
+
+  const initials = $derived(
+    user?.name
+      ? user.name
+          .split(' ')
+          .map(n => n[0])
+          .join('')
+          .toUpperCase()
+          .slice(0, 2)
+      : '?'
+  )
+
+  onMount(() => {
+    initAuthState()
+
+    const unsub1 = userStore.subscribe(v => user = v)
+    const unsub2 = isAuthenticatedStore.subscribe(v => isAuthenticated = v)
+    const unsub3 = isLoadingStore.subscribe(v => isLoading = v)
+    const unsub4 = isAdminStore.subscribe(v => isAdmin = v)
+
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.closest('.container')) {
+        showMenu = false
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside)
+
+    return () => {
+      unsub1()
+      unsub2()
+      unsub3()
+      unsub4()
+      document.removeEventListener('click', handleClickOutside)
+    }
+  })
+</script>
+
+{#if !isAuthenticated}
+  <div class="hidden" aria-hidden="true"></div>
+{:else if isLoading}
+  <div class="container">
+    <div class="avatar-placeholder"></div>
+  </div>
+{:else}
+  <div class="container">
+    <button
+      type="button"
+      class="avatar"
+      onclick={() => showMenu = !showMenu}
+      aria-expanded={showMenu}
+      aria-haspopup="true"
+      title={user?.name ?? 'User'}
+    >
+      {#if user?.image}
+        <img src={user.image} alt={user.name ?? 'User avatar'} class="avatar-image" />
+      {:else}
+        <span class="initials">{initials}</span>
+      {/if}
+    </button>
+
+    {#if showMenu}
+      <div class="menu" role="menu">
+        <div class="user-info">
+          <span class="user-name">{user?.name}</span>
+          <span class="user-email">{user?.email}</span>
+        </div>
+
+        <div class="divider"></div>
+
+        {#if isAdmin}
+          <a href="/admin" class="menu-item" role="menuitem">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" />
+              <rect x="14" y="3" width="7" height="7" />
+              <rect x="14" y="14" width="7" height="7" />
+              <rect x="3" y="14" width="7" height="7" />
+            </svg>
+            <span>{t.dashboard}</span>
+          </a>
+        {/if}
+
+        <button type="button" class="menu-item" onclick={logout} role="menuitem">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+            <polyline points="16 17 21 12 16 7" />
+            <line x1="21" y1="12" x2="9" y2="12" />
+          </svg>
+          <span>{t.signOut}</span>
+        </button>
+      </div>
+    {/if}
+  </div>
+{/if}
+
+<style>
+  .hidden {
+    display: none;
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--color-main);
+    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+    cursor: pointer;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+  }
+
+  .avatar:hover {
+    transform: scale(1.05);
+  }
+
+  .avatar-placeholder {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .initials {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-main);
+  }
+
+  .menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    min-width: 220px;
+    background: light-dark(white, hsl(0 0% 15%));
+    border: 1px solid light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 0.5rem;
+    z-index: 100;
+  }
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .user-name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .user-email {
+    font-size: 0.8rem;
+    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+  }
+
+  .divider {
+    height: 1px;
+    background: light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
+    margin: 0.5rem 0;
+  }
+
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    background: none;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    text-align: left;
+    transition: background-color 0.2s;
+  }
+
+  .menu-item:hover {
+    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+  }
+</style>

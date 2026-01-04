@@ -2,6 +2,7 @@
 import { Picture } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
 import AISummarizer from '@components/AISummarizer.astro'
+import { CommentsSection } from '@components/comments'
 import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
 export async function getStaticPaths() {
@@ -55,6 +56,7 @@ llmPath={`/notebook/${page.id}.md`}
   <p id="notification">Link copiado al portapapeles!</p>
   <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
 </section>
+<CommentsSection client:load noteId={selfHealing} lang="en" />
 </NoteTemplate>
 <script define:vars={{selfHealing}}>
   notification = document.getElementById('notification');
