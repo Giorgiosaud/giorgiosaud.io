@@ -1,11 +1,13 @@
 ---
-import { type RouteNames } from '@i18n/utils'
+import { type RouteNames, getLangFromUrl } from '@i18n/utils'
 import HamburgerIcon from './HamburgerIcon.astro'
 import LogoNavigation from './LogoNavigation.astro'
 import Navigation from './Navigation.astro'
 import TranslateButton from './TranslateButton.astro'
+import { LoginButton, UserAvatar } from '@components/auth'
 
 const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
 
 interface Props {
   pathToTranslate: RouteNames
@@ -17,6 +19,10 @@ interface Props {
   <LogoNavigation />
   <Navigation/>
   <div class="actions">
+    <div class="auth-container">
+      <LoginButton client:load lang={lang} />
+      <UserAvatar client:load lang={lang} />
+    </div>
     <TranslateButton pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
     <button id="hamburger-menu" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="menu">
       <HamburgerIcon />
@@ -82,7 +88,11 @@ interface Props {
       place-items: center;
       align-self: start;
       gap:1rem;
-      z-index: 10;;
+      z-index: 10;
+    }
+    .auth-container {
+      display: flex;
+      align-items: center;
     }
     #hamburger-menu{
       width: 3ch;

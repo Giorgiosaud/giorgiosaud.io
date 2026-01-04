@@ -1,0 +1,130 @@
+.hidden {
+  display: none;
+}
+
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 2px solid light-dark(var(--color-main), var(--color-light));
+  border-radius: 50%;
+  background: light-dark(var(--color-main), var(--color-dark));
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    border-color 0.2s,
+    transform 0.2s;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.initials {
+  color: light-dark(var(--color-light), var(--color-light));
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: light-dark(
+    hsl(from var(--color-main) h s l / 0.2),
+    hsl(from var(--color-light) h s l / 0.2)
+  );
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  min-width: 220px;
+  background: light-dark(var(--color-light), var(--color-dark));
+  border: 1px solid light-dark(var(--color-main), var(--color-light));
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.15);
+  overflow: hidden;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+}
+
+.userName {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.userEmail {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.divider {
+  height: 1px;
+  background: light-dark(
+    hsl(from var(--color-main) h s l / 0.2),
+    hsl(from var(--color-light) h s l / 0.2)
+  );
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menuItem:hover {
+  background: light-dark(
+    hsl(from var(--color-main) h s l / 0.1),
+    hsl(from var(--color-light) h s l / 0.1)
+  );
+}
+
+.menuItem svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}

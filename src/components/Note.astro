@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
 import { isDraftInDevMode } from '@helpers/collections'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
 
 const lang = getLangFromUrl(Astro.url)
 const { note, context = 'no-context' } = Astro.props

@@ -35,7 +35,9 @@
     color: var(--_color);
     font-family: monospace;
     border: solid 3px var(--_color);
-    transition: color 0.3s ease, background-color 0.3s ease;
+    transition:
+      color 0.3s ease,
+      background-color 0.3s ease;
   }
   p {
     text-wrap: pretty;
