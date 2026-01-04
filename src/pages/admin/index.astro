@@ -23,8 +23,18 @@ const [activeSubscriptions, recentComments, allUsers] = await Promise.all([
   db.query.users.findMany({
     orderBy: [desc(users.createdAt)],
     limit: 50,
+    with: {
+      pushSubscriptions: true,
+    },
   }),
 ])
+
+// Create set of user IDs with active subscriptions
+const subscribedUserIds = new Set(
+  activeSubscriptions
+    .filter(sub => sub.userId)
+    .map(sub => sub.userId)
+)
 
 const stats = {
   totalSubscribers: activeSubscriptions.length,
@@ -126,6 +136,9 @@ const stats = {
               <span class={`badge ${user.role === 'admin' ? 'badge-admin' : ''} ${user.banned ? 'badge-banned' : ''}`}>
                 {user.banned ? 'Banned' : (user.role || 'user')}
               </span>
+              {subscribedUserIds.has(user.id) && (
+                <span class="badge badge-subscribed" title="Push notifications enabled">🔔</span>
+              )}
               {user.banned && user.banExpires && (
                 <span class="ban-expires">Until {new Date(user.banExpires).toLocaleDateString()}</span>
               )}
@@ -510,6 +523,7 @@ const stats = {
   }
   .badge-admin { background: var(--color-main); color: white; }
   .badge-banned { background: var(--color-error, #ef4444); color: white; }
+  .badge-subscribed { background: var(--color-success, #10b981); cursor: help; }
 
   .ban-expires {
     display: block;
