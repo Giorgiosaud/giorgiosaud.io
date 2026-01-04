@@ -126,6 +126,9 @@ const stats = {
               <span class={`badge ${user.role === 'admin' ? 'badge-admin' : ''} ${user.banned ? 'badge-banned' : ''}`}>
                 {user.banned ? 'Banned' : (user.role || 'user')}
               </span>
+              {user.banned && user.banExpires && (
+                <span class="ban-expires">Until {new Date(user.banExpires).toLocaleDateString()}</span>
+              )}
             </div>
             <div class="user-actions">
               {!user.banned ? (
@@ -220,7 +223,19 @@ const stats = {
   window.banUser = async (id: string) => {
     const reason = prompt('Ban reason (optional):')
     if (reason === null) return
-    await updateUserBan(id, true, reason || undefined)
+
+    const duration = prompt('Ban duration:\n- Enter number of days (e.g., "7" for 7 days)\n- Or leave empty for permanent ban')
+    if (duration === null) return
+
+    let banExpires: string | undefined
+    if (duration && !isNaN(Number(duration))) {
+      const days = Number(duration)
+      const expiryDate = new Date()
+      expiryDate.setDate(expiryDate.getDate() + days)
+      banExpires = expiryDate.toISOString()
+    }
+
+    await updateUserBan(id, true, reason || undefined, banExpires)
   }
 
   window.unbanUser = async (id: string) => {
@@ -228,13 +243,13 @@ const stats = {
     await updateUserBan(id, false)
   }
 
-  async function updateUserBan(id: string, ban: boolean, reason?: string) {
+  async function updateUserBan(id: string, ban: boolean, reason?: string, banExpires?: string) {
     const result = document.getElementById('users-result') as HTMLDivElement
     try {
       const response = await fetch(`/api/admin/users/${id}/ban.json`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ban, reason }),
+        body: JSON.stringify({ ban, reason, banExpires }),
       })
       const data = await response.json()
       result.hidden = false
@@ -419,4 +434,11 @@ const stats = {
   }
   .badge-admin { background: var(--color-main); color: white; }
   .badge-banned { background: var(--color-error, #ef4444); color: white; }
+
+  .ban-expires {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--color-muted, #666);
+    margin-top: 0.25rem;
+  }
 </style>

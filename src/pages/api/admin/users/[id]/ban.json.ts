@@ -32,7 +32,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
 
   try {
     const body = await request.json()
-    const { ban, reason } = body as { ban: boolean; reason?: string }
+    const { ban, reason, banExpires } = body as { ban: boolean; reason?: string; banExpires?: string }
 
     if (ban) {
       // Ban user
@@ -40,6 +40,7 @@ export const POST: APIRoute = async ({ params, request, locals }) => {
         .set({
           banned: true,
           banReason: reason || 'Banned by admin',
+          banExpires: banExpires ? new Date(banExpires) : null,
           updatedAt: new Date(),
         })
         .where(eq(users.id, id))
