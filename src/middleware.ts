@@ -1,30 +1,49 @@
-import { defineMiddleware } from 'astro:middleware'
+import { defineMiddleware, sequence } from 'astro:middleware'
 import { auth } from '@lib/auth'
 
-export const onRequest = defineMiddleware(async (context, next) => {
-  // Get session from Better Auth
+// Auth middleware - only runs for server-rendered requests
+const authMiddleware = defineMiddleware(async (context, next) => {
+  // Default to no auth
+  context.locals.session = null
+  context.locals.user = null
+
+  // Skip auth for prerendered pages (headers not available during SSG)
+  if (context.isPrerendered) {
+    return next()
+  }
+
+  // Get session from Better Auth for server-rendered requests
   const session = await auth.api.getSession({
     headers: context.request.headers,
   })
 
-  // Attach to Astro.locals for use in pages/components
   context.locals.session = session?.session ?? null
   context.locals.user = session?.user ?? null
 
-  // Protect admin routes
+  return next()
+})
+
+// Admin protection middleware
+const adminMiddleware = defineMiddleware(async (context, next) => {
+  // Skip for prerendered pages
+  if (context.isPrerendered) {
+    return next()
+  }
+
   if (context.url.pathname.startsWith('/admin')) {
-    if (!session?.user) {
-      // Redirect to home if not authenticated
+    const user = context.locals.user
+
+    if (!user) {
       return context.redirect('/')
     }
 
-    // Check for admin role
-    const userRole = session.user.role as string | undefined
+    const userRole = user.role as string | undefined
     if (userRole !== 'admin') {
-      // Redirect to home if not admin
       return context.redirect('/')
     }
   }
 
   return next()
 })
+
+export const onRequest = sequence(authMiddleware, adminMiddleware)
