@@ -12,6 +12,13 @@
     registerPasskey,
     clearAuthError,
   } from '@lib/stores/auth'
+  import {
+    isPushSupported,
+    getPermissionState,
+    isSubscribed,
+    subscribeToPush,
+    unsubscribeFromPush,
+  } from '@lib/push-client'
 
   interface Props {
     lang?: 'en' | 'es'
@@ -23,6 +30,9 @@
       profile: 'Profile',
       addPasskey: 'Add Passkey',
       passkeyAdded: 'Passkey added!',
+      notifications: 'Notifications',
+      notificationsOn: 'Notifications On',
+      notificationsOff: 'Notifications Off',
       signOut: 'Sign Out',
       loading: 'Loading...',
     },
@@ -31,6 +41,9 @@
       profile: 'Perfil',
       addPasskey: 'Agregar Passkey',
       passkeyAdded: 'Passkey agregada!',
+      notifications: 'Notificaciones',
+      notificationsOn: 'Notificaciones On',
+      notificationsOff: 'Notificaciones Off',
       signOut: 'Cerrar sesion',
       loading: 'Cargando...',
     },
@@ -47,6 +60,12 @@
   let passkeySuccess = $state(false)
   let isAddingPasskey = $state(false)
 
+  // Push notification state
+  let pushSupported = $state(false)
+  let pushSubscribed = $state(false)
+  let pushLoading = $state(false)
+  let pushPermission = $state<NotificationPermission | 'unsupported'>('default')
+
   const t = $derived(translations[lang])
 
   const initials = $derived(
@@ -60,7 +79,7 @@
       : '?'
   )
 
-  onMount(() => {
+  onMount(async () => {
     initAuthState()
 
     const unsub1 = userStore.subscribe(v => user = v)
@@ -68,6 +87,13 @@
     const unsub3 = isLoadingStore.subscribe(v => isLoading = v)
     const unsub4 = isAdminStore.subscribe(v => isAdmin = v)
     const unsub5 = authErrorStore.subscribe(v => authError = v)
+
+    // Initialize push notification state
+    pushSupported = isPushSupported()
+    if (pushSupported) {
+      pushPermission = getPermissionState()
+      pushSubscribed = await isSubscribed()
+    }
 
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement
@@ -97,6 +123,28 @@
     if (success) {
       passkeySuccess = true
       setTimeout(() => passkeySuccess = false, 3000)
+    }
+  }
+
+  async function handleToggleNotifications() {
+    if (!pushSupported || pushLoading) return
+
+    pushLoading = true
+    try {
+      if (pushSubscribed) {
+        const success = await unsubscribeFromPush()
+        if (success) pushSubscribed = false
+      } else {
+        const success = await subscribeToPush()
+        if (success) {
+          pushSubscribed = true
+          pushPermission = getPermissionState()
+        } else {
+          pushPermission = getPermissionState()
+        }
+      }
+    } finally {
+      pushLoading = false
     }
   }
 </script>
@@ -163,6 +211,38 @@
 
         {#if authError}
           <div class="error">{authError}</div>
+        {/if}
+
+        {#if pushSupported && pushPermission !== 'denied'}
+          <button
+            type="button"
+            class="menu-item"
+            class:active={pushSubscribed}
+            onclick={handleToggleNotifications}
+            disabled={pushLoading}
+            role="menuitem"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              {#if pushSubscribed}
+                <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+              {:else}
+                <path d="M8.7 3A6 6 0 0 1 18 8a21.3 21.3 0 0 0 .6 5" />
+                <path d="M17 17H3s3-2 3-9a4.67 4.67 0 0 1 .3-1.7" />
+                <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              {/if}
+            </svg>
+            <span>
+              {#if pushLoading}
+                ...
+              {:else if pushSubscribed}
+                {t.notificationsOn}
+              {:else}
+                {t.notificationsOff}
+              {/if}
+            </span>
+          </button>
         {/if}
 
         <div class="divider"></div>
@@ -293,6 +373,10 @@
   .menu-item:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  .menu-item.active {
+    color: light-dark(hsl(142 70% 35%), hsl(142 50% 55%));
   }
 
   .error {
