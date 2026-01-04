@@ -89,18 +89,32 @@ export async function loginWithPasskey() {
   $authError.set(null)
   $isLoading.set(true)
   try {
-    const result = await passkey.signIn()
+    // Use signIn.passkey() - the correct method per Better Auth docs
+    const result = await signIn.passkey({
+      fetchOptions: {
+        credentials: 'include',
+        onSuccess: async () => {
+          await initAuthState()
+          $isLoading.set(false)
+        },
+        onError: (context) => {
+          console.error('Passkey authentication failed:', context.error?.message)
+          $authError.set(context.error?.message || 'Passkey login failed')
+          $isLoading.set(false)
+        },
+      },
+    })
     if (result?.error) {
       $authError.set(result.error.message || 'Passkey login failed')
+      $isLoading.set(false)
       return false
     }
-    await initAuthState()
     return true
   } catch (error) {
+    console.error('Passkey login error:', error)
     $authError.set('Passkey login failed. Please try again.')
-    return false
-  } finally {
     $isLoading.set(false)
+    return false
   }
 }
 

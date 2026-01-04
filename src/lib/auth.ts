@@ -4,67 +4,16 @@ import { admin } from 'better-auth/plugins'
 import { passkey } from '@better-auth/passkey'
 import { db } from '@db'
 import * as schema from '@db/schema'
-
-// Support both Astro env and process.env (for CLI tools like better-auth)
-let envVars: {
-  BETTER_AUTH_SECRET: string
-  BETTER_AUTH_URL: string
-  GITHUB_CLIENT_ID?: string
-  GITHUB_CLIENT_SECRET?: string
-  GOOGLE_CLIENT_ID?: string
-  GOOGLE_CLIENT_SECRET?: string
-  FACEBOOK_CLIENT_ID?: string
-  FACEBOOK_CLIENT_SECRET?: string
-}
-
-// Detect base URL from various sources
-function getServerBaseURL(): string {
-  // Check explicit env var first
-  if (process.env.BETTER_AUTH_URL) return process.env.BETTER_AUTH_URL
-  // Vercel provides VERCEL_URL for preview deployments
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`
-  // Default for local development
-  return 'http://localhost:4321'
-}
-
-try {
-  // Try Astro's env system first (works during build/runtime)
-  const serverEnv = await import('astro:env/server')
-  const clientEnv = await import('astro:env/client')
-  envVars = {
-    BETTER_AUTH_SECRET: serverEnv.BETTER_AUTH_SECRET,
-    BETTER_AUTH_URL: clientEnv.BETTER_AUTH_URL || getServerBaseURL(),
-    GITHUB_CLIENT_ID: serverEnv.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: serverEnv.GITHUB_CLIENT_SECRET,
-    GOOGLE_CLIENT_ID: serverEnv.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: serverEnv.GOOGLE_CLIENT_SECRET,
-    FACEBOOK_CLIENT_ID: serverEnv.FACEBOOK_CLIENT_ID,
-    FACEBOOK_CLIENT_SECRET: serverEnv.FACEBOOK_CLIENT_SECRET,
-  }
-} catch {
-  // Fallback to process.env (for CLI tools)
-  envVars = {
-    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || '',
-    BETTER_AUTH_URL: getServerBaseURL(),
-    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
-    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
-    FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
-  }
-}
-
-const {
+import {
   BETTER_AUTH_SECRET,
-  BETTER_AUTH_URL,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,
-} = envVars
+} from 'astro:env/server'
+import { BETTER_AUTH_URL } from 'astro:env/client'
 
 // Detect production mode from both Astro and Node environments
 const isProd = typeof import.meta.env !== 'undefined'

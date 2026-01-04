@@ -63,6 +63,7 @@
   let email = $state('')
   let password = $state('')
   let name = $state('')
+  let containerRef: HTMLDivElement | null = null
 
   const t = $derived(translations[lang])
 
@@ -74,8 +75,10 @@
     const unsub3 = authErrorStore.subscribe(v => authError = v)
 
     const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      if (!target.closest('.container')) {
+      if (!containerRef) return
+      const target = e.target as Node
+      const isOutside = !containerRef.contains(target)
+      if (isOutside) {
         showMenu = false
         mode = 'menu'
         clearAuthError()
@@ -131,7 +134,7 @@
     <span class="loading">{t.loading}</span>
   </div>
 {:else}
-  <div class="container">
+  <div class="container" bind:this={containerRef}>
     <button
       type="button"
       class="button"
@@ -144,7 +147,7 @@
 
     {#if showMenu}
       {#if mode === 'menu'}
-        <div class="menu" role="menu">
+        <div class="menu" role="menu" onclick={(e) => e.stopPropagation()}>
           <button type="button" class="menu-item" onclick={() => mode = 'login'} role="menuitem">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -183,7 +186,7 @@
           </button>
         </div>
       {:else if mode === 'login'}
-        <div class="menu">
+        <div class="menu" onclick={(e) => e.stopPropagation()}>
           <form onsubmit={handleEmailLogin} class="form">
             <button type="button" class="back-button" onclick={goBack}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -217,7 +220,7 @@
           </form>
         </div>
       {:else if mode === 'signup'}
-        <div class="menu">
+        <div class="menu" onclick={(e) => e.stopPropagation()}>
           <form onsubmit={handleEmailSignUp} class="form">
             <button type="button" class="back-button" onclick={goBack}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">

@@ -6,8 +6,11 @@
     $isAuthenticated as isAuthenticatedStore,
     $isLoading as isLoadingStore,
     $isAdmin as isAdminStore,
+    $authError as authErrorStore,
     initAuthState,
     logout,
+    registerPasskey,
+    clearAuthError,
   } from '@lib/stores/auth'
 
   interface Props {
@@ -18,12 +21,16 @@
     en: {
       dashboard: 'Dashboard',
       profile: 'Profile',
+      addPasskey: 'Add Passkey',
+      passkeyAdded: 'Passkey added!',
       signOut: 'Sign Out',
       loading: 'Loading...',
     },
     es: {
       dashboard: 'Panel',
       profile: 'Perfil',
+      addPasskey: 'Agregar Passkey',
+      passkeyAdded: 'Passkey agregada!',
       signOut: 'Cerrar sesion',
       loading: 'Cargando...',
     },
@@ -36,6 +43,9 @@
   let isLoading = $state(true)
   let isAdmin = $state(false)
   let showMenu = $state(false)
+  let authError = $state<string | null>(null)
+  let passkeySuccess = $state(false)
+  let isAddingPasskey = $state(false)
 
   const t = $derived(translations[lang])
 
@@ -57,6 +67,7 @@
     const unsub2 = isAuthenticatedStore.subscribe(v => isAuthenticated = v)
     const unsub3 = isLoadingStore.subscribe(v => isLoading = v)
     const unsub4 = isAdminStore.subscribe(v => isAdmin = v)
+    const unsub5 = authErrorStore.subscribe(v => authError = v)
 
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement
@@ -72,9 +83,22 @@
       unsub2()
       unsub3()
       unsub4()
+      unsub5()
       document.removeEventListener('click', handleClickOutside)
     }
   })
+
+  async function handleAddPasskey() {
+    isAddingPasskey = true
+    passkeySuccess = false
+    clearAuthError()
+    const success = await registerPasskey()
+    isAddingPasskey = false
+    if (success) {
+      passkeySuccess = true
+      setTimeout(() => passkeySuccess = false, 3000)
+    }
+  }
 </script>
 
 {#if !isAuthenticated}
@@ -120,6 +144,28 @@
             <span>{t.dashboard}</span>
           </a>
         {/if}
+
+        <button type="button" class="menu-item" onclick={handleAddPasskey} disabled={isAddingPasskey} role="menuitem">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z" />
+            <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
+          </svg>
+          <span>
+            {#if isAddingPasskey}
+              ...
+            {:else if passkeySuccess}
+              {t.passkeyAdded}
+            {:else}
+              {t.addPasskey}
+            {/if}
+          </span>
+        </button>
+
+        {#if authError}
+          <div class="error">{authError}</div>
+        {/if}
+
+        <div class="divider"></div>
 
         <button type="button" class="menu-item" onclick={logout} role="menuitem">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -240,7 +286,22 @@
     transition: background-color 0.2s;
   }
 
-  .menu-item:hover {
+  .menu-item:hover:not(:disabled) {
     background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+  }
+
+  .menu-item:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .error {
+    padding: 0.5rem 0.75rem;
+    background: hsl(0 80% 95%);
+    border: 1px solid hsl(0 70% 80%);
+    border-radius: 4px;
+    color: hsl(0 70% 40%);
+    font-size: 0.8rem;
+    margin: 0.25rem 0;
   }
 </style>

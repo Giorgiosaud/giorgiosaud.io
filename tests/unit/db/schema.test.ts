@@ -1,11 +1,11 @@
 import { getTableName } from 'drizzle-orm'
 import { describe, expect, it } from 'vitest'
-import { accounts, sessions, users, verifications, passkeys } from '../../src/db/schema/auth'
-import { badges } from '../../src/db/schema/badges'
-import { comments } from '../../src/db/schema/comments'
-import { pushSubscriptions } from '../../src/db/schema/push-subscriptions'
-import { userBadges } from '../../src/db/schema/user-badges'
-import { userProfiles } from '../../src/db/schema/user-profiles'
+import { accounts, sessions, users, verifications, passkeys } from '@db/schema/auth'
+import { badges } from '@db/schema/badges'
+import { comments } from '@db/schema/comments'
+import { pushSubscriptions } from '@db/schema/push-subscriptions'
+import { userBadges } from '@db/schema/user-badges'
+import { userProfiles } from '@db/schema/user-profiles'
 
 describe('Database Schema', () => {
   describe('Users table (Better Auth managed)', () => {
