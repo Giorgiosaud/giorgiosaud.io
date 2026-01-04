@@ -17,7 +17,7 @@ const [activeSubscriptions, recentComments, allUsers] = await Promise.all([
     orderBy: [desc(comments.createdAt)],
     limit: 20,
     with: {
-      user: true,
+      author: true,
     },
   }),
   db.query.users.findMany({
@@ -92,7 +92,7 @@ const stats = {
           {recentComments.map(comment => (
             <li class="comment-item" data-id={comment.id}>
               <div class="comment-header">
-                <strong>{comment.user?.name || 'Unknown'}</strong>
+                <strong>{comment.author?.name || 'Unknown'}</strong>
                 <span class="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
               </div>
               <p class="comment-content">{comment.content.slice(0, 150)}{comment.content.length > 150 ? '...' : ''}</p>
