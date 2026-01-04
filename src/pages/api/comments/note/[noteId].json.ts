@@ -1,6 +1,6 @@
 import type { APIRoute } from 'astro'
 import { db } from '@db'
-import { comments } from '@db/schema'
+import { comments, users } from '@db/schema'
 import { eq, and, isNull, asc } from 'drizzle-orm'
 
 export const prerender = false
@@ -14,7 +14,7 @@ export const GET: APIRoute = async ({ params }) => {
   }
 
   try {
-    // Fetch all non-deleted comments for this note
+    // Fetch all non-deleted comments for this note with author info
     const noteComments = await db
       .select({
         id: comments.id,
@@ -25,8 +25,11 @@ export const GET: APIRoute = async ({ params }) => {
         isEdited: comments.isEdited,
         createdAt: comments.createdAt,
         editedAt: comments.editedAt,
+        authorName: users.name,
+        authorImage: users.image,
       })
       .from(comments)
+      .leftJoin(users, eq(comments.userId, users.id))
       .where(
         and(
           eq(comments.noteSelfHealing, noteId),
@@ -58,6 +61,8 @@ interface Comment {
   isEdited: boolean
   createdAt: Date
   editedAt: Date | null
+  authorName: string | null
+  authorImage: string | null
   replies?: Comment[]
 }
 

@@ -122,6 +122,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
         ...newComment,
         isEdited: false,
         editedAt: null,
+        authorName: locals.user.name,
+        authorImage: locals.user.image,
         replies: [],
       },
     }, { status: 201 })

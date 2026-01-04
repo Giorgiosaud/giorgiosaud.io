@@ -31,6 +31,7 @@
 
   let content = $state('')
   let isSubmitting = $state(false)
+  let submitError = $state<string | null>(null)
   let turnstileToken = $state<string | null>(null)
   let turnstileError = $state(false)
   let turnstileRef: Turnstile | null = null
@@ -58,10 +59,12 @@
     if (turnstileSiteKey && !turnstileToken) return
 
     isSubmitting = true
+    submitError = null
     try {
-      const res = await fetch('/api/comments.json', {
+      const res = await fetch('/api/comments/index.json', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           noteId,
           content: content.trim(),
@@ -70,19 +73,21 @@
         }),
       })
 
+      const data = await res.json()
+
       if (!res.ok) {
-        const data = await res.json()
         throw new Error(data.error || 'Failed to post')
       }
 
-      const { comment } = await res.json()
-      onSubmit(comment)
+      onSubmit(data.comment)
       content = ''
+      submitError = null
       turnstileToken = null
       turnstileRef?.reset()
       onCancel?.()
     } catch (err) {
       console.error('Failed to post comment:', err)
+      submitError = err instanceof Error ? err.message : 'Failed to post comment'
       // Reset turnstile on error
       turnstileToken = null
       turnstileRef?.reset()
@@ -114,6 +119,10 @@
     {#if turnstileError}
       <p class="error">{t.verificationFailed}</p>
     {/if}
+  {/if}
+
+  {#if submitError}
+    <p class="error">{submitError}</p>
   {/if}
 
   <div class="form-actions">

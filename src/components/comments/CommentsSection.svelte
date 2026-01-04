@@ -14,6 +14,8 @@
     isEdited: boolean
     createdAt: string
     editedAt: string | null
+    authorName?: string | null
+    authorImage?: string | null
     replies?: Comment[]
   }
 
@@ -66,7 +68,9 @@
 
   async function fetchComments() {
     try {
-      const res = await fetch(`/api/comments/note/${noteId}.json`)
+      const res = await fetch(`/api/comments/note/${noteId}.json`, {
+        credentials: 'include',
+      })
       if (!res.ok) throw new Error('Failed to fetch')
       const data = await res.json()
       comments = data.comments || []

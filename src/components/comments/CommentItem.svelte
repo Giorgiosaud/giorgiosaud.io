@@ -11,6 +11,8 @@
     isEdited: boolean
     createdAt: string
     editedAt: string | null
+    authorName?: string | null
+    authorImage?: string | null
     replies?: Comment[]
   }
 
@@ -73,6 +75,7 @@
       const res = await fetch(`/api/comments/${comment.id}.json`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ content: editContent.trim() }),
       })
       if (!res.ok) throw new Error('Failed to update')
@@ -87,7 +90,10 @@
   async function handleDelete() {
     if (!confirm(t.confirmDelete)) return
     try {
-      const res = await fetch(`/api/comments/${comment.id}.json`, { method: 'DELETE' })
+      const res = await fetch(`/api/comments/${comment.id}.json`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
       if (!res.ok) throw new Error('Failed to delete')
       onDelete(comment.id)
     } catch (err) {
@@ -103,7 +109,12 @@
 
 <article class="comment" style="--depth: {comment.depth}">
   <header class="comment-header">
-    <span class="author">User {comment.userId.slice(0, 8)}</span>
+    {#if comment.authorImage}
+      <img src={comment.authorImage} alt="" class="avatar" />
+    {:else}
+      <span class="avatar-placeholder">{(comment.authorName || 'U')[0].toUpperCase()}</span>
+    {/if}
+    <span class="author">{comment.authorName || 'Anonymous'}</span>
     <time class="time" datetime={comment.createdAt}>
       {formatDate(comment.createdAt)}
     </time>
@@ -179,6 +190,26 @@
     gap: 0.5rem;
     font-size: 0.85rem;
     margin-block-end: 0.5rem;
+  }
+
+  .avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .avatar-placeholder {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-main);
+    color: var(--color-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
   }
 
   .author {
