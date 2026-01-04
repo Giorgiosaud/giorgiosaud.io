@@ -2,7 +2,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest'
 
 // Mock Astro env modules before imports
 vi.mock('astro:env/server', () => ({
-  POSTGRES_PRISMA_URL: 'postgresql://test:test@localhost:5432/test',
+  POSTGRES_URL: 'postgresql://test:test@localhost:5432/test',
   BETTER_AUTH_SECRET: 'test-secret-at-least-32-characters-long',
   GITHUB_CLIENT_ID: 'test-github-id',
   GITHUB_CLIENT_SECRET: 'test-github-secret',

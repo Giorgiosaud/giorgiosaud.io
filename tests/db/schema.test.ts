@@ -1,18 +1,17 @@
 import { getTableName } from 'drizzle-orm'
 import { describe, expect, it } from 'vitest'
-import { accounts } from '../../src/db/schema/accounts'
+import { accounts, sessions, users, verifications, passkeys } from '../../src/db/schema/auth'
 import { badges } from '../../src/db/schema/badges'
 import { comments } from '../../src/db/schema/comments'
 import { pushSubscriptions } from '../../src/db/schema/push-subscriptions'
-import { sessions } from '../../src/db/schema/sessions'
 import { userBadges } from '../../src/db/schema/user-badges'
-import { userRoleEnum, users } from '../../src/db/schema/users'
-import { verifications } from '../../src/db/schema/verifications'
+import { userProfiles } from '../../src/db/schema/user-profiles'
 
 describe('Database Schema', () => {
-  describe('Users table', () => {
+  describe('Users table (Better Auth managed)', () => {
     it('should have correct table name', () => {
-      expect(getTableName(users)).toBe('users')
+      // Better Auth uses singular table names
+      expect(getTableName(users)).toBe('user')
     })
 
     it('should have required columns', () => {
@@ -21,19 +20,22 @@ describe('Database Schema', () => {
       expect(columns).toContain('name')
       expect(columns).toContain('email')
       expect(columns).toContain('emailVerified')
-      expect(columns).toContain('role')
       expect(columns).toContain('createdAt')
       expect(columns).toContain('updatedAt')
     })
 
-    it('should have user role enum with correct values', () => {
-      expect(userRoleEnum.enumValues).toEqual(['user', 'moderator', 'admin'])
+    it('should have admin plugin columns', () => {
+      const columns = Object.keys(users)
+      expect(columns).toContain('role')
+      expect(columns).toContain('banned')
+      expect(columns).toContain('banReason')
+      expect(columns).toContain('banExpires')
     })
   })
 
-  describe('Sessions table', () => {
+  describe('Sessions table (Better Auth managed)', () => {
     it('should have correct table name', () => {
-      expect(getTableName(sessions)).toBe('sessions')
+      expect(getTableName(sessions)).toBe('session')
     })
 
     it('should have required columns', () => {
@@ -45,9 +47,9 @@ describe('Database Schema', () => {
     })
   })
 
-  describe('Accounts table', () => {
+  describe('Accounts table (Better Auth managed)', () => {
     it('should have correct table name', () => {
-      expect(getTableName(accounts)).toBe('accounts')
+      expect(getTableName(accounts)).toBe('account')
     })
 
     it('should have required columns for OAuth', () => {
@@ -60,9 +62,9 @@ describe('Database Schema', () => {
     })
   })
 
-  describe('Verifications table', () => {
+  describe('Verifications table (Better Auth managed)', () => {
     it('should have correct table name', () => {
-      expect(getTableName(verifications)).toBe('verifications')
+      expect(getTableName(verifications)).toBe('verification')
     })
 
     it('should have required columns', () => {
@@ -71,6 +73,36 @@ describe('Database Schema', () => {
       expect(columns).toContain('identifier')
       expect(columns).toContain('value')
       expect(columns).toContain('expiresAt')
+    })
+  })
+
+  describe('Passkeys table (Better Auth managed)', () => {
+    it('should have correct table name', () => {
+      expect(getTableName(passkeys)).toBe('passkey')
+    })
+
+    it('should have required columns', () => {
+      const columns = Object.keys(passkeys)
+      expect(columns).toContain('id')
+      expect(columns).toContain('userId')
+      expect(columns).toContain('publicKey')
+      expect(columns).toContain('credentialID')
+      expect(columns).toContain('counter')
+    })
+  })
+
+  describe('User Profiles table (app managed)', () => {
+    it('should have correct table name', () => {
+      expect(getTableName(userProfiles)).toBe('user_profiles')
+    })
+
+    it('should have required columns', () => {
+      const columns = Object.keys(userProfiles)
+      expect(columns).toContain('id')
+      expect(columns).toContain('userId')
+      expect(columns).toContain('displayName')
+      expect(columns).toContain('bio')
+      expect(columns).toContain('website')
     })
   })
 

@@ -7,7 +7,7 @@ import {
   timestamp,
   uuid,
 } from 'drizzle-orm/pg-core'
-import { users } from './users'
+import { users } from './auth'
 
 export const pushSubscriptions = pgTable(
   'push_subscriptions',

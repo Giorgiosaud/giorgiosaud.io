@@ -1,9 +1,12 @@
-export * from './accounts'
+// Auth tables (from Better Auth generated schema)
+export * from './auth'
+
+// App tables
+export * from './user-profiles'
 export * from './badges'
 export * from './comments'
 export * from './push-subscriptions'
-export * from './relations'
-export * from './sessions'
 export * from './user-badges'
-export * from './users'
-export * from './verifications'
+
+// App-level relations (extends auth relations)
+export * from './relations'

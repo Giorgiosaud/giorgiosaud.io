@@ -1,18 +1,66 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { admin } from 'better-auth/plugins'
 import { passkey } from '@better-auth/passkey'
 import { db } from '@db'
 import * as schema from '@db/schema'
-import {
+
+// Support both Astro env and process.env (for CLI tools like better-auth)
+let envVars: {
+  BETTER_AUTH_SECRET: string
+  BETTER_AUTH_URL: string
+  GITHUB_CLIENT_ID?: string
+  GITHUB_CLIENT_SECRET?: string
+  GOOGLE_CLIENT_ID?: string
+  GOOGLE_CLIENT_SECRET?: string
+  FACEBOOK_CLIENT_ID?: string
+  FACEBOOK_CLIENT_SECRET?: string
+}
+
+try {
+  // Try Astro's env system first (works during build/runtime)
+  const serverEnv = await import('astro:env/server')
+  const clientEnv = await import('astro:env/client')
+  envVars = {
+    BETTER_AUTH_SECRET: serverEnv.BETTER_AUTH_SECRET,
+    BETTER_AUTH_URL: clientEnv.BETTER_AUTH_URL,
+    GITHUB_CLIENT_ID: serverEnv.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: serverEnv.GITHUB_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID: serverEnv.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: serverEnv.GOOGLE_CLIENT_SECRET,
+    FACEBOOK_CLIENT_ID: serverEnv.FACEBOOK_CLIENT_ID,
+    FACEBOOK_CLIENT_SECRET: serverEnv.FACEBOOK_CLIENT_SECRET,
+  }
+} catch {
+  // Fallback to process.env (for CLI tools)
+  envVars = {
+    BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET || '',
+    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || '',
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
+    GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+    FACEBOOK_CLIENT_ID: process.env.FACEBOOK_CLIENT_ID,
+    FACEBOOK_CLIENT_SECRET: process.env.FACEBOOK_CLIENT_SECRET,
+  }
+}
+
+const {
   BETTER_AUTH_SECRET,
+  BETTER_AUTH_URL,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   FACEBOOK_CLIENT_ID,
   FACEBOOK_CLIENT_SECRET,
-} from 'astro:env/server'
-import { BETTER_AUTH_URL } from 'astro:env/client'
+} = envVars
+
+// Detect production mode from both Astro and Node environments
+const isProd = typeof import.meta.env !== 'undefined'
+  ? import.meta.env.PROD
+  : process.env.NODE_ENV === 'production'
+
 const socialProviders: Record<string, { clientId: string; clientSecret: string }> = {}
 if(GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET) {
   socialProviders['github'] = {
@@ -40,6 +88,7 @@ export const auth = betterAuth({
       session: schema.sessions,
       account: schema.accounts,
       verification: schema.verifications,
+      passkey: schema.passkeys,
     },
   }),
 
@@ -68,8 +117,12 @@ export const auth = betterAuth({
 
   // Plugins
   plugins: [
+    admin({
+      defaultRole: 'user',
+      adminRoles: ['admin'],
+    }),
     passkey({
-      rpID: import.meta.env.PROD ? 'giorgiosaud.io' : 'localhost',
+      rpID: isProd ? 'giorgiosaud.io' : 'localhost',
       rpName: 'Giorgio Saud Notebook',
       origin: BETTER_AUTH_URL,
     }),
@@ -78,7 +131,7 @@ export const auth = betterAuth({
   // Advanced options
   advanced: {
     cookiePrefix: 'gsio',
-    useSecureCookies: import.meta.env.PROD,
+    useSecureCookies: isProd,
   },
 })
 

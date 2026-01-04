@@ -43,8 +43,8 @@ export default defineConfig({
 
   env: {
     schema: {
-      // Database (Vercel-Supabase integration uses POSTGRES_PRISMA_URL)
-      POSTGRES_PRISMA_URL: envField.string({
+      // Database (Vercel-Supabase integration uses POSTGRES_URL)
+      POSTGRES_URL: envField.string({
         context: 'server',
         access: 'secret',
         optional: false,

@@ -9,7 +9,7 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core'
 import { badges } from './badges'
-import { users } from './users'
+import { users } from './auth'
 
 export const userBadges = pgTable(
   'user_badges',
