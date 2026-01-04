@@ -1,5 +1,5 @@
 // Name of the cache used in this version of the service worker.
-const PRECACHE = 'precache-v20'
+const PRECACHE = 'precache-v21'
 
 // A list of local resources we always want to be cached.
 const PRECACHE_URLS = [
@@ -36,9 +36,14 @@ self.addEventListener('activate', event => {
 })
 
 // The fetch handler serves responses for same-origin resources from a cache.
+// Only GET requests can be cached - POST, PUT, DELETE etc are not cacheable.
 
 self.addEventListener('fetch', event => {
-  if (event.request.url.startsWith(self.location.origin)) {
+  // Only handle same-origin GET requests
+  if (
+    event.request.url.startsWith(self.location.origin) &&
+    event.request.method === 'GET'
+  ) {
     event.respondWith(
       fetch(event.request)
         .then(networkResponse => {
