@@ -4,6 +4,7 @@ import { getCollection, render } from 'astro:content'
 import AISummarizer from '@components/AISummarizer.astro'
 import { CommentsSection } from '@components/comments'
 import NoteTemplate from '@templates/Note.astro'
+import { TURNSTILE_SITE_KEY } from 'astro:env/client'
 import '@global-styles/md.css'
 export async function getStaticPaths() {
   const pages = await getCollection('notes')
@@ -57,7 +58,7 @@ llmPath={`/notebook/${page.id}.md`}
   <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
 </section>
 <div class="comments-wrapper">
-  <CommentsSection client:load noteId={selfHealing} lang="en" />
+  <CommentsSection client:load noteId={selfHealing} lang="en" turnstileSiteKey={TURNSTILE_SITE_KEY} />
 </div>
 </NoteTemplate>
 <script define:vars={{selfHealing}}>

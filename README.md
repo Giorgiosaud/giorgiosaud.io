@@ -12,7 +12,7 @@ Live: https://giorgiosaud.io
 - Content Collections for: pages, notes, portfolio, team, collections, badges, technologies
 - Bilingual content (en, es)
 - Sitemap + (optional) RSS
-- Form actions via Resend (email) and optional reCAPTCHA
+- Form actions via Resend (email) and Cloudflare Turnstile (comments)
 - Biome for lint/format, TypeScript, Vercel adapter
 
 ## Tech Stack
@@ -67,11 +67,11 @@ Defined in `astro.config.mjs` via `envField`. Create a `.env` file at the projec
 
 ```env
 # Public (client) – optional
-PUBLIC_TAG_MANAGER_ID="GTM-XXXXXX"
-PUBLIC_RECAPTCHA_KEY=""
+TAG_MANAGER_ID="GTM-XXXXXX"
+TURNSTILE_SITE_KEY=""
 
 # Server – optional
-RECAPTCHA_SECRET=""
+TURNSTILE_SECRET_KEY=""
 RESEND_API_KEY=""
 
 # Email defaults (server)
@@ -81,7 +81,7 @@ PUBLIC_RESEND_FROM_NAME="Notebook"
 ```
 
 Notes
-- In code, these map to TAG_MANAGER_ID, RECAPTCHA_KEY, RECAPTCHA_SECRET, RESEND_* as declared in `astro.config.mjs`. Astro handles exposure based on `access` (public/secret) and `context` (client/server).
+- In code, access via `astro:env/client` or `astro:env/server`. Astro handles exposure based on `access` (public/secret) and `context` (client/server).
 
 ---
 

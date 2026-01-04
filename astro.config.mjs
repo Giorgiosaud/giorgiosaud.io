@@ -113,13 +113,13 @@ export default defineConfig({
         optional: true,
       }),
 
-      // reCAPTCHA
-      RECAPTCHA_KEY: envField.string({
+      // Cloudflare Turnstile (bot protection for comments)
+      TURNSTILE_SITE_KEY: envField.string({
         context: 'client',
         access: 'public',
         optional: true,
       }),
-      RECAPTCHA_SECRET: envField.string({
+      TURNSTILE_SECRET_KEY: envField.string({
         context: 'server',
         access: 'secret',
         optional: true,

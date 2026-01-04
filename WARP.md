@@ -109,9 +109,9 @@ tags: ["tag1", "tag2"]
 **Environment Variables**:
 ```env
 # Optional - for analytics and forms
-PUBLIC_TAG_MANAGER_ID="GTM-XXXXXX"
-PUBLIC_RECAPTCHA_KEY=""
-RECAPTCHA_SECRET=""
+TAG_MANAGER_ID="GTM-XXXXXX"
+TURNSTILE_SITE_KEY=""
+TURNSTILE_SECRET_KEY=""
 RESEND_API_KEY=""
 ```
 

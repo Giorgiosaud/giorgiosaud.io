@@ -2,10 +2,36 @@ import type { APIRoute } from 'astro'
 import { db } from '@db'
 import { comments } from '@db/schema'
 import { eq, and, isNull } from 'drizzle-orm'
+import { TURNSTILE_SECRET_KEY } from 'astro:env/server'
 
 export const prerender = false
 
 const MAX_DEPTH = 3 // Limit reply nesting
+
+// Verify Turnstile token with Cloudflare
+async function verifyTurnstile(token: string): Promise<boolean> {
+  if (!TURNSTILE_SECRET_KEY) {
+    // Skip verification if no secret key configured
+    return true
+  }
+
+  try {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret: TURNSTILE_SECRET_KEY,
+        response: token,
+      }),
+    })
+
+    const data = await response.json()
+    return data.success === true
+  } catch (error) {
+    console.error('Turnstile verification failed:', error)
+    return false
+  }
+}
 
 // POST /api/comments.json - Create a new comment
 export const POST: APIRoute = async ({ request, locals }) => {
@@ -16,7 +42,19 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
   try {
     const body = await request.json()
-    const { noteId, content, parentId } = body
+    const { noteId, content, parentId, turnstileToken } = body
+
+    // Verify Turnstile token if secret key is configured
+    if (TURNSTILE_SECRET_KEY) {
+      if (!turnstileToken) {
+        return Response.json({ error: 'Verification required' }, { status: 400 })
+      }
+
+      const isValid = await verifyTurnstile(turnstileToken)
+      if (!isValid) {
+        return Response.json({ error: 'Verification failed' }, { status: 403 })
+      }
+    }
 
     // Validate required fields
     if (!noteId || typeof noteId !== 'string') {

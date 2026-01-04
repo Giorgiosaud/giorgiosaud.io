@@ -22,6 +22,7 @@
     onUpdate: (comment: Comment) => void
     onDelete: (id: string) => void
     lang: 'en' | 'es'
+    turnstileSiteKey?: string
   }
 
   const translations = {
@@ -45,7 +46,7 @@
     },
   }
 
-  let { comment, noteId, user, onReply, onUpdate, onDelete, lang }: Props = $props()
+  let { comment, noteId, user, onReply, onUpdate, onDelete, lang, turnstileSiteKey }: Props = $props()
 
   let isReplying = $state(false)
   let isEditing = $state(false)
@@ -143,6 +144,7 @@
         onSubmit={handleReplySubmit}
         onCancel={() => isReplying = false}
         {lang}
+        {turnstileSiteKey}
       />
     </div>
   {/if}
@@ -158,6 +160,7 @@
           {onUpdate}
           {onDelete}
           {lang}
+          {turnstileSiteKey}
         />
       {/each}
     </div>

@@ -20,6 +20,7 @@
   interface Props {
     noteId: string
     lang?: 'en' | 'es'
+    turnstileSiteKey?: string
   }
 
   const translations = {
@@ -39,7 +40,7 @@
     },
   }
 
-  let { noteId, lang = 'en' }: Props = $props()
+  let { noteId, lang = 'en', turnstileSiteKey }: Props = $props()
 
   let user = $state<User | null>(null)
   let isAuthenticated = $state(false)
@@ -142,7 +143,7 @@
     {/if}
 
     {#if isAuthenticated}
-      <CommentForm {noteId} onSubmit={handleNewComment} {lang} />
+      <CommentForm {noteId} onSubmit={handleNewComment} {lang} {turnstileSiteKey} />
     {:else}
       <p class="login-prompt">{t.loginToComment}</p>
     {/if}
@@ -160,6 +161,7 @@
             onUpdate={handleUpdateComment}
             onDelete={handleDeleteComment}
             {lang}
+            {turnstileSiteKey}
           />
         {/each}
       </div>
