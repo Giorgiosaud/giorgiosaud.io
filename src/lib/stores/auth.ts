@@ -118,32 +118,20 @@ export async function registerPasskey() {
   }
 }
 
-// Social login actions
-export async function loginWithGitHub() {
+// Social login actions - these trigger redirects, don't await
+export function loginWithGitHub() {
   $authError.set(null)
-  try {
-    await signIn.social({ provider: 'github' })
-  } catch (error) {
-    $authError.set('GitHub login failed. Please try again.')
-  }
+  signIn.social({ provider: 'github', callbackURL: window.location.href })
 }
 
-export async function loginWithGoogle() {
+export function loginWithGoogle() {
   $authError.set(null)
-  try {
-    await signIn.social({ provider: 'google' })
-  } catch (error) {
-    $authError.set('Google login failed. Please try again.')
-  }
+  signIn.social({ provider: 'google', callbackURL: window.location.href })
 }
 
-export async function loginWithFacebook() {
+export function loginWithFacebook() {
   $authError.set(null)
-  try {
-    await signIn.social({ provider: 'facebook' })
-  } catch (error) {
-    $authError.set('Facebook login failed. Please try again.')
-  }
+  signIn.social({ provider: 'facebook', callbackURL: window.location.href })
 }
 
 // Logout action
