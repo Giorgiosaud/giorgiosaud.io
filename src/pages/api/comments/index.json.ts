@@ -3,6 +3,7 @@ import { db } from '@db'
 import { comments } from '@db/schema'
 import { eq, and, isNull } from 'drizzle-orm'
 import { TURNSTILE_SECRET_KEY } from 'astro:env/server'
+import { sendCommentReplyNotification, isPushConfigured } from '@lib/push-notifications'
 
 export const prerender = false
 
@@ -71,9 +72,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     // Calculate depth if replying
     let depth = 0
+    let parentAuthorId: string | null = null
     if (parentId) {
       const parentComment = await db
-        .select({ depth: comments.depth })
+        .select({ depth: comments.depth, userId: comments.userId })
         .from(comments)
         .where(
           and(
@@ -88,6 +90,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
 
       depth = parentComment[0].depth + 1
+      parentAuthorId = parentComment[0].userId
 
       if (depth > MAX_DEPTH) {
         return Response.json(
@@ -116,6 +119,17 @@ export const POST: APIRoute = async ({ request, locals }) => {
         userId: comments.userId,
         createdAt: comments.createdAt,
       })
+
+    // Send push notification for replies (async, don't block response)
+    if (parentAuthorId && parentAuthorId !== locals.user.id && isPushConfigured()) {
+      sendCommentReplyNotification(
+        parentAuthorId,
+        locals.user.name || 'Someone',
+        content.trim(),
+        noteId,
+        newComment.id,
+      ).catch(err => console.error('Failed to send reply notification:', err))
+    }
 
     return Response.json({
       comment: {

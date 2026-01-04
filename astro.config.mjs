@@ -149,6 +149,24 @@ export default defineConfig({
         optional: true,
         default: 'Notebook',
       }),
+
+      // Web Push (VAPID keys - generate with: npx web-push generate-vapid-keys)
+      VAPID_PUBLIC_KEY: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
+      VAPID_PRIVATE_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      VAPID_SUBJECT: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'mailto:jorgelsaud@gmail.com',
+      }),
     },
   },
 
