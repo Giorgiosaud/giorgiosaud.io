@@ -144,6 +144,9 @@ const stats = {
               )}
             </div>
             <div class="user-actions">
+              {subscribedUserIds.has(user.id) && (
+                <button type="button" class="btn-small btn-notify" onclick={`notifyUser('${user.id}', '${user.name}')`}>Notify</button>
+              )}
               {!user.banned ? (
                 <button type="button" class="btn-small btn-danger" onclick={`banUser('${user.id}')`}>Ban</button>
               ) : (
@@ -155,6 +158,34 @@ const stats = {
       </ul>
       <div id="users-result" class="result" hidden></div>
     </section>
+
+    <!-- Notify User Modal -->
+    <dialog id="notify-modal">
+      <form method="dialog" id="notify-form">
+        <h3>Notify <span id="notify-user-name"></span></h3>
+        <input type="hidden" id="notify-user-id" />
+
+        <div class="form-group">
+          <label for="notify-title">Title</label>
+          <input type="text" id="notify-title" required maxlength="50" placeholder="Hey!" />
+        </div>
+
+        <div class="form-group">
+          <label for="notify-body">Message</label>
+          <textarea id="notify-body" required maxlength="200" rows="3" placeholder="Check this out..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="notify-url">Link URL (optional)</label>
+          <input type="text" id="notify-url" placeholder="/notebook/my-post" />
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeNotifyModal()">Cancel</button>
+          <button type="submit" class="btn-primary">Send Notification</button>
+        </div>
+      </form>
+    </dialog>
 
     <!-- Ban Modal -->
     <dialog id="ban-modal">
@@ -270,6 +301,57 @@ const stats = {
     }
   }
 
+  // Notify User Modal
+  const notifyModal = document.getElementById('notify-modal') as HTMLDialogElement
+  const notifyForm = document.getElementById('notify-form') as HTMLFormElement
+  const notifyUserIdInput = document.getElementById('notify-user-id') as HTMLInputElement
+  const notifyUserNameSpan = document.getElementById('notify-user-name') as HTMLSpanElement
+  const notifyTitleInput = document.getElementById('notify-title') as HTMLInputElement
+  const notifyBodyInput = document.getElementById('notify-body') as HTMLTextAreaElement
+  const notifyUrlInput = document.getElementById('notify-url') as HTMLInputElement
+
+  window.notifyUser = (id: string, name: string) => {
+    notifyUserIdInput.value = id
+    notifyUserNameSpan.textContent = name
+    notifyTitleInput.value = ''
+    notifyBodyInput.value = ''
+    notifyUrlInput.value = ''
+    notifyModal.showModal()
+  }
+
+  window.closeNotifyModal = () => {
+    notifyModal.close()
+  }
+
+  notifyForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const userId = notifyUserIdInput.value
+    const title = notifyTitleInput.value
+    const body = notifyBodyInput.value
+    const url = notifyUrlInput.value || undefined
+
+    const result = document.getElementById('users-result') as HTMLDivElement
+    notifyModal.close()
+
+    try {
+      const response = await fetch('/api/push/send-to-user.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, title, body, url }),
+      })
+      const data = await response.json()
+      result.hidden = false
+      result.className = response.ok ? 'result success' : 'result error'
+      result.textContent = response.ok
+        ? `Notification sent (${data.result.sent} device(s))`
+        : (data.error || 'Failed to send')
+    } catch {
+      result.hidden = false
+      result.className = 'result error'
+      result.textContent = 'Network error'
+    }
+  })
+
   // Ban Modal
   const banModal = document.getElementById('ban-modal') as HTMLDialogElement
   const banForm = document.getElementById('ban-form') as HTMLFormElement
@@ -360,6 +442,8 @@ const stats = {
       banUser: (id: string) => void
       unbanUser: (id: string) => Promise<void>
       closeBanModal: () => void
+      notifyUser: (id: string, name: string) => void
+      closeNotifyModal: () => void
     }
   }
 </script>
@@ -454,6 +538,7 @@ const stats = {
   }
   .btn-danger { background: var(--color-error, #ef4444); color: white; }
   .btn-success { background: var(--color-success, #10b981); color: white; }
+  .btn-notify { background: var(--color-main); color: white; }
 
   .result {
     margin-top: 1rem;
