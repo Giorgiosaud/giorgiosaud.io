@@ -119,16 +119,31 @@ export async function registerPasskey() {
 }
 
 // Social login actions
-export function loginWithGitHub() {
-  window.location.href = '/api/auth/sign-in/social?provider=github'
+export async function loginWithGitHub() {
+  $authError.set(null)
+  try {
+    await signIn.social({ provider: 'github' })
+  } catch (error) {
+    $authError.set('GitHub login failed. Please try again.')
+  }
 }
 
-export function loginWithGoogle() {
-  window.location.href = '/api/auth/sign-in/social?provider=google'
+export async function loginWithGoogle() {
+  $authError.set(null)
+  try {
+    await signIn.social({ provider: 'google' })
+  } catch (error) {
+    $authError.set('Google login failed. Please try again.')
+  }
 }
 
-export function loginWithFacebook() {
-  window.location.href = '/api/auth/sign-in/social?provider=facebook'
+export async function loginWithFacebook() {
+  $authError.set(null)
+  try {
+    await signIn.social({ provider: 'facebook' })
+  } catch (error) {
+    $authError.set('Facebook login failed. Please try again.')
+  }
 }
 
 // Logout action
