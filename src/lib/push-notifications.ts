@@ -2,11 +2,8 @@ import webpush from 'web-push'
 import { db } from '@db'
 import { pushSubscriptions } from '@db/schema'
 import { eq, and } from 'drizzle-orm'
-import {
-  VAPID_PUBLIC_KEY,
-  VAPID_PRIVATE_KEY,
-  VAPID_SUBJECT,
-} from 'astro:env/server'
+import { VAPID_PUBLIC_KEY } from 'astro:env/client'
+import { VAPID_PRIVATE_KEY, VAPID_SUBJECT } from 'astro:env/server'
 
 // Configure web-push with VAPID keys
 function configureWebPush() {
