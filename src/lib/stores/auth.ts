@@ -43,7 +43,7 @@ export async function loginWithEmail(email: string, password: string) {
   $authError.set(null)
   $isLoading.set(true)
   try {
-    const result = await signIn.email({ email, password })
+    const result = await signIn.email({ email, password, fetchOptions: { credentials: 'include' } })
     if (result.error) {
       $authError.set(result.error.message || 'Login failed')
       return false
@@ -51,7 +51,8 @@ export async function loginWithEmail(email: string, password: string) {
     await initAuthState()
     return true
   } catch (error) {
-    $authError.set('Login failed. Please try again.')
+    console.error('Login error:', error)
+    $authError.set(error instanceof Error ? error.message : 'Login failed. Please try again.')
     return false
   } finally {
     $isLoading.set(false)
@@ -67,7 +68,7 @@ export async function signUpWithEmail(
   $authError.set(null)
   $isLoading.set(true)
   try {
-    const result = await signUp.email({ email, password, name })
+    const result = await signUp.email({ email, password, name, fetchOptions: { credentials: 'include' } })
     if (result.error) {
       $authError.set(result.error.message || 'Sign up failed')
       return false
@@ -75,7 +76,8 @@ export async function signUpWithEmail(
     await initAuthState()
     return true
   } catch (error) {
-    $authError.set('Sign up failed. Please try again.')
+    console.error('Signup error:', error)
+    $authError.set(error instanceof Error ? error.message : 'Sign up failed. Please try again.')
     return false
   } finally {
     $isLoading.set(false)
