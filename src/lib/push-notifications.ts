@@ -143,3 +143,92 @@ export async function sendCommentReplyNotification(
 export function isPushConfigured(): boolean {
   return !!(VAPID_PUBLIC_KEY && VAPID_PRIVATE_KEY)
 }
+
+/**
+ * Send notification to ALL active subscribers (for new posts, announcements)
+ */
+export async function broadcastNotification(
+  payload: NotificationPayload,
+): Promise<{ sent: number; failed: number }> {
+  if (!configureWebPush()) {
+    console.warn('Push notifications not configured')
+    return { sent: 0, failed: 0 }
+  }
+
+  // Get all active subscriptions
+  const subscriptions = await db.query.pushSubscriptions.findMany({
+    where: eq(pushSubscriptions.isActive, true),
+  })
+
+  let sent = 0
+  let failed = 0
+
+  for (const sub of subscriptions) {
+    try {
+      await webpush.sendNotification(
+        {
+          endpoint: sub.endpoint,
+          keys: {
+            p256dh: sub.p256dh,
+            auth: sub.auth,
+          },
+        },
+        JSON.stringify(payload),
+      )
+
+      await db.update(pushSubscriptions)
+        .set({ lastUsedAt: new Date(), failureCount: 0 })
+        .where(eq(pushSubscriptions.id, sub.id))
+
+      sent++
+    } catch (error) {
+      failed++
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+      const statusCode = (error as { statusCode?: number }).statusCode
+
+      if (statusCode === 404 || statusCode === 410) {
+        await db.update(pushSubscriptions)
+          .set({
+            isActive: false,
+            lastError: `Subscription expired (${statusCode})`,
+            updatedAt: new Date(),
+          })
+          .where(eq(pushSubscriptions.id, sub.id))
+      } else {
+        const newFailureCount = sub.failureCount + 1
+        await db.update(pushSubscriptions)
+          .set({
+            failureCount: newFailureCount,
+            lastError: errorMessage,
+            isActive: newFailureCount < MAX_FAILURES,
+            updatedAt: new Date(),
+          })
+          .where(eq(pushSubscriptions.id, sub.id))
+      }
+    }
+  }
+
+  return { sent, failed }
+}
+
+/**
+ * Send notification for a new blog post
+ */
+export async function sendNewPostNotification(
+  postTitle: string,
+  postSlug: string,
+  postExcerpt?: string,
+): Promise<{ sent: number; failed: number }> {
+  const payload: NotificationPayload = {
+    title: 'New Post Published',
+    body: postExcerpt || postTitle,
+    icon: '/favicon.svg',
+    tag: `new-post-${postSlug}`,
+    data: {
+      url: `/notebook/${postSlug}`,
+      type: 'new-post',
+    },
+  }
+
+  return broadcastNotification(payload)
+}
