@@ -7,6 +7,7 @@ export const $user = atom<User | null>(null)
 export const $session = atom<Session | null>(null)
 export const $isLoading = atom<boolean>(true)
 export const $authError = atom<string | null>(null)
+export const $oauthLoading = atom<'github' | 'google' | 'facebook' | null>(null)
 
 // Computed stores
 export const $isAuthenticated = computed($user, user => user !== null)
@@ -134,20 +135,145 @@ export async function registerPasskey() {
   }
 }
 
-// Social login actions - these trigger redirects, don't await
-export function loginWithGitHub() {
+// OAuth popup login - opens provider in popup window
+type OAuthProvider = 'github' | 'google' | 'facebook'
+
+async function loginWithOAuthPopup(provider: OAuthProvider) {
   $authError.set(null)
-  signIn.social({ provider: 'github', callbackURL: window.location.href })
+  $oauthLoading.set(provider)
+
+  const width = 600
+  const height = 700
+  const left = window.screenX + (window.outerWidth - width) / 2
+  const top = window.screenY + (window.outerHeight - height) / 2
+
+  // Open popup immediately (must be synchronous to avoid popup blocker)
+  const popup = window.open(
+    '',
+    `${provider}-oauth`,
+    `width=${width},height=${height},left=${left},top=${top}`
+  )
+
+  if (!popup) {
+    // Popup blocked - fall back to redirect
+    $oauthLoading.set(null)
+    signIn.social({ provider, callbackURL: window.location.href })
+    return
+  }
+
+  // Show loading state in popup
+  popup.document.write(`
+    <html>
+      <head>
+        <title>Connecting to ${provider}...</title>
+        <style>
+          body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f8f9fa;
+            color: #333;
+          }
+          .loader {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e0e0e0;
+            border-top-color: #333;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1.5rem;
+          }
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+          p {
+            font-size: 1.1rem;
+            margin: 0;
+            opacity: 0.9;
+          }
+          .dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+          }
+          @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80%, 100% { content: '...'; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="loader"></div>
+        <p>Connecting to ${provider}<span class="dots"></span></p>
+      </body>
+    </html>
+  `)
+
+  try {
+    // Get OAuth URL from Better Auth
+    const result = await signIn.social({
+      provider,
+      callbackURL: '/auth/callback',
+      disableRedirect: true,
+    })
+
+    if (!result.data?.url) {
+      popup.close()
+      throw new Error('Failed to get OAuth URL')
+    }
+
+    // Navigate popup to OAuth URL
+    popup.location.href = result.data.url
+
+    let timeoutId: number | null = null
+
+    const cleanup = () => {
+      if (timeoutId) clearTimeout(timeoutId)
+      window.removeEventListener('message', handleMessage)
+      $oauthLoading.set(null)
+    }
+
+    const handleMessage = (event: MessageEvent) => {
+      if (event.origin === window.location.origin && event.data.type === 'oauth-success') {
+        cleanup()
+        initAuthState()
+      }
+    }
+
+    // Recursive setTimeout - cleaner than setInterval
+    const checkPopupClosed = () => {
+      if (popup.closed) {
+        cleanup()
+      } else {
+        timeoutId = window.setTimeout(checkPopupClosed, 500)
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+    checkPopupClosed()
+  } catch (error) {
+    console.error('OAuth popup error:', error)
+    $oauthLoading.set(null)
+    $authError.set('Failed to start authentication')
+  }
+}
+
+// Social login actions
+export function loginWithGitHub() {
+  loginWithOAuthPopup('github')
 }
 
 export function loginWithGoogle() {
-  $authError.set(null)
-  signIn.social({ provider: 'google', callbackURL: window.location.href })
+  loginWithOAuthPopup('google')
 }
 
 export function loginWithFacebook() {
-  $authError.set(null)
-  signIn.social({ provider: 'facebook', callbackURL: window.location.href })
+  loginWithOAuthPopup('facebook')
 }
 
 // Logout action
