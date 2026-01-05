@@ -1,6 +1,6 @@
+import { passkey, signIn, signOut, signUp } from '@lib/auth-client'
+import type { Session, User } from 'better-auth/types'
 import { atom, computed } from 'nanostores'
-import type { User, Session } from 'better-auth/types'
-import { signIn, signUp, signOut, passkey } from '@lib/auth-client'
 
 // Auth state atoms
 export const $user = atom<User | null>(null)
@@ -13,7 +13,14 @@ export const $oauthLoading = atom<'github' | 'google' | 'facebook' | null>(null)
 export const $isAuthenticated = computed($user, user => user !== null)
 export const $isAdmin = computed(
   $user,
-  user => (user as (User & { role?: string }) | null)?.role === 'admin'
+  user =>
+    (
+      user as
+        | (User & {
+            role?: string
+          })
+        | null
+    )?.role === 'admin',
 )
 
 // Initialize auth state from server
@@ -44,7 +51,13 @@ export async function loginWithEmail(email: string, password: string) {
   $authError.set(null)
   $isLoading.set(true)
   try {
-    const result = await signIn.email({ email, password, fetchOptions: { credentials: 'include' } })
+    const result = await signIn.email({
+      email,
+      password,
+      fetchOptions: {
+        credentials: 'include',
+      },
+    })
     if (result.error) {
       $authError.set(result.error.message || 'Login failed')
       return false
@@ -53,7 +66,11 @@ export async function loginWithEmail(email: string, password: string) {
     return true
   } catch (error) {
     console.error('Login error:', error)
-    $authError.set(error instanceof Error ? error.message : 'Login failed. Please try again.')
+    $authError.set(
+      error instanceof Error
+        ? error.message
+        : 'Login failed. Please try again.',
+    )
     return false
   } finally {
     $isLoading.set(false)
@@ -64,12 +81,19 @@ export async function loginWithEmail(email: string, password: string) {
 export async function signUpWithEmail(
   email: string,
   password: string,
-  name: string
+  name: string,
 ) {
   $authError.set(null)
   $isLoading.set(true)
   try {
-    const result = await signUp.email({ email, password, name, fetchOptions: { credentials: 'include' } })
+    const result = await signUp.email({
+      email,
+      password,
+      name,
+      fetchOptions: {
+        credentials: 'include',
+      },
+    })
     if (result.error) {
       $authError.set(result.error.message || 'Sign up failed')
       return false
@@ -78,7 +102,11 @@ export async function signUpWithEmail(
     return true
   } catch (error) {
     console.error('Signup error:', error)
-    $authError.set(error instanceof Error ? error.message : 'Sign up failed. Please try again.')
+    $authError.set(
+      error instanceof Error
+        ? error.message
+        : 'Sign up failed. Please try again.',
+    )
     return false
   } finally {
     $isLoading.set(false)
@@ -98,8 +126,11 @@ export async function loginWithPasskey() {
           await initAuthState()
           $isLoading.set(false)
         },
-        onError: (context) => {
-          console.error('Passkey authentication failed:', context.error?.message)
+        onError: context => {
+          console.error(
+            'Passkey authentication failed:',
+            context.error?.message,
+          )
           $authError.set(context.error?.message || 'Passkey login failed')
           $isLoading.set(false)
         },
@@ -135,145 +166,30 @@ export async function registerPasskey() {
   }
 }
 
-// OAuth popup login - opens provider in popup window
+// OAuth redirect login - redirects to provider and back
 type OAuthProvider = 'github' | 'google' | 'facebook'
 
-async function loginWithOAuthPopup(provider: OAuthProvider) {
+function loginWithOAuthRedirect(provider: OAuthProvider) {
   $authError.set(null)
   $oauthLoading.set(provider)
-
-  const width = 600
-  const height = 700
-  const left = window.screenX + (window.outerWidth - width) / 2
-  const top = window.screenY + (window.outerHeight - height) / 2
-
-  // Open popup immediately (must be synchronous to avoid popup blocker)
-  const popup = window.open(
-    '',
-    `${provider}-oauth`,
-    `width=${width},height=${height},left=${left},top=${top}`
-  )
-
-  if (!popup) {
-    // Popup blocked - fall back to redirect
-    $oauthLoading.set(null)
-    signIn.social({ provider, callbackURL: window.location.href })
-    return
-  }
-
-  // Show loading state in popup
-  popup.document.write(`
-    <html>
-      <head>
-        <title>Connecting to ${provider}...</title>
-        <style>
-          body {
-            font-family: system-ui, -apple-system, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background: #f8f9fa;
-            color: #333;
-          }
-          .loader {
-            width: 48px;
-            height: 48px;
-            border: 4px solid #e0e0e0;
-            border-top-color: #333;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin-bottom: 1.5rem;
-          }
-          @keyframes spin {
-            to { transform: rotate(360deg); }
-          }
-          p {
-            font-size: 1.1rem;
-            margin: 0;
-            opacity: 0.9;
-          }
-          .dots::after {
-            content: '';
-            animation: dots 1.5s steps(4, end) infinite;
-          }
-          @keyframes dots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
-          }
-        </style>
-      </head>
-      <body>
-        <div class="loader"></div>
-        <p>Connecting to ${provider}<span class="dots"></span></p>
-      </body>
-    </html>
-  `)
-
-  try {
-    // Get OAuth URL from Better Auth
-    const result = await signIn.social({
-      provider,
-      callbackURL: '/auth/callback',
-      disableRedirect: true,
-    })
-
-    if (!result.data?.url) {
-      popup.close()
-      throw new Error('Failed to get OAuth URL')
-    }
-
-    // Navigate popup to OAuth URL
-    popup.location.href = result.data.url
-
-    let timeoutId: number | null = null
-
-    const cleanup = () => {
-      if (timeoutId) clearTimeout(timeoutId)
-      window.removeEventListener('message', handleMessage)
-      $oauthLoading.set(null)
-    }
-
-    const handleMessage = (event: MessageEvent) => {
-      if (event.origin === window.location.origin && event.data.type === 'oauth-success') {
-        cleanup()
-        initAuthState()
-      }
-    }
-
-    // Recursive setTimeout - cleaner than setInterval
-    const checkPopupClosed = () => {
-      if (popup.closed) {
-        cleanup()
-      } else {
-        timeoutId = window.setTimeout(checkPopupClosed, 500)
-      }
-    }
-
-    window.addEventListener('message', handleMessage)
-    checkPopupClosed()
-  } catch (error) {
-    console.error('OAuth popup error:', error)
-    $oauthLoading.set(null)
-    $authError.set('Failed to start authentication')
-  }
+  // Redirect to OAuth provider, return to current page after auth
+  signIn.social({
+    provider,
+    callbackURL: window.location.pathname,
+  })
 }
 
 // Social login actions
 export function loginWithGitHub() {
-  loginWithOAuthPopup('github')
+  loginWithOAuthRedirect('github')
 }
 
 export function loginWithGoogle() {
-  loginWithOAuthPopup('google')
+  loginWithOAuthRedirect('google')
 }
 
 export function loginWithFacebook() {
-  loginWithOAuthPopup('facebook')
+  loginWithOAuthRedirect('facebook')
 }
 
 // Logout action
