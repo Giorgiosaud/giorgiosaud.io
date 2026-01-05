@@ -8,6 +8,7 @@ import Footer from '@global-components/Footer.astro'
 import Head from '@global-components/Head/index.astro'
 import Header from '@global-components/Header.astro'
 import OfflineBar from '@global-components/OfflineBar.svelte'
+import CookieConsent from '@global-components/CookieConsent.svelte'
 import type { RouteNames } from '@i18n/utils'
 
 export interface Props {
@@ -22,6 +23,11 @@ const {
   lang = 'en',
   pathToTranslate = 'home',
 } = Astro.props
+
+// Get user for dataLayer (may be null if not logged in or prerendered)
+const user = Astro.locals?.user as { id: string; name: string; role?: string } | null
+const isLoggedIn = !!user
+const userRole = user?.role || 'guest'
 ---
 
 <!doctype html>
@@ -31,6 +37,14 @@ const {
     description={description}
   >
     <slot name="head"/>
+    <script define:vars={{ isLoggedIn, userRole, userId: user?.id }}>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        'user_logged_in': isLoggedIn,
+        'user_role': userRole,
+        'user_id': userId || null
+      });
+    </script>
   </Head>
 
   <body>
@@ -41,5 +55,6 @@ const {
       <slot />
     </main>
     <Footer />
+    <CookieConsent client:load />
   </body>
 </html>
