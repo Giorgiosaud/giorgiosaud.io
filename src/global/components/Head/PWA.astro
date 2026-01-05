@@ -1,8 +1,19 @@
 ---
 export interface Props {
   version?: string
+  cacheMaxPages?: number
+  cacheTtlMinutes?: number
 }
-const { version = 'v1' } = Astro.props
+const {
+  version = 'v1',
+  cacheMaxPages = 4,
+  cacheTtlMinutes = 10,
+} = Astro.props
+
+const cacheConfig = {
+  maxPages: cacheMaxPages,
+  ttlMs: cacheTtlMinutes * 60 * 1000,
+}
 ---
 <link
     href={`/manifest.json?v=1${version}`}
@@ -12,14 +23,25 @@ const { version = 'v1' } = Astro.props
     content="#ffffff"
     name="msapplication-TileColor"
   />
-  
+
   <meta
     content="#ffffff"
     name="theme-color"
   />
-  <script>
-
-    // if ('serviceWorker' in navigator && import.meta.env.PROD) {
-    //   navigator.serviceWorker.register('service-worker.js');
-    // }
+  <script define:vars={{ cacheConfig }}>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => {
+          console.log('Service worker registered:', reg.scope)
+          // Send cache config to service worker
+          if (reg.active) {
+            reg.active.postMessage({ type: 'CACHE_CONFIG', ...cacheConfig })
+          }
+          // Also send when it becomes active
+          navigator.serviceWorker.ready.then(registration => {
+            registration.active?.postMessage({ type: 'CACHE_CONFIG', ...cacheConfig })
+          })
+        })
+        .catch(err => console.error('Service worker registration failed:', err));
+    }
   </script>

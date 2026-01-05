@@ -1,5 +1,8 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
 import { auth } from '@lib/auth'
+import { db } from '@db'
+import { users } from '@db/schema'
+import { eq } from 'drizzle-orm'
 
 // Auth middleware - only runs for server-rendered requests
 const authMiddleware = defineMiddleware(async (context, next) => {
@@ -19,6 +22,36 @@ const authMiddleware = defineMiddleware(async (context, next) => {
 
   context.locals.session = session?.session ?? null
   context.locals.user = session?.user ?? null
+
+  return next()
+})
+
+// Ban expiry check middleware - auto-unban users when ban expires
+const banCheckMiddleware = defineMiddleware(async (context, next) => {
+  if (context.isPrerendered) {
+    return next()
+  }
+
+  const user = context.locals.user as { id: string; banned?: boolean; banExpires?: Date } | null
+
+  // Check if user has an expired temporary ban
+  if (user?.banned && user.banExpires) {
+    const banExpiry = new Date(user.banExpires)
+    if (banExpiry <= new Date()) {
+      // Ban has expired, auto-unban
+      await db.update(users)
+        .set({
+          banned: false,
+          banReason: null,
+          banExpires: null,
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, user.id))
+
+      // Update local user state
+      user.banned = false
+    }
+  }
 
   return next()
 })
@@ -46,4 +79,4 @@ const adminMiddleware = defineMiddleware(async (context, next) => {
   return next()
 })
 
-export const onRequest = sequence(authMiddleware, adminMiddleware)
+export const onRequest = sequence(authMiddleware, banCheckMiddleware, adminMiddleware)

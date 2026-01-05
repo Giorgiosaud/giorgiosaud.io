@@ -1,0 +1,160 @@
+---
+import AdminLayout from '@components/admin/AdminLayout.astro'
+import { db } from '@db'
+import { eq, isNull, desc } from 'drizzle-orm'
+import { pushSubscriptions, comments, users } from '@db/schema'
+
+export const prerender = false
+
+// Get stats
+const [activeSubscriptions, totalComments, totalUsers, recentActivity] = await Promise.all([
+  db.query.pushSubscriptions.findMany({
+    where: eq(pushSubscriptions.isActive, true),
+  }),
+  db.query.comments.findMany({
+    where: isNull(comments.deletedAt),
+  }),
+  db.query.users.findMany(),
+  db.query.comments.findMany({
+    where: isNull(comments.deletedAt),
+    orderBy: [desc(comments.createdAt)],
+    limit: 5,
+    with: { author: true },
+  }),
+])
+
+const stats = {
+  subscribers: activeSubscriptions.length,
+  comments: totalComments.length,
+  users: totalUsers.length,
+}
+---
+
+<AdminLayout title="Overview" currentPage="dashboard">
+  <section class="stats-grid">
+    <a href="/admin/notifications" class="stat-card">
+      <span class="stat-value">{stats.subscribers}</span>
+      <span class="stat-label">Push Subscribers</span>
+    </a>
+    <a href="/admin/comments" class="stat-card">
+      <span class="stat-value">{stats.comments}</span>
+      <span class="stat-label">Comments</span>
+    </a>
+    <a href="/admin/users" class="stat-card">
+      <span class="stat-value">{stats.users}</span>
+      <span class="stat-label">Users</span>
+    </a>
+  </section>
+
+  <section class="recent-activity">
+    <h2>Recent Comments</h2>
+    {recentActivity.length === 0 ? (
+      <p class="empty">No comments yet.</p>
+    ) : (
+      <ul class="activity-list">
+        {recentActivity.map(comment => (
+          <li class="activity-item">
+            <div class="activity-header">
+              <strong>{comment.author?.name || 'Unknown'}</strong>
+              <span class="activity-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
+            </div>
+            <p class="activity-content">{comment.content.slice(0, 100)}{comment.content.length > 100 ? '...' : ''}</p>
+            <span class="activity-meta">on {comment.noteSelfHealing}</span>
+          </li>
+        ))}
+      </ul>
+    )}
+    <a href="/admin/comments" class="view-all">View all comments →</a>
+  </section>
+</AdminLayout>
+
+<style>
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: var(--color-surface, #f5f5f5);
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .stat-value {
+    display: block;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--color-main);
+  }
+
+  .stat-label {
+    color: var(--color-muted, #666);
+    font-size: 0.875rem;
+  }
+
+  .recent-activity h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .activity-item {
+    padding: 1rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .activity-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.25rem;
+  }
+
+  .activity-date {
+    color: var(--color-muted, #666);
+    font-size: 0.875rem;
+  }
+
+  .activity-content {
+    margin: 0.5rem 0;
+    color: var(--color-text, #333);
+  }
+
+  .activity-meta {
+    font-size: 0.75rem;
+    color: var(--color-muted, #666);
+  }
+
+  .empty {
+    color: var(--color-muted, #666);
+    font-style: italic;
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-main);
+    text-decoration: none;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
+  }
+</style>

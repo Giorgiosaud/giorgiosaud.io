@@ -119,10 +119,10 @@ Environment variables are defined in `astro.config.mjs` using Astro's `envField`
 
 **Client-side (public)**:
 - `TAG_MANAGER_ID` - Google Tag Manager ID (optional)
-- `RECAPTCHA_KEY` - reCAPTCHA site key (optional)
+- `TURNSTILE_SITE_KEY` - Cloudflare Turnstile site key for comments (optional)
 
 **Server-side (secret)**:
-- `RECAPTCHA_SECRET` - reCAPTCHA secret key (optional)
+- `TURNSTILE_SECRET_KEY` - Cloudflare Turnstile secret key (optional)
 - `RESEND_API_KEY` - Resend email API key (optional)
 
 **Server-side (public)**:

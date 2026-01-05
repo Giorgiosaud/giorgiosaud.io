@@ -1,11 +1,13 @@
 import { getTableName } from 'drizzle-orm'
 import { describe, expect, it } from 'vitest'
-import { accounts, sessions, users, verifications, passkeys } from '../../src/db/schema/auth'
-import { badges } from '../../src/db/schema/badges'
-import { comments } from '../../src/db/schema/comments'
-import { pushSubscriptions } from '../../src/db/schema/push-subscriptions'
-import { userBadges } from '../../src/db/schema/user-badges'
-import { userProfiles } from '../../src/db/schema/user-profiles'
+import { accounts, sessions, users, verifications, passkeys } from '@db/schema/auth'
+import { badges } from '@db/schema/badges'
+import { comments } from '@db/schema/comments'
+import { pushSubscriptions } from '@db/schema/push-subscriptions'
+import { userBadges } from '@db/schema/user-badges'
+import { userProfiles } from '@db/schema/user-profiles'
+import { postViews } from '@db/schema/post-views'
+import { consentRecords } from '@db/schema/consent-records'
 
 describe('Database Schema', () => {
   describe('Users table (Better Auth managed)', () => {
@@ -169,6 +171,53 @@ describe('Database Schema', () => {
       expect(columns).toContain('badgeSlug')
       expect(columns).toContain('earnedAt')
       expect(columns).toContain('isDisplayed')
+    })
+  })
+
+  describe('Post Views table', () => {
+    it('should have correct table name', () => {
+      expect(getTableName(postViews)).toBe('post_views')
+    })
+
+    it('should have required columns for scroll tracking', () => {
+      const columns = Object.keys(postViews)
+      expect(columns).toContain('id')
+      expect(columns).toContain('noteSelfHealing')
+      expect(columns).toContain('userId')
+      expect(columns).toContain('scrollDepth')
+      expect(columns).toContain('viewDuration')
+      expect(columns).toContain('language')
+    })
+
+    it('should have analytics columns', () => {
+      const columns = Object.keys(postViews)
+      expect(columns).toContain('referrer')
+      expect(columns).toContain('userAgent')
+      expect(columns).toContain('sessionId')
+      expect(columns).toContain('viewedAt')
+    })
+  })
+
+  describe('Consent Records table', () => {
+    it('should have correct table name', () => {
+      expect(getTableName(consentRecords)).toBe('consent_records')
+    })
+
+    it('should have required columns for GDPR compliance', () => {
+      const columns = Object.keys(consentRecords)
+      expect(columns).toContain('id')
+      expect(columns).toContain('sessionId')
+      expect(columns).toContain('ipHash')
+      expect(columns).toContain('consentAnalytics')
+      expect(columns).toContain('consentMarketing')
+      expect(columns).toContain('consentVersion')
+    })
+
+    it('should have audit columns', () => {
+      const columns = Object.keys(consentRecords)
+      expect(columns).toContain('actionType')
+      expect(columns).toContain('userAgent')
+      expect(columns).toContain('createdAt')
     })
   })
 })

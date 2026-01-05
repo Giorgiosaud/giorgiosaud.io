@@ -67,13 +67,13 @@ describe('Auth Store', () => {
 
 describe('Auth Components', () => {
   it('should export LoginButton component', async () => {
-    const components = await import('../../../src/components/auth')
+    const components = await import('@components/auth')
 
     expect(components.LoginButton).toBeDefined()
   })
 
   it('should export UserAvatar component', async () => {
-    const components = await import('../../../src/components/auth')
+    const components = await import('@components/auth')
 
     expect(components.UserAvatar).toBeDefined()
   })

@@ -1,19 +1,22 @@
 ---
-import { Picture } from 'astro:assets'
-import { getCollection, render } from 'astro:content'
-import AISummarizer from '@components/AISummarizer.astro'
-import NoteTemplate from '@templates/Note.astro'
-import '@global-styles/md.css'
+import { Picture } from "astro:assets";
+import { getCollection, render } from "astro:content";
+import AISummarizer from "@components/AISummarizer.astro";
+import { CommentsSection } from "@components/comments";
+import ScrollTracker from "@components/ScrollTracker.svelte";
+import NoteTemplate from "@templates/Note.astro";
+import { TURNSTILE_SITE_KEY } from "astro:env/client";
+import "@global-styles/md.css";
 export async function getStaticPaths() {
-  const pages = await getCollection('notes')
-  const pagesTranslated = await getCollection('notas')
-  return pages.map(page => {
+  const pages = await getCollection("notes");
+  const pagesTranslated = await getCollection("notas");
+  return pages.map((page) => {
     const pathToTranslateNote =
       pagesTranslated.find(
-        translatedPage =>
+        (translatedPage) =>
           translatedPage.data.selfHealing &&
-          translatedPage.data.selfHealing === page.data.selfHealing,
-      )?.id || ''
+          translatedPage.data.selfHealing === page.data.selfHealing
+      )?.id || "";
     return {
       params: {
         note: page.id,
@@ -22,102 +25,127 @@ export async function getStaticPaths() {
         page,
         pathToTranslateNote,
       },
-    }
-  })
+    };
+  });
 }
 
-const { page, pathToTranslateNote } = Astro.props
-const { Content } = await render(page)
+const { page, pathToTranslateNote } = Astro.props;
+const { Content } = await render(page);
 const { draft, title, publishDate, cover, coverAlt, description, selfHealing } =
-  page.data
-const imageName = `${page.id}-latest`
+  page.data;
+const imageName = `${page.id}-latest`;
 ---
+
 <NoteTemplate
-description={description}
-draft={draft}
-title={title}
-image={cover}
-publishedAt={publishDate}
-pathToTranslateNote={pathToTranslateNote}
-llmPath={`/notebook/${page.id}.md`}
+  description={description}
+  draft={draft}
+  title={title}
+  image={cover}
+  publishedAt={publishDate}
+  pathToTranslateNote={pathToTranslateNote}
+  llmPath={`/notebook/${page.id}.md`}
 >
-<figure>
-  {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
-  <figcaption>{coverAlt}</figcaption>
-</figure>
-<AISummarizer lang="en" />
-<div id="content">
-  <h1>{title}</h1>
-  <Content/>
-</div>
-<section class="share">
-  <p>Share this note:</p>
-  <p id="notification">Link copiado al portapapeles!</p>
-  <button id="share" class="button button-primary" popovertarget="#share-notification">Share</button>
-</section>
+  <ScrollTracker client:idle noteId={selfHealing} lang="en" threshold={0.5} />
+  <figure>
+    {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500} />}
+    <figcaption>{coverAlt}</figcaption>
+  </figure>
+  <AISummarizer lang="en" />
+  <div id="content">
+    <h1>{title}</h1>
+    <Content />
+  </div>
+  <section class="share">
+    <p>Share this note:</p>
+    <p id="notification">Link copiado al portapapeles!</p>
+    <button
+      id="share"
+      class="button button-primary"
+      popovertarget="#share-notification">Share</button
+    >
+  </section>
+  <div class="comments-wrapper">
+    <CommentsSection
+      client:visible
+      noteId={selfHealing}
+      lang="en"
+      turnstileSiteKey={TURNSTILE_SITE_KEY}
+    />
+  </div>
 </NoteTemplate>
-<script define:vars={{selfHealing}}>
-  notification = document.getElementById('notification');
-  
-  const shareButton = document.getElementById('share');
+<script define:vars={{ selfHealing, title }}>
+  // Track note view with gtag
+  if (typeof gtag === 'function') {
+    gtag('event', 'note_view', {
+      'event_category': 'content',
+      'event_label': title,
+      'note_id': selfHealing,
+      'page_title': title,
+      'language': 'en'
+    });
+  }
+
+  notification = document.getElementById("notification");
+
+  const shareButton = document.getElementById("share");
   const urlToShare = `${window.location.href}-${selfHealing}`;
-  const copyLink = async (link)=>{
+  const copyLink = async (link) => {
     if (navigator.clipboard) {
       try {
         await navigator.clipboard.writeText(link);
-        notification.style.display = 'block';
+        notification.style.display = "block";
         setTimeout(() => {
-          notification.style.display = 'none';
+          notification.style.display = "none";
         }, 2000);
-        console.log('Link copied to clipboard');
+        console.log("Link copied to clipboard");
       } catch (err) {
-        console.error('Failed to copy link: ', err);
-        throw err
+        console.error("Failed to copy link: ", err);
+        throw err;
       }
+    } else {
+      console.log("Clipboard API not supported");
+      throw new Error("Clipboard API not supported");
     }
-    else{
-      console.log('Clipboard API not supported');
-      throw new Error('Clipboard API not supported');
-    }
-  }
-  const shareViaShareApi=async ({title, text, url})=>{
+  };
+  const shareViaShareApi = async ({ title, text, url }) => {
     if (navigator.share) {
-      try{
-        await navigator.share({title, text, url});
-        console.log('Successful share');
+      try {
+        await navigator.share({ title, text, url });
+        console.log("Successful share");
       } catch (error) {
-        console.error('Error sharing:', error);
-        throw error
+        console.error("Error sharing:", error);
+        throw error;
       }
+    } else {
+      console.log("Share API not supported");
+      throw new Error("Share API not supported");
     }
-    else{
-      console.log('Share API not supported');
-      throw new Error('Share API not supported');
-    }
-  }
-  
+  };
+
   const shareContent = async () => {
     const shareData = {
-      title: document.querySelector('h1').textContent,
+      title: document.querySelector("h1").textContent,
       text: document.querySelector('meta[name="description"]').content,
       url: urlToShare,
     };
-    try{
+    try {
       await shareViaShareApi(shareData);
     } catch (error) {
       try {
         // Fallback to copying the link if Share API fails
         await copyLink(shareData.url);
       } catch (error) {
-        console.error('Error copying link:', error);
+        console.error("Error copying link:", error);
       }
     }
   };
-  shareButton.addEventListener('click', shareContent);
-  
+  shareButton.addEventListener("click", shareContent);
 </script>
-<style >
-  #share{
+<style>
+  .comments-wrapper {
+    grid-column: content;
+  }
+  #share {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,8 +154,8 @@ llmPath={`/notebook/${page.id}.md`}
     color: light-dark(var(--color-light), var(--color-dark));
     anchor-name: --share-button;
   }
-  #notification{
-    display:none;
+  #notification {
+    display: none;
     position: fixed;
     right: 10px;
     background-color: var(--color-main);

@@ -5,6 +5,7 @@ import svelte from '@astrojs/svelte'
 import vercel from '@astrojs/vercel'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
+import { fileURLToPath } from 'node:url'
 
 // https://astro.build/config
 export default defineConfig({
@@ -18,6 +19,12 @@ export default defineConfig({
   ],
 
   vite: {
+    resolve: {
+      alias: {
+        '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
+        '@db': fileURLToPath(new URL('./src/db', import.meta.url)),
+      },
+    },
     css: {
       transformer: 'lightningcss',
       lightningcss: {
@@ -106,16 +113,16 @@ export default defineConfig({
         optional: true,
       }),
 
-      // reCAPTCHA
-      RECAPTCHA_KEY: envField.string({
+      // Cloudflare Turnstile (bot protection for comments - required)
+      TURNSTILE_SITE_KEY: envField.string({
         context: 'client',
         access: 'public',
-        optional: true,
+        optional: false,
       }),
-      RECAPTCHA_SECRET: envField.string({
+      TURNSTILE_SECRET_KEY: envField.string({
         context: 'server',
         access: 'secret',
-        optional: true,
+        optional: false,
       }),
 
       // Email (Resend)
@@ -141,6 +148,24 @@ export default defineConfig({
         access: 'public',
         optional: true,
         default: 'Notebook',
+      }),
+
+      // Web Push (VAPID keys - generate with: npx web-push generate-vapid-keys)
+      VAPID_PUBLIC_KEY: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+      }),
+      VAPID_PRIVATE_KEY: envField.string({
+        context: 'server',
+        access: 'secret',
+        optional: true,
+      }),
+      VAPID_SUBJECT: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: 'mailto:jorgelsaud@gmail.com',
       }),
     },
   },

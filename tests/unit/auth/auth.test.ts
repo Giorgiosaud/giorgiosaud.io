@@ -66,7 +66,7 @@ describe('Auth Configuration', () => {
     it('should export auth client methods', async () => {
       // Import after mocks are set up
       const { authClient, signIn, signOut, getSession } = await import(
-        '../../src/lib/auth-client'
+        '@lib/auth-client'
       )
 
       expect(authClient).toBeDefined()
