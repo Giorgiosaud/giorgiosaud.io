@@ -1,43 +1,218 @@
 ---
 import AdminLayout from '@components/admin/AdminLayout.astro'
 import { db } from '@db'
-import { isNull, desc } from 'drizzle-orm'
+import { isNull, desc, eq, like, and, or, sql } from 'drizzle-orm'
 import { comments } from '@db/schema'
+import { getCollection } from 'astro:content'
 
 export const prerender = false
 
+// Get notes to map selfHealing codes to titles
+const notesEn = await getCollection('notes')
+const notesEs = await getCollection('notas')
+const notesMap = new Map<string, { title: string; slug: string; lang: string }>()
+
+for (const note of notesEn) {
+  if (note.data.selfHealing) {
+    notesMap.set(note.data.selfHealing, { title: note.data.title, slug: note.id, lang: 'en' })
+  }
+}
+for (const note of notesEs) {
+  if (note.data.selfHealing && !notesMap.has(note.data.selfHealing)) {
+    notesMap.set(note.data.selfHealing, { title: note.data.title, slug: note.id, lang: 'es' })
+  }
+}
+
+// Get filter params
+const url = new URL(Astro.request.url)
+const filterPost = url.searchParams.get('post') || ''
+const filterStatus = url.searchParams.get('status') || 'all'
+const searchQuery = url.searchParams.get('q') || ''
+const page = parseInt(url.searchParams.get('page') || '1')
+const limit = 20
+
+// Build where conditions
+const conditions = [isNull(comments.deletedAt)]
+
+if (filterPost) {
+  conditions.push(eq(comments.noteSelfHealing, filterPost))
+}
+
+if (filterStatus === 'approved') {
+  conditions.push(eq(comments.isApproved, true))
+} else if (filterStatus === 'pending') {
+  conditions.push(eq(comments.isApproved, false))
+}
+
+if (searchQuery) {
+  conditions.push(like(comments.content, `%${searchQuery}%`))
+}
+
+// Get total count for pagination
+const [{ count: totalCount }] = await db
+  .select({ count: sql<number>`count(*)::int` })
+  .from(comments)
+  .where(and(...conditions))
+
+const totalPages = Math.ceil(totalCount / limit)
+const offset = (page - 1) * limit
+
+// Get comments with pagination
 const allComments = await db.query.comments.findMany({
-  where: isNull(comments.deletedAt),
+  where: and(...conditions),
   orderBy: [desc(comments.createdAt)],
-  limit: 50,
+  limit,
+  offset,
   with: { author: true },
 })
+
+// Get unique posts for filter dropdown
+const uniquePosts = await db
+  .selectDistinct({ noteSelfHealing: comments.noteSelfHealing })
+  .from(comments)
+  .where(isNull(comments.deletedAt))
+  .orderBy(comments.noteSelfHealing)
+
+// Stats
+const [stats] = await db
+  .select({
+    total: sql<number>`count(*)::int`,
+    approved: sql<number>`count(*) filter (where is_approved = true)::int`,
+    pending: sql<number>`count(*) filter (where is_approved = false)::int`,
+  })
+  .from(comments)
+  .where(isNull(comments.deletedAt))
 ---
 
 <AdminLayout title="Comments" currentPage="comments">
   <section class="comments-section">
     <header class="section-header">
-      <h2>Comments ({allComments.length})</h2>
+      <h2>Comments Management</h2>
+      <div class="stats">
+        <span class="stat">Total: <strong>{stats.total}</strong></span>
+        <span class="stat approved">Approved: <strong>{stats.approved}</strong></span>
+        <span class="stat pending">Pending: <strong>{stats.pending}</strong></span>
+      </div>
     </header>
 
+    <!-- Filters -->
+    <form class="filters" method="GET">
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="search">Search</label>
+          <input
+            type="search"
+            id="search"
+            name="q"
+            placeholder="Search comments..."
+            value={searchQuery}
+          />
+        </div>
+
+        <div class="filter-group">
+          <label for="post">Post</label>
+          <select id="post" name="post">
+            <option value="">All posts</option>
+            {uniquePosts.map(p => {
+              const noteInfo = notesMap.get(p.noteSelfHealing)
+              return (
+                <option value={p.noteSelfHealing} selected={filterPost === p.noteSelfHealing}>
+                  {noteInfo?.title || p.noteSelfHealing}
+                </option>
+              )
+            })}
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="status">Status</label>
+          <select id="status" name="status">
+            <option value="all" selected={filterStatus === 'all'}>All</option>
+            <option value="approved" selected={filterStatus === 'approved'}>Approved</option>
+            <option value="pending" selected={filterStatus === 'pending'}>Pending</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn-filter">Filter</button>
+        {(filterPost || filterStatus !== 'all' || searchQuery) && (
+          <a href="/admin/comments" class="btn-clear">Clear</a>
+        )}
+      </div>
+    </form>
+
+    <!-- Results info -->
+    <p class="results-info">
+      Showing {allComments.length} of {totalCount} comments
+      {searchQuery && <span> matching "{searchQuery}"</span>}
+    </p>
+
     {allComments.length === 0 ? (
-      <p class="empty">No comments yet.</p>
+      <p class="empty">No comments found.</p>
     ) : (
       <ul class="comment-list">
         {allComments.map(comment => (
-          <li class="comment-item" data-id={comment.id}>
+          <li class="comment-item" data-id={comment.id} data-approved={comment.isApproved}>
             <div class="comment-header">
               <div class="comment-author">
-                <strong>{comment.author?.name || 'Unknown'}</strong>
+                <div class="author-row">
+                  {comment.author?.image && (
+                    <img src={comment.author.image} alt="" class="author-avatar" />
+                  )}
+                  <strong>{comment.author?.name || 'Unknown'}</strong>
+                  <span class={`status-badge ${comment.isApproved ? 'approved' : 'pending'}`}>
+                    {comment.isApproved ? 'Approved' : 'Pending'}
+                  </span>
+                </div>
                 <span class="comment-email">{comment.author?.email}</span>
               </div>
-              <span class="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
+              <div class="comment-meta-right">
+                <span class="comment-date">{new Date(comment.createdAt).toLocaleString()}</span>
+                {comment.depth > 0 && <span class="reply-badge">Reply (depth: {comment.depth})</span>}
+              </div>
             </div>
+
             <p class="comment-content">{comment.content}</p>
+
             <div class="comment-footer">
-              <span class="comment-meta">Post: {comment.noteSelfHealing}</span>
+              {(() => {
+                const noteInfo = notesMap.get(comment.noteSelfHealing)
+                const href = noteInfo
+                  ? (noteInfo.lang === 'en' ? `/notebook/${noteInfo.slug}` : `/es/cuaderno/${noteInfo.slug}`)
+                  : `/notebook/${comment.noteSelfHealing}`
+                return (
+                  <a
+                    href={href}
+                    target="_blank"
+                    class="post-link"
+                    title={noteInfo?.title || comment.noteSelfHealing}
+                  >
+                    📝 {noteInfo?.title || comment.noteSelfHealing}
+                  </a>
+                )
+              })()}
               <div class="comment-actions">
-                <button type="button" class="btn-small btn-danger" onclick={`deleteComment('${comment.id}')`}>
+                {comment.isApproved ? (
+                  <button
+                    type="button"
+                    class="btn-small btn-warning"
+                    onclick={`toggleApproval('${comment.id}', false)`}
+                  >
+                    Unapprove
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    class="btn-small btn-success"
+                    onclick={`toggleApproval('${comment.id}', true)`}
+                  >
+                    Approve
+                  </button>
+                )}
+                <button
+                  type="button"
+                  class="btn-small btn-danger"
+                  onclick={`deleteComment('${comment.id}')`}
+                >
                   Delete
                 </button>
               </div>
@@ -47,26 +222,116 @@ const allComments = await db.query.comments.findMany({
       </ul>
     )}
 
+    <!-- Pagination -->
+    {totalPages > 1 && (
+      <nav class="pagination">
+        {page > 1 && (
+          <a href={`?page=${page - 1}&post=${filterPost}&status=${filterStatus}&q=${searchQuery}`} class="page-link">
+            ← Previous
+          </a>
+        )}
+        <span class="page-info">Page {page} of {totalPages}</span>
+        {page < totalPages && (
+          <a href={`?page=${page + 1}&post=${filterPost}&status=${filterStatus}&q=${searchQuery}`} class="page-link">
+            Next →
+          </a>
+        )}
+      </nav>
+    )}
+
     <div id="result" class="result" hidden></div>
   </section>
+
+  <!-- Delete confirmation dialog -->
+  <dialog id="delete-dialog">
+    <form method="dialog">
+      <h3>Delete Comment</h3>
+      <p>Are you sure you want to delete this comment? This action cannot be undone.</p>
+      <div class="dialog-actions">
+        <button type="button" class="btn-secondary" onclick="document.getElementById('delete-dialog').close()">
+          Cancel
+        </button>
+        <button type="submit" class="btn-danger" id="confirm-delete">
+          Delete
+        </button>
+      </div>
+    </form>
+  </dialog>
 </AdminLayout>
 
 <script>
-  window.deleteComment = async (id: string) => {
-    if (!confirm('Delete this comment?')) return
+  let pendingDeleteId: string | null = null
+  const deleteDialog = document.getElementById('delete-dialog') as HTMLDialogElement
+  const confirmDeleteBtn = document.getElementById('confirm-delete') as HTMLButtonElement
 
+  window.deleteComment = (id: string) => {
+    pendingDeleteId = id
+    deleteDialog.showModal()
+  }
+
+  confirmDeleteBtn.addEventListener('click', async (e) => {
+    e.preventDefault()
+    if (!pendingDeleteId) return
+
+    const id = pendingDeleteId
     const result = document.getElementById('result') as HTMLDivElement
 
     try {
       const response = await fetch(`/api/admin/comments/${id}.json`, { method: 'DELETE' })
       const data = await response.json()
 
+      deleteDialog.close()
       result.hidden = false
       result.className = response.ok ? 'result success' : 'result error'
       result.textContent = response.ok ? 'Comment deleted' : (data.error || 'Failed to delete')
 
       if (response.ok) {
         document.querySelector(`.comment-item[data-id="${id}"]`)?.remove()
+      }
+    } catch {
+      deleteDialog.close()
+      result.hidden = false
+      result.className = 'result error'
+      result.textContent = 'Network error'
+    }
+
+    pendingDeleteId = null
+  })
+
+  window.toggleApproval = async (id: string, approve: boolean) => {
+    const result = document.getElementById('result') as HTMLDivElement
+
+    try {
+      const response = await fetch(`/api/admin/comments/${id}.json`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isApproved: approve }),
+      })
+      const data = await response.json()
+
+      result.hidden = false
+      result.className = response.ok ? 'result success' : 'result error'
+      result.textContent = response.ok
+        ? `Comment ${approve ? 'approved' : 'unapproved'}`
+        : (data.error || 'Failed to update')
+
+      if (response.ok) {
+        // Update UI
+        const item = document.querySelector(`.comment-item[data-id="${id}"]`) as HTMLElement
+        if (item) {
+          item.dataset.approved = String(approve)
+          const badge = item.querySelector('.status-badge') as HTMLElement
+          badge.textContent = approve ? 'Approved' : 'Pending'
+          badge.className = `status-badge ${approve ? 'approved' : 'pending'}`
+
+          // Swap buttons
+          const actions = item.querySelector('.comment-actions') as HTMLElement
+          const approveBtn = approve
+            ? `<button type="button" class="btn-small btn-warning" onclick="toggleApproval('${id}', false)">Unapprove</button>`
+            : `<button type="button" class="btn-small btn-success" onclick="toggleApproval('${id}', true)">Approve</button>`
+          const deleteBtn = `<button type="button" class="btn-small btn-danger" onclick="deleteComment('${id}')">Delete</button>`
+          actions.innerHTML = approveBtn + deleteBtn
+        }
       }
     } catch {
       result.hidden = false
@@ -77,7 +342,8 @@ const allComments = await db.query.comments.findMany({
 
   declare global {
     interface Window {
-      deleteComment: (id: string) => Promise<void>
+      deleteComment: (id: string) => void
+      toggleApproval: (id: string, approve: boolean) => Promise<void>
     }
   }
 </script>
@@ -87,19 +353,105 @@ const allComments = await db.query.comments.findMany({
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
   h2 {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     margin: 0;
+  }
+
+  .stats {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .stat {
+    font-size: 0.875rem;
+    color: var(--color-muted, #666);
+  }
+
+  .stat.approved strong {
+    color: var(--color-success, #10b981);
+  }
+
+  .stat.pending strong {
+    color: var(--color-warning, #f59e0b);
+  }
+
+  /* Filters */
+  .filters {
+    background: var(--color-surface-alt, #f5f5f5);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .filter-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .filter-group label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-muted, #666);
+  }
+
+  .filter-group input,
+  .filter-group select {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 4px;
+    font-size: 0.875rem;
+    min-width: 150px;
+  }
+
+  .btn-filter {
+    padding: 0.5rem 1rem;
+    background: var(--color-main);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+  }
+
+  .btn-clear {
+    padding: 0.5rem 1rem;
+    color: var(--color-muted, #666);
+    text-decoration: none;
+    font-size: 0.875rem;
+  }
+
+  .btn-clear:hover {
+    text-decoration: underline;
+  }
+
+  .results-info {
+    font-size: 0.875rem;
+    color: var(--color-muted, #666);
+    margin-bottom: 1rem;
   }
 
   .empty {
     color: var(--color-muted, #666);
     font-style: italic;
+    text-align: center;
+    padding: 2rem;
   }
 
+  /* Comment list */
   .comment-list {
     list-style: none;
     padding: 0;
@@ -111,6 +463,15 @@ const allComments = await db.query.comments.findMany({
     border: 1px solid var(--color-border, #ddd);
     border-radius: 8px;
     margin-bottom: 0.75rem;
+    transition: border-color 0.2s;
+  }
+
+  .comment-item[data-approved="false"] {
+    border-left: 3px solid var(--color-warning, #f59e0b);
+  }
+
+  .comment-item[data-approved="true"] {
+    border-left: 3px solid var(--color-success, #10b981);
   }
 
   .comment-header {
@@ -118,6 +479,7 @@ const allComments = await db.query.comments.findMany({
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 0.5rem;
+    gap: 1rem;
   }
 
   .comment-author {
@@ -125,9 +487,46 @@ const allComments = await db.query.comments.findMany({
     flex-direction: column;
   }
 
+  .author-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .author-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+
+  .status-badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .status-badge.approved {
+    background: var(--color-success, #10b981);
+    color: white;
+  }
+
+  .status-badge.pending {
+    background: var(--color-warning, #f59e0b);
+    color: white;
+  }
+
   .comment-email {
     font-size: 0.75rem;
     color: var(--color-muted, #666);
+  }
+
+  .comment-meta-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
   }
 
   .comment-date {
@@ -135,20 +534,38 @@ const allComments = await db.query.comments.findMany({
     color: var(--color-muted, #666);
   }
 
+  .reply-badge {
+    font-size: 0.625rem;
+    padding: 0.125rem 0.5rem;
+    background: var(--color-surface-alt, #e5e5e5);
+    border-radius: 4px;
+    color: var(--color-muted, #666);
+  }
+
   .comment-content {
     margin: 0.75rem 0;
     line-height: 1.5;
+    padding: 0.75rem;
+    background: var(--color-surface-alt, #f9f9f9);
+    border-radius: 4px;
   }
 
   .comment-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
 
-  .comment-meta {
+  .post-link {
     font-size: 0.75rem;
-    color: var(--color-muted, #666);
+    color: var(--color-main);
+    text-decoration: none;
+  }
+
+  .post-link:hover {
+    text-decoration: underline;
   }
 
   .comment-actions {
@@ -164,15 +581,62 @@ const allComments = await db.query.comments.findMany({
     cursor: pointer;
   }
 
+  .btn-success {
+    background: var(--color-success, #10b981);
+    color: white;
+  }
+
+  .btn-warning {
+    background: var(--color-warning, #f59e0b);
+    color: white;
+  }
+
   .btn-danger {
     background: var(--color-error, #ef4444);
     color: white;
   }
 
-  .btn-danger:hover {
+  .btn-secondary {
+    background: var(--color-surface-alt, #e5e5e5);
+    color: var(--color-text, #333);
+  }
+
+  .btn-small:hover,
+  .btn-danger:hover,
+  .btn-secondary:hover {
     opacity: 0.9;
   }
 
+  /* Pagination */
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border, #ddd);
+  }
+
+  .page-link {
+    padding: 0.5rem 1rem;
+    background: var(--color-main);
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+  }
+
+  .page-link:hover {
+    opacity: 0.9;
+  }
+
+  .page-info {
+    font-size: 0.875rem;
+    color: var(--color-muted, #666);
+  }
+
+  /* Result message */
   .result {
     margin-top: 1rem;
     padding: 0.75rem;
@@ -188,5 +652,69 @@ const allComments = await db.query.comments.findMany({
   .result.error {
     background: var(--color-error, #ef4444);
     color: white;
+  }
+
+  /* Dialog */
+  dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  dialog h3 {
+    margin: 0 0 0.5rem;
+  }
+
+  dialog p {
+    color: var(--color-muted, #666);
+    margin-bottom: 1.5rem;
+  }
+
+  .dialog-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+  }
+
+  .dialog-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .filter-row {
+      flex-direction: column;
+    }
+
+    .filter-group input,
+    .filter-group select {
+      width: 100%;
+    }
+
+    .comment-header {
+      flex-direction: column;
+    }
+
+    .comment-meta-right {
+      align-items: flex-start;
+    }
+
+    .comment-footer {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>

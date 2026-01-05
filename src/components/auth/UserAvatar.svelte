@@ -79,11 +79,32 @@
       : '?'
   )
 
+  // Push user data to dataLayer when authenticated
+  function pushUserToDataLayer(userData: User | null, authenticated: boolean, admin: boolean) {
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({
+        event: 'user_state_update',
+        user_logged_in: authenticated,
+        user_role: admin ? 'admin' : (authenticated ? 'user' : 'guest'),
+        user_id: userData?.id || null,
+      })
+    }
+  }
+
   onMount(async () => {
     initAuthState()
 
+    let lastAuthState = false
     const unsub1 = userStore.subscribe(v => user = v)
-    const unsub2 = isAuthenticatedStore.subscribe(v => isAuthenticated = v)
+    const unsub2 = isAuthenticatedStore.subscribe(v => {
+      isAuthenticated = v
+      // Push to dataLayer when auth state changes (login/logout)
+      if (v !== lastAuthState) {
+        lastAuthState = v
+        // Small delay to ensure user data is available
+        setTimeout(() => pushUserToDataLayer(user, v, isAdmin), 100)
+      }
+    })
     const unsub3 = isLoadingStore.subscribe(v => isLoading = v)
     const unsub4 = isAdminStore.subscribe(v => isAdmin = v)
     const unsub5 = authErrorStore.subscribe(v => authError = v)

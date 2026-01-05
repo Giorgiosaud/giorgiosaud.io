@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
 
   const CONSENT_KEY = 'cookie_consent'
+  const CONSENT_SESSION_KEY = 'consent_session_id'
   const CONSENT_VERSION = '1' // Bump this to re-ask consent
 
   type ConsentState = {
@@ -12,6 +13,8 @@
     timestamp: number
   }
 
+  type ActionType = 'accept_all' | 'reject_all' | 'custom'
+
   let showBanner = $state(false)
   let showSettings = $state(false)
   let consent = $state<ConsentState>({
@@ -21,6 +24,36 @@
     version: CONSENT_VERSION,
     timestamp: 0,
   })
+
+  // Get or create session ID for consent tracking
+  function getSessionId(): string {
+    let sessionId = localStorage.getItem(CONSENT_SESSION_KEY)
+    if (!sessionId) {
+      sessionId = crypto.randomUUID()
+      localStorage.setItem(CONSENT_SESSION_KEY, sessionId)
+    }
+    return sessionId
+  }
+
+  // Record consent to server for GDPR audit trail
+  async function recordConsentToServer(state: ConsentState, actionType: ActionType) {
+    try {
+      await fetch('/api/consent/record.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: getSessionId(),
+          analytics: state.analytics,
+          marketing: state.marketing,
+          version: state.version,
+          actionType,
+        }),
+      })
+    } catch (error) {
+      // Silent fail - don't block user experience
+      console.error('Failed to record consent:', error)
+    }
+  }
 
   onMount(() => {
     const stored = localStorage.getItem(CONSENT_KEY)
@@ -63,10 +96,12 @@
     }
   }
 
-  function saveConsent(state: ConsentState) {
+  function saveConsent(state: ConsentState, actionType: ActionType) {
     state.timestamp = Date.now()
     localStorage.setItem(CONSENT_KEY, JSON.stringify(state))
     applyConsent(state)
+    // Record to server for GDPR compliance (async, non-blocking)
+    recordConsentToServer(state, actionType)
     showBanner = false
     showSettings = false
   }
@@ -76,7 +111,7 @@
       ...consent,
       analytics: true,
       marketing: true,
-    })
+    }, 'accept_all')
   }
 
   function rejectAll() {
@@ -84,11 +119,11 @@
       ...consent,
       analytics: false,
       marketing: false,
-    })
+    }, 'reject_all')
   }
 
   function saveCustom() {
-    saveConsent(consent)
+    saveConsent(consent, 'custom')
   }
 
   // Declare global types

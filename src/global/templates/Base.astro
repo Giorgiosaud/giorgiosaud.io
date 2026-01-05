@@ -24,10 +24,6 @@ const {
   pathToTranslate = 'home',
 } = Astro.props
 
-// Get user for dataLayer (may be null if not logged in or prerendered)
-const user = Astro.locals?.user as { id: string; name: string; role?: string } | null
-const isLoggedIn = !!user
-const userRole = user?.role || 'guest'
 ---
 
 <!doctype html>
@@ -37,13 +33,9 @@ const userRole = user?.role || 'guest'
     description={description}
   >
     <slot name="head"/>
-    <script define:vars={{ isLoggedIn, userRole, userId: user?.id }}>
+    <script>
+      // Initialize dataLayer for GTM - user state is pushed client-side by UserAvatar component
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({
-        'user_logged_in': isLoggedIn,
-        'user_role': userRole,
-        'user_id': userId || null
-      });
     </script>
   </Head>
 

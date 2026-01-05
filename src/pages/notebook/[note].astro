@@ -3,6 +3,7 @@ import { Picture } from "astro:assets";
 import { getCollection, render } from "astro:content";
 import AISummarizer from "@components/AISummarizer.astro";
 import { CommentsSection } from "@components/comments";
+import ScrollTracker from "@components/ScrollTracker.svelte";
 import NoteTemplate from "@templates/Note.astro";
 import { TURNSTILE_SITE_KEY } from "astro:env/client";
 import "@global-styles/md.css";
@@ -44,6 +45,7 @@ const imageName = `${page.id}-latest`;
   pathToTranslateNote={pathToTranslateNote}
   llmPath={`/notebook/${page.id}.md`}
 >
+  <ScrollTracker client:idle noteId={selfHealing} lang="en" threshold={0.5} />
   <figure>
     {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500} />}
     <figcaption>{coverAlt}</figcaption>
