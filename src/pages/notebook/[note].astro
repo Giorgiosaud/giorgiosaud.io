@@ -71,7 +71,18 @@ const imageName = `${page.id}-latest`;
     />
   </div>
 </NoteTemplate>
-<script define:vars={{ selfHealing }}>
+<script define:vars={{ selfHealing, title }}>
+  // Track note view with gtag
+  if (typeof gtag === 'function') {
+    gtag('event', 'note_view', {
+      'event_category': 'content',
+      'event_label': title,
+      'note_id': selfHealing,
+      'page_title': title,
+      'language': 'en'
+    });
+  }
+
   notification = document.getElementById("notification");
 
   const shareButton = document.getElementById("share");
