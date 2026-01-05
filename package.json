@@ -15,7 +15,7 @@
     "db:push": "drizzle-kit push",
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
-    "auth:generate": "bunx @better-auth/cli generate",
+    "auth:generate": "yes | bunx @better-auth/cli generate --config auth.config.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

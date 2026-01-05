@@ -33,6 +33,12 @@ describe('Database Schema', () => {
       expect(columns).toContain('banReason')
       expect(columns).toContain('banExpires')
     })
+
+    it('should have username plugin columns', () => {
+      const columns = Object.keys(users)
+      expect(columns).toContain('username')
+      expect(columns).toContain('displayUsername')
+    })
   })
 
   describe('Sessions table (Better Auth managed)', () => {

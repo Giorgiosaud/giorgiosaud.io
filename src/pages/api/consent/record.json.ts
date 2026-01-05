@@ -1,6 +1,6 @@
-import type { APIRoute } from 'astro'
 import { db } from '@db'
 import { consentRecords } from '@db/schema'
+import type { APIRoute } from 'astro'
 
 export const prerender = false
 
@@ -43,15 +43,43 @@ export const POST: APIRoute = async ({ request }) => {
 
     // Validate required fields
     if (!sessionId || typeof sessionId !== 'string') {
-      return Response.json({ error: 'Session ID required' }, { status: 400 })
+      return Response.json(
+        {
+          error: 'Session ID required',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     if (!version || typeof version !== 'string') {
-      return Response.json({ error: 'Consent version required' }, { status: 400 })
+      return Response.json(
+        {
+          error: 'Consent version required',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
-    if (!actionType || !['accept_all', 'reject_all', 'custom'].includes(actionType)) {
-      return Response.json({ error: 'Valid action type required' }, { status: 400 })
+    if (
+      !actionType ||
+      ![
+        'accept_all',
+        'reject_all',
+        'custom',
+      ].includes(actionType)
+    ) {
+      return Response.json(
+        {
+          error: 'Valid action type required',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     // Get and hash IP
@@ -69,9 +97,23 @@ export const POST: APIRoute = async ({ request }) => {
       userAgent: request.headers.get('user-agent') || null,
     })
 
-    return Response.json({ success: true }, { status: 201 })
+    return Response.json(
+      {
+        success: true,
+      },
+      {
+        status: 201,
+      },
+    )
   } catch (error) {
     console.error('Failed to record consent:', error)
-    return Response.json({ error: 'Failed to record consent' }, { status: 500 })
+    return Response.json(
+      {
+        error: 'Failed to record consent',
+      },
+      {
+        status: 500,
+      },
+    )
   }
 }

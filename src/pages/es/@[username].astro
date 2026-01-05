@@ -1,0 +1,74 @@
+---
+import PublicProfile from '@components/profile/PublicProfile.astro'
+import Base from '@templates/Base.astro'
+
+export const prerender = false
+
+const { username } = Astro.params
+
+// Redirect if no username
+if (!username) {
+  return Astro.redirect('/es')
+}
+
+// Fetch profile data
+let profileData = null
+let error = null
+
+try {
+  const res = await fetch(
+    new URL(`/api/users/${username}.json`, Astro.url.origin),
+  )
+  const data = await res.json()
+
+  if (res.ok) {
+    profileData = data
+  } else {
+    error = data.error || 'Usuario no encontrado'
+  }
+} catch (err) {
+  console.error('Failed to fetch profile:', err)
+  error = 'Error al cargar perfil'
+}
+
+// 404 if user not found
+if (error === 'User not found' || error === 'Usuario no encontrado') {
+  return Astro.redirect('/es/404')
+}
+---
+
+<Base title={profileData ? `@${profileData.user.username}` : 'Perfil'} pathToTranslate="home">
+  {error ? (
+    <div class="error-container">
+      <h1>Error</h1>
+      <p>{error}</p>
+      <a href="/es">Ir al inicio</a>
+    </div>
+  ) : profileData && (
+    <PublicProfile
+      user={profileData.user}
+      profile={profileData.profile}
+      badges={profileData.badges}
+      recentComments={profileData.recentComments}
+      lang="es"
+    />
+  )}
+</Base>
+
+<style>
+  .error-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  .error-container h1 {
+    color: hsl(0 70% 50%);
+    margin-bottom: 1rem;
+  }
+
+  .error-container a {
+    color: var(--color-main);
+  }
+</style>

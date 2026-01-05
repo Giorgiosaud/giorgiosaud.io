@@ -1,27 +1,32 @@
 ---
 import AdminLayout from '@components/admin/AdminLayout.astro'
 import { db } from '@db'
-import { eq, isNull, desc } from 'drizzle-orm'
-import { pushSubscriptions, comments, users } from '@db/schema'
+import { comments, pushSubscriptions, users } from '@db/schema'
+import { desc, eq, isNull } from 'drizzle-orm'
 
 export const prerender = false
 
 // Get stats
-const [activeSubscriptions, totalComments, totalUsers, recentActivity] = await Promise.all([
-  db.query.pushSubscriptions.findMany({
-    where: eq(pushSubscriptions.isActive, true),
-  }),
-  db.query.comments.findMany({
-    where: isNull(comments.deletedAt),
-  }),
-  db.query.users.findMany(),
-  db.query.comments.findMany({
-    where: isNull(comments.deletedAt),
-    orderBy: [desc(comments.createdAt)],
-    limit: 5,
-    with: { author: true },
-  }),
-])
+const [activeSubscriptions, totalComments, totalUsers, recentActivity] =
+  await Promise.all([
+    db.query.pushSubscriptions.findMany({
+      where: eq(pushSubscriptions.isActive, true),
+    }),
+    db.query.comments.findMany({
+      where: isNull(comments.deletedAt),
+    }),
+    db.query.users.findMany(),
+    db.query.comments.findMany({
+      where: isNull(comments.deletedAt),
+      orderBy: [
+        desc(comments.createdAt),
+      ],
+      limit: 5,
+      with: {
+        author: true,
+      },
+    }),
+  ])
 
 const stats = {
   subscribers: activeSubscriptions.length,

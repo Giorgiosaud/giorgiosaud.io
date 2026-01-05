@@ -1,7 +1,7 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
-import { auth } from '@lib/auth'
 import { db } from '@db'
 import { users } from '@db/schema'
+import { auth } from '@lib/auth'
 import { eq } from 'drizzle-orm'
 
 // Auth middleware - only runs for server-rendered requests
@@ -32,14 +32,19 @@ const banCheckMiddleware = defineMiddleware(async (context, next) => {
     return next()
   }
 
-  const user = context.locals.user as { id: string; banned?: boolean; banExpires?: Date } | null
+  const user = context.locals.user as {
+    id: string
+    banned?: boolean
+    banExpires?: Date
+  } | null
 
   // Check if user has an expired temporary ban
   if (user?.banned && user.banExpires) {
     const banExpiry = new Date(user.banExpires)
     if (banExpiry <= new Date()) {
       // Ban has expired, auto-unban
-      await db.update(users)
+      await db
+        .update(users)
         .set({
           banned: false,
           banReason: null,
@@ -79,4 +84,28 @@ const adminMiddleware = defineMiddleware(async (context, next) => {
   return next()
 })
 
-export const onRequest = sequence(authMiddleware, banCheckMiddleware, adminMiddleware)
+// Dashboard protection middleware - requires authenticated user
+const dashboardMiddleware = defineMiddleware(async (context, next) => {
+  if (context.isPrerendered) {
+    return next()
+  }
+
+  const isDashboard =
+    context.url.pathname.startsWith('/dashboard') ||
+    context.url.pathname.startsWith('/es/panel')
+
+  if (isDashboard && !context.locals.user) {
+    return context.redirect(
+      context.url.pathname.startsWith('/es') ? '/es' : '/',
+    )
+  }
+
+  return next()
+})
+
+export const onRequest = sequence(
+  authMiddleware,
+  banCheckMiddleware,
+  adminMiddleware,
+  dashboardMiddleware,
+)

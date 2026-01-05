@@ -31,4 +31,8 @@ export const routes = {
     es: 'notas-internas',
     en: 'internal-notes',
   },
+  dashboard: {
+    es: 'panel',
+    en: 'dashboard',
+  },
 } as const

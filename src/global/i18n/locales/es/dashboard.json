@@ -1,0 +1,61 @@
+{
+  "title": "Panel",
+  "nav": {
+    "profile": "Perfil",
+    "passkeys": "Llaves de Acceso",
+    "comments": "Mis Comentarios",
+    "status": "Estado"
+  },
+  "profile": {
+    "title": "Editar Perfil",
+    "displayName": "Nombre para Mostrar",
+    "displayNamePlaceholder": "Ingresa tu nombre para mostrar",
+    "username": "Nombre de Usuario",
+    "usernamePlaceholder": "Elige un nombre de usuario unico",
+    "usernameHelp": "Tu perfil publico estara disponible en /@{username}",
+    "bio": "Biografia",
+    "bioPlaceholder": "Cuentanos sobre ti",
+    "website": "Sitio Web",
+    "websitePlaceholder": "https://tusitio.com",
+    "save": "Guardar Cambios",
+    "saving": "Guardando...",
+    "saved": "Perfil guardado",
+    "error": "Error al guardar perfil"
+  },
+  "passkeys": {
+    "title": "Llaves de Acceso",
+    "description": "Administra tus llaves de acceso para inicio de sesion seguro sin contrasena.",
+    "add": "Agregar Llave",
+    "adding": "Agregando...",
+    "namePrompt": "Ingresa un nombre para esta llave de acceso",
+    "namePlaceholder": "ej., MacBook Touch ID",
+    "noPasskeys": "No hay llaves de acceso registradas.",
+    "delete": "Eliminar",
+    "deleting": "Eliminando...",
+    "confirmDelete": "Estas seguro de que quieres eliminar esta llave de acceso?",
+    "deviceType": "Tipo de Dispositivo",
+    "backedUp": "Respaldado",
+    "createdAt": "Agregado",
+    "error": "Error al administrar llave de acceso"
+  },
+  "comments": {
+    "title": "Mis Comentarios",
+    "description": "Ve todos los comentarios que has publicado en las notas.",
+    "noComments": "Aun no has hecho ningun comentario.",
+    "viewNote": "Ver Nota",
+    "pending": "Pendiente",
+    "approved": "Aprobado",
+    "deleted": "Eliminado"
+  },
+  "status": {
+    "title": "Estado de la Cuenta",
+    "role": "Rol",
+    "badges": "Insignias",
+    "noBadges": "Aun no has ganado insignias.",
+    "memberSince": "Miembro Desde"
+  },
+  "publicProfile": {
+    "viewProfile": "Ver Perfil Publico",
+    "noProfile": "Configura tu nombre de usuario para habilitar tu perfil publico."
+  }
+}

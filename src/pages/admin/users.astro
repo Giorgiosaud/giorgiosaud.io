@@ -1,14 +1,16 @@
 ---
 import AdminLayout from '@components/admin/AdminLayout.astro'
 import { db } from '@db'
-import { eq, desc } from 'drizzle-orm'
 import { pushSubscriptions, users } from '@db/schema'
+import { desc, eq } from 'drizzle-orm'
 
 export const prerender = false
 
 const [allUsers, activeSubscriptions] = await Promise.all([
   db.query.users.findMany({
-    orderBy: [desc(users.createdAt)],
+    orderBy: [
+      desc(users.createdAt),
+    ],
     limit: 100,
   }),
   db.query.pushSubscriptions.findMany({
@@ -17,7 +19,7 @@ const [allUsers, activeSubscriptions] = await Promise.all([
 ])
 
 const subscribedUserIds = new Set(
-  activeSubscriptions.filter(sub => sub.userId).map(sub => sub.userId)
+  activeSubscriptions.filter(sub => sub.userId).map(sub => sub.userId),
 )
 ---
 

@@ -1,11 +1,17 @@
-import type { APIRoute } from 'astro'
 import { db } from '@db'
 import { postViews } from '@db/schema'
+import type { APIRoute } from 'astro'
 
 export const prerender = false
 
 // Event types supported by the tracking API
-type TrackEventType = 'scroll_depth' | 'page_view' | 'engagement' | 'click' | 'video' | 'custom'
+type TrackEventType =
+  | 'scroll_depth'
+  | 'page_view'
+  | 'engagement'
+  | 'click'
+  | 'video'
+  | 'custom'
 
 interface TrackEvent {
   type: TrackEventType
@@ -28,7 +34,11 @@ interface TrackEvent {
 
 // Validate scroll depth event
 function validateScrollEvent(event: TrackEvent): string | null {
-  if (typeof event.scrollDepth !== 'number' || event.scrollDepth < 0 || event.scrollDepth > 1) {
+  if (
+    typeof event.scrollDepth !== 'number' ||
+    event.scrollDepth < 0 ||
+    event.scrollDepth > 1
+  ) {
     return 'Invalid scroll depth (must be 0-1)'
   }
   return null
@@ -62,12 +72,19 @@ function validateEvent(event: TrackEvent): string | null {
 // POST /api/views/track.json - Record tracking events (extensible)
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    const body = await request.json() as TrackEvent
+    const body = (await request.json()) as TrackEvent
 
     // Validate event
     const error = validateEvent(body)
     if (error) {
-      return Response.json({ error }, { status: 400 })
+      return Response.json(
+        {
+          error,
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     // Handle different event types
@@ -98,9 +115,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
       }
     }
 
-    return Response.json({ success: true, type: body.type }, { status: 201 })
+    return Response.json(
+      {
+        success: true,
+        type: body.type,
+      },
+      {
+        status: 201,
+      },
+    )
   } catch (error) {
     console.error('Failed to track event:', error)
-    return Response.json({ error: 'Failed to track event' }, { status: 500 })
+    return Response.json(
+      {
+        error: 'Failed to track event',
+      },
+      {
+        status: 500,
+      },
+    )
   }
 }

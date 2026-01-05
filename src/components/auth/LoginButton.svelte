@@ -1,154 +1,154 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import {
-    $isAuthenticated as isAuthenticatedStore,
-    $isLoading as isLoadingStore,
-    $authError as authErrorStore,
-    $oauthLoading as oauthLoadingStore,
-    initAuthState,
-    loginWithEmail,
-    signUpWithEmail,
-    loginWithPasskey,
-    loginWithGitHub,
-    loginWithGoogle,
-    loginWithFacebook,
-    clearAuthError,
-  } from "@lib/stores/auth";
+import {
+  $authError as authErrorStore,
+  clearAuthError,
+  initAuthState,
+  $isAuthenticated as isAuthenticatedStore,
+  $isLoading as isLoadingStore,
+  loginWithEmail,
+  loginWithFacebook,
+  loginWithGitHub,
+  loginWithGoogle,
+  loginWithPasskey,
+  $oauthLoading as oauthLoadingStore,
+  signUpWithEmail,
+} from '@lib/stores/auth'
+import { onMount } from 'svelte'
 
-  interface Props {
-    lang?: "en" | "es";
-  }
+interface Props {
+  lang?: 'en' | 'es'
+}
 
-  type AuthMode = "menu" | "login" | "signup";
+type AuthMode = 'menu' | 'login' | 'signup'
 
-  interface SocialProviders {
-    github: boolean;
-    google: boolean;
-    facebook: boolean;
-  }
+interface SocialProviders {
+  github: boolean
+  google: boolean
+  facebook: boolean
+}
 
-  const translations = {
-    en: {
-      signIn: "Sign In",
-      signUp: "Sign Up",
-      loading: "Loading...",
-      email: "Email",
-      password: "Password",
-      name: "Name",
-      loginButton: "Log In",
-      signUpButton: "Create Account",
-      orContinueWith: "or continue with",
-      usePasskey: "Use Passkey",
-      noAccount: "Don't have an account?",
-      haveAccount: "Already have an account?",
-      back: "Back",
-    },
-    es: {
-      signIn: "Iniciar sesion",
-      signUp: "Registrarse",
-      loading: "Cargando...",
-      email: "Correo electronico",
-      password: "Contrasena",
-      name: "Nombre",
-      loginButton: "Entrar",
-      signUpButton: "Crear Cuenta",
-      orContinueWith: "o continuar con",
-      usePasskey: "Usar Passkey",
-      noAccount: "No tienes cuenta?",
-      haveAccount: "Ya tienes cuenta?",
-      back: "Volver",
-    },
-  };
+const translations = {
+  en: {
+    signIn: 'Sign In',
+    signUp: 'Sign Up',
+    loading: 'Loading...',
+    email: 'Email',
+    password: 'Password',
+    name: 'Name',
+    loginButton: 'Log In',
+    signUpButton: 'Create Account',
+    orContinueWith: 'or continue with',
+    usePasskey: 'Use Passkey',
+    noAccount: "Don't have an account?",
+    haveAccount: 'Already have an account?',
+    back: 'Back',
+  },
+  es: {
+    signIn: 'Iniciar sesion',
+    signUp: 'Registrarse',
+    loading: 'Cargando...',
+    email: 'Correo electronico',
+    password: 'Contrasena',
+    name: 'Nombre',
+    loginButton: 'Entrar',
+    signUpButton: 'Crear Cuenta',
+    orContinueWith: 'o continuar con',
+    usePasskey: 'Usar Passkey',
+    noAccount: 'No tienes cuenta?',
+    haveAccount: 'Ya tienes cuenta?',
+    back: 'Volver',
+  },
+}
 
-  let { lang = "en" }: Props = $props();
+let { lang = 'en' }: Props = $props()
 
-  let isAuthenticated = $state(false);
-  let isLoading = $state(true);
-  let authError = $state<string | null>(null);
-  let oauthLoading = $state<"github" | "google" | "facebook" | null>(null);
-  let showMenu = $state(false);
-  let mode = $state<AuthMode>("menu");
-  let email = $state("");
-  let password = $state("");
-  let name = $state("");
-  let containerRef: HTMLDivElement | null = null;
-  let providers = $state<SocialProviders>({
-    github: false,
-    google: false,
-    facebook: false,
-  });
+let isAuthenticated = $state(false)
+let isLoading = $state(true)
+let authError = $state<string | null>(null)
+let oauthLoading = $state<'github' | 'google' | 'facebook' | null>(null)
+let showMenu = $state(false)
+let mode = $state<AuthMode>('menu')
+let email = $state('')
+let password = $state('')
+let name = $state('')
+let containerRef: HTMLDivElement | null = null
+let providers = $state<SocialProviders>({
+  github: false,
+  google: false,
+  facebook: false,
+})
 
-  const t = $derived(translations[lang]);
-  const hasSocialProviders = $derived(
-    providers.github || providers.google || providers.facebook
-  );
+const t = $derived(translations[lang])
+const hasSocialProviders = $derived(
+  providers.github || providers.google || providers.facebook,
+)
 
-  onMount(() => {
-    initAuthState();
+onMount(() => {
+  initAuthState()
 
-    // Fetch available social providers
-    fetch("/api/auth/providers.json")
-      .then((res) => res.json())
-      .then((data: SocialProviders) => (providers = data))
-      .catch(() => {}); // Silently fail - social buttons just won't show
+  // Fetch available social providers
+  fetch('/api/auth/providers.json')
+    .then(res => res.json())
+    .then((data: SocialProviders) => (providers = data))
+    .catch(() => {}) // Silently fail - social buttons just won't show
 
-    const unsub1 = isAuthenticatedStore.subscribe((v) => (isAuthenticated = v));
-    const unsub2 = isLoadingStore.subscribe((v) => (isLoading = v));
-    const unsub3 = authErrorStore.subscribe((v) => (authError = v));
-    const unsub4 = oauthLoadingStore.subscribe((v) => (oauthLoading = v));
+  const unsub1 = isAuthenticatedStore.subscribe(v => (isAuthenticated = v))
+  const unsub2 = isLoadingStore.subscribe(v => (isLoading = v))
+  const unsub3 = authErrorStore.subscribe(v => (authError = v))
+  const unsub4 = oauthLoadingStore.subscribe(v => (oauthLoading = v))
 
-    const handleClickOutside = (e: MouseEvent) => {
-      if (!containerRef) return;
-      const target = e.target as Node;
-      const isOutside = !containerRef.contains(target);
-      if (isOutside) {
-        showMenu = false;
-        mode = "menu";
-        clearAuthError();
-      }
-    };
-
-    document.addEventListener("click", handleClickOutside);
-
-    return () => {
-      unsub1();
-      unsub2();
-      unsub3();
-      unsub4();
-      document.removeEventListener("click", handleClickOutside);
-    };
-  });
-
-  async function handleEmailLogin(e: Event) {
-    e.preventDefault();
-    const success = await loginWithEmail(email, password);
-    if (success) {
-      showMenu = false;
-      mode = "menu";
+  const handleClickOutside = (e: MouseEvent) => {
+    if (!containerRef) return
+    const target = e.target as Node
+    const isOutside = !containerRef.contains(target)
+    if (isOutside) {
+      showMenu = false
+      mode = 'menu'
+      clearAuthError()
     }
   }
 
-  async function handleEmailSignUp(e: Event) {
-    e.preventDefault();
-    const success = await signUpWithEmail(email, password, name);
-    if (success) {
-      showMenu = false;
-      mode = "menu";
-    }
-  }
+  document.addEventListener('click', handleClickOutside)
 
-  async function handlePasskeyLogin() {
-    const success = await loginWithPasskey();
-    if (success) {
-      showMenu = false;
-      mode = "menu";
-    }
+  return () => {
+    unsub1()
+    unsub2()
+    unsub3()
+    unsub4()
+    document.removeEventListener('click', handleClickOutside)
   }
+})
 
-  function goBack() {
-    mode = "menu";
-    clearAuthError();
+async function handleEmailLogin(e: Event) {
+  e.preventDefault()
+  const success = await loginWithEmail(email, password)
+  if (success) {
+    showMenu = false
+    mode = 'menu'
   }
+}
+
+async function handleEmailSignUp(e: Event) {
+  e.preventDefault()
+  const success = await signUpWithEmail(email, password, name)
+  if (success) {
+    showMenu = false
+    mode = 'menu'
+  }
+}
+
+async function handlePasskeyLogin() {
+  const success = await loginWithPasskey()
+  if (success) {
+    showMenu = false
+    mode = 'menu'
+  }
+}
+
+function goBack() {
+  mode = 'menu'
+  clearAuthError()
+}
 </script>
 
 {#if isAuthenticated}

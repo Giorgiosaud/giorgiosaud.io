@@ -1,22 +1,22 @@
 ---
-import { Picture } from "astro:assets";
-import { getCollection, render } from "astro:content";
-import AISummarizer from "@components/AISummarizer.astro";
-import { CommentsSection } from "@components/comments";
-import ScrollTracker from "@components/ScrollTracker.svelte";
-import NoteTemplate from "@templates/Note.astro";
-import { TURNSTILE_SITE_KEY } from "astro:env/client";
-import "@global-styles/md.css";
+import { Picture } from 'astro:assets'
+import { getCollection, render } from 'astro:content'
+import { TURNSTILE_SITE_KEY } from 'astro:env/client'
+import AISummarizer from '@components/AISummarizer.astro'
+import { CommentsSection } from '@components/comments'
+import ScrollTracker from '@components/ScrollTracker.svelte'
+import NoteTemplate from '@templates/Note.astro'
+import '@global-styles/md.css'
 export async function getStaticPaths() {
-  const pages = await getCollection("notes");
-  const pagesTranslated = await getCollection("notas");
-  return pages.map((page) => {
+  const pages = await getCollection('notes')
+  const pagesTranslated = await getCollection('notas')
+  return pages.map(page => {
     const pathToTranslateNote =
       pagesTranslated.find(
-        (translatedPage) =>
+        translatedPage =>
           translatedPage.data.selfHealing &&
-          translatedPage.data.selfHealing === page.data.selfHealing
-      )?.id || "";
+          translatedPage.data.selfHealing === page.data.selfHealing,
+      )?.id || ''
     return {
       params: {
         note: page.id,
@@ -25,15 +25,15 @@ export async function getStaticPaths() {
         page,
         pathToTranslateNote,
       },
-    };
-  });
+    }
+  })
 }
 
-const { page, pathToTranslateNote } = Astro.props;
-const { Content } = await render(page);
+const { page, pathToTranslateNote } = Astro.props
+const { Content } = await render(page)
 const { draft, title, publishDate, cover, coverAlt, description, selfHealing } =
-  page.data;
-const imageName = `${page.id}-latest`;
+  page.data
+const imageName = `${page.id}-latest`
 ---
 
 <NoteTemplate

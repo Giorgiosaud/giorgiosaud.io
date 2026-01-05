@@ -1,80 +1,81 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import {
-    isPushSupported,
-    getPermissionState,
-    subscribeToPush,
-    unsubscribeFromPush,
-    isSubscribed,
-  } from '@lib/push-client'
+import {
+  getPermissionState,
+  isPushSupported,
+  isSubscribed,
+  subscribeToPush,
+  unsubscribeFromPush,
+} from '@lib/push-client'
+import { onMount } from 'svelte'
 
-  interface Props {
-    lang?: 'en' | 'es'
+interface Props {
+  lang?: 'en' | 'es'
+}
+
+const translations = {
+  en: {
+    enable: 'Enable notifications',
+    disable: 'Disable notifications',
+    notSupported: 'Not supported',
+    denied: 'Blocked',
+    enabling: 'Enabling...',
+    disabling: 'Disabling...',
+    tooltip: 'Get notified when someone replies to your comments',
+    deniedTooltip: 'Notifications blocked. Enable in browser settings.',
+  },
+  es: {
+    enable: 'Activar notificaciones',
+    disable: 'Desactivar notificaciones',
+    notSupported: 'No soportado',
+    denied: 'Bloqueadas',
+    enabling: 'Activando...',
+    disabling: 'Desactivando...',
+    tooltip: 'Recibe notificaciones cuando alguien responda a tus comentarios',
+    deniedTooltip:
+      'Notificaciones bloqueadas. Activa en configuracion del navegador.',
+  },
+}
+
+let { lang = 'en' }: Props = $props()
+
+let supported = $state(false)
+let permission = $state<NotificationPermission | 'unsupported'>('default')
+let subscribed = $state(false)
+let loading = $state(true)
+let actionLoading = $state(false)
+
+const t = $derived(translations[lang])
+
+onMount(async () => {
+  supported = isPushSupported()
+  if (supported) {
+    permission = getPermissionState()
+    subscribed = await isSubscribed()
   }
+  loading = false
+})
 
-  const translations = {
-    en: {
-      enable: 'Enable notifications',
-      disable: 'Disable notifications',
-      notSupported: 'Not supported',
-      denied: 'Blocked',
-      enabling: 'Enabling...',
-      disabling: 'Disabling...',
-      tooltip: 'Get notified when someone replies to your comments',
-      deniedTooltip: 'Notifications blocked. Enable in browser settings.',
-    },
-    es: {
-      enable: 'Activar notificaciones',
-      disable: 'Desactivar notificaciones',
-      notSupported: 'No soportado',
-      denied: 'Bloqueadas',
-      enabling: 'Activando...',
-      disabling: 'Desactivando...',
-      tooltip: 'Recibe notificaciones cuando alguien responda a tus comentarios',
-      deniedTooltip: 'Notificaciones bloqueadas. Activa en configuracion del navegador.',
-    },
-  }
+async function handleToggle() {
+  if (!supported || actionLoading) return
 
-  let { lang = 'en' }: Props = $props()
-
-  let supported = $state(false)
-  let permission = $state<NotificationPermission | 'unsupported'>('default')
-  let subscribed = $state(false)
-  let loading = $state(true)
-  let actionLoading = $state(false)
-
-  const t = $derived(translations[lang])
-
-  onMount(async () => {
-    supported = isPushSupported()
-    if (supported) {
-      permission = getPermissionState()
-      subscribed = await isSubscribed()
-    }
-    loading = false
-  })
-
-  async function handleToggle() {
-    if (!supported || actionLoading) return
-
-    actionLoading = true
-    try {
-      if (subscribed) {
-        const success = await unsubscribeFromPush()
-        if (success) subscribed = false
+  actionLoading = true
+  try {
+    if (subscribed) {
+      const success = await unsubscribeFromPush()
+      if (success) subscribed = false
+    } else {
+      const success = await subscribeToPush()
+      if (success) {
+        subscribed = true
+        permission = getPermissionState()
       } else {
-        const success = await subscribeToPush()
-        if (success) {
-          subscribed = true
-          permission = getPermissionState()
-        } else {
-          permission = getPermissionState()
-        }
+        permission = getPermissionState()
       }
-    } finally {
-      actionLoading = false
     }
+  } finally {
+    actionLoading = false
   }
+}
 </script>
 
 {#if loading}

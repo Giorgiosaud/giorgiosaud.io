@@ -151,16 +151,18 @@ export async function loginWithPasskey() {
 }
 
 // Register passkey for current user
-export async function registerPasskey() {
+export async function registerPasskey(name?: string) {
   $authError.set(null)
   try {
-    const result = await passkey.addPasskey()
+    const result = await passkey.addPasskey({
+      name,
+    })
     if (result?.error) {
       $authError.set(result.error.message || 'Failed to register passkey')
       return false
     }
     return true
-  } catch (error) {
+  } catch (_error) {
     $authError.set('Failed to register passkey. Please try again.')
     return false
   }

@@ -1,0 +1,32 @@
+---
+import BadgeDisplay from '@components/dashboard/BadgeDisplay.svelte'
+import DashboardLayout from '@components/dashboard/DashboardLayout.astro'
+import UserStatus from '@components/dashboard/UserStatus.svelte'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+
+export const prerender = false
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<DashboardLayout title={t('dashboard.nav.status')} currentPage="status">
+  <UserStatus client:load lang={lang} />
+  <div class="badges-section">
+    <h2>{t('dashboard.status.badges')}</h2>
+    <BadgeDisplay client:load lang={lang} />
+  </div>
+</DashboardLayout>
+
+<style>
+  .badges-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border, #ddd);
+  }
+
+  .badges-section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+</style>

@@ -1,0 +1,14 @@
+---
+import DashboardLayout from '@components/dashboard/DashboardLayout.astro'
+import PasskeyManager from '@components/dashboard/PasskeyManager.svelte'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+
+export const prerender = false
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<DashboardLayout title={t('dashboard.nav.passkeys')} currentPage="passkeys">
+  <PasskeyManager client:load lang={lang} />
+</DashboardLayout>

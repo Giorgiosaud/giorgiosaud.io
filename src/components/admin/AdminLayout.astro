@@ -9,10 +9,26 @@ interface Props {
 const { title, currentPage } = Astro.props
 
 const navItems = [
-  { id: 'dashboard', label: 'Dashboard', href: '/admin' },
-  { id: 'notifications', label: 'Notifications', href: '/admin/notifications' },
-  { id: 'comments', label: 'Comments', href: '/admin/comments' },
-  { id: 'users', label: 'Users', href: '/admin/users' },
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    href: '/admin',
+  },
+  {
+    id: 'notifications',
+    label: 'Notifications',
+    href: '/admin/notifications',
+  },
+  {
+    id: 'comments',
+    label: 'Comments',
+    href: '/admin/comments',
+  },
+  {
+    id: 'users',
+    label: 'Users',
+    href: '/admin/users',
+  },
 ]
 ---
 

@@ -1,0 +1,61 @@
+{
+  "title": "Dashboard",
+  "nav": {
+    "profile": "Profile",
+    "passkeys": "Passkeys",
+    "comments": "My Comments",
+    "status": "Status"
+  },
+  "profile": {
+    "title": "Edit Profile",
+    "displayName": "Display Name",
+    "displayNamePlaceholder": "Enter your display name",
+    "username": "Username",
+    "usernamePlaceholder": "Choose a unique username",
+    "usernameHelp": "Your public profile will be available at /@{username}",
+    "bio": "Bio",
+    "bioPlaceholder": "Tell us about yourself",
+    "website": "Website",
+    "websitePlaceholder": "https://yourwebsite.com",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "saved": "Profile saved",
+    "error": "Failed to save profile"
+  },
+  "passkeys": {
+    "title": "Passkeys",
+    "description": "Manage your passkeys for secure, passwordless login.",
+    "add": "Add Passkey",
+    "adding": "Adding...",
+    "namePrompt": "Enter a name for this passkey",
+    "namePlaceholder": "e.g., MacBook Touch ID",
+    "noPasskeys": "No passkeys registered yet.",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "confirmDelete": "Are you sure you want to delete this passkey?",
+    "deviceType": "Device Type",
+    "backedUp": "Backed Up",
+    "createdAt": "Added",
+    "error": "Failed to manage passkey"
+  },
+  "comments": {
+    "title": "My Comments",
+    "description": "View all comments you've posted on notes.",
+    "noComments": "You haven't made any comments yet.",
+    "viewNote": "View Note",
+    "pending": "Pending",
+    "approved": "Approved",
+    "deleted": "Deleted"
+  },
+  "status": {
+    "title": "Account Status",
+    "role": "Role",
+    "badges": "Badges",
+    "noBadges": "No badges earned yet.",
+    "memberSince": "Member Since"
+  },
+  "publicProfile": {
+    "viewProfile": "View Public Profile",
+    "noProfile": "Set up your username to enable your public profile."
+  }
+}

@@ -1,173 +1,177 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import type { User } from 'better-auth/types'
-  import {
-    $user as userStore,
-    $isAuthenticated as isAuthenticatedStore,
-    $isLoading as isLoadingStore,
-    $isAdmin as isAdminStore,
-    $authError as authErrorStore,
-    initAuthState,
-    logout,
-    registerPasskey,
-    clearAuthError,
-  } from '@lib/stores/auth'
-  import {
-    isPushSupported,
-    getPermissionState,
-    isSubscribed,
-    subscribeToPush,
-    unsubscribeFromPush,
-  } from '@lib/push-client'
+import {
+  getPermissionState,
+  isPushSupported,
+  isSubscribed,
+  subscribeToPush,
+  unsubscribeFromPush,
+} from '@lib/push-client'
+import {
+  $authError as authErrorStore,
+  clearAuthError,
+  initAuthState,
+  $isAdmin as isAdminStore,
+  $isAuthenticated as isAuthenticatedStore,
+  $isLoading as isLoadingStore,
+  logout,
+  registerPasskey,
+  $user as userStore,
+} from '@lib/stores/auth'
+import type { User } from 'better-auth/types'
+import { onMount } from 'svelte'
 
-  interface Props {
-    lang?: 'en' | 'es'
-  }
+interface Props {
+  lang?: 'en' | 'es'
+}
 
-  const translations = {
-    en: {
-      dashboard: 'Dashboard',
-      profile: 'Profile',
-      addPasskey: 'Add Passkey',
-      passkeyAdded: 'Passkey added!',
-      notifications: 'Notifications',
-      notificationsOn: 'Notifications On',
-      notificationsOff: 'Notifications Off',
-      signOut: 'Sign Out',
-      loading: 'Loading...',
-    },
-    es: {
-      dashboard: 'Panel',
-      profile: 'Perfil',
-      addPasskey: 'Agregar Passkey',
-      passkeyAdded: 'Passkey agregada!',
-      notifications: 'Notificaciones',
-      notificationsOn: 'Notificaciones On',
-      notificationsOff: 'Notificaciones Off',
-      signOut: 'Cerrar sesion',
-      loading: 'Cargando...',
-    },
-  }
+const translations = {
+  en: {
+    dashboard: 'Dashboard',
+    profile: 'Profile',
+    addPasskey: 'Add Passkey',
+    passkeyAdded: 'Passkey added!',
+    notifications: 'Notifications',
+    notificationsOn: 'Notifications On',
+    notificationsOff: 'Notifications Off',
+    signOut: 'Sign Out',
+    loading: 'Loading...',
+  },
+  es: {
+    dashboard: 'Panel',
+    profile: 'Perfil',
+    addPasskey: 'Agregar Passkey',
+    passkeyAdded: 'Passkey agregada!',
+    notifications: 'Notificaciones',
+    notificationsOn: 'Notificaciones On',
+    notificationsOff: 'Notificaciones Off',
+    signOut: 'Cerrar sesion',
+    loading: 'Cargando...',
+  },
+}
 
-  let { lang = 'en' }: Props = $props()
+let { lang = 'en' }: Props = $props()
 
-  let user = $state<User | null>(null)
-  let isAuthenticated = $state(false)
-  let isLoading = $state(true)
-  let isAdmin = $state(false)
-  let showMenu = $state(false)
-  let authError = $state<string | null>(null)
-  let passkeySuccess = $state(false)
-  let isAddingPasskey = $state(false)
+let user = $state<User | null>(null)
+let isAuthenticated = $state(false)
+let isLoading = $state(true)
+let isAdmin = $state(false)
+let showMenu = $state(false)
+let authError = $state<string | null>(null)
+let passkeySuccess = $state(false)
+let isAddingPasskey = $state(false)
 
-  // Push notification state
-  let pushSupported = $state(false)
-  let pushSubscribed = $state(false)
-  let pushLoading = $state(false)
-  let pushPermission = $state<NotificationPermission | 'unsupported'>('default')
+// Push notification state
+let pushSupported = $state(false)
+let pushSubscribed = $state(false)
+let pushLoading = $state(false)
+let pushPermission = $state<NotificationPermission | 'unsupported'>('default')
 
-  const t = $derived(translations[lang])
+const t = $derived(translations[lang])
 
-  const initials = $derived(
-    user?.name
-      ? user.name
-          .split(' ')
-          .map(n => n[0])
-          .join('')
-          .toUpperCase()
-          .slice(0, 2)
-      : '?'
-  )
+const initials = $derived(
+  user?.name
+    ? user.name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2)
+    : '?',
+)
 
-  // Push user data to dataLayer when authenticated
-  function pushUserToDataLayer(userData: User | null, authenticated: boolean, admin: boolean) {
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'user_state_update',
-        user_logged_in: authenticated,
-        user_role: admin ? 'admin' : (authenticated ? 'user' : 'guest'),
-        user_id: userData?.id || null,
-      })
-    }
-  }
-
-  onMount(async () => {
-    initAuthState()
-
-    let lastAuthState = false
-    const unsub1 = userStore.subscribe(v => user = v)
-    const unsub2 = isAuthenticatedStore.subscribe(v => {
-      isAuthenticated = v
-      // Push to dataLayer when auth state changes (login/logout)
-      if (v !== lastAuthState) {
-        lastAuthState = v
-        // Small delay to ensure user data is available
-        setTimeout(() => pushUserToDataLayer(user, v, isAdmin), 100)
-      }
+// Push user data to dataLayer when authenticated
+function pushUserToDataLayer(
+  userData: User | null,
+  authenticated: boolean,
+  admin: boolean,
+) {
+  if (typeof window !== 'undefined' && window.dataLayer) {
+    window.dataLayer.push({
+      event: 'user_state_update',
+      user_logged_in: authenticated,
+      user_role: admin ? 'admin' : authenticated ? 'user' : 'guest',
+      user_id: userData?.id || null,
     })
-    const unsub3 = isLoadingStore.subscribe(v => isLoading = v)
-    const unsub4 = isAdminStore.subscribe(v => isAdmin = v)
-    const unsub5 = authErrorStore.subscribe(v => authError = v)
+  }
+}
 
-    // Initialize push notification state
-    pushSupported = isPushSupported()
-    if (pushSupported) {
-      pushPermission = getPermissionState()
-      pushSubscribed = await isSubscribed()
-    }
+onMount(async () => {
+  initAuthState()
 
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      if (!target.closest('.container')) {
-        showMenu = false
-      }
-    }
-
-    document.addEventListener('click', handleClickOutside)
-
-    return () => {
-      unsub1()
-      unsub2()
-      unsub3()
-      unsub4()
-      unsub5()
-      document.removeEventListener('click', handleClickOutside)
+  let lastAuthState = false
+  const unsub1 = userStore.subscribe(v => (user = v))
+  const unsub2 = isAuthenticatedStore.subscribe(v => {
+    isAuthenticated = v
+    // Push to dataLayer when auth state changes (login/logout)
+    if (v !== lastAuthState) {
+      lastAuthState = v
+      // Small delay to ensure user data is available
+      setTimeout(() => pushUserToDataLayer(user, v, isAdmin), 100)
     }
   })
+  const unsub3 = isLoadingStore.subscribe(v => (isLoading = v))
+  const unsub4 = isAdminStore.subscribe(v => (isAdmin = v))
+  const unsub5 = authErrorStore.subscribe(v => (authError = v))
 
-  async function handleAddPasskey() {
-    isAddingPasskey = true
-    passkeySuccess = false
-    clearAuthError()
-    const success = await registerPasskey()
-    isAddingPasskey = false
-    if (success) {
-      passkeySuccess = true
-      setTimeout(() => passkeySuccess = false, 3000)
+  // Initialize push notification state
+  pushSupported = isPushSupported()
+  if (pushSupported) {
+    pushPermission = getPermissionState()
+    pushSubscribed = await isSubscribed()
+  }
+
+  const handleClickOutside = (e: MouseEvent) => {
+    const target = e.target as HTMLElement
+    if (!target.closest('.container')) {
+      showMenu = false
     }
   }
 
-  async function handleToggleNotifications() {
-    if (!pushSupported || pushLoading) return
+  document.addEventListener('click', handleClickOutside)
 
-    pushLoading = true
-    try {
-      if (pushSubscribed) {
-        const success = await unsubscribeFromPush()
-        if (success) pushSubscribed = false
+  return () => {
+    unsub1()
+    unsub2()
+    unsub3()
+    unsub4()
+    unsub5()
+    document.removeEventListener('click', handleClickOutside)
+  }
+})
+
+async function handleAddPasskey() {
+  isAddingPasskey = true
+  passkeySuccess = false
+  clearAuthError()
+  const success = await registerPasskey()
+  isAddingPasskey = false
+  if (success) {
+    passkeySuccess = true
+    setTimeout(() => (passkeySuccess = false), 3000)
+  }
+}
+
+async function handleToggleNotifications() {
+  if (!pushSupported || pushLoading) return
+
+  pushLoading = true
+  try {
+    if (pushSubscribed) {
+      const success = await unsubscribeFromPush()
+      if (success) pushSubscribed = false
+    } else {
+      const success = await subscribeToPush()
+      if (success) {
+        pushSubscribed = true
+        pushPermission = getPermissionState()
       } else {
-        const success = await subscribeToPush()
-        if (success) {
-          pushSubscribed = true
-          pushPermission = getPermissionState()
-        } else {
-          pushPermission = getPermissionState()
-        }
+        pushPermission = getPermissionState()
       }
-    } finally {
-      pushLoading = false
     }
+  } finally {
+    pushLoading = false
   }
+}
 </script>
 
 {#if !isAuthenticated}

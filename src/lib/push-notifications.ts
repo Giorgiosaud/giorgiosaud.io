@@ -1,9 +1,9 @@
-import webpush from 'web-push'
-import { db } from '@db'
-import { pushSubscriptions } from '@db/schema'
-import { eq, and } from 'drizzle-orm'
 import { VAPID_PUBLIC_KEY } from 'astro:env/client'
 import { VAPID_PRIVATE_KEY, VAPID_SUBJECT } from 'astro:env/server'
+import { db } from '@db'
+import { pushSubscriptions } from '@db/schema'
+import { and, eq } from 'drizzle-orm'
+import webpush from 'web-push'
 
 // Configure web-push with VAPID keys
 function configureWebPush() {
@@ -39,10 +39,16 @@ const MAX_FAILURES = 3
 export async function sendPushToUser(
   userId: string,
   payload: NotificationPayload,
-): Promise<{ sent: number; failed: number }> {
+): Promise<{
+  sent: number
+  failed: number
+}> {
   if (!configureWebPush()) {
     console.warn('Push notifications not configured')
-    return { sent: 0, failed: 0 }
+    return {
+      sent: 0,
+      failed: 0,
+    }
   }
 
   // Get all active subscriptions for user
@@ -70,19 +76,29 @@ export async function sendPushToUser(
       )
 
       // Update last used timestamp
-      await db.update(pushSubscriptions)
-        .set({ lastUsedAt: new Date(), failureCount: 0 })
+      await db
+        .update(pushSubscriptions)
+        .set({
+          lastUsedAt: new Date(),
+          failureCount: 0,
+        })
         .where(eq(pushSubscriptions.id, sub.id))
 
       sent++
     } catch (error) {
       failed++
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      const statusCode = (error as { statusCode?: number }).statusCode
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error'
+      const statusCode = (
+        error as {
+          statusCode?: number
+        }
+      ).statusCode
 
       // If subscription is gone (expired/unsubscribed), deactivate it
       if (statusCode === 404 || statusCode === 410) {
-        await db.update(pushSubscriptions)
+        await db
+          .update(pushSubscriptions)
           .set({
             isActive: false,
             lastError: `Subscription expired (${statusCode})`,
@@ -92,7 +108,8 @@ export async function sendPushToUser(
       } else {
         // Increment failure count
         const newFailureCount = sub.failureCount + 1
-        await db.update(pushSubscriptions)
+        await db
+          .update(pushSubscriptions)
           .set({
             failureCount: newFailureCount,
             lastError: errorMessage,
@@ -102,11 +119,17 @@ export async function sendPushToUser(
           .where(eq(pushSubscriptions.id, sub.id))
       }
 
-      console.error(`Push notification failed for subscription ${sub.id}:`, errorMessage)
+      console.error(
+        `Push notification failed for subscription ${sub.id}:`,
+        errorMessage,
+      )
     }
   }
 
-  return { sent, failed }
+  return {
+    sent,
+    failed,
+  }
 }
 
 /**
@@ -146,10 +169,16 @@ export function isPushConfigured(): boolean {
  */
 export async function broadcastNotification(
   payload: NotificationPayload,
-): Promise<{ sent: number; failed: number }> {
+): Promise<{
+  sent: number
+  failed: number
+}> {
   if (!configureWebPush()) {
     console.warn('Push notifications not configured')
-    return { sent: 0, failed: 0 }
+    return {
+      sent: 0,
+      failed: 0,
+    }
   }
 
   // Get all active subscriptions
@@ -173,18 +202,28 @@ export async function broadcastNotification(
         JSON.stringify(payload),
       )
 
-      await db.update(pushSubscriptions)
-        .set({ lastUsedAt: new Date(), failureCount: 0 })
+      await db
+        .update(pushSubscriptions)
+        .set({
+          lastUsedAt: new Date(),
+          failureCount: 0,
+        })
         .where(eq(pushSubscriptions.id, sub.id))
 
       sent++
     } catch (error) {
       failed++
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      const statusCode = (error as { statusCode?: number }).statusCode
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error'
+      const statusCode = (
+        error as {
+          statusCode?: number
+        }
+      ).statusCode
 
       if (statusCode === 404 || statusCode === 410) {
-        await db.update(pushSubscriptions)
+        await db
+          .update(pushSubscriptions)
           .set({
             isActive: false,
             lastError: `Subscription expired (${statusCode})`,
@@ -193,7 +232,8 @@ export async function broadcastNotification(
           .where(eq(pushSubscriptions.id, sub.id))
       } else {
         const newFailureCount = sub.failureCount + 1
-        await db.update(pushSubscriptions)
+        await db
+          .update(pushSubscriptions)
           .set({
             failureCount: newFailureCount,
             lastError: errorMessage,
@@ -205,7 +245,10 @@ export async function broadcastNotification(
     }
   }
 
-  return { sent, failed }
+  return {
+    sent,
+    failed,
+  }
 }
 
 /**
@@ -215,7 +258,10 @@ export async function sendNewPostNotification(
   postTitle: string,
   postSlug: string,
   postExcerpt?: string,
-): Promise<{ sent: number; failed: number }> {
+): Promise<{
+  sent: number
+  failed: number
+}> {
   const payload: NotificationPayload = {
     title: 'New Post Published',
     body: postExcerpt || postTitle,

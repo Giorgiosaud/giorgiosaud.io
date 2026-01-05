@@ -1,139 +1,161 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import { $user as userStore, $isAuthenticated as isAuthenticatedStore, initAuthState } from '@lib/stores/auth'
-  import type { User } from 'better-auth/types'
-  import CommentForm from './CommentForm.svelte'
-  import CommentItem from './CommentItem.svelte'
+import {
+  initAuthState,
+  $isAuthenticated as isAuthenticatedStore,
+  $user as userStore,
+} from '@lib/stores/auth'
+import type { User } from 'better-auth/types'
+import { onMount } from 'svelte'
+import CommentForm from './CommentForm.svelte'
+import CommentItem from './CommentItem.svelte'
 
-  interface Comment {
-    id: string
-    content: string
-    parentId: string | null
-    depth: number
-    userId: string
-    isEdited: boolean
-    createdAt: string
-    editedAt: string | null
-    authorName?: string | null
-    authorImage?: string | null
-    replies?: Comment[]
+interface Comment {
+  id: string
+  content: string
+  parentId: string | null
+  depth: number
+  userId: string
+  isEdited: boolean
+  createdAt: string
+  editedAt: string | null
+  authorName?: string | null
+  authorImage?: string | null
+  replies?: Comment[]
+}
+
+interface Props {
+  noteId: string
+  lang?: 'en' | 'es'
+  turnstileSiteKey?: string
+}
+
+const translations = {
+  en: {
+    comments: 'Comments',
+    noComments: 'No comments yet. Be the first to share your thoughts!',
+    loginToComment: 'Sign in to leave a comment',
+    loadingComments: 'Loading comments...',
+    errorLoading: 'Failed to load comments',
+  },
+  es: {
+    comments: 'Comentarios',
+    noComments: 'Aun no hay comentarios. Se el primero en compartir tus ideas!',
+    loginToComment: 'Inicia sesion para comentar',
+    loadingComments: 'Cargando comentarios...',
+    errorLoading: 'Error al cargar comentarios',
+  },
+}
+
+let { noteId, lang = 'en', turnstileSiteKey }: Props = $props()
+
+let user = $state<User | null>(null)
+let isAuthenticated = $state(false)
+let comments = $state<Comment[]>([])
+let isLoading = $state(true)
+let error = $state<string | null>(null)
+
+const t = $derived(translations[lang])
+
+onMount(() => {
+  initAuthState()
+
+  const unsub1 = userStore.subscribe(v => (user = v))
+  const unsub2 = isAuthenticatedStore.subscribe(v => (isAuthenticated = v))
+
+  fetchComments()
+
+  return () => {
+    unsub1()
+    unsub2()
   }
+})
 
-  interface Props {
-    noteId: string
-    lang?: 'en' | 'es'
-    turnstileSiteKey?: string
-  }
-
-  const translations = {
-    en: {
-      comments: 'Comments',
-      noComments: 'No comments yet. Be the first to share your thoughts!',
-      loginToComment: 'Sign in to leave a comment',
-      loadingComments: 'Loading comments...',
-      errorLoading: 'Failed to load comments',
-    },
-    es: {
-      comments: 'Comentarios',
-      noComments: 'Aun no hay comentarios. Se el primero en compartir tus ideas!',
-      loginToComment: 'Inicia sesion para comentar',
-      loadingComments: 'Cargando comentarios...',
-      errorLoading: 'Error al cargar comentarios',
-    },
-  }
-
-  let { noteId, lang = 'en', turnstileSiteKey }: Props = $props()
-
-  let user = $state<User | null>(null)
-  let isAuthenticated = $state(false)
-  let comments = $state<Comment[]>([])
-  let isLoading = $state(true)
-  let error = $state<string | null>(null)
-
-  const t = $derived(translations[lang])
-
-  onMount(() => {
-    initAuthState()
-
-    const unsub1 = userStore.subscribe(v => user = v)
-    const unsub2 = isAuthenticatedStore.subscribe(v => isAuthenticated = v)
-
-    fetchComments()
-
-    return () => {
-      unsub1()
-      unsub2()
-    }
-  })
-
-  async function fetchComments() {
-    try {
-      const res = await fetch(`/api/comments/note/${noteId}.json`, {
-        credentials: 'include',
-      })
-      if (!res.ok) throw new Error('Failed to fetch')
-      const data = await res.json()
-      comments = data.comments || []
-      error = null
-    } catch {
-      error = t.errorLoading
-    } finally {
-      isLoading = false
-    }
-  }
-
-  function handleNewComment(newComment: Comment) {
-    if (newComment.parentId) {
-      comments = addReplyToTree(comments, newComment)
-    } else {
-      comments = [...comments, newComment]
-    }
-  }
-
-  function handleUpdateComment(updated: Comment) {
-    comments = updateCommentInTree(comments, updated)
-  }
-
-  function handleDeleteComment(id: string) {
-    comments = removeCommentFromTree(comments, id)
-  }
-
-  function countComments(list: Comment[]): number {
-    return list.reduce((acc, c) => acc + 1 + countComments(c.replies || []), 0)
-  }
-
-  function addReplyToTree(list: Comment[], reply: Comment): Comment[] {
-    return list.map(c => {
-      if (c.id === reply.parentId) {
-        return { ...c, replies: [...(c.replies || []), reply] }
-      }
-      if (c.replies?.length) {
-        return { ...c, replies: addReplyToTree(c.replies, reply) }
-      }
-      return c
+async function fetchComments() {
+  try {
+    const res = await fetch(`/api/comments/note/${noteId}.json`, {
+      credentials: 'include',
     })
+    if (!res.ok) throw new Error('Failed to fetch')
+    const data = await res.json()
+    comments = data.comments || []
+    error = null
+  } catch {
+    error = t.errorLoading
+  } finally {
+    isLoading = false
   }
+}
 
-  function updateCommentInTree(list: Comment[], updated: Comment): Comment[] {
-    return list.map(c => {
-      if (c.id === updated.id) {
-        return { ...c, ...updated }
-      }
-      if (c.replies?.length) {
-        return { ...c, replies: updateCommentInTree(c.replies, updated) }
-      }
-      return c
-    })
+function handleNewComment(newComment: Comment) {
+  if (newComment.parentId) {
+    comments = addReplyToTree(comments, newComment)
+  } else {
+    comments = [
+      ...comments,
+      newComment,
+    ]
   }
+}
 
-  function removeCommentFromTree(list: Comment[], id: string): Comment[] {
-    return list
-      .filter(c => c.id !== id)
-      .map(c => ({
+function handleUpdateComment(updated: Comment) {
+  comments = updateCommentInTree(comments, updated)
+}
+
+function handleDeleteComment(id: string) {
+  comments = removeCommentFromTree(comments, id)
+}
+
+function countComments(list: Comment[]): number {
+  return list.reduce((acc, c) => acc + 1 + countComments(c.replies || []), 0)
+}
+
+function addReplyToTree(list: Comment[], reply: Comment): Comment[] {
+  return list.map(c => {
+    if (c.id === reply.parentId) {
+      return {
         ...c,
-        replies: c.replies ? removeCommentFromTree(c.replies, id) : [],
-      }))
-  }
+        replies: [
+          ...(c.replies || []),
+          reply,
+        ],
+      }
+    }
+    if (c.replies?.length) {
+      return {
+        ...c,
+        replies: addReplyToTree(c.replies, reply),
+      }
+    }
+    return c
+  })
+}
+
+function updateCommentInTree(list: Comment[], updated: Comment): Comment[] {
+  return list.map(c => {
+    if (c.id === updated.id) {
+      return {
+        ...c,
+        ...updated,
+      }
+    }
+    if (c.replies?.length) {
+      return {
+        ...c,
+        replies: updateCommentInTree(c.replies, updated),
+      }
+    }
+    return c
+  })
+}
+
+function removeCommentFromTree(list: Comment[], id: string): Comment[] {
+  return list
+    .filter(c => c.id !== id)
+    .map(c => ({
+      ...c,
+      replies: c.replies ? removeCommentFromTree(c.replies, id) : [],
+    }))
+}
 </script>
 
 <section class="section">

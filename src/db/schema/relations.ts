@@ -21,29 +21,45 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, {
-    fields: [sessions.userId],
-    references: [users.id],
+    fields: [
+      sessions.userId,
+    ],
+    references: [
+      users.id,
+    ],
   }),
 }))
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, {
-    fields: [accounts.userId],
-    references: [users.id],
+    fields: [
+      accounts.userId,
+    ],
+    references: [
+      users.id,
+    ],
   }),
 }))
 
 export const passkeysRelations = relations(passkeys, ({ one }) => ({
   user: one(users, {
-    fields: [passkeys.userId],
-    references: [users.id],
+    fields: [
+      passkeys.userId,
+    ],
+    references: [
+      users.id,
+    ],
   }),
 }))
 
 export const userProfilesRelations = relations(userProfiles, ({ one }) => ({
   user: one(users, {
-    fields: [userProfiles.userId],
-    references: [users.id],
+    fields: [
+      userProfiles.userId,
+    ],
+    references: [
+      users.id,
+    ],
   }),
 }))
 
@@ -51,28 +67,44 @@ export const pushSubscriptionsRelations = relations(
   pushSubscriptions,
   ({ one }) => ({
     user: one(users, {
-      fields: [pushSubscriptions.userId],
-      references: [users.id],
+      fields: [
+        pushSubscriptions.userId,
+      ],
+      references: [
+        users.id,
+      ],
     }),
   }),
 )
 
 export const commentsRelations = relations(comments, ({ one, many }) => ({
   author: one(users, {
-    fields: [comments.userId],
-    references: [users.id],
+    fields: [
+      comments.userId,
+    ],
+    references: [
+      users.id,
+    ],
   }),
   parent: one(comments, {
-    fields: [comments.parentId],
-    references: [comments.id],
+    fields: [
+      comments.parentId,
+    ],
+    references: [
+      comments.id,
+    ],
     relationName: 'replies',
   }),
   replies: many(comments, {
     relationName: 'replies',
   }),
   deletedByUser: one(users, {
-    fields: [comments.deletedBy],
-    references: [users.id],
+    fields: [
+      comments.deletedBy,
+    ],
+    references: [
+      users.id,
+    ],
   }),
 }))
 
@@ -82,15 +114,27 @@ export const badgesRelations = relations(badges, ({ many }) => ({
 
 export const userBadgesRelations = relations(userBadges, ({ one }) => ({
   user: one(users, {
-    fields: [userBadges.userId],
-    references: [users.id],
+    fields: [
+      userBadges.userId,
+    ],
+    references: [
+      users.id,
+    ],
   }),
   badge: one(badges, {
-    fields: [userBadges.badgeSlug],
-    references: [badges.slug],
+    fields: [
+      userBadges.badgeSlug,
+    ],
+    references: [
+      badges.slug,
+    ],
   }),
   awardedByUser: one(users, {
-    fields: [userBadges.awardedBy],
-    references: [users.id],
+    fields: [
+      userBadges.awardedBy,
+    ],
+    references: [
+      users.id,
+    ],
   }),
 }))

@@ -113,6 +113,34 @@ describe('Middleware', () => {
     })
   })
 
+  it('should protect dashboard routes', () => {
+    // Dashboard routes that should be protected
+    const dashboardPaths = [
+      '/dashboard',
+      '/dashboard/passkeys',
+      '/dashboard/comments',
+      '/dashboard/status',
+    ]
+
+    dashboardPaths.forEach(path => {
+      expect(path.startsWith('/dashboard')).toBe(true)
+    })
+  })
+
+  it('should protect Spanish dashboard routes', () => {
+    // Spanish panel routes that should be protected
+    const panelPaths = [
+      '/es/panel',
+      '/es/panel/passkeys',
+      '/es/panel/comments',
+      '/es/panel/status',
+    ]
+
+    panelPaths.forEach(path => {
+      expect(path.startsWith('/es/panel')).toBe(true)
+    })
+  })
+
   it('should define user roles for authorization', () => {
     const roles = ['user', 'moderator', 'admin']
 

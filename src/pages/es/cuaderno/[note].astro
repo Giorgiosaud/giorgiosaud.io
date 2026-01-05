@@ -1,11 +1,11 @@
 ---
 import { Picture } from 'astro:assets'
 import { getCollection, render } from 'astro:content'
+import { TURNSTILE_SITE_KEY } from 'astro:env/client'
 import AISummarizer from '@components/AISummarizer.astro'
 import { CommentsSection } from '@components/comments'
 import ScrollTracker from '@components/ScrollTracker.svelte'
 import NoteTemplate from '@templates/Note.astro'
-import { TURNSTILE_SITE_KEY } from 'astro:env/client'
 import '@global-styles/md.css'
 
 export async function getStaticPaths() {

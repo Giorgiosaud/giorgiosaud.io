@@ -1,39 +1,39 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+import { onMount } from 'svelte'
 
-  let isOffline = $state(false)
-  let showBar = $state(false)
+let isOffline = $state(false)
+let showBar = $state(false)
 
-  onMount(() => {
-    isOffline = !navigator.onLine
+onMount(() => {
+  isOffline = !navigator.onLine
 
-    const handleOnline = () => {
-      isOffline = false
-      showBar = true
-      // Hide the "back online" message after 3 seconds
-      setTimeout(() => {
-        showBar = false
-      }, 3000)
-    }
+  const handleOnline = () => {
+    isOffline = false
+    showBar = true
+    // Hide the "back online" message after 3 seconds
+    setTimeout(() => {
+      showBar = false
+    }, 3000)
+  }
 
-    const handleOffline = () => {
-      isOffline = true
-      showBar = true
-    }
+  const handleOffline = () => {
+    isOffline = true
+    showBar = true
+  }
 
-    window.addEventListener('online', handleOnline)
-    window.addEventListener('offline', handleOffline)
+  window.addEventListener('online', handleOnline)
+  window.addEventListener('offline', handleOffline)
 
-    // Show bar if starting offline
-    if (isOffline) {
-      showBar = true
-    }
+  // Show bar if starting offline
+  if (isOffline) {
+    showBar = true
+  }
 
-    return () => {
-      window.removeEventListener('online', handleOnline)
-      window.removeEventListener('offline', handleOffline)
-    }
-  })
+  return () => {
+    window.removeEventListener('online', handleOnline)
+    window.removeEventListener('offline', handleOffline)
+  }
+})
 </script>
 
 {#if showBar}

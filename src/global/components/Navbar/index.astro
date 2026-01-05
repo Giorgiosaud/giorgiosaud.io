@@ -1,17 +1,17 @@
 ---
-import { type RouteNames, getLangFromUrl } from "@i18n/utils";
-import HamburgerIcon from "./HamburgerIcon.astro";
-import LogoNavigation from "./LogoNavigation.astro";
-import Navigation from "./Navigation.astro";
-import TranslateButton from "./TranslateButton.astro";
-import { LoginButton, UserAvatar } from "@components/auth";
+import { LoginButton, UserAvatar } from '@components/auth'
+import { getLangFromUrl, type RouteNames } from '@i18n/utils'
+import HamburgerIcon from './HamburgerIcon.astro'
+import LogoNavigation from './LogoNavigation.astro'
+import Navigation from './Navigation.astro'
+import TranslateButton from './TranslateButton.astro'
 
-const { pathToTranslate, pathToTranslateNote } = Astro.props;
-const lang = getLangFromUrl(Astro.url);
+const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
 
 interface Props {
-  pathToTranslate: RouteNames;
-  pathToTranslateNote?: string;
+  pathToTranslate: RouteNames
+  pathToTranslateNote?: string
 }
 ---
 

@@ -1,100 +1,105 @@
 <script lang="ts">
-  import Turnstile from '@components/Turnstile.svelte'
+import Turnstile from '@components/Turnstile.svelte'
 
-  interface Props {
-    noteId: string
-    parentId?: string
-    onSubmit: (comment: any) => void
-    onCancel?: () => void
-    lang: 'en' | 'es'
-    turnstileSiteKey?: string
-  }
+interface Props {
+  noteId: string
+  parentId?: string
+  onSubmit: (comment: any) => void
+  onCancel?: () => void
+  lang: 'en' | 'es'
+  turnstileSiteKey?: string
+}
 
-  const translations = {
-    en: {
-      writeComment: 'Write a comment...',
-      cancel: 'Cancel',
-      post: 'Post',
-      verifying: 'Verifying...',
-      verificationFailed: 'Verification failed. Please try again.',
-    },
-    es: {
-      writeComment: 'Escribe un comentario...',
-      cancel: 'Cancelar',
-      post: 'Publicar',
-      verifying: 'Verificando...',
-      verificationFailed: 'Verificacion fallida. Intenta de nuevo.',
-    },
-  }
+const translations = {
+  en: {
+    writeComment: 'Write a comment...',
+    cancel: 'Cancel',
+    post: 'Post',
+    verifying: 'Verifying...',
+    verificationFailed: 'Verification failed. Please try again.',
+  },
+  es: {
+    writeComment: 'Escribe un comentario...',
+    cancel: 'Cancelar',
+    post: 'Publicar',
+    verifying: 'Verificando...',
+    verificationFailed: 'Verificacion fallida. Intenta de nuevo.',
+  },
+}
 
-  let { noteId, parentId, onSubmit, onCancel, lang, turnstileSiteKey }: Props = $props()
+let { noteId, parentId, onSubmit, onCancel, lang, turnstileSiteKey }: Props =
+  $props()
 
-  let content = $state('')
-  let isSubmitting = $state(false)
-  let submitError = $state<string | null>(null)
-  let turnstileToken = $state<string | null>(null)
-  let turnstileError = $state(false)
-  let turnstileRef: Turnstile | null = null
+let content = $state('')
+let isSubmitting = $state(false)
+let submitError = $state<string | null>(null)
+let turnstileToken = $state<string | null>(null)
+let turnstileError = $state(false)
+let turnstileRef: Turnstile | null = null
 
-  const t = $derived(translations[lang])
-  const canSubmit = $derived(content.trim() && (turnstileToken || !turnstileSiteKey) && !isSubmitting)
+const t = $derived(translations[lang])
+const canSubmit = $derived(
+  content.trim() && (turnstileToken || !turnstileSiteKey) && !isSubmitting,
+)
 
-  function handleTurnstileVerify(token: string) {
-    turnstileToken = token
-    turnstileError = false
-  }
+function handleTurnstileVerify(token: string) {
+  turnstileToken = token
+  turnstileError = false
+}
 
-  function handleTurnstileError() {
-    turnstileError = true
-    turnstileToken = null
-  }
+function handleTurnstileError() {
+  turnstileError = true
+  turnstileToken = null
+}
 
-  function handleTurnstileExpire() {
-    turnstileToken = null
-  }
+function handleTurnstileExpire() {
+  turnstileToken = null
+}
 
-  async function handleSubmit(e: Event) {
-    e.preventDefault()
-    if (!content.trim() || isSubmitting) return
-    if (turnstileSiteKey && !turnstileToken) return
+async function handleSubmit(e: Event) {
+  e.preventDefault()
+  if (!content.trim() || isSubmitting) return
+  if (turnstileSiteKey && !turnstileToken) return
 
-    isSubmitting = true
-    submitError = null
-    try {
-      const res = await fetch('/api/comments/index.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          noteId,
-          content: content.trim(),
-          parentId,
-          turnstileToken,
-        }),
-      })
+  isSubmitting = true
+  submitError = null
+  try {
+    const res = await fetch('/api/comments/index.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        noteId,
+        content: content.trim(),
+        parentId,
+        turnstileToken,
+      }),
+    })
 
-      const data = await res.json()
+    const data = await res.json()
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to post')
-      }
-
-      onSubmit(data.comment)
-      content = ''
-      submitError = null
-      turnstileToken = null
-      turnstileRef?.reset()
-      onCancel?.()
-    } catch (err) {
-      console.error('Failed to post comment:', err)
-      submitError = err instanceof Error ? err.message : 'Failed to post comment'
-      // Reset turnstile on error
-      turnstileToken = null
-      turnstileRef?.reset()
-    } finally {
-      isSubmitting = false
+    if (!res.ok) {
+      throw new Error(data.error || 'Failed to post')
     }
+
+    onSubmit(data.comment)
+    content = ''
+    submitError = null
+    turnstileToken = null
+    turnstileRef?.reset()
+    onCancel?.()
+  } catch (err) {
+    console.error('Failed to post comment:', err)
+    submitError = err instanceof Error ? err.message : 'Failed to post comment'
+    // Reset turnstile on error
+    turnstileToken = null
+    turnstileRef?.reset()
+  } finally {
+    isSubmitting = false
   }
+}
 </script>
 
 <form onsubmit={handleSubmit} class="form">

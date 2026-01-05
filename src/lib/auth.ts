@@ -1,40 +1,47 @@
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { admin } from 'better-auth/plugins'
-import { passkey } from '@better-auth/passkey'
-import { db } from '@db'
-import * as schema from '@db/schema'
+import { BETTER_AUTH_URL } from 'astro:env/client'
 import {
   BETTER_AUTH_SECRET,
+  FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  FACEBOOK_CLIENT_ID,
-  FACEBOOK_CLIENT_SECRET,
 } from 'astro:env/server'
-import { BETTER_AUTH_URL } from 'astro:env/client'
+import { passkey } from '@better-auth/passkey'
+import { db } from '@db'
+import * as schema from '@db/schema'
+import { betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
+import { admin, username } from 'better-auth/plugins'
 
 // Detect production mode from both Astro and Node environments
-const isProd = typeof import.meta.env !== 'undefined'
-  ? import.meta.env.PROD
-  : process.env.NODE_ENV === 'production'
+const isProd =
+  typeof import.meta.env !== 'undefined'
+    ? import.meta.env.PROD
+    : process.env.NODE_ENV === 'production'
 
-const socialProviders: Record<string, { clientId: string; clientSecret: string }> = {}
-if(GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET) {
-  socialProviders['github'] = {
+const socialProviders: Record<
+  string,
+  {
+    clientId: string
+    clientSecret: string
+  }
+> = {}
+if (GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET) {
+  socialProviders.github = {
     clientId: GITHUB_CLIENT_ID,
     clientSecret: GITHUB_CLIENT_SECRET,
   }
 }
-if(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
-  socialProviders['google'] = {
+if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {
+  socialProviders.google = {
     clientId: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
   }
 }
-if(FACEBOOK_CLIENT_ID && FACEBOOK_CLIENT_SECRET) {
-  socialProviders['facebook'] = {
+if (FACEBOOK_CLIENT_ID && FACEBOOK_CLIENT_SECRET) {
+  socialProviders.facebook = {
     clientId: FACEBOOK_CLIENT_ID,
     clientSecret: FACEBOOK_CLIENT_SECRET,
   }
@@ -78,12 +85,18 @@ export const auth = betterAuth({
   plugins: [
     admin({
       defaultRole: 'user',
-      adminRoles: ['admin'],
+      adminRoles: [
+        'admin',
+      ],
     }),
     passkey({
       rpID: isProd ? 'giorgiosaud.io' : 'localhost',
       rpName: 'Giorgio Saud Notebook',
       origin: BETTER_AUTH_URL,
+    }),
+    username({
+      minLength: 3,
+      maxLength: 30,
     }),
   ],
 
@@ -94,7 +107,9 @@ export const auth = betterAuth({
   },
 
   // Trusted origins for CORS
-  trustedOrigins: [BETTER_AUTH_URL],
+  trustedOrigins: [
+    BETTER_AUTH_URL,
+  ],
 })
 
 export type Auth = typeof auth

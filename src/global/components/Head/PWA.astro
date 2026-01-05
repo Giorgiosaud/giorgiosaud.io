@@ -4,11 +4,7 @@ export interface Props {
   cacheMaxPages?: number
   cacheTtlMinutes?: number
 }
-const {
-  version = 'v1',
-  cacheMaxPages = 4,
-  cacheTtlMinutes = 10,
-} = Astro.props
+const { version = 'v1', cacheMaxPages = 4, cacheTtlMinutes = 10 } = Astro.props
 
 const cacheConfig = {
   maxPages: cacheMaxPages,
