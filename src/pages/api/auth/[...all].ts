@@ -13,13 +13,27 @@ export const ALL: APIRoute = async ctx => {
 
 // Explicit handlers for compatibility
 export const GET: APIRoute = async ctx => {
+  // Debug: log all possible sources of URL/query params
   console.log('[AUTH DEBUG GET] ctx.request.url:', ctx.request.url)
   console.log('[AUTH DEBUG GET] ctx.url.href:', ctx.url.href)
-  console.log('[AUTH DEBUG GET] ctx.url.search:', ctx.url.search)
-  console.log(
-    '[AUTH DEBUG GET] State from ctx.url:',
-    ctx.url.searchParams.get('state'),
-  )
+
+  // Check headers for original URL
+  const headers: Record<string, string> = {}
+  ctx.request.headers.forEach((v, k) => {
+    headers[k] = v
+  })
+  console.log('[AUTH DEBUG GET] Headers:', JSON.stringify(headers, null, 2))
+
+  // Check if Astro has the original URL somewhere
+  console.log('[AUTH DEBUG GET] ctx.params:', JSON.stringify(ctx.params))
+
+  // Try to get URL from x-forwarded headers or referer
+  const xUrl = ctx.request.headers.get('x-url')
+  const xOriginalUrl = ctx.request.headers.get('x-original-url')
+  const xInvokeQuery = ctx.request.headers.get('x-invoke-query')
+  console.log('[AUTH DEBUG GET] x-url:', xUrl)
+  console.log('[AUTH DEBUG GET] x-original-url:', xOriginalUrl)
+  console.log('[AUTH DEBUG GET] x-invoke-query:', xInvokeQuery)
 
   // If request.url is missing query params, reconstruct it
   const fullUrl = ctx.url.href
