@@ -1,0 +1,14 @@
+---
+import DashboardLayout from '@components/dashboard/DashboardLayout.astro'
+import UserComments from '@components/dashboard/UserComments.svelte'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+
+export const prerender = false
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<DashboardLayout title={t('dashboard.nav.comments')} currentPage="comments">
+  <UserComments client:load lang={lang} />
+</DashboardLayout>

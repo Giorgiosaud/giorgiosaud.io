@@ -1,9 +1,12 @@
-import type { APIRoute } from 'astro'
+import { TURNSTILE_SECRET_KEY } from 'astro:env/server'
 import { db } from '@db'
 import { comments } from '@db/schema'
-import { eq, and, isNull } from 'drizzle-orm'
-import { TURNSTILE_SECRET_KEY } from 'astro:env/server'
-import { sendCommentReplyNotification, isPushConfigured } from '@lib/push-notifications'
+import {
+  isPushConfigured,
+  sendCommentReplyNotification,
+} from '@lib/push-notifications'
+import type { APIRoute } from 'astro'
+import { and, eq, isNull } from 'drizzle-orm'
 
 export const prerender = false
 
@@ -17,14 +20,19 @@ async function verifyTurnstile(token: string): Promise<boolean> {
   }
 
   try {
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        secret: TURNSTILE_SECRET_KEY,
-        response: token,
-      }),
-    })
+    const response = await fetch(
+      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          secret: TURNSTILE_SECRET_KEY,
+          response: token,
+        }),
+      },
+    )
 
     const data = await response.json()
     return data.success === true
@@ -38,7 +46,14 @@ async function verifyTurnstile(token: string): Promise<boolean> {
 export const POST: APIRoute = async ({ request, locals }) => {
   // Check authentication
   if (!locals.user) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 })
+    return Response.json(
+      {
+        error: 'Authentication required',
+      },
+      {
+        status: 401,
+      },
+    )
   }
 
   try {
@@ -48,26 +63,65 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Verify Turnstile token if secret key is configured
     if (TURNSTILE_SECRET_KEY) {
       if (!turnstileToken) {
-        return Response.json({ error: 'Verification required' }, { status: 400 })
+        return Response.json(
+          {
+            error: 'Verification required',
+          },
+          {
+            status: 400,
+          },
+        )
       }
 
       const isValid = await verifyTurnstile(turnstileToken)
       if (!isValid) {
-        return Response.json({ error: 'Verification failed' }, { status: 403 })
+        return Response.json(
+          {
+            error: 'Verification failed',
+          },
+          {
+            status: 403,
+          },
+        )
       }
     }
 
     // Validate required fields
     if (!noteId || typeof noteId !== 'string') {
-      return Response.json({ error: 'Note ID required' }, { status: 400 })
+      return Response.json(
+        {
+          error: 'Note ID required',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
-    if (!content || typeof content !== 'string' || content.trim().length === 0) {
-      return Response.json({ error: 'Comment content required' }, { status: 400 })
+    if (
+      !content ||
+      typeof content !== 'string' ||
+      content.trim().length === 0
+    ) {
+      return Response.json(
+        {
+          error: 'Comment content required',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     if (content.length > 5000) {
-      return Response.json({ error: 'Comment too long (max 5000 characters)' }, { status: 400 })
+      return Response.json(
+        {
+          error: 'Comment too long (max 5000 characters)',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     // Calculate depth if replying
@@ -75,18 +129,23 @@ export const POST: APIRoute = async ({ request, locals }) => {
     let parentAuthorId: string | null = null
     if (parentId) {
       const parentComment = await db
-        .select({ depth: comments.depth, userId: comments.userId })
+        .select({
+          depth: comments.depth,
+          userId: comments.userId,
+        })
         .from(comments)
-        .where(
-          and(
-            eq(comments.id, parentId),
-            isNull(comments.deletedAt)
-          )
-        )
+        .where(and(eq(comments.id, parentId), isNull(comments.deletedAt)))
         .limit(1)
 
       if (parentComment.length === 0) {
-        return Response.json({ error: 'Parent comment not found' }, { status: 404 })
+        return Response.json(
+          {
+            error: 'Parent comment not found',
+          },
+          {
+            status: 404,
+          },
+        )
       }
 
       depth = parentComment[0].depth + 1
@@ -94,8 +153,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
       if (depth > MAX_DEPTH) {
         return Response.json(
-          { error: `Maximum reply depth (${MAX_DEPTH}) exceeded` },
-          { status: 400 }
+          {
+            error: `Maximum reply depth (${MAX_DEPTH}) exceeded`,
+          },
+          {
+            status: 400,
+          },
         )
       }
     }
@@ -121,7 +184,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
       })
 
     // Send push notification for replies (async, don't block response)
-    if (parentAuthorId && parentAuthorId !== locals.user.id && isPushConfigured()) {
+    if (
+      parentAuthorId &&
+      parentAuthorId !== locals.user.id &&
+      isPushConfigured()
+    ) {
       sendCommentReplyNotification(
         parentAuthorId,
         locals.user.name || 'Someone',
@@ -131,18 +198,30 @@ export const POST: APIRoute = async ({ request, locals }) => {
       ).catch(err => console.error('Failed to send reply notification:', err))
     }
 
-    return Response.json({
-      comment: {
-        ...newComment,
-        isEdited: false,
-        editedAt: null,
-        authorName: locals.user.name,
-        authorImage: locals.user.image,
-        replies: [],
+    return Response.json(
+      {
+        comment: {
+          ...newComment,
+          isEdited: false,
+          editedAt: null,
+          authorName: locals.user.name,
+          authorImage: locals.user.image,
+          replies: [],
+        },
       },
-    }, { status: 201 })
+      {
+        status: 201,
+      },
+    )
   } catch (error) {
     console.error('Failed to create comment:', error)
-    return Response.json({ error: 'Failed to create comment' }, { status: 500 })
+    return Response.json(
+      {
+        error: 'Failed to create comment',
+      },
+      {
+        status: 500,
+      },
+    )
   }
 }

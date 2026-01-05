@@ -1,0 +1,110 @@
+---
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import Base from '@templates/Base.astro'
+
+interface Props {
+  title: string
+  currentPage: 'profile' | 'passkeys' | 'comments' | 'status'
+}
+
+const { title, currentPage } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+const basePath = lang === 'es' ? '/es/panel' : '/dashboard'
+
+const navItems = [
+  {
+    id: 'profile',
+    label: t('dashboard.nav.profile'),
+    href: basePath,
+  },
+  {
+    id: 'passkeys',
+    label: t('dashboard.nav.passkeys'),
+    href: `${basePath}/passkeys`,
+  },
+  {
+    id: 'comments',
+    label: t('dashboard.nav.comments'),
+    href: `${basePath}/comments`,
+  },
+  {
+    id: 'status',
+    label: t('dashboard.nav.status'),
+    href: `${basePath}/status`,
+  },
+]
+---
+
+<Base title={`${t('dashboard.title')} - ${title}`} pathToTranslate="dashboard">
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>{t('dashboard.title')}</h1>
+    </header>
+
+    <nav class="dashboard-nav">
+      {navItems.map(item => (
+        <a
+          href={item.href}
+          class:list={['nav-link', { active: currentPage === item.id }]}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <main class="dashboard-content">
+      <slot />
+    </main>
+  </div>
+</Base>
+
+<style>
+  .dashboard-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .dashboard-header {
+    margin-bottom: 1rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .dashboard-nav {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border, #ddd);
+    padding-bottom: 0;
+    flex-wrap: wrap;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    color: var(--color-muted, #666);
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .nav-link:hover {
+    color: var(--color-main);
+  }
+
+  .nav-link.active {
+    color: var(--color-main);
+    border-bottom-color: var(--color-main);
+    font-weight: 500;
+  }
+
+  .dashboard-content {
+    min-height: 400px;
+  }
+</style>

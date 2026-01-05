@@ -46,9 +46,7 @@ async function getVapidKey(): Promise<string | null> {
  */
 function urlBase64ToUint8Array(base64String: string): Uint8Array {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/')
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
 
   const rawData = window.atob(base64)
   const outputArray = new Uint8Array(rawData.length)
@@ -96,7 +94,9 @@ export async function subscribeToPush(): Promise<boolean> {
     // Send subscription to server
     const response = await fetch('/api/push/subscribe.json', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(subscription.toJSON()),
       credentials: 'include',
     })
@@ -134,8 +134,12 @@ export async function unsubscribeFromPush(): Promise<boolean> {
     // Notify server
     await fetch('/api/push/subscribe.json', {
       method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ endpoint: subscription.endpoint }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        endpoint: subscription.endpoint,
+      }),
       credentials: 'include',
     })
 

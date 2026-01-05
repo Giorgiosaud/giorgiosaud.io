@@ -6,9 +6,9 @@
 // with app-specific relations in ./relations.ts
 
 export {
-  user as users,
-  session as sessions,
   account as accounts,
-  verification as verifications,
   passkey as passkeys,
+  session as sessions,
+  user as users,
+  verification as verifications,
 } from '../../auth-schema.generated'

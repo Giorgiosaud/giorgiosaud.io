@@ -1,138 +1,149 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+import { onMount } from 'svelte'
 
-  const CONSENT_KEY = 'cookie_consent'
-  const CONSENT_SESSION_KEY = 'consent_session_id'
-  const CONSENT_VERSION = '1' // Bump this to re-ask consent
+const CONSENT_KEY = 'cookie_consent'
+const CONSENT_SESSION_KEY = 'consent_session_id'
+const CONSENT_VERSION = '1' // Bump this to re-ask consent
 
-  type ConsentState = {
-    necessary: boolean
-    analytics: boolean
-    marketing: boolean
-    version: string
-    timestamp: number
+type ConsentState = {
+  necessary: boolean
+  analytics: boolean
+  marketing: boolean
+  version: string
+  timestamp: number
+}
+
+type ActionType = 'accept_all' | 'reject_all' | 'custom'
+
+let showBanner = $state(false)
+let showSettings = $state(false)
+let consent = $state<ConsentState>({
+  necessary: true, // Always required
+  analytics: false,
+  marketing: false,
+  version: CONSENT_VERSION,
+  timestamp: 0,
+})
+
+// Get or create session ID for consent tracking
+function getSessionId(): string {
+  let sessionId = localStorage.getItem(CONSENT_SESSION_KEY)
+  if (!sessionId) {
+    sessionId = crypto.randomUUID()
+    localStorage.setItem(CONSENT_SESSION_KEY, sessionId)
   }
+  return sessionId
+}
 
-  type ActionType = 'accept_all' | 'reject_all' | 'custom'
-
-  let showBanner = $state(false)
-  let showSettings = $state(false)
-  let consent = $state<ConsentState>({
-    necessary: true, // Always required
-    analytics: false,
-    marketing: false,
-    version: CONSENT_VERSION,
-    timestamp: 0,
-  })
-
-  // Get or create session ID for consent tracking
-  function getSessionId(): string {
-    let sessionId = localStorage.getItem(CONSENT_SESSION_KEY)
-    if (!sessionId) {
-      sessionId = crypto.randomUUID()
-      localStorage.setItem(CONSENT_SESSION_KEY, sessionId)
-    }
-    return sessionId
+// Record consent to server for GDPR audit trail
+async function recordConsentToServer(
+  state: ConsentState,
+  actionType: ActionType,
+) {
+  try {
+    await fetch('/api/consent/record.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        sessionId: getSessionId(),
+        analytics: state.analytics,
+        marketing: state.marketing,
+        version: state.version,
+        actionType,
+      }),
+    })
+  } catch (error) {
+    // Silent fail - don't block user experience
+    console.error('Failed to record consent:', error)
   }
+}
 
-  // Record consent to server for GDPR audit trail
-  async function recordConsentToServer(state: ConsentState, actionType: ActionType) {
+onMount(() => {
+  const stored = localStorage.getItem(CONSENT_KEY)
+  if (stored) {
     try {
-      await fetch('/api/consent/record.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sessionId: getSessionId(),
-          analytics: state.analytics,
-          marketing: state.marketing,
-          version: state.version,
-          actionType,
-        }),
-      })
-    } catch (error) {
-      // Silent fail - don't block user experience
-      console.error('Failed to record consent:', error)
-    }
-  }
-
-  onMount(() => {
-    const stored = localStorage.getItem(CONSENT_KEY)
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored) as ConsentState
-        // Re-ask if version changed
-        if (parsed.version !== CONSENT_VERSION) {
-          showBanner = true
-        } else {
-          consent = parsed
-          applyConsent(consent)
-        }
-      } catch {
+      const parsed = JSON.parse(stored) as ConsentState
+      // Re-ask if version changed
+      if (parsed.version !== CONSENT_VERSION) {
         showBanner = true
+      } else {
+        consent = parsed
+        applyConsent(consent)
       }
-    } else {
+    } catch {
       showBanner = true
     }
-  })
+  } else {
+    showBanner = true
+  }
+})
 
-  function applyConsent(state: ConsentState) {
-    // Push consent to dataLayer for GTM
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      window.dataLayer.push({
-        event: 'consent_update',
-        consent_analytics: state.analytics,
-        consent_marketing: state.marketing,
-      })
-    }
-
-    // Update gtag consent mode if available
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-      window.gtag('consent', 'update', {
-        analytics_storage: state.analytics ? 'granted' : 'denied',
-        ad_storage: state.marketing ? 'granted' : 'denied',
-        ad_user_data: state.marketing ? 'granted' : 'denied',
-        ad_personalization: state.marketing ? 'granted' : 'denied',
-      })
-    }
+function applyConsent(state: ConsentState) {
+  // Push consent to dataLayer for GTM
+  if (typeof window !== 'undefined' && window.dataLayer) {
+    window.dataLayer.push({
+      event: 'consent_update',
+      consent_analytics: state.analytics,
+      consent_marketing: state.marketing,
+    })
   }
 
-  function saveConsent(state: ConsentState, actionType: ActionType) {
-    state.timestamp = Date.now()
-    localStorage.setItem(CONSENT_KEY, JSON.stringify(state))
-    applyConsent(state)
-    // Record to server for GDPR compliance (async, non-blocking)
-    recordConsentToServer(state, actionType)
-    showBanner = false
-    showSettings = false
+  // Update gtag consent mode if available
+  if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    window.gtag('consent', 'update', {
+      analytics_storage: state.analytics ? 'granted' : 'denied',
+      ad_storage: state.marketing ? 'granted' : 'denied',
+      ad_user_data: state.marketing ? 'granted' : 'denied',
+      ad_personalization: state.marketing ? 'granted' : 'denied',
+    })
   }
+}
 
-  function acceptAll() {
-    saveConsent({
+function saveConsent(state: ConsentState, actionType: ActionType) {
+  state.timestamp = Date.now()
+  localStorage.setItem(CONSENT_KEY, JSON.stringify(state))
+  applyConsent(state)
+  // Record to server for GDPR compliance (async, non-blocking)
+  recordConsentToServer(state, actionType)
+  showBanner = false
+  showSettings = false
+}
+
+function acceptAll() {
+  saveConsent(
+    {
       ...consent,
       analytics: true,
       marketing: true,
-    }, 'accept_all')
-  }
+    },
+    'accept_all',
+  )
+}
 
-  function rejectAll() {
-    saveConsent({
+function rejectAll() {
+  saveConsent(
+    {
       ...consent,
       analytics: false,
       marketing: false,
-    }, 'reject_all')
-  }
+    },
+    'reject_all',
+  )
+}
 
-  function saveCustom() {
-    saveConsent(consent, 'custom')
-  }
+function saveCustom() {
+  saveConsent(consent, 'custom')
+}
 
-  // Declare global types
-  declare global {
-    interface Window {
-      dataLayer: unknown[]
-      gtag: (...args: unknown[]) => void
-    }
+// Declare global types
+declare global {
+  interface Window {
+    dataLayer: unknown[]
+    gtag: (...args: unknown[]) => void
   }
+}
 </script>
 
 {#if showBanner}

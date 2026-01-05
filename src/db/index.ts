@@ -15,9 +15,10 @@ try {
 }
 
 // Detect dev mode from both Astro and Node environments
-const isDev = typeof import.meta.env !== 'undefined'
-  ? import.meta.env.DEV
-  : process.env.NODE_ENV === 'development'
+const isDev =
+  typeof import.meta.env !== 'undefined'
+    ? import.meta.env.DEV
+    : process.env.NODE_ENV === 'development'
 
 // Only create a real db connection if we have a URL
 // This allows the module to be imported during SSG without crashing

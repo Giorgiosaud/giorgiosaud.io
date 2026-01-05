@@ -9,10 +9,20 @@ export const userProfiles = pgTable('user_profiles', {
   userId: text('user_id')
     .notNull()
     .unique()
-    .references(() => users.id, { onDelete: 'cascade' }),
+    .references(() => users.id, {
+      onDelete: 'cascade',
+    }),
   displayName: text('display_name'),
   bio: text('bio'),
   website: text('website'),
-  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-  updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp('created_at', {
+    withTimezone: true,
+  })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp('updated_at', {
+    withTimezone: true,
+  })
+    .defaultNow()
+    .notNull(),
 })

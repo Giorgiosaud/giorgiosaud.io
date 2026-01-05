@@ -1,25 +1,40 @@
 ---
+import { getCollection } from 'astro:content'
 import AdminLayout from '@components/admin/AdminLayout.astro'
 import { db } from '@db'
-import { isNull, desc, eq, like, and, or, sql } from 'drizzle-orm'
 import { comments } from '@db/schema'
-import { getCollection } from 'astro:content'
+import { and, desc, eq, isNull, like, or, sql } from 'drizzle-orm'
 
 export const prerender = false
 
 // Get notes to map selfHealing codes to titles
 const notesEn = await getCollection('notes')
 const notesEs = await getCollection('notas')
-const notesMap = new Map<string, { title: string; slug: string; lang: string }>()
+const notesMap = new Map<
+  string,
+  {
+    title: string
+    slug: string
+    lang: string
+  }
+>()
 
 for (const note of notesEn) {
   if (note.data.selfHealing) {
-    notesMap.set(note.data.selfHealing, { title: note.data.title, slug: note.id, lang: 'en' })
+    notesMap.set(note.data.selfHealing, {
+      title: note.data.title,
+      slug: note.id,
+      lang: 'en',
+    })
   }
 }
 for (const note of notesEs) {
   if (note.data.selfHealing && !notesMap.has(note.data.selfHealing)) {
-    notesMap.set(note.data.selfHealing, { title: note.data.title, slug: note.id, lang: 'es' })
+    notesMap.set(note.data.selfHealing, {
+      title: note.data.title,
+      slug: note.id,
+      lang: 'es',
+    })
   }
 }
 
@@ -32,7 +47,9 @@ const page = parseInt(url.searchParams.get('page') || '1')
 const limit = 20
 
 // Build where conditions
-const conditions = [isNull(comments.deletedAt)]
+const conditions = [
+  isNull(comments.deletedAt),
+]
 
 if (filterPost) {
   conditions.push(eq(comments.noteSelfHealing, filterPost))
@@ -50,7 +67,9 @@ if (searchQuery) {
 
 // Get total count for pagination
 const [{ count: totalCount }] = await db
-  .select({ count: sql<number>`count(*)::int` })
+  .select({
+    count: sql<number>`count(*)::int`,
+  })
   .from(comments)
   .where(and(...conditions))
 
@@ -60,15 +79,21 @@ const offset = (page - 1) * limit
 // Get comments with pagination
 const allComments = await db.query.comments.findMany({
   where: and(...conditions),
-  orderBy: [desc(comments.createdAt)],
+  orderBy: [
+    desc(comments.createdAt),
+  ],
   limit,
   offset,
-  with: { author: true },
+  with: {
+    author: true,
+  },
 })
 
 // Get unique posts for filter dropdown
 const uniquePosts = await db
-  .selectDistinct({ noteSelfHealing: comments.noteSelfHealing })
+  .selectDistinct({
+    noteSelfHealing: comments.noteSelfHealing,
+  })
   .from(comments)
   .where(isNull(comments.deletedAt))
   .orderBy(comments.noteSelfHealing)

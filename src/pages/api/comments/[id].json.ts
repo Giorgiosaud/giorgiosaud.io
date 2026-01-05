@@ -1,19 +1,33 @@
-import type { APIRoute } from 'astro'
 import { db } from '@db'
 import { comments } from '@db/schema'
-import { eq, and, isNull } from 'drizzle-orm'
+import type { APIRoute } from 'astro'
+import { and, eq, isNull } from 'drizzle-orm'
 
 export const prerender = false
 
 // PUT /api/comments/[id].json - Update a comment
 export const PUT: APIRoute = async ({ params, request, locals }) => {
   if (!locals.user) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 })
+    return Response.json(
+      {
+        error: 'Authentication required',
+      },
+      {
+        status: 401,
+      },
+    )
   }
 
   const { id } = params
   if (!id) {
-    return Response.json({ error: 'Comment ID required' }, { status: 400 })
+    return Response.json(
+      {
+        error: 'Comment ID required',
+      },
+      {
+        status: 400,
+      },
+    )
   }
 
   try {
@@ -29,11 +43,25 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
       .limit(1)
 
     if (!existing) {
-      return Response.json({ error: 'Comment not found' }, { status: 404 })
+      return Response.json(
+        {
+          error: 'Comment not found',
+        },
+        {
+          status: 404,
+        },
+      )
     }
 
     if (existing.deletedAt) {
-      return Response.json({ error: 'Comment has been deleted' }, { status: 410 })
+      return Response.json(
+        {
+          error: 'Comment has been deleted',
+        },
+        {
+          status: 410,
+        },
+      )
     }
 
     // Check ownership (or admin)
@@ -41,18 +69,43 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
     const isAdmin = locals.user.role === 'admin'
 
     if (!isOwner && !isAdmin) {
-      return Response.json({ error: 'Not authorized to edit this comment' }, { status: 403 })
+      return Response.json(
+        {
+          error: 'Not authorized to edit this comment',
+        },
+        {
+          status: 403,
+        },
+      )
     }
 
     const body = await request.json()
     const { content } = body
 
-    if (!content || typeof content !== 'string' || content.trim().length === 0) {
-      return Response.json({ error: 'Comment content required' }, { status: 400 })
+    if (
+      !content ||
+      typeof content !== 'string' ||
+      content.trim().length === 0
+    ) {
+      return Response.json(
+        {
+          error: 'Comment content required',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     if (content.length > 5000) {
-      return Response.json({ error: 'Comment too long (max 5000 characters)' }, { status: 400 })
+      return Response.json(
+        {
+          error: 'Comment too long (max 5000 characters)',
+        },
+        {
+          status: 400,
+        },
+      )
     }
 
     // Update the comment
@@ -72,22 +125,45 @@ export const PUT: APIRoute = async ({ params, request, locals }) => {
         editedAt: comments.editedAt,
       })
 
-    return Response.json({ comment: updated })
+    return Response.json({
+      comment: updated,
+    })
   } catch (error) {
     console.error('Failed to update comment:', error)
-    return Response.json({ error: 'Failed to update comment' }, { status: 500 })
+    return Response.json(
+      {
+        error: 'Failed to update comment',
+      },
+      {
+        status: 500,
+      },
+    )
   }
 }
 
 // DELETE /api/comments/[id].json - Soft delete a comment
 export const DELETE: APIRoute = async ({ params, request, locals }) => {
   if (!locals.user) {
-    return Response.json({ error: 'Authentication required' }, { status: 401 })
+    return Response.json(
+      {
+        error: 'Authentication required',
+      },
+      {
+        status: 401,
+      },
+    )
   }
 
   const { id } = params
   if (!id) {
-    return Response.json({ error: 'Comment ID required' }, { status: 400 })
+    return Response.json(
+      {
+        error: 'Comment ID required',
+      },
+      {
+        status: 400,
+      },
+    )
   }
 
   try {
@@ -103,11 +179,25 @@ export const DELETE: APIRoute = async ({ params, request, locals }) => {
       .limit(1)
 
     if (!existing) {
-      return Response.json({ error: 'Comment not found' }, { status: 404 })
+      return Response.json(
+        {
+          error: 'Comment not found',
+        },
+        {
+          status: 404,
+        },
+      )
     }
 
     if (existing.deletedAt) {
-      return Response.json({ error: 'Comment already deleted' }, { status: 410 })
+      return Response.json(
+        {
+          error: 'Comment already deleted',
+        },
+        {
+          status: 410,
+        },
+      )
     }
 
     // Check ownership (or admin)
@@ -115,7 +205,14 @@ export const DELETE: APIRoute = async ({ params, request, locals }) => {
     const isAdmin = locals.user.role === 'admin'
 
     if (!isOwner && !isAdmin) {
-      return Response.json({ error: 'Not authorized to delete this comment' }, { status: 403 })
+      return Response.json(
+        {
+          error: 'Not authorized to delete this comment',
+        },
+        {
+          status: 403,
+        },
+      )
     }
 
     // Get optional reason from body
@@ -133,14 +230,24 @@ export const DELETE: APIRoute = async ({ params, request, locals }) => {
       .set({
         deletedAt: new Date(),
         deletedBy: locals.user.id,
-        deletedReason: reason || (isAdmin && !isOwner ? 'Removed by moderator' : null),
+        deletedReason:
+          reason || (isAdmin && !isOwner ? 'Removed by moderator' : null),
         updatedAt: new Date(),
       })
       .where(eq(comments.id, id))
 
-    return Response.json({ success: true })
+    return Response.json({
+      success: true,
+    })
   } catch (error) {
     console.error('Failed to delete comment:', error)
-    return Response.json({ error: 'Failed to delete comment' }, { status: 500 })
+    return Response.json(
+      {
+        error: 'Failed to delete comment',
+      },
+      {
+        status: 500,
+      },
+    )
   }
 }

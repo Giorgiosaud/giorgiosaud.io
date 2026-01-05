@@ -1,7 +1,7 @@
-import type { APIRoute } from 'astro'
 import { db } from '@db'
 import { comments, users } from '@db/schema'
-import { eq, and, isNull, asc } from 'drizzle-orm'
+import type { APIRoute } from 'astro'
+import { and, asc, eq, isNull } from 'drizzle-orm'
 
 export const prerender = false
 
@@ -10,7 +10,14 @@ export const GET: APIRoute = async ({ params }) => {
   const { noteId } = params
 
   if (!noteId) {
-    return Response.json({ error: 'Note ID required' }, { status: 400 })
+    return Response.json(
+      {
+        error: 'Note ID required',
+      },
+      {
+        status: 400,
+      },
+    )
   }
 
   try {
@@ -34,8 +41,8 @@ export const GET: APIRoute = async ({ params }) => {
         and(
           eq(comments.noteSelfHealing, noteId),
           isNull(comments.deletedAt),
-          eq(comments.isApproved, true)
-        )
+          eq(comments.isApproved, true),
+        ),
       )
       .orderBy(asc(comments.createdAt))
 
@@ -48,7 +55,14 @@ export const GET: APIRoute = async ({ params }) => {
     })
   } catch (error) {
     console.error('Failed to fetch comments:', error)
-    return Response.json({ error: 'Failed to fetch comments' }, { status: 500 })
+    return Response.json(
+      {
+        error: 'Failed to fetch comments',
+      },
+      {
+        status: 500,
+      },
+    )
   }
 }
 
@@ -72,7 +86,10 @@ function buildThreadedComments(flatComments: Comment[]): Comment[] {
 
   // First pass: create map and initialize replies array
   for (const comment of flatComments) {
-    commentMap.set(comment.id, { ...comment, replies: [] })
+    commentMap.set(comment.id, {
+      ...comment,
+      replies: [],
+    })
   }
 
   // Second pass: build tree structure

@@ -1,110 +1,134 @@
 <script lang="ts">
-  import type { User } from 'better-auth/types'
-  import CommentForm from './CommentForm.svelte'
+import type { User } from 'better-auth/types'
+import CommentForm from './CommentForm.svelte'
 
-  interface Comment {
-    id: string
-    content: string
-    parentId: string | null
-    depth: number
-    userId: string
-    isEdited: boolean
-    createdAt: string
-    editedAt: string | null
-    authorName?: string | null
-    authorImage?: string | null
-    replies?: Comment[]
-  }
+interface Comment {
+  id: string
+  content: string
+  parentId: string | null
+  depth: number
+  userId: string
+  isEdited: boolean
+  createdAt: string
+  editedAt: string | null
+  authorName?: string | null
+  authorImage?: string | null
+  replies?: Comment[]
+}
 
-  interface Props {
-    comment: Comment
-    noteId: string
-    user: User | null
-    onReply: (comment: Comment) => void
-    onUpdate: (comment: Comment) => void
-    onDelete: (id: string) => void
-    lang: 'en' | 'es'
-    turnstileSiteKey?: string
-  }
+interface Props {
+  comment: Comment
+  noteId: string
+  user: User | null
+  onReply: (comment: Comment) => void
+  onUpdate: (comment: Comment) => void
+  onDelete: (id: string) => void
+  lang: 'en' | 'es'
+  turnstileSiteKey?: string
+}
 
-  const translations = {
-    en: {
-      reply: 'Reply',
-      edit: 'Edit',
-      delete: 'Delete',
-      cancel: 'Cancel',
-      save: 'Save',
-      edited: 'edited',
-      confirmDelete: 'Delete this comment?',
-    },
-    es: {
-      reply: 'Responder',
-      edit: 'Editar',
-      delete: 'Eliminar',
-      cancel: 'Cancelar',
-      save: 'Guardar',
-      edited: 'editado',
-      confirmDelete: 'Eliminar este comentario?',
-    },
-  }
+const translations = {
+  en: {
+    reply: 'Reply',
+    edit: 'Edit',
+    delete: 'Delete',
+    cancel: 'Cancel',
+    save: 'Save',
+    edited: 'edited',
+    confirmDelete: 'Delete this comment?',
+  },
+  es: {
+    reply: 'Responder',
+    edit: 'Editar',
+    delete: 'Eliminar',
+    cancel: 'Cancelar',
+    save: 'Guardar',
+    edited: 'editado',
+    confirmDelete: 'Eliminar este comentario?',
+  },
+}
 
-  let { comment, noteId, user, onReply, onUpdate, onDelete, lang, turnstileSiteKey }: Props = $props()
+let {
+  comment,
+  noteId,
+  user,
+  onReply,
+  onUpdate,
+  onDelete,
+  lang,
+  turnstileSiteKey,
+}: Props = $props()
 
-  let isReplying = $state(false)
-  let isEditing = $state(false)
-  let editContent = $state(comment.content)
+let isReplying = $state(false)
+let isEditing = $state(false)
+let editContent = $state(comment.content)
 
-  const t = $derived(translations[lang])
-  const isOwner = $derived(user?.id === comment.userId)
-  const isAdmin = $derived((user as (User & { role?: string }) | null)?.role === 'admin')
-  const canModify = $derived(isOwner || isAdmin)
-  const canReply = $derived(comment.depth < 3)
+const t = $derived(translations[lang])
+const isOwner = $derived(user?.id === comment.userId)
+const isAdmin = $derived(
+  (
+    user as
+      | (User & {
+          role?: string
+        })
+      | null
+  )?.role === 'admin',
+)
+const canModify = $derived(isOwner || isAdmin)
+const canReply = $derived(comment.depth < 3)
 
-  function formatDate(dateStr: string): string {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString(lang === 'es' ? 'es-ES' : 'en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
+async function handleEdit() {
+  if (!editContent.trim()) return
+  try {
+    const res = await fetch(`/api/comments/${comment.id}.json`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        content: editContent.trim(),
+      }),
     })
+    if (!res.ok) throw new Error('Failed to update')
+    const { comment: updated } = await res.json()
+    onUpdate({
+      ...comment,
+      ...updated,
+    })
+    isEditing = false
+  } catch (err) {
+    console.error('Failed to update:', err)
   }
+}
 
-  async function handleEdit() {
-    if (!editContent.trim()) return
-    try {
-      const res = await fetch(`/api/comments/${comment.id}.json`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ content: editContent.trim() }),
-      })
-      if (!res.ok) throw new Error('Failed to update')
-      const { comment: updated } = await res.json()
-      onUpdate({ ...comment, ...updated })
-      isEditing = false
-    } catch (err) {
-      console.error('Failed to update:', err)
-    }
+async function handleDelete() {
+  if (!confirm(t.confirmDelete)) return
+  try {
+    const res = await fetch(`/api/comments/${comment.id}.json`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    if (!res.ok) throw new Error('Failed to delete')
+    onDelete(comment.id)
+  } catch (err) {
+    console.error('Failed to delete:', err)
   }
+}
 
-  async function handleDelete() {
-    if (!confirm(t.confirmDelete)) return
-    try {
-      const res = await fetch(`/api/comments/${comment.id}.json`, {
-        method: 'DELETE',
-        credentials: 'include',
-      })
-      if (!res.ok) throw new Error('Failed to delete')
-      onDelete(comment.id)
-    } catch (err) {
-      console.error('Failed to delete:', err)
-    }
-  }
-
-  function handleReplySubmit(newComment: Comment) {
-    onReply(newComment)
-    isReplying = false
-  }
+function handleReplySubmit(newComment: Comment) {
+  onReply(newComment)
+  isReplying = false
+}
 </script>
 
 <article class="comment" style="--depth: {comment.depth}">

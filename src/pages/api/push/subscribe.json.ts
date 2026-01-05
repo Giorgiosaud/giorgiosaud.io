@@ -1,6 +1,6 @@
-import type { APIRoute } from 'astro'
 import { db } from '@db'
 import { pushSubscriptions } from '@db/schema'
+import type { APIRoute } from 'astro'
 import { eq } from 'drizzle-orm'
 
 export const prerender = false
@@ -17,12 +17,19 @@ interface PushSubscriptionData {
 // Subscribe to push notifications
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
-    const body = await request.json() as PushSubscriptionData
+    const body = (await request.json()) as PushSubscriptionData
 
     if (!body.endpoint || !body.keys?.p256dh || !body.keys?.auth) {
       return new Response(
-        JSON.stringify({ error: 'Invalid subscription data' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } },
+        JSON.stringify({
+          error: 'Invalid subscription data',
+        }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
     }
 
@@ -36,12 +43,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     if (existing) {
       // Update existing subscription
-      await db.update(pushSubscriptions)
+      await db
+        .update(pushSubscriptions)
         .set({
           userId,
           p256dh: body.keys.p256dh,
           auth: body.keys.auth,
-          expirationTime: body.expirationTime ? new Date(body.expirationTime) : null,
+          expirationTime: body.expirationTime
+            ? new Date(body.expirationTime)
+            : null,
           userAgent,
           isActive: true,
           failureCount: 0,
@@ -51,8 +61,15 @@ export const POST: APIRoute = async ({ request, locals }) => {
         .where(eq(pushSubscriptions.endpoint, body.endpoint))
 
       return new Response(
-        JSON.stringify({ success: true, message: 'Subscription updated' }),
-        { headers: { 'Content-Type': 'application/json' } },
+        JSON.stringify({
+          success: true,
+          message: 'Subscription updated',
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
     }
 
@@ -62,19 +79,36 @@ export const POST: APIRoute = async ({ request, locals }) => {
       endpoint: body.endpoint,
       p256dh: body.keys.p256dh,
       auth: body.keys.auth,
-      expirationTime: body.expirationTime ? new Date(body.expirationTime) : null,
+      expirationTime: body.expirationTime
+        ? new Date(body.expirationTime)
+        : null,
       userAgent,
     })
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Subscribed successfully' }),
-      { status: 201, headers: { 'Content-Type': 'application/json' } },
+      JSON.stringify({
+        success: true,
+        message: 'Subscribed successfully',
+      }),
+      {
+        status: 201,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     )
   } catch (error) {
     console.error('Push subscription error:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to subscribe' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
+      JSON.stringify({
+        error: 'Failed to subscribe',
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     )
   }
 }
@@ -82,29 +116,56 @@ export const POST: APIRoute = async ({ request, locals }) => {
 // Unsubscribe from push notifications
 export const DELETE: APIRoute = async ({ request }) => {
   try {
-    const body = await request.json() as { endpoint: string }
+    const body = (await request.json()) as {
+      endpoint: string
+    }
 
     if (!body.endpoint) {
       return new Response(
-        JSON.stringify({ error: 'Endpoint required' }),
-        { status: 400, headers: { 'Content-Type': 'application/json' } },
+        JSON.stringify({
+          error: 'Endpoint required',
+        }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       )
     }
 
     // Mark subscription as inactive instead of deleting
-    const result = await db.update(pushSubscriptions)
-      .set({ isActive: false, updatedAt: new Date() })
+    const result = await db
+      .update(pushSubscriptions)
+      .set({
+        isActive: false,
+        updatedAt: new Date(),
+      })
       .where(eq(pushSubscriptions.endpoint, body.endpoint))
 
     return new Response(
-      JSON.stringify({ success: true, message: 'Unsubscribed successfully' }),
-      { headers: { 'Content-Type': 'application/json' } },
+      JSON.stringify({
+        success: true,
+        message: 'Unsubscribed successfully',
+      }),
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     )
   } catch (error) {
     console.error('Push unsubscribe error:', error)
     return new Response(
-      JSON.stringify({ error: 'Failed to unsubscribe' }),
-      { status: 500, headers: { 'Content-Type': 'application/json' } },
+      JSON.stringify({
+        error: 'Failed to unsubscribe',
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     )
   }
 }

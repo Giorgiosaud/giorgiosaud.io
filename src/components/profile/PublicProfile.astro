@@ -1,0 +1,284 @@
+---
+import RecentComments from './RecentComments.svelte'
+
+interface Props {
+  user: {
+    name: string
+    image: string | null
+    username: string
+    createdAt: string
+  }
+  profile: {
+    displayName: string | null
+    bio: string | null
+    website: string | null
+  }
+  badges: Array<{
+    id: string
+    name: string
+    description: string
+    icon: string
+    color: string
+    earnedAt: string
+  }>
+  recentComments: Array<{
+    id: string
+    content: string
+    createdAt: string
+    note: {
+      title: string
+      url: string
+    } | null
+  }>
+  lang?: 'en' | 'es'
+}
+
+const { user, profile, badges, recentComments, lang = 'en' } = Astro.props
+
+const translations = {
+  en: {
+    memberSince: 'Member since',
+    badges: 'Badges',
+    noBadges: 'No badges yet',
+    recentComments: 'Recent Comments',
+    noComments: 'No comments yet',
+    visitWebsite: 'Visit Website',
+  },
+  es: {
+    memberSince: 'Miembro desde',
+    badges: 'Insignias',
+    noBadges: 'Sin insignias aun',
+    recentComments: 'Comentarios Recientes',
+    noComments: 'Sin comentarios aun',
+    visitWebsite: 'Visitar Sitio Web',
+  },
+}
+
+const t = translations[lang]
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr)
+  return new Intl.DateTimeFormat(lang, {
+    year: 'numeric',
+    month: 'long',
+  }).format(date)
+}
+
+const displayName = profile.displayName || user.name
+const initials = displayName
+  .split(' ')
+  .map(n => n[0])
+  .join('')
+  .toUpperCase()
+  .slice(0, 2)
+---
+
+<div class="profile-container">
+  <header class="profile-header">
+    <div class="avatar">
+      {user.image ? (
+        <img src={user.image} alt={displayName} class="avatar-image" />
+      ) : (
+        <span class="initials">{initials}</span>
+      )}
+    </div>
+
+    <div class="profile-info">
+      <h1 class="display-name">{displayName}</h1>
+      <p class="username">@{user.username}</p>
+
+      {profile.bio && (
+        <p class="bio">{profile.bio}</p>
+      )}
+
+      <div class="meta">
+        <span class="member-since">{t.memberSince} {formatDate(user.createdAt)}</span>
+        {profile.website && (
+          <a href={profile.website} target="_blank" rel="noopener noreferrer" class="website-link">
+            {t.visitWebsite}
+          </a>
+        )}
+      </div>
+    </div>
+  </header>
+
+  {badges.length > 0 && (
+    <section class="badges-section">
+      <h2>{t.badges}</h2>
+      <div class="badge-grid">
+        {badges.map(badge => (
+          <div class="badge-item" style={`--badge-color: ${badge.color}`}>
+            <span class="badge-icon">{badge.icon}</span>
+            <div class="badge-info">
+              <span class="badge-name">{badge.name}</span>
+              <span class="badge-desc">{badge.description}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="comments-section">
+    <h2>{t.recentComments}</h2>
+    {recentComments.length > 0 ? (
+      <RecentComments comments={recentComments} lang={lang} client:visible />
+    ) : (
+      <p class="no-comments">{t.noComments}</p>
+    )}
+  </section>
+</div>
+
+<style>
+  .profile-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+
+  .profile-header {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border, #ddd);
+  }
+
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--color-main);
+  }
+
+  .avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .initials {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--color-main);
+  }
+
+  .profile-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .display-name {
+    font-size: 1.75rem;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .username {
+    font-size: 1rem;
+    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    margin: 0.25rem 0 0;
+  }
+
+  .bio {
+    margin: 1rem 0;
+    line-height: 1.6;
+    color: light-dark(hsl(0 0% 30%), hsl(0 0% 75%));
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    font-size: 0.9rem;
+  }
+
+  .member-since {
+    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+  }
+
+  .website-link {
+    color: var(--color-main);
+    text-decoration: none;
+  }
+
+  .website-link:hover {
+    text-decoration: underline;
+  }
+
+  .badges-section,
+  .comments-section {
+    margin-bottom: 2rem;
+  }
+
+  .badges-section h2,
+  .comments-section h2 {
+    font-size: 1.25rem;
+    margin: 0 0 1rem;
+  }
+
+  .badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .badge-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: light-dark(white, hsl(0 0% 12%));
+    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
+    border-radius: 6px;
+    border-left: 3px solid var(--badge-color, var(--color-main));
+  }
+
+  .badge-icon {
+    font-size: 1.25rem;
+  }
+
+  .badge-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .badge-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+
+  .badge-desc {
+    font-size: 0.75rem;
+    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+  }
+
+  .no-comments {
+    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    text-align: center;
+    padding: 2rem;
+    background: light-dark(hsl(0 0% 98%), hsl(0 0% 12%));
+    border: 1px dashed light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
+    border-radius: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .profile-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .meta {
+      justify-content: center;
+    }
+  }
+</style>

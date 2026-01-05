@@ -1,12 +1,12 @@
-import type { APIRoute } from 'astro'
 import {
+  FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET,
   GITHUB_CLIENT_ID,
   GITHUB_CLIENT_SECRET,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  FACEBOOK_CLIENT_ID,
-  FACEBOOK_CLIENT_SECRET,
 } from 'astro:env/server'
+import type { APIRoute } from 'astro'
 
 export const prerender = false
 
@@ -19,6 +19,8 @@ export const GET: APIRoute = async () => {
   }
 
   return new Response(JSON.stringify(providers), {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+    },
   })
 }
