@@ -172,6 +172,9 @@ export default defineConfig({
 
   adapter: vercel({
     skewProtection: true,
-    isr: true,
+    isr: {
+      // Exclude auth routes from ISR to preserve query parameters
+      exclude: ['/api/auth/**'],
+    },
   }),
 })
