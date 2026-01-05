@@ -66,7 +66,8 @@ export default defineConfig({
       BETTER_AUTH_URL: envField.string({
         context: 'client',
         access: 'public',
-        optional: true
+        optional: false,
+        default: 'http://localhost:4321',
       }),
 
       // OAuth - GitHub
