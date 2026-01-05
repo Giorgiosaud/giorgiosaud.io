@@ -1,0 +1,438 @@
+---
+import AdminLayout from '@components/admin/AdminLayout.astro'
+import { db } from '@db'
+import { eq, desc } from 'drizzle-orm'
+import { pushSubscriptions, users } from '@db/schema'
+
+export const prerender = false
+
+const [allUsers, activeSubscriptions] = await Promise.all([
+  db.query.users.findMany({
+    orderBy: [desc(users.createdAt)],
+    limit: 100,
+  }),
+  db.query.pushSubscriptions.findMany({
+    where: eq(pushSubscriptions.isActive, true),
+  }),
+])
+
+const subscribedUserIds = new Set(
+  activeSubscriptions.filter(sub => sub.userId).map(sub => sub.userId)
+)
+---
+
+<AdminLayout title="Users" currentPage="users">
+  <section class="users-section">
+    <header class="section-header">
+      <h2>Users ({allUsers.length})</h2>
+    </header>
+
+    <ul class="user-list">
+      {allUsers.map(user => (
+        <li class="user-item" data-id={user.id}>
+          <div class="user-info">
+            {user.image && <img src={user.image} alt="" class="user-avatar" />}
+            <div class="user-details">
+              <strong>{user.name}</strong>
+              <span class="user-email">{user.email}</span>
+            </div>
+          </div>
+          <div class="user-badges">
+            <span class={`badge ${user.role === 'admin' ? 'badge-admin' : ''} ${user.banned ? 'badge-banned' : ''}`}>
+              {user.banned ? 'Banned' : (user.role || 'user')}
+            </span>
+            {subscribedUserIds.has(user.id) && (
+              <span class="badge badge-subscribed" title="Push notifications enabled">🔔</span>
+            )}
+            {user.banned && user.banExpires && (
+              <span class="ban-expires">Until {new Date(user.banExpires).toLocaleDateString()}</span>
+            )}
+          </div>
+          <div class="user-actions">
+            {subscribedUserIds.has(user.id) && (
+              <button type="button" class="btn-small btn-notify" onclick={`notifyUser('${user.id}', '${user.name?.replace(/'/g, "\\'")}')`}>
+                Notify
+              </button>
+            )}
+            {!user.banned ? (
+              <button type="button" class="btn-small btn-danger" onclick={`banUser('${user.id}')`}>Ban</button>
+            ) : (
+              <button type="button" class="btn-small btn-success" onclick={`unbanUser('${user.id}')`}>Unban</button>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <div id="result" class="result" hidden></div>
+  </section>
+
+  <!-- Notify User Modal -->
+  <dialog id="notify-modal">
+    <form method="dialog" id="notify-form">
+      <h3>Notify <span id="notify-user-name"></span></h3>
+      <input type="hidden" id="notify-user-id" />
+
+      <div class="form-group">
+        <label for="notify-title">Title</label>
+        <input type="text" id="notify-title" required maxlength="50" placeholder="Hey!" />
+      </div>
+
+      <div class="form-group">
+        <label for="notify-body">Message</label>
+        <textarea id="notify-body" required maxlength="200" rows="3" placeholder="Check this out..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="notify-url">Link URL (optional)</label>
+        <input type="text" id="notify-url" placeholder="/notebook/my-post" />
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeNotifyModal()">Cancel</button>
+        <button type="submit" class="btn-primary">Send Notification</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Ban Modal -->
+  <dialog id="ban-modal">
+    <form method="dialog" id="ban-form">
+      <h3>Ban User</h3>
+      <input type="hidden" id="ban-user-id" />
+
+      <div class="form-group">
+        <label for="ban-reason">Reason (optional)</label>
+        <input type="text" id="ban-reason" placeholder="Spam, harassment, etc." />
+      </div>
+
+      <div class="form-group">
+        <label for="ban-duration">Duration</label>
+        <select id="ban-duration">
+          <option value="">Permanent</option>
+          <option value="1">1 day</option>
+          <option value="3">3 days</option>
+          <option value="7">1 week</option>
+          <option value="14">2 weeks</option>
+          <option value="30">1 month</option>
+          <option value="90">3 months</option>
+          <option value="365">1 year</option>
+          <option value="custom">Custom days...</option>
+        </select>
+      </div>
+
+      <div class="form-group" id="custom-days-group" hidden>
+        <label for="custom-days">Number of days</label>
+        <input type="number" id="custom-days" min="1" max="3650" placeholder="Enter days" />
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeBanModal()">Cancel</button>
+        <button type="submit" class="btn-danger">Ban User</button>
+      </div>
+    </form>
+  </dialog>
+</AdminLayout>
+
+<script>
+  const result = document.getElementById('result') as HTMLDivElement
+
+  // Notify Modal
+  const notifyModal = document.getElementById('notify-modal') as HTMLDialogElement
+  const notifyForm = document.getElementById('notify-form') as HTMLFormElement
+  const notifyUserIdInput = document.getElementById('notify-user-id') as HTMLInputElement
+  const notifyUserNameSpan = document.getElementById('notify-user-name') as HTMLSpanElement
+  const notifyTitleInput = document.getElementById('notify-title') as HTMLInputElement
+  const notifyBodyInput = document.getElementById('notify-body') as HTMLTextAreaElement
+  const notifyUrlInput = document.getElementById('notify-url') as HTMLInputElement
+
+  window.notifyUser = (id: string, name: string) => {
+    notifyUserIdInput.value = id
+    notifyUserNameSpan.textContent = name
+    notifyTitleInput.value = ''
+    notifyBodyInput.value = ''
+    notifyUrlInput.value = ''
+    notifyModal.showModal()
+  }
+
+  window.closeNotifyModal = () => notifyModal.close()
+
+  notifyForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const userId = notifyUserIdInput.value
+    const title = notifyTitleInput.value
+    const body = notifyBodyInput.value
+    const url = notifyUrlInput.value || undefined
+
+    notifyModal.close()
+
+    try {
+      const response = await fetch('/api/push/send-to-user.json', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, title, body, url }),
+      })
+      const data = await response.json()
+      result.hidden = false
+      result.className = response.ok ? 'result success' : 'result error'
+      result.textContent = response.ok
+        ? `Notification sent (${data.result.sent} device(s))`
+        : (data.error || 'Failed to send')
+    } catch {
+      result.hidden = false
+      result.className = 'result error'
+      result.textContent = 'Network error'
+    }
+  })
+
+  // Ban Modal
+  const banModal = document.getElementById('ban-modal') as HTMLDialogElement
+  const banForm = document.getElementById('ban-form') as HTMLFormElement
+  const banUserIdInput = document.getElementById('ban-user-id') as HTMLInputElement
+  const banReasonInput = document.getElementById('ban-reason') as HTMLInputElement
+  const banDurationSelect = document.getElementById('ban-duration') as HTMLSelectElement
+  const customDaysGroup = document.getElementById('custom-days-group') as HTMLDivElement
+  const customDaysInput = document.getElementById('custom-days') as HTMLInputElement
+
+  banDurationSelect?.addEventListener('change', () => {
+    customDaysGroup.hidden = banDurationSelect.value !== 'custom'
+    if (banDurationSelect.value === 'custom') customDaysInput.focus()
+  })
+
+  window.banUser = (id: string) => {
+    banUserIdInput.value = id
+    banReasonInput.value = ''
+    banDurationSelect.value = ''
+    customDaysInput.value = ''
+    customDaysGroup.hidden = true
+    banModal.showModal()
+  }
+
+  window.closeBanModal = () => banModal.close()
+
+  banForm?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const id = banUserIdInput.value
+    const reason = banReasonInput.value || undefined
+
+    let days: number | undefined
+    if (banDurationSelect.value === 'custom') {
+      days = Number(customDaysInput.value)
+    } else if (banDurationSelect.value) {
+      days = Number(banDurationSelect.value)
+    }
+
+    let banExpires: string | undefined
+    if (days && days > 0) {
+      const expiryDate = new Date()
+      expiryDate.setDate(expiryDate.getDate() + days)
+      banExpires = expiryDate.toISOString()
+    }
+
+    banModal.close()
+    await updateUserBan(id, true, reason, banExpires)
+  })
+
+  window.unbanUser = async (id: string) => {
+    if (!confirm('Unban this user?')) return
+    await updateUserBan(id, false)
+  }
+
+  async function updateUserBan(id: string, ban: boolean, reason?: string, banExpires?: string) {
+    try {
+      const response = await fetch(`/api/admin/users/${id}/ban.json`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ban, reason, banExpires }),
+      })
+      const data = await response.json()
+      result.hidden = false
+      result.className = response.ok ? 'result success' : 'result error'
+      result.textContent = response.ok ? (ban ? 'User banned' : 'User unbanned') : (data.error || 'Failed')
+      if (response.ok) setTimeout(() => location.reload(), 1000)
+    } catch {
+      result.hidden = false
+      result.className = 'result error'
+      result.textContent = 'Network error'
+    }
+  }
+
+  declare global {
+    interface Window {
+      notifyUser: (id: string, name: string) => void
+      closeNotifyModal: () => void
+      banUser: (id: string) => void
+      closeBanModal: () => void
+      unbanUser: (id: string) => Promise<void>
+    }
+  }
+</script>
+
+<style>
+  .section-header {
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .user-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .user-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .user-details {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .user-email {
+    font-size: 0.75rem;
+    color: var(--color-muted, #666);
+  }
+
+  .user-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background: var(--color-surface, #e5e5e5);
+  }
+
+  .badge-admin { background: var(--color-main); color: white; }
+  .badge-banned { background: var(--color-error, #ef4444); color: white; }
+  .badge-subscribed { background: var(--color-success, #10b981); cursor: help; }
+
+  .ban-expires {
+    font-size: 0.7rem;
+    color: var(--color-muted, #666);
+  }
+
+  .user-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .btn-small {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .btn-danger { background: var(--color-error, #ef4444); color: white; }
+  .btn-success { background: var(--color-success, #10b981); color: white; }
+  .btn-notify { background: var(--color-main); color: white; }
+
+  .result {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .result.success { background: var(--color-success, #10b981); color: white; }
+  .result.error { background: var(--color-error, #ef4444); color: white; }
+
+  /* Modal styles */
+  dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 1.5rem;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  dialog h3 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 1rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+
+  .btn-secondary {
+    padding: 0.5rem 1rem;
+    background: var(--color-surface, #e5e5e5);
+    color: var(--color-text, #333);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    padding: 0.5rem 1rem;
+    background: var(--color-main);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .modal-actions .btn-danger {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+</style>

@@ -1,673 +1,160 @@
 ---
-import Base from '@templates/Base.astro'
+import AdminLayout from '@components/admin/AdminLayout.astro'
 import { db } from '@db'
-import { eq, desc, isNull } from 'drizzle-orm'
-import { pushSubscriptions, comments } from '@db/schema'
-import { users } from '@db/schema'
+import { eq, isNull, desc } from 'drizzle-orm'
+import { pushSubscriptions, comments, users } from '@db/schema'
 
 export const prerender = false
 
 // Get stats
-const [activeSubscriptions, recentComments, allUsers] = await Promise.all([
+const [activeSubscriptions, totalComments, totalUsers, recentActivity] = await Promise.all([
   db.query.pushSubscriptions.findMany({
     where: eq(pushSubscriptions.isActive, true),
   }),
   db.query.comments.findMany({
     where: isNull(comments.deletedAt),
-    orderBy: [desc(comments.createdAt)],
-    limit: 20,
-    with: {
-      author: true,
-    },
   }),
-  db.query.users.findMany({
-    orderBy: [desc(users.createdAt)],
-    limit: 50,
-    with: {
-      pushSubscriptions: true,
-    },
+  db.query.users.findMany(),
+  db.query.comments.findMany({
+    where: isNull(comments.deletedAt),
+    orderBy: [desc(comments.createdAt)],
+    limit: 5,
+    with: { author: true },
   }),
 ])
 
-// Create set of user IDs with active subscriptions
-const subscribedUserIds = new Set(
-  activeSubscriptions
-    .filter(sub => sub.userId)
-    .map(sub => sub.userId)
-)
-
 const stats = {
-  totalSubscribers: activeSubscriptions.length,
-  totalComments: recentComments.length,
-  totalUsers: allUsers.length,
+  subscribers: activeSubscriptions.length,
+  comments: totalComments.length,
+  users: totalUsers.length,
 }
 ---
 
-<Base title="Admin Dashboard" pathToTranslate="home">
-  <div class="admin-container">
-    <h1>Admin Dashboard</h1>
+<AdminLayout title="Overview" currentPage="dashboard">
+  <section class="stats-grid">
+    <a href="/admin/notifications" class="stat-card">
+      <span class="stat-value">{stats.subscribers}</span>
+      <span class="stat-label">Push Subscribers</span>
+    </a>
+    <a href="/admin/comments" class="stat-card">
+      <span class="stat-value">{stats.comments}</span>
+      <span class="stat-label">Comments</span>
+    </a>
+    <a href="/admin/users" class="stat-card">
+      <span class="stat-value">{stats.users}</span>
+      <span class="stat-label">Users</span>
+    </a>
+  </section>
 
-    <nav class="admin-nav">
-      <button type="button" class="tab active" data-tab="broadcast">Notifications</button>
-      <button type="button" class="tab" data-tab="comments">Comments</button>
-      <button type="button" class="tab" data-tab="users">Users</button>
-    </nav>
-
-    <!-- Stats -->
-    <section class="stats">
-      <div class="stat-card">
-        <span class="stat-value">{stats.totalSubscribers}</span>
-        <span class="stat-label">Subscribers</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">{stats.totalComments}</span>
-        <span class="stat-label">Comments</span>
-      </div>
-      <div class="stat-card">
-        <span class="stat-value">{stats.totalUsers}</span>
-        <span class="stat-label">Users</span>
-      </div>
-    </section>
-
-    <!-- Broadcast Tab -->
-    <section id="tab-broadcast" class="tab-content active">
-      <h2>Send Broadcast Notification</h2>
-      <form id="broadcast-form">
-        <div class="form-group">
-          <label for="title">Title</label>
-          <input type="text" id="title" name="title" required maxlength="50" placeholder="New blog post!" />
-        </div>
-        <div class="form-group">
-          <label for="body">Message</label>
-          <textarea id="body" name="body" required maxlength="200" rows="3" placeholder="Check out my latest article..."></textarea>
-        </div>
-        <div class="form-group">
-          <label for="url">Link URL (optional)</label>
-          <input type="text" id="url" name="url" placeholder="/notebook/my-new-post" />
-        </div>
-        <button type="submit" class="btn-primary">
-          Send to {stats.totalSubscribers} subscriber{stats.totalSubscribers !== 1 ? 's' : ''}
-        </button>
-      </form>
-      <div id="broadcast-result" class="result" hidden></div>
-    </section>
-
-    <!-- Comments Tab -->
-    <section id="tab-comments" class="tab-content">
-      <h2>Recent Comments</h2>
-      {recentComments.length === 0 ? (
-        <p class="empty">No comments yet.</p>
-      ) : (
-        <ul class="comment-list">
-          {recentComments.map(comment => (
-            <li class="comment-item" data-id={comment.id}>
-              <div class="comment-header">
-                <strong>{comment.author?.name || 'Unknown'}</strong>
-                <span class="comment-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
-              </div>
-              <p class="comment-content">{comment.content.slice(0, 150)}{comment.content.length > 150 ? '...' : ''}</p>
-              <div class="comment-meta">
-                <span>Post: {comment.noteSelfHealing}</span>
-              </div>
-              <div class="comment-actions">
-                <button type="button" class="btn-small btn-danger" onclick={`deleteComment('${comment.id}')`}>Delete</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-      <div id="comments-result" class="result" hidden></div>
-    </section>
-
-    <!-- Users Tab -->
-    <section id="tab-users" class="tab-content">
-      <h2>Users</h2>
-      <ul class="user-list">
-        {allUsers.map(user => (
-          <li class="user-item" data-id={user.id}>
-            <div class="user-info">
-              {user.image && <img src={user.image} alt="" class="user-avatar" />}
-              <div>
-                <strong>{user.name}</strong>
-                <span class="user-email">{user.email}</span>
-              </div>
+  <section class="recent-activity">
+    <h2>Recent Comments</h2>
+    {recentActivity.length === 0 ? (
+      <p class="empty">No comments yet.</p>
+    ) : (
+      <ul class="activity-list">
+        {recentActivity.map(comment => (
+          <li class="activity-item">
+            <div class="activity-header">
+              <strong>{comment.author?.name || 'Unknown'}</strong>
+              <span class="activity-date">{new Date(comment.createdAt).toLocaleDateString()}</span>
             </div>
-            <div class="user-meta">
-              <span class={`badge ${user.role === 'admin' ? 'badge-admin' : ''} ${user.banned ? 'badge-banned' : ''}`}>
-                {user.banned ? 'Banned' : (user.role || 'user')}
-              </span>
-              {subscribedUserIds.has(user.id) && (
-                <span class="badge badge-subscribed" title="Push notifications enabled">🔔</span>
-              )}
-              {user.banned && user.banExpires && (
-                <span class="ban-expires">Until {new Date(user.banExpires).toLocaleDateString()}</span>
-              )}
-            </div>
-            <div class="user-actions">
-              {subscribedUserIds.has(user.id) && (
-                <button type="button" class="btn-small btn-notify" onclick={`notifyUser('${user.id}', '${user.name}')`}>Notify</button>
-              )}
-              {!user.banned ? (
-                <button type="button" class="btn-small btn-danger" onclick={`banUser('${user.id}')`}>Ban</button>
-              ) : (
-                <button type="button" class="btn-small btn-success" onclick={`unbanUser('${user.id}')`}>Unban</button>
-              )}
-            </div>
+            <p class="activity-content">{comment.content.slice(0, 100)}{comment.content.length > 100 ? '...' : ''}</p>
+            <span class="activity-meta">on {comment.noteSelfHealing}</span>
           </li>
         ))}
       </ul>
-      <div id="users-result" class="result" hidden></div>
-    </section>
-
-    <!-- Notify User Modal -->
-    <dialog id="notify-modal">
-      <form method="dialog" id="notify-form">
-        <h3>Notify <span id="notify-user-name"></span></h3>
-        <input type="hidden" id="notify-user-id" />
-
-        <div class="form-group">
-          <label for="notify-title">Title</label>
-          <input type="text" id="notify-title" required maxlength="50" placeholder="Hey!" />
-        </div>
-
-        <div class="form-group">
-          <label for="notify-body">Message</label>
-          <textarea id="notify-body" required maxlength="200" rows="3" placeholder="Check this out..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="notify-url">Link URL (optional)</label>
-          <input type="text" id="notify-url" placeholder="/notebook/my-post" />
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" class="btn-secondary" onclick="closeNotifyModal()">Cancel</button>
-          <button type="submit" class="btn-primary">Send Notification</button>
-        </div>
-      </form>
-    </dialog>
-
-    <!-- Ban Modal -->
-    <dialog id="ban-modal">
-      <form method="dialog" id="ban-form">
-        <h3>Ban User</h3>
-        <input type="hidden" id="ban-user-id" />
-
-        <div class="form-group">
-          <label for="ban-reason">Reason (optional)</label>
-          <input type="text" id="ban-reason" placeholder="Spam, harassment, etc." />
-        </div>
-
-        <div class="form-group">
-          <label for="ban-duration">Duration</label>
-          <select id="ban-duration">
-            <option value="">Permanent</option>
-            <option value="1">1 day</option>
-            <option value="3">3 days</option>
-            <option value="7">1 week</option>
-            <option value="14">2 weeks</option>
-            <option value="30">1 month</option>
-            <option value="90">3 months</option>
-            <option value="365">1 year</option>
-            <option value="custom">Custom days...</option>
-          </select>
-        </div>
-
-        <div class="form-group" id="custom-days-group" hidden>
-          <label for="custom-days">Number of days</label>
-          <input type="number" id="custom-days" min="1" max="3650" placeholder="Enter days" />
-        </div>
-
-        <div class="modal-actions">
-          <button type="button" class="btn-secondary" onclick="closeBanModal()">Cancel</button>
-          <button type="submit" class="btn-danger">Ban User</button>
-        </div>
-      </form>
-    </dialog>
-  </div>
-</Base>
-
-<script>
-  // Tab switching
-  const tabs = document.querySelectorAll('.tab')
-  const contents = document.querySelectorAll('.tab-content')
-
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'))
-      contents.forEach(c => c.classList.remove('active'))
-      tab.classList.add('active')
-      document.getElementById(`tab-${tab.dataset.tab}`)?.classList.add('active')
-    })
-  })
-
-  // Broadcast form
-  const broadcastForm = document.getElementById('broadcast-form') as HTMLFormElement
-  const broadcastResult = document.getElementById('broadcast-result') as HTMLDivElement
-
-  broadcastForm?.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const formData = new FormData(broadcastForm)
-    const title = formData.get('title') as string
-    const body = formData.get('body') as string
-    const url = formData.get('url') as string
-    const submitBtn = broadcastForm.querySelector('button[type="submit"]') as HTMLButtonElement
-    submitBtn.disabled = true
-    submitBtn.textContent = 'Sending...'
-
-    try {
-      const payload: { type: string; title: string; body: string; url?: string } = { type: 'custom', title, body }
-      if (url) payload.url = url
-
-      const response = await fetch('/api/push/broadcast.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      const data = await response.json()
-      broadcastResult.hidden = false
-      broadcastResult.className = response.ok ? 'result success' : 'result error'
-      broadcastResult.textContent = response.ok
-        ? `Sent to ${data.result.sent} subscriber(s). ${data.result.failed} failed.`
-        : (data.error || 'Failed to send')
-      if (response.ok) broadcastForm.reset()
-    } catch {
-      broadcastResult.hidden = false
-      broadcastResult.className = 'result error'
-      broadcastResult.textContent = 'Network error'
-    } finally {
-      submitBtn.disabled = false
-      submitBtn.textContent = 'Send to subscribers'
-    }
-  })
-
-  // Delete comment
-  window.deleteComment = async (id: string) => {
-    if (!confirm('Delete this comment?')) return
-    const result = document.getElementById('comments-result') as HTMLDivElement
-    try {
-      const response = await fetch(`/api/admin/comments/${id}.json`, { method: 'DELETE' })
-      const data = await response.json()
-      result.hidden = false
-      result.className = response.ok ? 'result success' : 'result error'
-      result.textContent = response.ok ? 'Comment deleted' : (data.error || 'Failed')
-      if (response.ok) {
-        document.querySelector(`.comment-item[data-id="${id}"]`)?.remove()
-      }
-    } catch {
-      result.hidden = false
-      result.className = 'result error'
-      result.textContent = 'Network error'
-    }
-  }
-
-  // Notify User Modal
-  const notifyModal = document.getElementById('notify-modal') as HTMLDialogElement
-  const notifyForm = document.getElementById('notify-form') as HTMLFormElement
-  const notifyUserIdInput = document.getElementById('notify-user-id') as HTMLInputElement
-  const notifyUserNameSpan = document.getElementById('notify-user-name') as HTMLSpanElement
-  const notifyTitleInput = document.getElementById('notify-title') as HTMLInputElement
-  const notifyBodyInput = document.getElementById('notify-body') as HTMLTextAreaElement
-  const notifyUrlInput = document.getElementById('notify-url') as HTMLInputElement
-
-  window.notifyUser = (id: string, name: string) => {
-    notifyUserIdInput.value = id
-    notifyUserNameSpan.textContent = name
-    notifyTitleInput.value = ''
-    notifyBodyInput.value = ''
-    notifyUrlInput.value = ''
-    notifyModal.showModal()
-  }
-
-  window.closeNotifyModal = () => {
-    notifyModal.close()
-  }
-
-  notifyForm?.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const userId = notifyUserIdInput.value
-    const title = notifyTitleInput.value
-    const body = notifyBodyInput.value
-    const url = notifyUrlInput.value || undefined
-
-    const result = document.getElementById('users-result') as HTMLDivElement
-    notifyModal.close()
-
-    try {
-      const response = await fetch('/api/push/send-to-user.json', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, title, body, url }),
-      })
-      const data = await response.json()
-      result.hidden = false
-      result.className = response.ok ? 'result success' : 'result error'
-      result.textContent = response.ok
-        ? `Notification sent (${data.result.sent} device(s))`
-        : (data.error || 'Failed to send')
-    } catch {
-      result.hidden = false
-      result.className = 'result error'
-      result.textContent = 'Network error'
-    }
-  })
-
-  // Ban Modal
-  const banModal = document.getElementById('ban-modal') as HTMLDialogElement
-  const banForm = document.getElementById('ban-form') as HTMLFormElement
-  const banUserIdInput = document.getElementById('ban-user-id') as HTMLInputElement
-  const banReasonInput = document.getElementById('ban-reason') as HTMLInputElement
-  const banDurationSelect = document.getElementById('ban-duration') as HTMLSelectElement
-  const customDaysGroup = document.getElementById('custom-days-group') as HTMLDivElement
-  const customDaysInput = document.getElementById('custom-days') as HTMLInputElement
-
-  // Show/hide custom days input
-  banDurationSelect?.addEventListener('change', () => {
-    customDaysGroup.hidden = banDurationSelect.value !== 'custom'
-    if (banDurationSelect.value === 'custom') {
-      customDaysInput.focus()
-    }
-  })
-
-  // Open ban modal
-  window.banUser = (id: string) => {
-    banUserIdInput.value = id
-    banReasonInput.value = ''
-    banDurationSelect.value = ''
-    customDaysInput.value = ''
-    customDaysGroup.hidden = true
-    banModal.showModal()
-  }
-
-  // Close ban modal
-  window.closeBanModal = () => {
-    banModal.close()
-  }
-
-  // Handle ban form submit
-  banForm?.addEventListener('submit', async (e) => {
-    e.preventDefault()
-    const id = banUserIdInput.value
-    const reason = banReasonInput.value || undefined
-
-    let days: number | undefined
-    if (banDurationSelect.value === 'custom') {
-      days = Number(customDaysInput.value)
-    } else if (banDurationSelect.value) {
-      days = Number(banDurationSelect.value)
-    }
-
-    let banExpires: string | undefined
-    if (days && days > 0) {
-      const expiryDate = new Date()
-      expiryDate.setDate(expiryDate.getDate() + days)
-      banExpires = expiryDate.toISOString()
-    }
-
-    banModal.close()
-    await updateUserBan(id, true, reason, banExpires)
-  })
-
-  window.unbanUser = async (id: string) => {
-    if (!confirm('Unban this user?')) return
-    await updateUserBan(id, false)
-  }
-
-  async function updateUserBan(id: string, ban: boolean, reason?: string, banExpires?: string) {
-    const result = document.getElementById('users-result') as HTMLDivElement
-    try {
-      const response = await fetch(`/api/admin/users/${id}/ban.json`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ban, reason, banExpires }),
-      })
-      const data = await response.json()
-      result.hidden = false
-      result.className = response.ok ? 'result success' : 'result error'
-      result.textContent = response.ok ? (ban ? 'User banned' : 'User unbanned') : (data.error || 'Failed')
-      if (response.ok) {
-        setTimeout(() => location.reload(), 1000)
-      }
-    } catch {
-      result.hidden = false
-      result.className = 'result error'
-      result.textContent = 'Network error'
-    }
-  }
-
-  // TypeScript declarations
-  declare global {
-    interface Window {
-      deleteComment: (id: string) => Promise<void>
-      banUser: (id: string) => void
-      unbanUser: (id: string) => Promise<void>
-      closeBanModal: () => void
-      notifyUser: (id: string, name: string) => void
-      closeNotifyModal: () => void
-    }
-  }
-</script>
+    )}
+    <a href="/admin/comments" class="view-all">View all comments →</a>
+  </section>
+</AdminLayout>
 
 <style>
-  .admin-container {
-    max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
-  }
-
-  h1 { margin-bottom: 1rem; }
-  h2 { margin-bottom: 1rem; font-size: 1.25rem; }
-
-  .admin-nav {
-    display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-border, #ddd);
-    padding-bottom: 0.5rem;
-  }
-
-  .tab {
-    padding: 0.5rem 1rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px 4px 0 0;
-    color: var(--color-muted, #666);
-  }
-
-  .tab:hover { background: var(--color-surface, #f5f5f5); }
-  .tab.active {
-    background: var(--color-main);
-    color: white;
-  }
-
-  .stats {
+  .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 1rem;
     margin-bottom: 2rem;
   }
 
   .stat-card {
     background: var(--color-surface, #f5f5f5);
-    padding: 1rem;
+    padding: 1.5rem;
     border-radius: 8px;
     text-align: center;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
 
   .stat-value {
     display: block;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bold;
     color: var(--color-main);
   }
 
-  .stat-label { color: var(--color-muted, #666); font-size: 0.875rem; }
-
-  .tab-content { display: none; }
-  .tab-content.active { display: block; }
-
-  .form-group { margin-bottom: 1rem; }
-  label { display: block; margin-bottom: 0.25rem; font-weight: 500; }
-  input, textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    font-family: inherit;
+  .stat-label {
+    color: var(--color-muted, #666);
+    font-size: 0.875rem;
   }
 
-  .btn-primary {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  .recent-activity h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
   }
-  .btn-primary:hover:not(:disabled) { opacity: 0.9; }
-  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 
-  .btn-small {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.75rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .btn-danger { background: var(--color-error, #ef4444); color: white; }
-  .btn-success { background: var(--color-success, #10b981); color: white; }
-  .btn-notify { background: var(--color-main); color: white; }
-
-  .result {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border-radius: 4px;
-    text-align: center;
-  }
-  .result.success { background: var(--color-success, #10b981); color: white; }
-  .result.error { background: var(--color-error, #ef4444); color: white; }
-
-  .empty { color: var(--color-muted, #666); font-style: italic; }
-
-  .comment-list, .user-list {
+  .activity-list {
     list-style: none;
     padding: 0;
     margin: 0;
   }
 
-  .comment-item, .user-item {
+  .activity-item {
     padding: 1rem;
     border: 1px solid var(--color-border, #ddd);
     border-radius: 8px;
     margin-bottom: 0.5rem;
   }
 
-  .comment-header {
+  .activity-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-  .comment-date { color: var(--color-muted, #666); font-size: 0.875rem; }
-  .comment-content { margin: 0.5rem 0; }
-  .comment-meta { font-size: 0.75rem; color: var(--color-muted, #666); margin-bottom: 0.5rem; }
-  .comment-actions { display: flex; gap: 0.5rem; }
-
-  .user-item {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    gap: 1rem;
+    margin-bottom: 0.25rem;
   }
 
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .user-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-
-  .user-email {
-    display: block;
+  .activity-date {
+    color: var(--color-muted, #666);
     font-size: 0.875rem;
-    color: var(--color-muted, #666);
   }
 
-  .badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    background: var(--color-surface, #e5e5e5);
-  }
-  .badge-admin { background: var(--color-main); color: white; }
-  .badge-banned { background: var(--color-error, #ef4444); color: white; }
-  .badge-subscribed { background: var(--color-success, #10b981); cursor: help; }
-
-  .ban-expires {
-    display: block;
-    font-size: 0.7rem;
-    color: var(--color-muted, #666);
-    margin-top: 0.25rem;
-  }
-
-  /* Modal styles */
-  dialog {
-    border: none;
-    border-radius: 8px;
-    padding: 1.5rem;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  dialog::backdrop {
-    background: rgba(0, 0, 0, 0.5);
-  }
-
-  dialog h3 {
-    margin: 0 0 1rem;
-    font-size: 1.25rem;
-  }
-
-  dialog select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 1rem;
-    background: white;
-  }
-
-  .modal-actions {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-    margin-top: 1.5rem;
-  }
-
-  .btn-secondary {
-    padding: 0.5rem 1rem;
-    background: var(--color-surface, #e5e5e5);
+  .activity-content {
+    margin: 0.5rem 0;
     color: var(--color-text, #333);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
   }
 
-  .btn-secondary:hover {
-    background: var(--color-border, #ddd);
+  .activity-meta {
+    font-size: 0.75rem;
+    color: var(--color-muted, #666);
   }
 
-  .modal-actions .btn-danger {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+  .empty {
+    color: var(--color-muted, #666);
+    font-style: italic;
+  }
+
+  .view-all {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-main);
+    text-decoration: none;
+  }
+
+  .view-all:hover {
+    text-decoration: underline;
   }
 </style>
