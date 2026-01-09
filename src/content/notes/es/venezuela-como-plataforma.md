@@ -21,6 +21,8 @@ coverAlt: Red abstracta de nodos industriales conectando a Venezuela con el mund
 slug: venezuela-como-plataforma
 ---
 
+Esta es una serie de post que realizare basados en mi experiencia como Venezolano y lo que he aprendido en mi carrera profesional.
+
 En el mundo del software, cuando un sistema se vuelve tan legado, tan fragmentado y tan desconectado que ya no puede servir a sus usuarios, no solo aplicamos parches: hacemos un **re-platforming**.
 
 Al iniciar este 2026, Venezuela se encuentra exactamente en esa encrucijada arquitectónica. Con los ojos del mundo puestos en nuestras reservas de petróleo y el potencial del Arco Minero, no estamos buscando solo una "recuperación económica". Estamos ante un **reposicionamiento global**.
@@ -40,3 +42,15 @@ La primera prioridad no es la extracción; es la **Interoperabilidad**. Estamos 
 Durante la ventana de migración que se abre ahora, tenemos la oportunidad de construir el "Digital Twin" de nuestra recuperación industrial. Debemos priorizar procesos que **eviten la burocracia** mediante investigación inteligente y automatización. Cada ejecución de proyecto retrasada por una firma manual es una pérdida en el PIB nacional.
 
 Venezuela no solo está volviendo; está siendo re-codificada para una nueva era.
+
+<!--
+### Mirando hacia el futuro
+
+Esta es la primera de una serie de publicaciones en las que analizaré la priorización de estos procesos desde una perspectiva técnica. Profundizaremos en:
+
+- **La ciudad de "prueba beta"**: Por qué Puerto Ordaz es el entorno ideal para esta reestructuración.
+- **Industria 4.0 en el Sur**: Automatizando el Arco Minero.
+- **Tecnología para el turismo**: Conectando nuestras maravillas naturales a las redes globales de pago y logística.
+
+Venezuela no solo está resurgiendo; está siendo rediseñada para una nueva era.
+-->

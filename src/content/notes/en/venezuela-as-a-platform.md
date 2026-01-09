@@ -25,6 +25,8 @@ keywords:
 preview: ../../../assets/images/Venezuela.png
 ---
 
+This is a series of posts I will be writing based on my experience as a Venezuelan and what I have learned in my professional career.
+
 In the world of software, when a system becomes so legacy, so fragmented, and so disconnected that it can no longer serve its users, we don't just patch it—we **re-platform**.
 
 As we enter 2026, Venezuela is at this exact architectural crossroads. With the world’s eyes on our massive oil reserves (303 billion barrels) and the untapped potential of the southern Mining Arc, we aren't just looking at an "economic recovery." We are looking at a **global repositioning**.
@@ -45,6 +47,7 @@ We often hear that it will take 18 months to see a material increase in oil prod
 
 We need to prioritize processes that **avoid bureaucracy** through intelligent investigation and automation. Every project execution delayed by a manual signature is a loss in national GDP.
 
+<!--
 ### Looking Ahead
 
 This is the first of a series of posts where I will break down the prioritization of these processes through a technical lens. We will dive into:
@@ -54,3 +57,4 @@ This is the first of a series of posts where I will break down the prioritizatio
 - **Tourism Tech**: Connecting our natural wonders to global payment and logistics grids.
 
 Venezuela isn't just coming back; it's being re-coded for a new era.
+-->
