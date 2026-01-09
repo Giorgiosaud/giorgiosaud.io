@@ -17,7 +17,7 @@ tags:
   - oil-and-gas
   - mining
   - solution-architecture
-cover: ../../../assets/images/venezuela-industry-recovery.webp
+cover: ../../../assets/images/Venezuela.webp
 coverAlt: Abstract visualization of industrial automation in Venezuelan landscape
 ---
 

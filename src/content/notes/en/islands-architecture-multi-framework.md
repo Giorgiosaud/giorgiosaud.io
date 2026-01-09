@@ -43,23 +43,23 @@ Here's the same counter component in React, Vue, and Svelte:
 
 ```tsx
 // buttonReact.tsx
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from "react";
 
 export default function Counter() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    setTimeout(() => setCount(c => c + 1), 1000)
-  }, [])
+    setTimeout(() => setCount((c) => c + 1), 1000);
+  }, []);
 
   return (
     <div className="react-component">
-      <h3>Clicked {count} {count === 1 ? 'time' : 'times'}</h3>
-      <button onClick={() => setCount(c => c + 1)}>
-        Increment Count
-      </button>
+      <h3>
+        Clicked {count} {count === 1 ? "time" : "times"}
+      </h3>
+      <button onClick={() => setCount((c) => c + 1)}>Increment Count</button>
     </div>
-  )
+  );
 }
 ```
 
@@ -68,13 +68,13 @@ export default function Counter() {
 ```vue
 <!-- buttonVue.vue -->
 <script setup>
-import { onMounted, ref } from "vue"
+import { onMounted, ref } from "vue";
 
-const count = ref(0)
+const count = ref(0);
 
 onMounted(() => {
-  setTimeout(() => count.value++, 1000)
-})
+  setTimeout(() => count.value++, 1000);
+});
 </script>
 
 <template>
@@ -106,6 +106,7 @@ onMount(() => {
 ```
 
 Same functionality, three different philosophies:
+
 - **React**: Explicit state hooks, functional components
 - **Vue**: Composition API with refs, template syntax
 - **Svelte**: Reactive by default, minimal boilerplate
@@ -136,13 +137,13 @@ import SvelteCounter from '@components/svelte/buttonSvelte.svelte'
 
 The magic is in the `client:*` directives:
 
-| Directive | When it Hydrates | Use Case |
-|-----------|------------------|----------|
-| `client:load` | Immediately on page load | Critical interactive elements |
-| `client:idle` | When browser is idle | Non-critical but needed soon |
-| `client:visible` | When element enters viewport | Below-the-fold content |
-| `client:media` | When media query matches | Mobile-only interactions |
-| `client:only` | Never SSR, client-side only | Components that can't be SSR'd |
+| Directive        | When it Hydrates             | Use Case                       |
+| ---------------- | ---------------------------- | ------------------------------ |
+| `client:load`    | Immediately on page load     | Critical interactive elements  |
+| `client:idle`    | When browser is idle         | Non-critical but needed soon   |
+| `client:visible` | When element enters viewport | Below-the-fold content         |
+| `client:media`   | When media query matches     | Mobile-only interactions       |
+| `client:only`    | Never SSR, client-side only  | Components that can't be SSR'd |
 
 ### No Directive = Zero JS
 
@@ -210,21 +211,19 @@ Each framework can use its own styling approach:
 
 ```tsx
 // React with CSS Modules or inline styles
-<button style={{ background: 'blue', color: 'white' }}>
-  Click me
-</button>
+<button style={{ background: "blue", color: "white" }}>Click me</button>
 ```
 
 ## Decision Framework
 
 When to use which framework:
 
-| Use Case | Recommended Framework |
-|----------|----------------------|
-| Complex state, large ecosystem | React |
-| Form-heavy applications | Vue |
-| Animation-heavy, minimal bundle | Svelte |
-| Server-rendered, no hydration | Astro |
+| Use Case                        | Recommended Framework |
+| ------------------------------- | --------------------- |
+| Complex state, large ecosystem  | React                 |
+| Form-heavy applications         | Vue                   |
+| Animation-heavy, minimal bundle | Svelte                |
+| Server-rendered, no hydration   | Astro                 |
 
 But honestly? Use what your team knows best. The performance benefits of Islands Architecture work regardless of which framework you choose.
 
@@ -233,18 +232,14 @@ But honestly? Use what your team knows best. The performance benefits of Islands
 In `astro.config.mjs`:
 
 ```javascript
-import { defineConfig } from 'astro/config'
-import react from '@astrojs/react'
-import vue from '@astrojs/vue'
-import svelte from '@astrojs/svelte'
+import { defineConfig } from "astro/config";
+import react from "@astrojs/react";
+import vue from "@astrojs/vue";
+import svelte from "@astrojs/svelte";
 
 export default defineConfig({
-  integrations: [
-    react(),
-    vue(),
-    svelte(),
-  ],
-})
+  integrations: [react(), vue(), svelte()],
+});
 ```
 
 That's it. Astro handles the rest.
