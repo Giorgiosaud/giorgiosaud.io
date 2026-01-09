@@ -1,8 +1,8 @@
 ---
 draft: true
-title: Re-platforming Venezuela: A Solution Architect's Perspective on Industrial Recovery
+title: "Re-platforming Venezuela: A Solution Architect's Perspective"
 selfHealing: "000008"
-description: An industrial engineer's perspective on prioritizing automation processes in Venezuela's core industries—Oil, Mining, and Tourism—during the new age of investment.
+description: "Prioritizing automation processes in Venezuela's core industries—Oil, Mining, and Tourism—during the new age of investment."
 publishDate: 2026-01-10T08:00:00.000Z
 category: strategy
 author: 000001-jorge-saud
