@@ -175,6 +175,12 @@ function goBack() {
           class="menu"
           role="menu"
           onclick={(e) => e.stopPropagation()}
+          onkeydown={(e) => {
+            if (e.key === "Escape") {
+              showMenu = false;
+              mode = "menu";
+            }
+          }}
           tabindex="-1"
         >
           <button
@@ -320,7 +326,18 @@ function goBack() {
           {/if}
         </div>
       {:else if mode === "login"}
-        <div class="menu" onclick={(e) => e.stopPropagation()}>
+        <div
+          class="menu"
+          role="menu"
+          onclick={(e) => e.stopPropagation()}
+          onkeydown={(e) => {
+            if (e.key === "Escape") {
+              showMenu = false;
+              mode = "menu";
+            }
+          }}
+          tabindex="-1"
+        >
           <form onsubmit={handleEmailLogin} class="form">
             <button type="button" class="back-button" onclick={goBack}>
               <svg
@@ -380,7 +397,18 @@ function goBack() {
           </form>
         </div>
       {:else if mode === "signup"}
-        <div class="menu" onclick={(e) => e.stopPropagation()}>
+        <div
+          class="menu"
+          role="menu"
+          onclick={(e) => e.stopPropagation()}
+          onkeydown={(e) => {
+            if (e.key === "Escape") {
+              showMenu = false;
+              mode = "menu";
+            }
+          }}
+          tabindex="-1"
+        >
           <form onsubmit={handleEmailSignUp} class="form">
             <button type="button" class="back-button" onclick={goBack}>
               <svg
