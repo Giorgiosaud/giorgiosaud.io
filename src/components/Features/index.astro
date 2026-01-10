@@ -6,32 +6,44 @@ const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 const features = [
   {
+    // @ts-expect-error
     title: t('features.list.0.title'),
+    // @ts-expect-error
     description: t('features.list.0.description'),
     icon: 'Integration',
   },
   {
+    // @ts-expect-error
     title: t('features.list.1.title'),
+    // @ts-expect-error
     description: t('features.list.1.description'),
     icon: 'Patterns',
   },
   {
+    // @ts-expect-error
     title: t('features.list.2.title'),
+    // @ts-expect-error
     description: t('features.list.2.description'),
     icon: 'Frameworks',
   },
   {
+    // @ts-expect-error
     title: t('features.list.3.title'),
+    // @ts-expect-error
     description: t('features.list.3.description'),
     icon: 'API',
   },
   {
+    // @ts-expect-error
     title: t('features.list.4.title'),
+    // @ts-expect-error
     description: t('features.list.4.description'),
     icon: 'Globe',
   },
   {
+    // @ts-expect-error
     title: t('features.list.5.title'),
+    // @ts-expect-error
     description: t('features.list.5.description'),
     icon: 'Community',
   },
@@ -51,11 +63,7 @@ const features = [
   <div class="features">
     {
       features.map(({ icon, title, description }) => (
-        <Feature
-          description={description}
-          icon={icon}
-          title={title}
-        />
+        <Feature description={description} icon={icon} title={title} />
       ))
     }
   </div>

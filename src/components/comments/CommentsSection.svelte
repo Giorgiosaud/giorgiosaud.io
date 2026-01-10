@@ -169,7 +169,12 @@ function removeCommentFromTree(list: Comment[], id: string): Comment[] {
     {/if}
 
     {#if isAuthenticated}
-      <CommentForm {noteId} onSubmit={handleNewComment} {lang} {turnstileSiteKey} />
+      <CommentForm
+        {noteId}
+        onSubmit={handleNewComment}
+        {lang}
+        {turnstileSiteKey}
+      />
     {:else}
       <p class="login-prompt">{t.loginToComment}</p>
     {/if}

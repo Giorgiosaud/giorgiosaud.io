@@ -63,9 +63,11 @@ onMount(() => {
   // Fetch profile data
   fetch('/api/dashboard/profile.json')
     .then(res => res.json())
-    .then(data => {
+    .then((data: { user: User }) => {
       if (data.user) {
-        profileData = data.user
+        profileData = {
+          createdAt: data.user.createdAt?.toISOString(),
+        }
       }
     })
     .catch(err => console.error('Failed to load profile:', err))
@@ -92,19 +94,29 @@ onMount(() => {
     <div class="status-grid">
       <div class="status-item">
         <span class="label">{t.role}</span>
-        <span class="value role-badge" class:admin={(user as { role?: string }).role === 'admin'}>
-          {(user as { role?: string }).role === 'admin' ? t.admin : t.user}
+        <span
+          class="value role-badge"
+          class:admin={(user as { role?: string }).role === "admin"}
+        >
+          {(user as { role?: string }).role === "admin" ? t.admin : t.user}
         </span>
       </div>
 
       <div class="status-item">
         <span class="label">{t.memberSince}</span>
-        <span class="value">{formatDate(profileData?.createdAt || (user as { createdAt?: string }).createdAt)}</span>
+        <span class="value"
+          >{formatDate(
+            profileData?.createdAt || user.createdAt.toISOString()
+          )}</span
+        >
       </div>
     </div>
 
     {#if profileData?.username}
-      <a href={`/@${profileData.displayUsername || profileData.username}`} class="profile-link">
+      <a
+        href={`/@${profileData.displayUsername || profileData.username}`}
+        class="profile-link"
+      >
         {t.viewProfile}
       </a>
     {:else if !compact}
@@ -209,7 +221,12 @@ onMount(() => {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 </style>

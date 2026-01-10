@@ -35,7 +35,7 @@ let isSubmitting = $state(false)
 let submitError = $state<string | null>(null)
 let turnstileToken = $state<string | null>(null)
 let turnstileError = $state(false)
-let turnstileRef: Turnstile | null = null
+let turnstileRef: Turnstile | null = $state(null)
 
 const t = $derived(translations[lang])
 const canSubmit = $derived(

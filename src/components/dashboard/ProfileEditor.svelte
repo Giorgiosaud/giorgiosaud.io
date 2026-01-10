@@ -144,7 +144,7 @@ async function handleSubmit(e: Event) {
         maxlength="30"
       />
       <small class="help-text">
-        {t.usernameHelp.replace('{username}', username || 'username')}
+        {t.usernameHelp.replace("{username}", username || "username")}
       </small>
     </div>
 
@@ -307,7 +307,12 @@ async function handleSubmit(e: Event) {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 </style>

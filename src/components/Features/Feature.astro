@@ -27,15 +27,14 @@ const { icon, title, description } = Astro.props
   article {
     display: grid;
     grid-template-rows: subgrid;
-    
   }
   header {
     display: flex;
     flex-direction: column;
-    
+
     align-items: center;
     padding: calc(var(--spacing) * 4) 0;
-    @container feature (width>320px){
+    @container feature (width>320px) {
       flex-direction: row;
     }
     .icon {
@@ -46,18 +45,17 @@ const { icon, title, description } = Astro.props
       align-items: center;
       aspect-ratio: 1;
       width: 80px;
-      &>svg{
+      & > svg {
         width: 100%;
       }
     }
     h3 {
       font-size: clamp(1.3rem, 2vw, 1.5rem);
       margin-left: calc(var(--spacing) * 4);
-      @container card (width > 48ch){
-      margin-left: 0;
+      @container card (width > 48ch) {
+        margin-left: 0;
         text-align: center;
       }
-      
     }
     @container card (width> 48ch) {
       flex-direction: column;

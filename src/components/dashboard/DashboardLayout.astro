@@ -37,21 +37,23 @@ const navItems = [
 ]
 ---
 
-<Base title={`${t('dashboard.title')} - ${title}`} pathToTranslate="dashboard">
+<Base title={`${t("dashboard.title")} - ${title}`} pathToTranslate="dashboard">
   <div class="dashboard-container">
     <header class="dashboard-header">
-      <h1>{t('dashboard.title')}</h1>
+      <h1>{t("dashboard.title")}</h1>
     </header>
 
     <nav class="dashboard-nav">
-      {navItems.map(item => (
-        <a
-          href={item.href}
-          class:list={['nav-link', { active: currentPage === item.id }]}
-        >
-          {item.label}
-        </a>
-      ))}
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class:list={["nav-link", { active: currentPage === item.id }]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
     </nav>
 
     <main class="dashboard-content">
@@ -91,7 +93,9 @@ const navItems = [
     color: var(--color-muted, #666);
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
-    transition: color 0.2s, border-color 0.2s;
+    transition:
+      color 0.2s,
+      border-color 0.2s;
   }
 
   .nav-link:hover {

@@ -72,7 +72,9 @@ onMount(() => {
           <div class="badge-info">
             <span class="badge-name">{badge.name}</span>
             <span class="badge-description">{badge.description}</span>
-            <span class="badge-earned">{t.earnedOn} {formatDate(badge.earnedAt)}</span>
+            <span class="badge-earned"
+              >{t.earnedOn} {formatDate(badge.earnedAt)}</span
+            >
           </div>
         </div>
       {/each}
@@ -163,7 +165,12 @@ onMount(() => {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 </style>

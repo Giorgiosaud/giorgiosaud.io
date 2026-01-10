@@ -180,13 +180,17 @@ async function handleDelete(id: string) {
         bind:value={newPasskeyName}
         placeholder={t.namePlaceholder}
         autofocus
-        onkeydown={(e) => e.key === 'Enter' && handleAddPasskey()}
+        onkeydown={(e) => e.key === "Enter" && handleAddPasskey()}
       />
       <div class="prompt-actions">
         <button type="button" onclick={handleAddPasskey} disabled={isAdding}>
           {t.add}
         </button>
-        <button type="button" class="cancel" onclick={() => showNamePrompt = false}>
+        <button
+          type="button"
+          class="cancel"
+          onclick={() => (showNamePrompt = false)}
+        >
           {t.cancel}
         </button>
       </div>
@@ -209,7 +213,7 @@ async function handleDelete(id: string) {
       {#each passkeys as pk (pk.id)}
         <li class="passkey-item">
           <div class="passkey-info">
-            <span class="passkey-name">{pk.name || 'Passkey'}</span>
+            <span class="passkey-name">{pk.name || "Passkey"}</span>
             <div class="passkey-details">
               <span class="detail">
                 <span class="detail-label">{t.deviceType}:</span>
@@ -394,7 +398,9 @@ async function handleDelete(id: string) {
     border-radius: 6px;
     font-size: 0.85rem;
     cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
   }
 
   .delete-button:hover:not(:disabled) {
@@ -423,7 +429,12 @@ async function handleDelete(id: string) {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 </style>
