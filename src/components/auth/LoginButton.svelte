@@ -71,7 +71,7 @@ let mode = $state<AuthMode>('menu')
 let email = $state('')
 let password = $state('')
 let name = $state('')
-let containerRef: HTMLDivElement | null = null
+let containerRef: HTMLDivElement | null = $state(null)
 let providers = $state<SocialProviders>({
   github: false,
   google: false,
