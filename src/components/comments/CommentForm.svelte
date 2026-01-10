@@ -132,10 +132,12 @@ async function handleSubmit(e: Event) {
 
   <div class="form-actions">
     {#if onCancel}
-      <button type="button" onclick={onCancel} class="cancel-btn">{t.cancel}</button>
+      <button type="button" onclick={onCancel} class="cancel-btn"
+        >{t.cancel}</button
+      >
     {/if}
     <button type="submit" disabled={!canSubmit} class="submit-btn">
-      {isSubmitting ? '...' : t.post}
+      {isSubmitting ? "..." : t.post}
     </button>
   </div>
 </form>

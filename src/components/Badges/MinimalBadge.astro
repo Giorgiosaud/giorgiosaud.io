@@ -21,54 +21,52 @@ const slugify = (str: string) => {
   )
 }
 ---
+
 <div class="badge">
-    <article tabindex="0">
-        <figure>
-            <img src={imgSrc} alt={title} loading="lazy" decoding="async">
-            <figcaption>
-                <h4>{title}</h4>
-                <p title={description}>{description}</p>
-                <span class="category">{Astro.props.category}</span>
-            </figcaption>
-        </figure>
-        </button>
-    </article>
+  <article tabindex="0">
+    <figure>
+      <img src={imgSrc} alt={title} loading="lazy" decoding="async" />
+      <figcaption>
+        <h4>{title}</h4>
+        <p title={description}>{description}</p>
+        <span class="category">{Astro.props.category}</span>
+      </figcaption>
+    </figure>
+  </article>
 </div>
 
-<style define:vars={{cardColor,anchorName:slugify(title)}}>
-   
-    .badge{
-        container: badge/inline-size;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    article{
-        width: 70cqw;
-        anchor-name: var(--anchorName);
-        figure{
-            img{
-                aspect-ratio:1;
-                width: 100%;
-            }
-            figcaption{
-                p{
-                     display: -webkit-box;
-                    -webkit-line-clamp: 5;
-                    -webkit-box-orient: vertical;  
-                    overflow: hidden;
-                    margin-block:1lh;
-                }
-                .category{
-                    display: block;
-                    text-align: center;
-                    color: var(--color-light);
-                    background-color: var(--color-main);
-                    padding: var(--spacing) calc(var(--spacing)*4);
-                    border-radius: 30px;
-                }
-            }
+<style define:vars={{ cardColor, anchorName: slugify(title) }}>
+  .badge {
+    container: badge/inline-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  article {
+    width: 70cqw;
+    anchor-name: var(--anchorName);
+    figure {
+      img {
+        aspect-ratio: 1;
+        width: 100%;
+      }
+      figcaption {
+        p {
+          display: -webkit-box;
+          -webkit-line-clamp: 5;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          margin-block: 1lh;
         }
-
+        .category {
+          display: block;
+          text-align: center;
+          color: var(--color-light);
+          background-color: var(--color-main);
+          padding: var(--spacing) calc(var(--spacing) * 4);
+          border-radius: 30px;
+        }
+      }
     }
+  }
 </style>
