@@ -95,7 +95,7 @@ function pushUserToDataLayer(
   }
 }
 
-onMount(async () => {
+onMount(() => {
   initAuthState()
 
   let lastAuthState = false
@@ -114,11 +114,13 @@ onMount(async () => {
   const unsub5 = authErrorStore.subscribe(v => (authError = v))
 
   // Initialize push notification state
-  pushSupported = isPushSupported()
-  if (pushSupported) {
-    pushPermission = getPermissionState()
-    pushSubscribed = await isSubscribed()
-  }
+  ;(async () => {
+    pushSupported = isPushSupported()
+    if (pushSupported) {
+      pushPermission = getPermissionState()
+      pushSubscribed = await isSubscribed()
+    }
+  })()
 
   const handleClickOutside = (e: MouseEvent) => {
     const target = e.target as HTMLElement
@@ -185,13 +187,17 @@ async function handleToggleNotifications() {
     <button
       type="button"
       class="avatar"
-      onclick={() => showMenu = !showMenu}
+      onclick={() => (showMenu = !showMenu)}
       aria-expanded={showMenu}
       aria-haspopup="true"
-      title={user?.name ?? 'User'}
+      title={user?.name ?? "User"}
     >
       {#if user?.image}
-        <img src={user.image} alt={user.name ?? 'User avatar'} class="avatar-image" />
+        <img
+          src={user.image}
+          alt={user.name ?? "User avatar"}
+          class="avatar-image"
+        />
       {:else}
         <span class="initials">{initials}</span>
       {/if}
@@ -208,7 +214,18 @@ async function handleToggleNotifications() {
 
         {#if isAdmin}
           <a href="/admin" class="menu-item" role="menuitem">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
               <rect x="3" y="3" width="7" height="7" />
               <rect x="14" y="3" width="7" height="7" />
               <rect x="14" y="14" width="7" height="7" />
@@ -218,9 +235,28 @@ async function handleToggleNotifications() {
           </a>
         {/if}
 
-        <button type="button" class="menu-item" onclick={handleAddPasskey} disabled={isAddingPasskey} role="menuitem">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z" />
+        <button
+          type="button"
+          class="menu-item"
+          onclick={handleAddPasskey}
+          disabled={isAddingPasskey}
+          role="menuitem"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path
+              d="M2 18v3c0 .6.4 1 1 1h4v-3h3v-3h2l1.4-1.4a6.5 6.5 0 1 0-4-4Z"
+            />
             <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" />
           </svg>
           <span>
@@ -238,7 +274,7 @@ async function handleToggleNotifications() {
           <div class="error">{authError}</div>
         {/if}
 
-        {#if pushSupported && pushPermission !== 'denied'}
+        {#if pushSupported && pushPermission !== "denied"}
           <button
             type="button"
             class="menu-item"
@@ -247,7 +283,18 @@ async function handleToggleNotifications() {
             disabled={pushLoading}
             role="menuitem"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
               {#if pushSubscribed}
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
@@ -272,8 +319,24 @@ async function handleToggleNotifications() {
 
         <div class="divider"></div>
 
-        <button type="button" class="menu-item" onclick={logout} role="menuitem">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <button
+          type="button"
+          class="menu-item"
+          onclick={logout}
+          role="menuitem"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
             <line x1="21" y1="12" x2="9" y2="12" />
@@ -322,8 +385,13 @@ async function handleToggleNotifications() {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 
   .avatar-image {
