@@ -1,6 +1,7 @@
 <script lang="ts">
 import type { User } from 'better-auth/types'
 import CommentForm from './CommentForm.svelte'
+import CommentItem from './CommentItem.svelte'
 
 interface Comment {
   id: string
@@ -61,7 +62,7 @@ let {
 
 let isReplying = $state(false)
 let isEditing = $state(false)
-let editContent = $state(comment.content)
+let editContent = $derived(comment.content)
 
 const t = $derived(translations[lang])
 const isOwner = $derived(user?.id === comment.userId)
@@ -136,9 +137,11 @@ function handleReplySubmit(newComment: Comment) {
     {#if comment.authorImage}
       <img src={comment.authorImage} alt="" class="avatar" />
     {:else}
-      <span class="avatar-placeholder">{(comment.authorName || 'U')[0].toUpperCase()}</span>
+      <span class="avatar-placeholder"
+        >{(comment.authorName || "U")[0].toUpperCase()}</span
+      >
     {/if}
-    <span class="author">{comment.authorName || 'Anonymous'}</span>
+    <span class="author">{comment.authorName || "Anonymous"}</span>
     <time class="time" datetime={comment.createdAt}>
       {formatDate(comment.createdAt)}
     </time>
@@ -151,8 +154,14 @@ function handleReplySubmit(newComment: Comment) {
     <div class="edit-form">
       <textarea bind:value={editContent} class="textarea" rows="3"></textarea>
       <div class="form-actions">
-        <button type="button" onclick={() => isEditing = false} class="cancel-btn">{t.cancel}</button>
-        <button type="button" class="submit-btn" onclick={handleEdit}>{t.save}</button>
+        <button
+          type="button"
+          onclick={() => (isEditing = false)}
+          class="cancel-btn">{t.cancel}</button
+        >
+        <button type="button" class="submit-btn" onclick={handleEdit}
+          >{t.save}</button
+        >
       </div>
     </div>
   {:else}
@@ -161,13 +170,23 @@ function handleReplySubmit(newComment: Comment) {
 
   <footer class="comment-footer">
     {#if user && canReply}
-      <button type="button" onclick={() => isReplying = !isReplying} class="action-btn">
+      <button
+        type="button"
+        onclick={() => (isReplying = !isReplying)}
+        class="action-btn"
+      >
         {t.reply}
       </button>
     {/if}
     {#if canModify && !isEditing}
-      <button type="button" onclick={() => isEditing = true} class="action-btn">{t.edit}</button>
-      <button type="button" class="action-btn" onclick={handleDelete}>{t.delete}</button>
+      <button
+        type="button"
+        onclick={() => (isEditing = true)}
+        class="action-btn">{t.edit}</button
+      >
+      <button type="button" class="action-btn" onclick={handleDelete}
+        >{t.delete}</button
+      >
     {/if}
   </footer>
 
@@ -177,7 +196,7 @@ function handleReplySubmit(newComment: Comment) {
         {noteId}
         parentId={comment.id}
         onSubmit={handleReplySubmit}
-        onCancel={() => isReplying = false}
+        onCancel={() => (isReplying = false)}
         {lang}
         {turnstileSiteKey}
       />
@@ -187,7 +206,7 @@ function handleReplySubmit(newComment: Comment) {
   {#if comment.replies && comment.replies.length > 0}
     <div class="replies">
       {#each comment.replies as reply (reply.id)}
-        <svelte:self
+        <CommentItem
           comment={reply}
           {noteId}
           {user}
@@ -205,7 +224,8 @@ function handleReplySubmit(newComment: Comment) {
 <style>
   .comment {
     padding-left: calc(var(--depth, 0) * 1.5rem);
-    border-left: calc(var(--depth, 0) * 2px) solid light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
+    border-left: calc(var(--depth, 0) * 2px) solid
+      light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
   }
 
   .comment-header {
