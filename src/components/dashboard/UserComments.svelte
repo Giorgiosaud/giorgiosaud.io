@@ -109,7 +109,11 @@ onMount(async () => {
             {#if comment.isEdited}
               <span class="edited-badge">({t.edited})</span>
             {/if}
-            <span class="status-badge" class:approved={comment.isApproved} class:deleted={comment.deletedAt !== null}>
+            <span
+              class="status-badge"
+              class:approved={comment.isApproved}
+              class:deleted={comment.deletedAt !== null}
+            >
               {#if comment.deletedAt}
                 {t.deleted}
               {:else if comment.isApproved}
@@ -280,7 +284,12 @@ onMount(async () => {
   }
 
   @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
   }
 </style>
