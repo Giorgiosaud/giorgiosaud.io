@@ -4,11 +4,11 @@ import type { Session, User } from 'better-auth/types'
 
 type UserType =
   | (User & {
-      role?: string
-      displayName?: string
-      isBanned?: boolean
-      bannedAt?: Date
-      bannedReason?: string
+      role?: string | null | undefined
+      displayName?: string | undefined
+      isBanned?: boolean | undefined
+      bannedAt?: Date | undefined
+      bannedReason?: string | undefined
     })
   | null
 
@@ -16,7 +16,7 @@ declare global {
   namespace App {
     interface Locals {
       session: Session | null
-      user: UserType | null
+      user: UserType | null | undefined
     }
   }
 }
