@@ -3,6 +3,7 @@ import Badges from '@components/Badges/index.astro'
 import Features from '@components/Features/index.astro'
 import Hero from '@components/Hero.astro'
 import Logos from '@components/Logos.astro'
+import NotesLatest from '@components/NotesLatest.astro'
 import { getLangFromUrl, useTranslations } from '@i18n/utils'
 import Base from '@templates/Base.astro'
 
@@ -12,11 +13,9 @@ const t = useTranslations(lang)
 ---
 
 <Base pathToTranslate="home">
-  <Hero
-    description={t("hero.description")}
-    title={t("hero.title")}
-  />
+  <Hero description={t("hero.description")} title={t("hero.title")} />
   <Features />
+  <NotesLatest collection="notas" />
   <Badges title={t("badges.title")} readMore={t("badges.readMore")} />
   <section class="full-width">
     <h3>
