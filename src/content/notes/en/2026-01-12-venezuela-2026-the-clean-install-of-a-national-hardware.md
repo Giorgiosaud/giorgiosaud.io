@@ -7,15 +7,15 @@ publishDate: 2026-01-12T17:30:00.000Z
 category: strategy
 author: giorgio-saud
 collections:
-  - strategy
-  - architecture
+    - strategy
+    - architecture
 tags:
-  - venezuela
-  - economy
-  - smart-contracts
-  - infrastructure
-  - fintech
-cover: ../../../assets/images/Venezuela-Architecture.png
+    - venezuela
+    - economy
+    - smart-contracts
+    - infrastructure
+    - fintech
+cover: ../../../assets/images/Venezuela.png
 coverAlt: Investment flow diagram and strategic resources in Venezuela
 slug: clean-install-venezuela
 ---
@@ -58,5 +58,3 @@ Venezuela’s geography allows for short distances between power centers and res
 We are designing a nation where effort has real value and the future is financeable. The goal is to move from being an "extractive country" to an **"orchestrator country."** Venezuela doesn't need a repair; it needs a strategic reboot.
 
 **Are we ready to deploy the code for the new Venezuela?**
-
----

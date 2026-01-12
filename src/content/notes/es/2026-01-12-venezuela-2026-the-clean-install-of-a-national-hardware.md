@@ -7,15 +7,15 @@ publishDate: 2026-01-12T17:30:00.000Z
 category: strategy
 author: 000001-jorge-saud
 collections:
-  - strategy
-  - architecture
+    - strategy
+    - architecture
 tags:
-  - venezuela
-  - economia
-  - smart-contracts
-  - infraestructura
-  - fintech
-cover: ../../../assets/images/Venezuela-Architecture.png
+    - venezuela
+    - economia
+    - smart-contracts
+    - infraestructura
+    - fintech
+cover: ../../../assets/images/Venezuela.png
 coverAlt: Diagrama de flujo de inversión y recursos estratégicos en Venezuela
 slug: venezuela-instalacion-limpia
 ---
@@ -58,5 +58,3 @@ Venezuela tiene distancias cortas entre sus centros de poder y sus recursos. Apr
 Estamos diseñando una nación donde el esfuerzo tiene un valor real y el futuro es financiable. La meta es pasar de ser un país extractor a ser un **país orquestador**. Venezuela no necesita una reparación; necesita un reinicio estratégico.
 
 **¿Estamos listos para desplegar el código de la nueva Venezuela?**
-
----
