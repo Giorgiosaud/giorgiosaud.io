@@ -23,6 +23,11 @@ self.addEventListener('message', event => {
 })
 
 self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(['/offline', '/es/offline'])
+    })
+  )
   self.skipWaiting()
 })
 
@@ -96,6 +101,13 @@ self.addEventListener('fetch', event => {
           const cached = await caches.match(event.request)
           if (cached) return cached
         }
+        
+        // Try to return the offline page
+        const cache = await caches.open(CACHE_NAME)
+        const isSpanish = new URL(event.request.url).pathname.startsWith('/es')
+        const offlinePage = await cache.match(isSpanish ? '/es/offline' : '/offline')
+        if (offlinePage) return offlinePage
+
         // Return offline fallback or let it fail
         return new Response('Offline - page not cached', {
           status: 503,

@@ -1,0 +1,15 @@
+---
+import Hero from '@components/Hero.astro'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import Base from '@templates/Base.astro'
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+---
+
+<Base title="Offline" pathToTranslate="home">
+  <Hero
+  description={t("offline.description")}
+  title={t("offline.title")}
+  />
+</Base>
