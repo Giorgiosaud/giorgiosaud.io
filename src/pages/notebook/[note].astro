@@ -75,13 +75,13 @@ const imageName = `${page.id}-latest`
 </NoteTemplate>
 <script define:vars={{ selfHealing, title }}>
   // Track note view with gtag
-  if (typeof gtag === 'function') {
-    gtag('event', 'note_view', {
-      'event_category': 'content',
-      'event_label': title,
-      'note_id': selfHealing,
-      'page_title': title,
-      'language': 'en'
+  if (typeof gtag === "function") {
+    gtag("event", "note_view", {
+      event_category: "content",
+      event_label: title,
+      note_id: selfHealing,
+      page_title: title,
+      language: "en",
     });
   }
 
@@ -131,15 +131,18 @@ const imageName = `${page.id}-latest`
     try {
       await shareViaShareApi(shareData);
     } catch (error) {
-      try {
-        // Fallback to copying the link if Share API fails
-        await copyLink(shareData.url);
-      } catch (error) {
-        console.error("Error copying link:", error);
-      }
+      // Ignore error, always try to copy
+    }
+    try {
+      await copyLink(shareData.url);
+    } catch (error) {
+      console.error("Error copying link:", error);
     }
   };
   shareButton.addEventListener("click", shareContent);
+  if (copyLinkButton) {
+    copyLinkButton.addEventListener("click", () => copyLink(urlToShare));
+  }
 </script>
 <style>
   .comments-wrapper {

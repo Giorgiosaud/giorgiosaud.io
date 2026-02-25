@@ -3,13 +3,13 @@ import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import svelte from '@astrojs/svelte'
-import vercel from '@astrojs/vercel'
+import cloudflare from '@astrojs/cloudflare'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://giorgiosaud.io',
+  site: 'https://beta.giorgiosaud.io',
   integrations: [
     mdx(),
     react(),
@@ -171,13 +171,9 @@ export default defineConfig({
     },
   },
 
-  adapter: vercel({
-    skewProtection: true,
-    isr: {
-      // Exclude API routes from ISR to preserve query parameters (e.g., OAuth callbacks)
-      exclude: [
-        /^\/api\/.+/,
-      ],
-    },
+  adapter: cloudflare({
+    platformProxy:{
+      enabled:true
+    }
   }),
 })
