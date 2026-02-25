@@ -17,10 +17,15 @@ export default defineConfig({
     svelte(),
     sitemap(),
   ],
-
+  
   vite: {
     ssr:{
-      external:["node:async_hooks"] // Fixes "Error: Cannot find module 'node:async_hooks'" when running on Cloudflare Pages (see
+      external:["node:async_hooks"], // Fixes "Error: Cannot find module 'node:async_hooks'" when running on Cloudflare Pages (see
+      define: {
+        // Esto fuerza a Vite a reconocer la variable durante el build
+        'process.env.TURNSTILE_SITE_KEY': JSON.stringify(process.env.TURNSTILE_SITE_KEY),
+        'process.env.VAPID_PUBLIC_KEY': JSON.stringify(process.env.VAPID_PUBLIC_KEY),
+      },
     },
     resolve: {
       alias: {
@@ -43,15 +48,15 @@ export default defineConfig({
       inlineStylesheets: 'never'
     },
   },
-
+  
   experimental: {
     contentIntellisense: true,
   },
-
+  
   redirects: {
     about: 'about-this-notebook',
   },
-
+  
   env: {
     schema: {
       // Database (Vercel-Supabase integration uses POSTGRES_URL)
@@ -60,7 +65,7 @@ export default defineConfig({
         access: 'secret',
         optional: false,
       }),
-
+      
       // Better Auth
       BETTER_AUTH_SECRET: envField.string({
         context: 'server',
@@ -73,7 +78,7 @@ export default defineConfig({
         optional: false,
         default: 'http://localhost:4321',
       }),
-
+      
       // OAuth - GitHub
       GITHUB_CLIENT_ID: envField.string({
         context: 'server',
@@ -85,7 +90,7 @@ export default defineConfig({
         access: 'secret',
         optional: true,
       }),
-
+      
       // OAuth - Google
       GOOGLE_CLIENT_ID: envField.string({
         context: 'server',
@@ -97,7 +102,7 @@ export default defineConfig({
         access: 'secret',
         optional: true,
       }),
-
+      
       // OAuth - Facebook
       FACEBOOK_CLIENT_ID: envField.string({
         context: 'server',
@@ -109,14 +114,14 @@ export default defineConfig({
         access: 'secret',
         optional: true,
       }),
-
+      
       // Analytics
       TAG_MANAGER_ID: envField.string({
         context: 'client',
         access: 'public',
         optional: true,
       }),
-
+      
       // Cloudflare Turnstile (bot protection for comments - required)
       TURNSTILE_SITE_KEY: envField.string({
         context: 'client',
@@ -128,7 +133,7 @@ export default defineConfig({
         access: 'secret',
         optional: false,
       }),
-
+      
       // Email (Resend)
       RESEND_API_KEY: envField.string({
         context: 'server',
@@ -153,7 +158,7 @@ export default defineConfig({
         optional: true,
         default: 'Notebook',
       }),
-
+      
       // Web Push (VAPID keys - generate with: npx web-push generate-vapid-keys)
       VAPID_PUBLIC_KEY: envField.string({
         context: 'client',
@@ -173,7 +178,7 @@ export default defineConfig({
       }),
     },
   },
-
+  
   adapter: cloudflare({
     platformProxy:{
       enabled:true
