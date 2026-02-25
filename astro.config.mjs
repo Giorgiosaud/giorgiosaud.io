@@ -19,6 +19,9 @@ export default defineConfig({
   ],
 
   vite: {
+    ssr:{
+      external:["node:async_hooks"] // Fixes "Error: Cannot find module 'node:async_hooks'" when running on Cloudflare Pages (see
+    },
     resolve: {
       alias: {
         '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
