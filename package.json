@@ -39,7 +39,7 @@
     "@nanostores/vue": "^1.0.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "astro": "5.16.6",
+    "astro": "5.18.1",
     "better-auth": "^1.4.10",
     "drizzle-orm": "^0.45.1",
     "nanostores": "^1.1.0",
