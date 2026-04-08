@@ -23,6 +23,8 @@ tags:
 
 If you spend a lot of time in Claude Code or hitting the Anthropic API directly, you've probably wondered: *is it slow right now, or is it just me?* I got tired of wondering and built a small zsh plugin that answers that question directly in my terminal prompt.
 
+> **Fair warning before we go any further:** this is a workaround, not a solution. What would actually be ideal is Anthropic exposing real-time peak load data — a status endpoint with actual queue depth or degradation signals, the kind of thing you'd expect from a mature API platform. Until that exists, inferring load from TCP handshake timing is the best we can do from the outside. It's imperfect: it can't distinguish network congestion from server-side load, and a cold baseline is just noise. But "imperfect and visible" beats "no information at all", so here's how I built it.
+
 ## What It Does
 
 The result is a Powerlevel10k segment on the right side of my prompt that shows the current API load:

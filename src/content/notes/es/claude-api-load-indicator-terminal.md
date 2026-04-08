@@ -23,6 +23,8 @@ tags:
 
 Si pasas mucho tiempo en Claude Code o usando la API de Anthropic directamente, probablemente te has preguntado: *¿está lento ahora, o soy solo yo?* Me cansé de adivinar y construí un pequeño plugin zsh que responde esa pregunta directamente en el prompt del terminal.
 
+> **Un aviso antes de continuar:** esto es un workaround, no una solución. Lo ideal sería que Anthropic expusiera datos de carga en tiempo real — un endpoint de estado con señales reales de saturación o degradación, el tipo de cosa que esperarías de una plataforma de API madura. Hasta que eso exista, inferir la carga a partir del tiempo de handshake TCP es lo mejor que podemos hacer desde afuera. Es imperfecto: no puede distinguir congestión de red de carga del servidor, y una línea base vacía es simplemente ruido. Pero "imperfecto y visible" le gana a "sin información alguna", así que aquí está cómo lo construí.
+
 ## Qué hace
 
 El resultado es un segmento de Powerlevel10k en el lado derecho de mi prompt que muestra la carga actual de la API:
