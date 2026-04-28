@@ -1,11 +1,54 @@
 ---
 import { getCollection } from 'astro:content'
+import { getPublishedNotes } from '@helpers/collections'
 import Base from '@templates/Base.astro'
+import { runSearch } from '../../../helpers/search'
 
 const lang = 'es'
 
 const collections = await getCollection('colecciones')
 const chipId = (id: string) => id.replace(/^\d{4}-\d{2}-\d{2}-/, '')
+
+const url = Astro.url
+const hasQuery = url.searchParams.has('q') || url.searchParams.has('collection')
+
+let initialHtml = ''
+if (!hasQuery) {
+  const allNotes = await getPublishedNotes('es')
+  const result = runSearch(allNotes, {
+    lang: 'es',
+    page: 1,
+  })
+  initialHtml = result.results
+    .map(note => {
+      const title = note.title
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      const description = (note.description ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      const coverAlt = (note.coverAlt ?? title).replace(/"/g, '&quot;')
+      const collection = note.collections[0] ?? ''
+      const imgVtn = `note-img-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+      const titleVtn = `note-title-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+      const imgHtml = note.coverSrc
+        ? `<div class="card-thumb" style="view-transition-name:${imgVtn}"><img src="${note.coverSrc.replace(/"/g, '&quot;')}" alt="${coverAlt}" loading="lazy" /></div>`
+        : ''
+      return `<li class="note-card-item">
+      <article aria-label="${title}" data-link="${note.href}" data-collection="${collection}">
+        <div class="wrapper">
+          ${imgHtml}
+          <div class="title" style="view-transition-name:${titleVtn}" title="${title}"><h2>${title}</h2></div>
+          <div class="description" title="${description}"><p>${description}</p></div>
+        </div>
+        <a href="${note.href}" class="card-link" aria-label="${coverAlt}"></a>
+      </article>
+    </li>`
+    })
+    .join('')
+}
 ---
 
 <Base title="Cuaderno" pathToTranslate="notebook">
@@ -41,8 +84,11 @@ const chipId = (id: string) => id.replace(/^\d{4}-\d{2}-\d{2}-/, '')
       ))}
     </div>
 
-    <ul id="search-results" class="notes-grid" aria-live="polite">
-      <li class="loading"><p>Cargando…</p></li>
+    <ul id="search-results" class="notes-grid" aria-live="polite" data-ssr={!hasQuery ? 'true' : 'false'}>
+      {hasQuery
+        ? <li class="loading"><p>Cargando…</p></li>
+        : <Fragment set:html={initialHtml} />
+      }
     </ul>
 
     <div id="pagination" class="pagination" aria-label="Paginación"></div>
