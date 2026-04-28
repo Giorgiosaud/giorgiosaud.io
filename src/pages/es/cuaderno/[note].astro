@@ -4,7 +4,10 @@ import { getCollection, render } from 'astro:content'
 import { TURNSTILE_SITE_KEY } from 'astro:env/client'
 import AISummarizer from '@components/AISummarizer.astro'
 import { CommentsSection } from '@components/comments'
+import RelatedNotes from '@components/RelatedNotes.astro'
 import ScrollTracker from '@components/ScrollTracker.svelte'
+import { getPublishedNotes } from '@helpers/collections'
+import { getRelatedNotes } from '@helpers/relatedNotes'
 import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
 
@@ -34,6 +37,10 @@ const { page, pathToTranslateNote } = Astro.props
 const { Content } = await render(page)
 const { draft, title, publishDate, cover, coverAlt, selfHealing, description } =
   page.data
+
+// Related posts
+const allNotes = await getPublishedNotes('es')
+const relatedNotes = getRelatedNotes(page, allNotes)
 ---
 <NoteTemplate
 description={description}
@@ -45,13 +52,13 @@ pathToTranslateNote={pathToTranslateNote}
 llmPath={`/es/cuaderno/${page.id}.md`}
 >
 <ScrollTracker client:idle noteId={selfHealing} lang="es" threshold={0.5} />
-<figure>
+<figure style={`view-transition-name:note-img-${page.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`}>
   {cover && coverAlt && <Picture src={cover} alt={coverAlt} width={500}/>}
   <figcaption>{coverAlt}</figcaption>
 </figure>
-<AISummarizer lang="es" />
+<AISummarizer lang="es" noteId={selfHealing} />
 <div id="content">
-  <h1>{title}</h1>
+  <h1 style={`view-transition-name:note-title-${page.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`}>{title}</h1>
   <Content/>
 </div>
 <section class="share">
@@ -62,77 +69,54 @@ llmPath={`/es/cuaderno/${page.id}.md`}
 <div class="comments-wrapper">
   <CommentsSection client:load noteId={selfHealing} lang="es" turnstileSiteKey={TURNSTILE_SITE_KEY} />
 </div>
+<RelatedNotes notes={relatedNotes} lang="es" sourceNoteId={selfHealing} />
 </NoteTemplate>
 <script define:vars={{selfHealing, title}}>
-  // Track note view with gtag
-  if (typeof gtag === 'function') {
-    gtag('event', 'note_view', {
-      'event_category': 'content',
-      'event_label': title,
-      'note_id': selfHealing,
-      'page_title': title,
-      'language': 'es'
-    });
-  }
+  import { trackEvent } from '../../../helpers/datalayer'
 
-  notification = document.getElementById('notification');
-  
+  trackEvent({ event: 'note_view', note_id: selfHealing, note_title: title, category: '', lang: 'es' })
+
+  const notification = document.getElementById('notification');
   const shareButton = document.getElementById('share');
   const urlToShare = `${window.location.href}-${selfHealing}`;
-  const copyLink = async (link)=>{
+
+  const copyLink = async (link) => {
     if (navigator.clipboard) {
-      try {
-        await navigator.clipboard.writeText(link);
-        notification.style.display = 'block';
-        setTimeout(() => {
-          notification.style.display = 'none';
-        }, 2000);
-        console.log('Link copied to clipboard');
-      } catch (err) {
-        console.error('Failed to copy link: ', err);
-        throw err
-      }
-    }
-    else{
-      console.log('Clipboard API not supported');
+      await navigator.clipboard.writeText(link);
+      notification.style.display = 'block';
+      setTimeout(() => { notification.style.display = 'none'; }, 2000);
+    } else {
       throw new Error('Clipboard API not supported');
     }
-  }
-  const shareViaShareApi=async ({title, text, url})=>{
+  };
+
+  const shareViaShareApi = async ({ title, text, url }) => {
     if (navigator.share) {
-      try{
-        await navigator.share({title, text, url});
-        console.log('Successful share');
-      } catch (error) {
-        console.error('Error sharing:', error);
-        throw error
-      }
-    }
-    else{
-      console.log('Share API not supported');
+      await navigator.share({ title, text, url });
+    } else {
       throw new Error('Share API not supported');
     }
-  }
-  
+  };
+
   const shareContent = async () => {
     const shareData = {
       title: document.querySelector('h1').textContent,
       text: document.querySelector('meta[name="description"]').content,
       url: urlToShare,
     };
-    try{
+    try {
       await shareViaShareApi(shareData);
-    } catch (error) {
+      trackEvent({ event: 'share_click', note_id: selfHealing, method: 'native', lang: 'es' })
+    } catch {
       try {
-        // Fallback to copying the link if Share API fails
         await copyLink(shareData.url);
+        trackEvent({ event: 'share_click', note_id: selfHealing, method: 'copy', lang: 'es' })
       } catch (error) {
         console.error('Error copying link:', error);
       }
     }
   };
   shareButton.addEventListener('click', shareContent);
-  
 </script>
 <style >
   .comments-wrapper {

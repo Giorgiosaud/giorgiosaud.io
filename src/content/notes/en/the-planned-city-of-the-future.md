@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "The Planned Digital City: Puerto Ordaz as a Beta Test for Venezuela's Recovery"
 selfHealing: "000009"
 description: Why the recovery of Venezuela's industrial core requires a digital-first architecture for identity, transparency, and infrastructure responsibility.

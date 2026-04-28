@@ -108,7 +108,7 @@ export default defineConfig({
       }),
 
       // Analytics
-      TAG_MANAGER_ID: envField.string({
+      GA4_MEASUREMENT_ID: envField.string({
         context: 'client',
         access: 'public',
         optional: true,

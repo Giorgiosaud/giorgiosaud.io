@@ -4,7 +4,6 @@ import '@global-styles/grid.css'
 import '@global-styles/global.css'
 
 import CookieConsent from '@global-components/CookieConsent.svelte'
-import DebuggerTagManager from '@global-components/DebuggerTagManager.astro'
 import Footer from '@global-components/Footer.astro'
 import Head from '@global-components/Head/index.astro'
 import Header from '@global-components/Header.astro'
@@ -32,15 +31,10 @@ const {
     description={description}
   >
     <slot name="head"/>
-    <script>
-      // Initialize dataLayer for GTM - user state is pushed client-side by UserAvatar component
-      window.dataLayer = window.dataLayer || [];
-    </script>
   </Head>
 
   <body>
     <OfflineBar client:load />
-    <DebuggerTagManager />
     <Header pathToTranslate={pathToTranslate} />
     <main class="content-grid">
       <slot />

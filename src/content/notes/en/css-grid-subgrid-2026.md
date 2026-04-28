@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "CSS Grid & Subgrid 2026: Universal Support Unlocks New Patterns"
 description: "Subgrid is now supported in all major browsers. Learn alignment patterns, card layouts, and form designs that were impossible before universal subgrid support."
 publishDate: 2026-01-02

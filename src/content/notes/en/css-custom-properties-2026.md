@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "CSS Custom Properties 2026: @property Goes Mainstream"
 description: "CSS custom properties with @property are now universally supported. Learn typed variables, animation capabilities, and inheritance control for bulletproof design systems."
 publishDate: 2026-01-02

@@ -1,9 +1,10 @@
 ---
 interface Props {
   lang?: 'en' | 'es'
+  noteId?: string
 }
 
-const { lang = 'en' } = Astro.props
+const { lang = 'en', noteId = '' } = Astro.props
 
 const i18n = {
   en: {
@@ -32,6 +33,8 @@ const t = i18n[lang]
   id="generate-summary-bubble"
   class="summary-bubble"
   title={t.buttonTitle}
+  data-note-id={noteId}
+  data-lang={lang}
   hidden
 >
   <span>🤖</span>
@@ -108,6 +111,9 @@ const t = i18n[lang]
     summaryBubble.addEventListener("click", () => {
       summaryModal.classList.add("show");
       summarizeContent();
+      import("../helpers/datalayer").then(({ trackEvent }) => {
+        trackEvent({ event: 'ai_summarizer_open', note_id: summaryBubble.dataset.noteId ?? '', lang: (summaryBubble.dataset.lang ?? 'en') as 'en' | 'es' })
+      })
     });
 
     closeModalBtn.addEventListener("click", () => {

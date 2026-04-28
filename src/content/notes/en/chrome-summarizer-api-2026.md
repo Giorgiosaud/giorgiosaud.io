@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "Chrome Summarizer API 2026: Browser AI Goes Mainstream"
 description: "Chrome's built-in Summarizer API is now available to all users. Learn the latest capabilities, availability detection, and production patterns for on-device AI summarization."
 publishDate: 2026-01-02
@@ -367,3 +367,7 @@ class ArticleSummarizer {
 5. **Always fallback** - Not all users have compatible hardware
 
 The Chrome Summarizer API represents a shift toward on-device AI. In 2026, it's mature enough for production use - just remember to always provide fallbacks for users without support.
+
+---
+
+> **Also see**: [Browser-Native AI: Building with Chrome's Summarizer API](/notebook/brwsrn) — how to implement it on a real site with lazy loading, streaming, and multi-language support.

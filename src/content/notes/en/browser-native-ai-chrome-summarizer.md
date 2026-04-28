@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "Browser Native AI: Chrome's Summarizer API"
 description: "Learn how to use Chrome's built-in Summarizer API to generate AI-powered summaries without API costs, including lazy loading, streaming, and multi-language support."
 publishDate: 2026-01-02
@@ -217,3 +217,7 @@ Always implement graceful degradation - hide the feature entirely if unavailable
 The Summarizer API represents a shift toward browser-native AI capabilities. While support is still limited, implementing it now with proper fallbacks prepares your site for when it becomes widely available.
 
 > **Try it now!** If you're on a supported browser, click the floating robot button in the bottom right corner of this page to see it in action.
+
+---
+
+> **Also see**: [Chrome Summarizer API: From Experimental to Production](/notebook/chrmsm) — browser support status, hardware requirements, and a full class-based implementation.
