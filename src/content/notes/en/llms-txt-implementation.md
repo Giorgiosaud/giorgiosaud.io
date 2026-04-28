@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "Implementing llms.txt: Make Your Site AI-Friendly"
 description: "Learn the llms.txt standard for providing structured content to AI crawlers. Implement llms.txt and per-page .md endpoints for LLM-optimized content access."
 publishDate: 2026-01-02

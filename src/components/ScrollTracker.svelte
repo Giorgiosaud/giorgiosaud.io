@@ -1,10 +1,11 @@
 <script lang="ts">
-import { onDestroy, onMount } from 'svelte'
+import { onMount } from 'svelte'
+import { trackEvent } from '../helpers/datalayer'
 
 interface Props {
   noteId: string
   lang?: 'en' | 'es'
-  threshold?: number // Scroll depth threshold to track (0-1), default 0.5
+  threshold?: number
 }
 
 let { noteId, lang = 'en', threshold = 0.5 }: Props = $props()
@@ -12,9 +13,7 @@ let { noteId, lang = 'en', threshold = 0.5 }: Props = $props()
 let maxScrollDepth = 0
 let startTime = 0
 let tracked = false
-let observer: IntersectionObserver | null = null
 
-// Generate or get session ID for anonymous tracking
 function getSessionId(): string {
   const key = 'view_session_id'
   let sessionId = sessionStorage.getItem(key)
@@ -25,7 +24,13 @@ function getSessionId(): string {
   return sessionId
 }
 
-// Track the view
+function snapDepth(d: number): 25 | 50 | 75 | 100 {
+  if (d >= 1) return 100
+  if (d >= 0.75) return 75
+  if (d >= 0.5) return 50
+  return 25
+}
+
 async function trackView(scrollDepth: number) {
   if (tracked) return
   tracked = true
@@ -47,39 +52,29 @@ async function trackView(scrollDepth: number) {
         sessionId: getSessionId(),
       }),
     })
-
-    // Also fire gtag event for analytics
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-      window.gtag('event', 'scroll_depth', {
-        event_category: 'engagement',
-        event_label: noteId,
-        value: Math.round(scrollDepth * 100),
-        language: lang,
-      })
-    }
+    trackEvent({
+      event: 'scroll_depth',
+      note_id: noteId,
+      depth: snapDepth(scrollDepth),
+      lang,
+    })
   } catch (error) {
     console.error('Failed to track view:', error)
   }
 }
 
-// Calculate scroll depth
 function updateScrollDepth() {
   const content = document.getElementById('content')
   if (!content) return
 
-  const windowHeight = window.innerHeight
-  const scrollTop = window.scrollY
-  const contentTop = content.offsetTop
-  const contentHeight = content.offsetHeight
-
-  // Calculate how far through the content we've scrolled
-  const scrolledPast = scrollTop + windowHeight - contentTop
-  const scrollDepth = Math.min(1, Math.max(0, scrolledPast / contentHeight))
+  const scrolledPast = window.scrollY + window.innerHeight - content.offsetTop
+  const scrollDepth = Math.min(
+    1,
+    Math.max(0, scrolledPast / content.offsetHeight),
+  )
 
   if (scrollDepth > maxScrollDepth) {
     maxScrollDepth = scrollDepth
-
-    // Track when threshold is reached
     if (maxScrollDepth >= threshold && !tracked) {
       trackView(maxScrollDepth)
     }
@@ -88,25 +83,18 @@ function updateScrollDepth() {
 
 onMount(() => {
   startTime = Date.now()
-
-  // Use scroll listener for tracking
   window.addEventListener('scroll', updateScrollDepth, {
     passive: true,
   })
-
-  // Initial check
   updateScrollDepth()
 
-  // Also track on page leave if threshold not met
   const handleUnload = () => {
     if (!tracked && maxScrollDepth > 0.1) {
-      const viewDuration = Math.floor((Date.now() - startTime) / 1000)
-      // Use sendBeacon for reliable tracking on page leave
       const data = JSON.stringify({
         type: 'scroll_depth',
         noteId,
         scrollDepth: maxScrollDepth,
-        viewDuration,
+        viewDuration: Math.floor((Date.now() - startTime) / 1000),
         language: lang,
         sessionId: getSessionId(),
       })
@@ -121,18 +109,12 @@ onMount(() => {
           },
         ),
       )
-
-      // Also send to gtag for analytics
-      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-        window.gtag('event', 'page_exit_scroll', {
-          event_category: 'engagement',
-          event_label: noteId,
-          value: Math.round(maxScrollDepth * 100),
-          view_duration: viewDuration,
-          language: lang,
-          non_interaction: true,
-        })
-      }
+      trackEvent({
+        event: 'page_exit_scroll',
+        note_id: noteId,
+        max_depth: Math.round(maxScrollDepth * 100),
+        lang,
+      })
     }
   }
 
@@ -143,13 +125,6 @@ onMount(() => {
     window.removeEventListener('beforeunload', handleUnload)
   }
 })
-
-// Declare gtag type
-declare global {
-  interface Window {
-    gtag: (...args: unknown[]) => void
-  }
-}
 </script>
 
 <!-- Invisible component - just for tracking -->

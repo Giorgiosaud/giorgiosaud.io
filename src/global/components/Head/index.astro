@@ -55,44 +55,17 @@ const lang = getLangFromUrl(Astro.url)
   <!-- Font metrics fallback to prevent CLS -->
   <style set:html={fontMetricsFallback}></style>
 
-  <!-- Google Tag Manager - Deferred for better LCP -->
+  <!-- GA4 -->
+  <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.GA4_MEASUREMENT_ID ?? ''}`}></script>
   <script>
-    import { TAG_MANAGER_ID } from "astro:env/client";
-
-    // Initialize dataLayer for custom events
-    declare global {
-      interface Window {
-        dataLayer: Record<string, unknown>[];
-      }
-    }
+    import { GA4_MEASUREMENT_ID } from "astro:env/client";
     window.dataLayer = window.dataLayer || [];
-
-    // Defer GTM loading until after page load or user interaction
-    const loadGTM = () => {
-      if ((window as any).gtmLoaded) return;
-      (window as any).gtmLoaded = true;
-
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtm.js?id=${TAG_MANAGER_ID || ''}`;
-      document.head.appendChild(script);
-
-      window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    };
-
-    // Load GTM after page is interactive or on first user interaction
-    if (document.readyState === 'complete') {
-      setTimeout(loadGTM, 2000);
-    } else {
-      window.addEventListener('load', () => setTimeout(loadGTM, 2000));
-    }
-
-    // Also load on first user interaction for faster tracking
-    ['click', 'scroll', 'keydown', 'touchstart'].forEach(event => {
-      document.addEventListener(event, loadGTM, { once: true, passive: true });
-    });
+    function gtag(..._args: unknown[]) { window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA4_MEASUREMENT_ID ?? '', { anonymize_ip: true, send_page_view: true });
   </script>
-  <!-- End Google Tag Manager -->
+  <!-- End GA4 -->
   <meta charset="UTF-8" />
   <meta
   content="width=device-width, initial-scale=1.0"

@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "Self-Healing URLs in Astro 5: Content Collections Update"
 description: "Updated implementation of self-healing URLs for Astro 5's new content collections API. Learn the changes from getCollection to glob loaders and type-safe URL healing."
 publishDate: 2026-01-02

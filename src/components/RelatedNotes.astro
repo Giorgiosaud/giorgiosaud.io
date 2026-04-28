@@ -1,0 +1,64 @@
+---
+import type { CollectionEntry } from 'astro:content'
+import Note from '@components/Note.astro'
+import type { SupportedLanguages } from '@i18n/utils'
+
+interface Props {
+  notes: CollectionEntry<'notes' | 'notas'>[]
+  lang: SupportedLanguages
+  sourceNoteId?: string
+}
+
+const { notes, lang, sourceNoteId = '' } = Astro.props
+
+const heading = lang === 'es' ? 'Artículos Relacionados' : 'Related Posts'
+---
+
+{notes.length > 0 && (
+  <section class="related-notes" aria-label={heading} data-source-note-id={sourceNoteId} data-lang={lang}>
+    <h2>{heading}</h2>
+    <ul class="related-grid">
+      {notes.slice(0, 4).map(note => (
+        <li>
+          <Note note={note} context="related" />
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<script>
+  import { trackEvent } from '../helpers/datalayer'
+
+  document.querySelectorAll<HTMLElement>('.related-notes').forEach(section => {
+    const sourceNoteId = section.dataset.sourceNoteId ?? ''
+    const lang = (section.dataset.lang ?? 'en') as 'en' | 'es'
+    section.addEventListener('click', (e) => {
+      const link = (e.target as Element).closest('a')
+      if (!link) return
+      const noteId = link.getAttribute('href') ?? ''
+      trackEvent({ event: 'related_note_click', note_id: noteId, source_note_id: sourceNoteId, lang })
+    })
+  })
+</script>
+
+<style>
+  .related-notes {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.1));
+  }
+
+  h2 {
+    margin-bottom: 1.25rem;
+  }
+
+  .related-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+</style>

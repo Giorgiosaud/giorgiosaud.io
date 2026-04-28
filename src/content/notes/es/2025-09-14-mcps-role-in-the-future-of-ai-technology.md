@@ -10,7 +10,7 @@ publishDate: 2025-09-14T03:00:00.000Z
 category: AI
 author: jorge-saud-001
 collections:
-   - AI
+   - ai
 tags:
    - AI technology
    - contextual intelligence

@@ -1,5 +1,5 @@
 ---
-draft: true
+draft: false
 title: "Re-platforming Venezuela: A Solution Architect's Perspective"
 selfHealing: "000008"
 description: "Prioritizing automation processes in Venezuela's core industries—Oil, Mining, and Tourism—during the new age of investment."
