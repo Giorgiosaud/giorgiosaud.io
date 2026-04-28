@@ -3,7 +3,7 @@ draft: false
 title: "How to Mock astro:content in Vitest"
 description: "Unit testing Astro content collection helpers isn't obvious. Here's the exact pattern to mock getCollection and control import.meta.env.DEV so your tests actually reflect production filtering behavior."
 publishDate: 2026-04-28
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/mock-astro-content-vitest.png
 coverAlt: Vitest test output for an Astro content collection helper
 selfHealing: hwtmck
 category: testing

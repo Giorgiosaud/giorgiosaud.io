@@ -4,7 +4,7 @@ slug: implementacion-llms-txt
 title: "Implementando llms.txt: Haz Tu Sitio Amigable para IA"
 description: "Aprende el estándar llms.txt para proporcionar contenido estructurado a crawlers de IA. Implementa llms.txt y endpoints .md por página para acceso de contenido optimizado para LLMs."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/llms-txt-implementation.png
 coverAlt: Implementación LLMs.txt
 selfHealing: llmstx
 lang: es

@@ -3,7 +3,7 @@ draft: false
 title: "CSS Scroll Animations 2026: View Timeline Now Stable"
 description: "Scroll-driven animations are now production-ready. Learn view timeline, scroll timeline, and animation-range for creating scroll-triggered effects without JavaScript."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/css-scroll-animations-2026.png
 coverAlt: CSS Scroll Animations 2026
 selfHealing: cssscr
 lang: en
