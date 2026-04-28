@@ -21,61 +21,64 @@ tags:
   - "2026"
 ---
 
-If you spend a lot of time in Claude Code or hitting the Anthropic API directly, you've probably wondered: *is it slow right now, or is it just me?* I got tired of wondering and built a small zsh plugin that answers that question directly in my terminal prompt.
-
-> **Fair warning before we go any further:** this is a workaround, not a solution. What would actually be ideal is Anthropic exposing real-time peak load data — a status endpoint with actual queue depth or degradation signals, the kind of thing you'd expect from a mature API platform. Until that exists, inferring load from TCP handshake timing is the best we can do from the outside. It's imperfect: it can't distinguish network congestion from server-side load, and a cold baseline is just noise. But "imperfect and visible" beats "no information at all", so here's how I built it.
+If you spend a lot of time in Claude Code or the Anthropic API, you've probably wondered: *is it slow right now, or is it just me?* This post walks through how I built a small zsh plugin that answers that question directly in my terminal prompt.
 
 ## What It Does
 
-The result is a Powerlevel10k segment on the right side of my prompt that shows the current API load:
+The final result is a Powerlevel10k segment on the right side of my prompt that shows:
 
 | Icon | Color | Meaning |
 |------|-------|---------|
-| ⚡ | Green | API responding normally |
-| ⚠ | Yellow | Elevated latency (1.4× baseline) |
-| ❤ | Red | Peak load (2× baseline) |
-| 🛡 | Grey | API unreachable |
+|  | Green | API responding normally |
+|  | Yellow | Elevated latency (baseline + 1σ) |
+|  | Red | Peak load (baseline + 2σ) |
+|  | Grey | API unreachable |
 
-It also shows the raw latency in milliseconds. The icon updates every 15 minutes via a background macOS launchd job — no shell slowdown, no tokens consumed.
+It also shows the raw latency in milliseconds. The icon updates every minute automatically via a background macOS launchd job — no shell slowdown, no tokens consumed.
 
 ## Architecture Overview
 
-The whole thing is packaged as an oh-my-zsh custom plugin with four files:
+The whole thing is packaged as an oh-my-zsh custom plugin with five files:
 
 ```
 ~/.oh-my-zsh/custom/plugins/claude-status/
-├── claude-status.plugin.zsh     # entry point — loaded by oh-my-zsh
-├── statusline.sh                # Claude Code statusline renderer
-├── latency-sampler.sh           # background ping script
-└── com.claude.latency.plist     # launchd job template
+├── claude-status.plugin.zsh          # entry point — loaded by oh-my-zsh
+├── statusline.sh                     # Claude Code statusline renderer
+├── latency-common.sh                 # shared cache reader (p10k + statusline)
+├── latency-sampler.sh                # background ping script
+└── com.giorgiosaud.claude.latency.plist  # launchd job template
 ```
 
 Two JSON files are written at runtime:
 
 ```
-~/.claude/latency_log.json       # rolling 7-day history
+~/.claude/latency_log.json       # rolling 30-day history
 ~/.claude/latency_cache.json     # latest result, read by the prompt
 ```
 
-The prompt only ever reads `latency_cache.json` — a tiny file written by the background job. No blocking, no waiting.
+## Part 1: Measuring Latency
 
-## Part 1: Measuring Latency Without Using the API
-
-The sampler script does a TCP handshake to `api.anthropic.com:443` using `nc` and measures the round-trip time in milliseconds:
+The sampler script (`latency-sampler.sh`) makes an unauthenticated HTTP POST to `api.anthropic.com/v1/messages` using `curl`. The server returns a `401` immediately — no API key needed, no tokens consumed — but the full TCP + TLS + HTTP stack is exercised:
 
 ```bash
-start=$(python3 -c "import time; print(int(time.time()*1000))")
-if nc -z -w 10 api.anthropic.com 443 2>/dev/null; then
-  end=$(python3 -c "import time; print(int(time.time()*1000))")
-  ms=$(( end - start ))
+curl_time=$(curl -s -o /dev/null -w "%{time_total}" \
+  --max-time "$TIMEOUT" \
+  -X POST \
+  -H "content-type: application/json" \
+  -H "anthropic-version: 2023-06-01" \
+  -d '{"model":"claude-haiku-4-5-20251001","max_tokens":1,"messages":[{"role":"user","content":"h"}]}' \
+  "https://api.anthropic.com/v1/messages" 2>/dev/null)
+
+if [ $? -eq 0 ] && [ -n "$curl_time" ]; then
+  ms=$(python3 -c "print(int(float('$curl_time') * 1000))")
 fi
 ```
 
-This measures network + TLS negotiation time — a good proxy for API load without making any actual API calls (and thus consuming zero tokens). It won't catch every type of slowdown, but it catches the ones that matter: the server being under load at the network edge.
+This measures the full HTTP stack — TCP handshake, TLS negotiation, and the server's time-to-first-byte — making it a better proxy for API load than a bare TCP ping.
 
-## Part 2: Building a Meaningful Baseline
+## Part 2: Building a Baseline with Statistics
 
-A single measurement tells you the current latency. To know if that's *fast or slow*, you need context. The sampler builds a rolling baseline using the last 7 days of samples taken at the same hour (±1) on the same weekday:
+A single measurement tells you the current latency. To know if that's *fast or slow*, you need context. The sampler builds a rolling baseline using the last 30 days of samples taken at the same hour (±1) on the same weekday:
 
 ```python
 samples = [
@@ -83,49 +86,55 @@ samples = [
     if e["weekday"] == current_weekday
     and abs(e["hour"] - current_hour) <= 1
     and e["ts"] != current_ts
+    and e["ms"] is not None
 ]
 
-if len(samples) >= 3:
+if len(samples) >= 30:
     baseline = statistics.median(samples)
-    ratio = current_ms / baseline
+    stdev = statistics.stdev(samples)
+    warn_threshold = baseline + stdev       # ~84th percentile
+    peak_threshold = baseline + 2 * stdev  # ~97.5th percentile
 ```
 
-Using the **median** rather than the mean avoids outliers — a single spike doesn't inflate the baseline. The weekday + hour window accounts for predictable traffic patterns; Tuesday afternoon looks very different from Sunday morning.
+Rather than fixed ratio multipliers, the thresholds are expressed in standard deviations from the median. This adapts automatically to your network environment — a fast connection and a slow one will have appropriately different thresholds.
 
 ### Level Thresholds
 
-| Ratio vs baseline | Level |
-|-------------------|-------|
-| < 1.4× | normal |
-| 1.4× – 2× | warn |
-| ≥ 2× | peak |
-| TCP timeout | unavailable |
+| Condition | Level |
+|-----------|-------|
+| ms ≤ baseline + σ | normal |
+| baseline + σ < ms ≤ baseline + 2σ | warn |
+| ms > baseline + 2σ | peak |
+| curl timeout | unavailable |
+| fewer than 30 samples | normal (no level indicator) |
 
-Until 3 samples exist for the current time window, only the raw ms is shown with no level indicator. Better to show nothing than something misleading.
+The minimum sample count is 30 (not 3) to ensure the standard deviation estimate is stable before it's used for decisions.
 
 ### Log Management
 
-Every run appends one entry and prunes entries older than 7 days. At 15-minute intervals that's a maximum of ~672 entries (~35KB) — a fixed-size rolling window that doesn't grow unbounded:
+Every run appends one entry and prunes entries older than 30 days. At 1-minute intervals the log grows quickly, but the weekday+hour filter window means the effective working set for any baseline calculation is much smaller.
 
 ```python
 log.append({"ts": now, "ms": ms, "hour": hour, "weekday": weekday})
-log = [e for e in log if e["ts"] >= cutoff]  # cutoff = now - 7 days
+log = [e for e in log if e["ts"] >= cutoff]  # cutoff = now - 30 days
 ```
 
 ## Part 3: Running It in the Background with launchd
 
 On macOS, `launchd` is the right tool for recurring background jobs. It runs even when no terminal is open, survives reboots, and doesn't require cron.
 
-The plugin ships a plist template with `__SAMPLER_PATH__` and `__HOME__` as placeholders:
+The plugin ships a plist template with `__SAMPLER_PATH__` and `__HOME__` as placeholders. The sampler runs every 60 seconds:
 
 ```xml
+<key>Label</key>
+<string>com.giorgiosaud.claude.latency</string>
 <key>StartInterval</key>
-<integer>900</integer>   <!-- 15 minutes -->
+<integer>60</integer>
 <key>RunAtLoad</key>
-<true/>                  <!-- run once immediately on install -->
+<true/>
 ```
 
-The plugin entry point renders the template with real paths and loads it on every shell start — idempotently, skipping the load if already registered:
+The plugin entry point renders the template with real paths and loads it silently on every shell start (idempotent — skips if already loaded):
 
 ```zsh
 sed \
@@ -133,98 +142,143 @@ sed \
   -e "s|__HOME__|$HOME|g" \
   "$_claude_plist_src" > "$_claude_plist_dest"
 
-if ! launchctl list "com.claude.latency" &>/dev/null; then
-  launchctl bootstrap "gui/$(id -u)" "$_claude_plist_dest" 2>/dev/null
+if ! launchctl list "$_claude_plist_label" &>/dev/null; then
+  launchctl bootstrap "gui/$(id -u)" "$_claude_plist_dest" 2>/dev/null \
+    || launchctl load "$_claude_plist_dest" 2>/dev/null \
+    || true
 fi
 ```
 
-No manual setup required. Install the plugin, reload your shell, and the sampler starts running. After ~15 seconds `~/.claude/latency_cache.json` exists and the segment appears.
+No manual setup required — install the plugin, reload your shell, and the sampler starts running.
 
-## Part 4: The Powerlevel10k Segment
+## Part 4: The Shared Cache Reader
 
-The prompt segment reads `latency_cache.json` and calls `p10k segment` with the appropriate icon and color. The key lesson here: use `-i` for the icon and hardcode color numbers directly — don't pass variables:
+Both the Powerlevel10k segment and the statusline renderer need to read the same cache file and resolve icons. Rather than duplicating that logic, a shared `latency-common.sh` sets three environment variables:
+
+```bash
+# latency-common.sh
+claude_latency_read() {
+  CLAUDE_LATENCY_LEVEL=$(jq -r '.level // "normal"' "$CLAUDE_LATENCY_CACHE")
+  CLAUDE_LATENCY_MS=$(jq -r '.ms // ""' "$CLAUDE_LATENCY_CACHE")
+
+  case "$CLAUDE_LATENCY_LEVEL" in
+    normal)      CLAUDE_LATENCY_ICON=$(printf '\xef\x83\xa7') ;;   # U+F0E7 bolt
+    warn)        CLAUDE_LATENCY_ICON=$(printf '\xef\x81\xb1') ;;   # U+F071 warning
+    peak)        CLAUDE_LATENCY_ICON=$(printf '\xef\x88\x9e') ;;   # U+F21E heartbeat
+    unavailable) CLAUDE_LATENCY_ICON=$(printf '\xef\xae\xa4') ;;   # U+FBA4 shield
+  esac
+}
+```
+
+Icons are encoded as raw UTF-8 byte sequences via `printf` rather than embedded literals — this avoids the invisible zero-width character issue that occurs when editors silently mangle Nerd Font codepoints.
+
+## Part 5: The Powerlevel10k Segment
+
+The prompt segment sources the shared reader and uses foreground-only coloring (no background fill — cleaner on transparent terminals):
 
 ```zsh
 function prompt_claude_latency() {
-  local cache="$HOME/.claude/latency_cache.json"
-  [[ -f "$cache" ]] || return
+  claude_latency_read || return
 
-  local level ms icon fg bg
-  level=$(jq -r '.level // "normal"' "$cache" 2>/dev/null) || return
-  ms=$(jq -r '.ms // ""' "$cache" 2>/dev/null)
-
-  case "$level" in
-    normal)      icon=$'\uf0e7'; fg=0; bg=2 ;;   # bolt,    black on green
-    warn)        icon=$'\uf071'; fg=0; bg=3 ;;   # warning, black on yellow
-    peak)        icon=$'\uf21e'; fg=0; bg=1 ;;   # pulse,   black on red
-    unavailable) icon=$'\ufba4'; fg=0; bg=7 ;;   # shield,  black on grey
-    *)           return ;;
+  local fg
+  case "$CLAUDE_LATENCY_LEVEL" in
+    normal)      fg=76  ;;   # green  (matches VCS_CLEAN)
+    warn)        fg=178 ;;   # yellow (matches VCS_MODIFIED)
+    peak)        fg=160 ;;   # red    (matches STATUS_ERROR)
+    unavailable) fg=66  ;;   # grey   (matches TIME)
   esac
 
-  if [[ -n "$ms" && "$ms" != "null" ]]; then
-    p10k segment -b $bg -f $fg -i "$icon" -t "${ms}ms"
+  if [[ -n "$CLAUDE_LATENCY_MS" && "$CLAUDE_LATENCY_MS" != "null" ]]; then
+    p10k segment -f $fg -i "$CLAUDE_LATENCY_ICON" -t "${CLAUDE_LATENCY_MS}ms"
   else
-    p10k segment -b $bg -f $fg -i "$icon"
+    p10k segment -f $fg -i "$CLAUDE_LATENCY_ICON"
   fi
 }
 ```
 
-Register it in `~/.p10k.zsh`:
+The segment auto-registers itself via a `precmd` hook — no manual `.p10k.zsh` edit required:
 
 ```zsh
-typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-  # ... existing segments ...
-  claude_latency
-)
+function _claude_status_register() {
+  if (( ${#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS} )); then
+    if [[ ${POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS[(Ie)claude_latency]} -eq 0 ]]; then
+      POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS+=(claude_latency)
+    fi
+    add-zsh-hook -d precmd _claude_status_register
+    unfunction _claude_status_register
+  fi
+}
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd _claude_status_register
 ```
 
-Then `p10k reload` to activate without restarting the shell.
+The hook fires once on the first prompt, appends the segment, then removes itself.
 
-> **Font requirement:** Nerd Font icons require a patched font. MesloLGS NF (the default for Powerlevel10k) works perfectly — all icon codepoints used are in the Font Awesome v4 / Powerline range.
+> **Color note:** Use literal 256-color numbers with `-f`, not variables. Passing `$POWERLEVEL9K_*` color variables to `p10k segment` doesn't work for custom segments.
 
-## Part 5: The Claude Code Statusline
+## Part 6: The Claude Code Statusline
 
-Claude Code has a built-in statusline that shows context window usage and rate limits. The plugin also ships a statusline renderer that adds the latency indicator there, reading the same cache file:
+Claude Code's built-in statusline shows context window usage and rate limits. The plugin adds a richer statusline that integrates all of this alongside the latency indicator, git branch, and model name:
 
 ```bash
-if [ -f "$CACHE" ]; then
-  level=$(jq -r '.level' "$CACHE")
-  ms=$(jq -r '.ms // ""' "$CACHE")
-  # ... pick icon by level ...
-  latency_segment=" | ${icon} ${ms}ms"
-fi
+# Reads JSON piped from Claude Code on stdin
+cwd=$(echo "$input"    | jq -r '.workspace.current_dir // .cwd // ""')
+model=$(echo "$input"  | jq -r '.model.display_name // ""')
+used_pct=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
+five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 ```
 
-This means you get the same signal whether you're looking at your prompt or inside a Claude Code session.
+Progress bars are rendered in pure bash:
+
+```bash
+make_bar() {
+  local pct=$1
+  local filled=$(( pct * 10 / 100 ))
+  local empty=$(( 10 - filled ))
+  local bar="" i
+  for (( i=0; i<filled; i++ )); do bar="${bar}█"; done
+  for (( i=0; i<empty;  i++ )); do bar="${bar}░"; done
+  printf "%s" "$bar"
+}
+```
+
+The final line looks like:
+
+```
+user@host  ~/projects/myapp  main  claude-sonnet-4-6 |  [████████░░] 82% |  [███░░░░░░░] 31% |  45ms
+```
+
+Register it with the provided helper:
+
+```zsh
+claude-status-register
+```
+
+This writes the `statusLine` key to `~/.claude/settings.json` automatically via `jq`.
 
 ## Gotchas I Hit
 
-**Nerd Font bytes not written correctly.** When the agent wrote icon codepoints to the shell script, they were stored as invisible zero-width characters. The fix was writing the file with Python and embedding the Unicode directly:
+**Nerd Font bytes not written correctly.** When the agent wrote icon codepoints to the shell script, they were stored as invisible zero-width characters. The fix was using `printf '\xNN\xNN\xNN'` with explicit UTF-8 byte sequences instead of embedding the characters directly.
 
-```python
-with open('statusline.sh', 'w', encoding='utf-8') as f:
-    f.write(script)  # script contains actual \uf0e7 etc. characters
-```
+**p10k segment colors need hardcoded numbers.** Passing variable values to `-f` or `-b` doesn't work for custom segments. Use literal 256-color numbers: `-f 76`.
 
-**p10k segment colors need hardcoded numbers.** Passing variable values to `-b` doesn't work for custom segments. Use literal numbers: `-b 2 -f 0`.
+**Background vs. foreground coloring.** Using `-b` (background fill) looks cluttered on transparent terminal backgrounds. Foreground-only (`-f`) blends better and still matches p10k's standard color palette.
 
-**`/dev/tcp` is unreliable in bash for timing.** Using `nc -z -w $TIMEOUT` is cleaner and works consistently across macOS bash versions.
+**`/dev/tcp` is unreliable for timing in bash.** `curl -w "%{time_total}"` is precise and portable across macOS bash versions.
+
+**TCP ping underestimates API load.** A bare `nc` TCP handshake only measures network RTT — it doesn't reflect TLS negotiation or server-side processing time. The `curl` approach captures the full stack and correlates much better with actual API latency under load.
 
 ## Installation
 
 1. Clone or copy the plugin into `~/.oh-my-zsh/custom/plugins/claude-status/`
-2. Add `claude-status` to your `plugins=(...)` list in `~/.zshrc`
-3. Add `claude_latency` to `POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS` in `~/.p10k.zsh`
-4. Run `exec zsh && p10k reload`
+2. Add `claude-status` to your `plugins=(...)` list in your zshrc
+3. Run `exec zsh` — the launchd job and p10k segment install themselves
+4. To add the Claude Code statusline: run `claude-status-register` in your terminal
 
-The launchd job installs itself. After ~15 seconds (RunAtLoad fires), the cache file will exist and the segment will appear.
+After ~60 seconds (RunAtLoad fires), `~/.claude/latency_cache.json` will exist and both the p10k segment and statusline will show live data.
 
 ## What's Next
 
-A few things I want to add:
-
-- **Color-coded ms text** — yellow/red when latency exceeds thresholds even without a full baseline yet
-- **Historical chart** — a `claude-latency-history` command to visualize the rolling log in the terminal
-- **Notification on peak** — `osascript` alert when ratio crosses 2× during active work sessions
-
-It's a small thing, but having this information ambient in the prompt has genuinely changed how I interpret Claude's response time. When it feels slow, I now know within a glance whether that's my machine, my connection, or the API itself.
+- **Color-coded ms text** — yellow/red on the ms value itself when latency exceeds thresholds, even before a full baseline exists
+- **Historical chart** — `claude-latency-history` command to visualize the rolling log in the terminal
+- **Notification on peak** — `osascript` alert when ratio crosses 2σ during active work
