@@ -310,5 +310,14 @@ export function initNotebookSearch(options: {
   // Initialize from URL params on page load
   inputEl.value = currentParams.q
   updateChips(currentParams.collection)
-  fetchResults(currentParams)
+  // Skip initial fetch if the server already rendered the first page
+  const ssrRendered = resultsEl.dataset.ssr === 'true'
+  if (
+    !ssrRendered ||
+    currentParams.q ||
+    currentParams.collection ||
+    currentParams.page > 1
+  ) {
+    fetchResults(currentParams)
+  }
 }
