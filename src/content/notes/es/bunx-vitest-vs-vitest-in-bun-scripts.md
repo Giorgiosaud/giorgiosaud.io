@@ -3,7 +3,7 @@ draft: false
 title: "bunx vitest vs vitest en scripts de Bun"
 description: "Si bun run test falla con 'vitest: command not found', el fix es una palabra: bunx. Acá está por qué Bun no siempre pone node_modules/.bin en el PATH, y cuándo importa."
 publishDate: 2026-04-28
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/bunx-vitest-vs-vitest.png
 coverAlt: Terminal mostrando el error vitest command not found bajo bun
 selfHealing: bnxvts
 category: devops

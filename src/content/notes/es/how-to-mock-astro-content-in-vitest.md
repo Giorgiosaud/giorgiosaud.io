@@ -3,7 +3,7 @@ draft: false
 title: "Cómo mockear astro:content en Vitest"
 description: "Hacer unit testing de helpers de content collections en Astro no es obvio. Aquí está el patrón exacto para mockear getCollection y controlar import.meta.env.DEV para que tus tests reflejen el comportamiento real en producción."
 publishDate: 2026-04-28
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/mock-astro-content-vitest.png
 coverAlt: Output de Vitest testeando un helper de content collections en Astro
 selfHealing: hwtmck
 category: testing

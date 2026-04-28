@@ -3,7 +3,7 @@ draft: false
 title: "Por qué vi.stubEnv no funciona con import.meta.env.DEV"
 description: "vi.stubEnv('DEV', 'false') asigna un string. El DEV de Vite es un boolean. El string 'false' es truthy. Tus tests te mienten en silencio. Acá está el fix."
 publishDate: 2026-04-28
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/import-meta-env-dev-vitest.png
 coverAlt: Test de Vitest fallando por el problema con DEV env var
 selfHealing: mprtmt
 category: testing

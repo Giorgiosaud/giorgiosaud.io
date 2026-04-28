@@ -3,7 +3,7 @@ draft: false
 title: "View Transitions API: Smooth Page Navigation"
 description: "Learn how to add smooth page transitions with a single CSS rule, customize animations for specific elements, and create SPA-like experiences without JavaScript."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/view-transitions-api.png
 coverAlt: View Transitions API illustration
 selfHealing: vwtrns
 lang: en

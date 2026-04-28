@@ -4,7 +4,7 @@ slug: compartiendo-estado-nanostores
 title: "Compartiendo Estado Entre Frameworks con Nanostores"
 description: "Aprende a compartir estado reactivo entre componentes React, Vue y Svelte en la Arquitectura de Islas de Astro usando Nanostores - un gestor de estado diminuto y agnóstico de framework."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/sharing-state-nanostores.png
 coverAlt: Ilustración de Nanostores State Sharing
 selfHealing: shrngs
 lang: es
