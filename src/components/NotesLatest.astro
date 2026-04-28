@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import { getLangFromUrl, useTranslations } from '@i18n/utils'
-import Note from './Note.astro'
+import NoteCardSticky from './NoteCardSticky.astro'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -13,51 +13,31 @@ const { collection } = Astro.props
 const notes = (await getCollection(collection))
   .filter(note => !note.data.draft)
   .sort((a, b) => (a.data.publishDate < b.data.publishDate ? 1 : -1))
-  .slice(0, 6)
+  .slice(0, 3)
 ---
 
 <section class="latest-notes" aria-label={t('notes.latest.title')}>
   <h2>
     {t('notes.latest.title')}
   </h2>
-  <ul>
-    {notes.map(note=>(<li ><Note note={note} context="latest" /></li>))}
+  <ul class="notes-grid">
+    {notes.map(note => <NoteCardSticky note={note} />)}
   </ul>
 </section>
 
 <style>
-  ul{
+  .notes-grid {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
     display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-auto-columns: minmax(300px, 1fr);
-    gap:1rem;
-    overflow-x: scroll;
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    
-    li{
-      scroll-snap-align: center;
-      scroll-snap-stop: always;
-      scale: .85;
-      transition: scale .3s;
-      
-      &:hover,&:focus-within{
-        scale:1;
-        
-      }
-    }
-    li:has(+ li:hover),li:has(+ li:focus-within) {
-        scale:.9;
-        transition-delay: .1s;
-    }
-    li:hover + li,li:focus-within + li{
-        scale:.9;
-        transition-delay: .1s;
-    }
+    grid-template-columns: repeat(3, minmax(220px, 320px));
+    gap: 1.25rem;
+    align-items: start;
+    justify-content: center;
   }
-  
-  h2{
-    margin-bottom: 1rem;
+
+  h2 {
+    margin-bottom: 1.5rem;
   }
 </style>

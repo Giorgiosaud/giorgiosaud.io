@@ -48,8 +48,7 @@
 
   h1,
   h2 {
-    --_color: light-dark(var(--color-dark), var(--color-light));
-    color: inherit;
+    color: light-dark(var(--color-dark), white);
     font-weight: 700;
   }
 
@@ -57,8 +56,7 @@
   h4,
   h5,
   h6 {
-    --_color: light-dark(var(--color-dark), var(--color-light));
-    color: inherit;
+    color: light-dark(var(--color-dark), white);
     font-weight: 600;
   }
 
@@ -173,10 +171,10 @@
   }
 
   .button-primary {
-    --_color: light-dark(var(--color-light), var(--color-dark));
+    --_color: light-dark(var(--color-light), white);
     --_background-color: var(
       --background-color,
-      light-dark(var(--color-dark), var(--color-main))
+      light-dark(var(--color-dark), #2563eb)
     );
     color: var(--color, var(--_color));
     background-color: var(--background-color, var(--_background-color));
@@ -191,7 +189,8 @@
 
   .button-outline {
     background: transparent;
-    border: 2px solid light-dark(var(--color-light), var(--color-dark));
+    border: 2px solid light-dark(var(--color-dark), white);
+    color: light-dark(var(--color-dark), white);
   }
 
   .button-outline:is(:hover, :focus-visible) {
