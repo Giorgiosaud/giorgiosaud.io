@@ -4,7 +4,7 @@ slug: css-grid-subgrid-2026
 title: "CSS Grid y Subgrid 2026: Soporte Universal Desbloquea Nuevos Patrones"
 description: "Subgrid ahora está soportado en todos los navegadores principales. Aprende patrones de alineación, layouts de cards y diseños de formularios que eran imposibles antes del soporte universal."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/css-grid-subgrid-2026.png
 coverAlt: CSS Grid Subgrid 2026
 selfHealing: cssgrd
 lang: es

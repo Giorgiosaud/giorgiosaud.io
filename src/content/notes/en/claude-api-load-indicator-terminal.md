@@ -3,7 +3,7 @@ draft: false
 title: "Building a Claude API Load Indicator for Your Terminal"
 description: "How I built a zsh oh-my-zsh plugin that shows Claude API latency directly in my Powerlevel10k prompt — using a background launchd job and a rolling baseline so you always know if it's slow right now or just your network."
 publishDate: 2026-04-08
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/claude-api-load-indicator.png
 coverAlt: Terminal showing Claude API load indicator
 selfHealing: bldngc
 lang: en

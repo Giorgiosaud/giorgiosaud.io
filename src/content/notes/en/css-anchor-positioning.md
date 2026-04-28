@@ -3,7 +3,7 @@ draft: false
 title: "CSS Anchor Positioning: The Future of UI Placement"
 description: "Learn how to use CSS Anchor Positioning to position tooltips, modals, and popovers without JavaScript libraries. Native CSS for precise element placement."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/css-anchor-positioning.png
 coverAlt: CSS Anchor Positioning illustration
 selfHealing: cssnch
 lang: en

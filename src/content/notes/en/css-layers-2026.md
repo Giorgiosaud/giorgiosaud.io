@@ -3,7 +3,7 @@ draft: false
 title: "CSS @layer 2026: Universal Support for Cascade Control"
 description: "CSS Cascade Layers are now universal with 98% browser support. Learn production patterns for organizing styles, integrating frameworks, and eliminating specificity wars."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/css-layers-2026.png
 coverAlt: CSS Layers 2026
 selfHealing: csslyr
 lang: en

@@ -4,7 +4,7 @@ slug: capas-css-2026
 title: "CSS @layer 2026: Soporte Universal para Control de Cascada"
 description: "Las Capas de Cascada CSS ahora son universales con 98% de soporte. Aprende patrones de producción para organizar estilos, integrar frameworks y eliminar guerras de especificidad."
 publishDate: 2026-01-02
-cover: ../../../assets/images/home-notebook.webp
+cover: ../../../assets/images/css-layers-2026.png
 coverAlt: CSS Layers 2026
 selfHealing: csslyr
 lang: es
