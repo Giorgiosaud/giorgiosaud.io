@@ -6,6 +6,7 @@
     --color-main: #62748e;
     --color-dark: hsl(from var(--color-main) h s calc(l / 2));
     --color-light: hsl(from var(--color-main) h s calc(l * 1.8));
+    --bg-dark: linear-gradient(160deg, #060d1f 0%, #0d2550 40%, #1a3a6e 70%, #0a1a35 100%);
     --spacing: 0.25rem;
     --breakpoint-lg: 48rem;
     --default-font-family: "Poppins", "Poppins Fallback";
@@ -26,6 +27,11 @@
       "Segoe UI Symbol",
       "Noto Color Emoji"
     );
+    background: white;
+    background-attachment: fixed;
+    @media (prefers-color-scheme: dark) {
+      background: var(--bg-dark);
+    }
   }
 
   @view-transition {
