@@ -5,6 +5,7 @@ import {
   useTranslatedPath,
   useTranslations,
 } from '@i18n/utils'
+import { BookOpen, Globe, Mail, User } from '@lucide/astro'
 
 interface Props {
   pathToTranslate: RouteNames
@@ -23,34 +24,34 @@ const tabs = [
   {
     title: t('nav.title'),
     path: translatePath('notebook', lang),
-    icon: '📓',
+    Icon: BookOpen,
   },
   {
     title: t('nav.about-me'),
     path: translatePath('about-me', lang),
-    icon: '👤',
+    Icon: User,
   },
   {
     title: t('nav.contact'),
     path: translatePath('contact', lang),
-    icon: '✉️',
+    Icon: Mail,
   },
   {
     title: langLabel,
     path: translatePath(pathToTranslate, langToTranslate, pathToTranslateNote),
-    icon: '🌐',
+    Icon: Globe,
   },
 ]
 ---
 
 <nav class="bottom-tab-bar" aria-label="Main navigation">
-  {tabs.map(({ title, path, icon }) => (
+  {tabs.map(({ title, path, Icon }) => (
     <a
       href={path}
       class:list={['tab', { active: path === Astro.url.pathname && path !== '/' }]}
       aria-current={path === Astro.url.pathname && path !== '/' ? 'page' : undefined}
     >
-      <span class="tab-icon" aria-hidden="true">{icon}</span>
+      <Icon size={20} aria-hidden="true" class="tab-icon" />
       <span class="tab-label">{title}</span>
     </a>
   ))}
@@ -100,14 +101,13 @@ const tabs = [
       color: var(--color-main);
 
       .tab-icon {
-        filter: drop-shadow(0 0 4px color-mix(in srgb, var(--color-main) 60%, transparent));
+        filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 80%, transparent));
       }
     }
   }
 
   .tab-icon {
-    font-size: 1.1rem;
-    line-height: 1;
+    display: block;
   }
 
   .tab-label {

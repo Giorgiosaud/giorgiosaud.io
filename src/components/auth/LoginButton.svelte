@@ -499,8 +499,8 @@ function goBack() {
 
   .button {
     padding: 0.5rem 1rem;
-    background: var(--color-main);
-    color: var(--color-light);
+    background: #3d5166;
+    color: #fff;
     border: none;
     border-radius: 6px;
     font-size: 0.9rem;

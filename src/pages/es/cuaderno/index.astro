@@ -212,13 +212,20 @@ if (!hasQuery) {
     position: relative;
     transform: rotate(var(--_tilt));
     transform-origin: center bottom;
-    transition: transform 0.25s cubic-bezier(.4,1.6,.5,1), filter 0.25s ease;
-    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.13));
+    transition: transform 0.25s cubic-bezier(.4,1.6,.5,1), box-shadow 0.25s ease;
+    clip-path: polygon(0 0, calc(100% - var(--_fold)) 0, 100% var(--_fold), 100% 100%, 0 100%);
+    box-shadow:
+      3px 3px 0 1px light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
+      6px 6px 0 2px light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
+      0 6px 18px rgba(0,0,0,0.13);
   }
 
   .note-card-item article:hover {
     transform: rotate(0deg) translateY(-6px);
-    filter: drop-shadow(4px 12px 18px rgba(0,0,0,0.22));
+    box-shadow:
+      3px 3px 0 1px light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
+      6px 6px 0 2px light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
+      0 12px 24px rgba(0,0,0,0.22);
     z-index: 5;
   }
 
@@ -280,13 +287,6 @@ if (!hasQuery) {
     color: light-dark(
       hsl(var(--note-hue) 40% 18%),
       hsl(var(--note-hue) 15% 88%)
-    );
-    clip-path: polygon(
-      0 0,
-      calc(100% - var(--_fold)) 0,
-      100% var(--_fold),
-      100% 100%,
-      0 100%
     );
     border-radius: 2px;
     padding: 1.1rem 1.1rem 1.25rem;

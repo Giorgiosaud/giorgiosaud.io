@@ -1,7 +1,34 @@
+---
+import { getLangFromUrl, useTranslatedPath } from '@i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const { translatePath } = useTranslatedPath(lang)
+
+const legal = [
+  {
+    label: lang === 'es' ? 'Política de Privacidad' : 'Privacy Policy',
+    path: translatePath('privacy', lang),
+  },
+  {
+    label: lang === 'es' ? 'Términos de Servicio' : 'Terms of Service',
+    path: translatePath('terms', lang),
+  },
+  {
+    label: lang === 'es' ? 'Política de Cookies' : 'Cookie Policy',
+    path: translatePath('cookies', lang),
+  },
+]
+---
+
 <footer class="full-width">
   <p>
     Copyleft © {new Date().getFullYear()} Giorgiosaud.io... None rights reserved.
   </p>
+  <nav class="legal-links" aria-label="Legal">
+    {legal.map(({ label, path }) => (
+      <a href={path}>{label}</a>
+    ))}
+  </nav>
 </footer>
 
 <style>
@@ -10,9 +37,29 @@
     text-align: center;
     background: light-dark(var(--color-light),var(--color-dark));
     padding-block: 1lh;
+
     p {
       --_font-size: var(--font-size, clamp(.9rem, .6cqw, 1rem));
       font-size: var(--_font-size);
+    }
+  }
+
+  .legal-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    margin-top: 0.5rem;
+
+    a {
+      font-size: 0.75rem;
+      color: light-dark(#64748b, #94a3b8);
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+        color: var(--color-main);
+      }
     }
   }
 </style>
