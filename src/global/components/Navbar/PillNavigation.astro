@@ -110,3 +110,21 @@ const menuItems = [
     letter-spacing: 0.04em;
   }
 </style>
+
+<script>
+  function syncActive() {
+    const path = window.location.pathname
+    document.querySelectorAll<HTMLAnchorElement>('.pill-nav .pill a:not(.lang-link)').forEach(a => {
+      const matches = a.getAttribute('href') === path && path !== '/'
+      a.classList.toggle('active', matches)
+      if (matches) {
+        a.setAttribute('aria-current', 'page')
+      } else {
+        a.removeAttribute('aria-current')
+      }
+    })
+  }
+
+  syncActive()
+  document.addEventListener('astro:page-load', syncActive)
+</script>

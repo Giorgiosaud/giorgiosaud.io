@@ -44,6 +44,12 @@
     /* biome-ignore lint/correctness/noUnknownProperty: This is a standard-track CSS View Transition property. */
     navigation: auto;
   }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
 }
 
 @layer global {

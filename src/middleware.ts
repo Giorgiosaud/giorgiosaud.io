@@ -16,12 +16,17 @@ const authMiddleware = defineMiddleware(async (context, next) => {
   }
 
   // Get session from Better Auth for server-rendered requests
-  const session = await auth.api.getSession({
-    headers: context.request.headers,
-  })
-
-  context.locals.session = session?.session ?? null
-  context.locals.user = session?.user ?? null
+  try {
+    const session = await auth.api.getSession({
+      headers: context.request.headers,
+    })
+    context.locals.session = session?.session ?? null
+    context.locals.user = session?.user ?? null
+  } catch {
+    // DB unavailable or auth misconfigured — treat as unauthenticated
+    context.locals.session = null
+    context.locals.user = null
+  }
 
   return next()
 })

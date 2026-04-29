@@ -27,7 +27,12 @@ export const $isAdmin = computed(
 export async function initAuthState() {
   $isLoading.set(true)
   try {
-    const response = await fetch('/api/auth/session.json')
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 5000)
+    const response = await fetch('/api/auth/session.json', {
+      signal: controller.signal,
+    })
+    clearTimeout(timeout)
     const data = await response.json()
 
     if (data.authenticated && data.user) {
