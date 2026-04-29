@@ -1,0 +1,151 @@
+---
+import {
+  getLangFromUrl,
+  type RouteNames,
+  useTranslatedPath,
+  useTranslations,
+} from '@i18n/utils'
+import { BookOpen, Globe, Mail, User } from '@lucide/astro'
+
+interface Props {
+  pathToTranslate: RouteNames
+  pathToTranslateNote?: string
+}
+
+const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const { translatePath } = useTranslatedPath(lang)
+
+const langToTranslate = lang === 'es' ? 'en' : 'es'
+const langLabel = lang === 'es' ? 'EN' : 'ES'
+
+const tabs = [
+  {
+    title: t('nav.title'),
+    path: translatePath('notebook', lang),
+    Icon: BookOpen,
+  },
+  {
+    title: t('nav.about-me'),
+    path: translatePath('about-me', lang),
+    Icon: User,
+  },
+  {
+    title: t('nav.contact'),
+    path: translatePath('contact', lang),
+    Icon: Mail,
+  },
+  {
+    title: langLabel,
+    path: translatePath(pathToTranslate, langToTranslate, pathToTranslateNote),
+    Icon: Globe,
+  },
+]
+---
+
+<nav class="bottom-tab-bar" aria-label="Main navigation">
+  {tabs.map(({ title, path, Icon }) => (
+    <a
+      href={path}
+      class:list={['tab', { active: path === Astro.url.pathname && path !== '/' }]}
+      aria-current={path === Astro.url.pathname && path !== '/' ? 'page' : undefined}
+    >
+      <Icon size={20} aria-hidden="true" class="tab-icon" />
+      <span class="tab-label">{title}</span>
+    </a>
+  ))}
+</nav>
+
+<style>
+  .bottom-tab-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: light-dark(#475569, #1e293b);
+    border-top: 1px solid light-dark(#334155, #0f172a);
+    padding: 0.5rem 0;
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    z-index: 200;
+    view-transition-name: bottom-tab-bar;
+    transition: transform 0.3s ease;
+
+    &.hidden {
+      transform: translateY(100%);
+    }
+
+    @media (width >= 48rem) {
+      display: none;
+    }
+  }
+
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0.25rem 0.75rem;
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.15s;
+
+    &:hover {
+      color: var(--color-main);
+    }
+
+    &.active {
+      color: var(--color-main);
+
+      .tab-icon {
+        filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 80%, transparent));
+      }
+    }
+  }
+
+  .tab-icon {
+    display: block;
+  }
+
+  .tab-label {
+    font-size: 0.6rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  const bar = document.querySelector('.bottom-tab-bar') as HTMLElement
+  let lastY = window.scrollY
+  let ticking = false
+
+  window.addEventListener('scroll', () => {
+    if (ticking) return
+    window.requestAnimationFrame(() => {
+      const currentY = window.scrollY
+      if (currentY > lastY + 4) {
+        bar?.classList.add('hidden')
+      } else if (currentY < lastY - 4) {
+        bar?.classList.remove('hidden')
+      }
+      lastY = currentY
+      ticking = false
+    })
+    ticking = true
+  }, { passive: true })
+
+  // Mark active tab on click immediately (before navigation completes)
+  document.querySelectorAll<HTMLAnchorElement>('.bottom-tab-bar .tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.bottom-tab-bar .tab').forEach(t => {
+        t.classList.remove('active')
+        t.removeAttribute('aria-current')
+      })
+      tab.classList.add('active')
+      tab.setAttribute('aria-current', 'page')
+    })
+  })
+</script>

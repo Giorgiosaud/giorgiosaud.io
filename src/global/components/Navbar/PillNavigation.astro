@@ -1,0 +1,130 @@
+---
+import {
+  getLangFromUrl,
+  type RouteNames,
+  useTranslatedPath,
+  useTranslations,
+} from '@i18n/utils'
+
+interface Props {
+  pathToTranslate: RouteNames
+  pathToTranslateNote?: string
+}
+
+const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const { translatePath } = useTranslatedPath(lang)
+
+const langToTranslate = lang === 'es' ? 'en' : 'es'
+const langLabel = lang === 'es' ? 'EN' : 'ES'
+
+const menuItems = [
+  {
+    title: t('nav.title'),
+    path: translatePath('notebook', lang),
+  },
+  {
+    title: t('nav.about-me'),
+    path: translatePath('about-me', lang),
+  },
+  {
+    title: t('nav.contact'),
+    path: translatePath('contact', lang),
+  },
+]
+---
+
+<nav class="pill-nav" aria-label="Main navigation">
+  <div class="pill">
+    {menuItems.map(({ title, path }) => (
+      <a
+        href={path}
+        class:list={[{ active: path === Astro.url.pathname && path !== '/' }]}
+        aria-current={path === Astro.url.pathname && path !== '/' ? 'page' : undefined}
+      >
+        {title}
+      </a>
+    ))}
+    <div class="lang-sep" aria-hidden="true"></div>
+    <a
+      href={translatePath(pathToTranslate, langToTranslate, pathToTranslateNote)}
+      class="lang-link"
+    >
+      {langLabel}
+    </a>
+  </div>
+</nav>
+
+<style>
+  .pill-nav {
+    display: none;
+
+    @media (width >= 48rem) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    background: light-dark(#f1f5f9, #1e293b);
+    border: 1px solid light-dark(#e2e8f0, #334155);
+    border-radius: 999px;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .pill a {
+    color: light-dark(#64748b, #94a3b8);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s, background 0.15s;
+
+    &:hover {
+      color: light-dark(#0f172a, #f8fafc);
+    }
+
+    &.active {
+      background: var(--color-main);
+      color: #fff;
+      font-weight: 500;
+    }
+  }
+
+  .lang-sep {
+    width: 1px;
+    height: 16px;
+    background: light-dark(#e2e8f0, #334155);
+    margin: 0 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .pill .lang-link {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+</style>
+
+<script>
+  function syncActive() {
+    const path = window.location.pathname
+    document.querySelectorAll<HTMLAnchorElement>('.pill-nav .pill a:not(.lang-link)').forEach(a => {
+      const matches = a.getAttribute('href') === path && path !== '/'
+      a.classList.toggle('active', matches)
+      if (matches) {
+        a.setAttribute('aria-current', 'page')
+      } else {
+        a.removeAttribute('aria-current')
+      }
+    })
+  }
+
+  syncActive()
+  document.addEventListener('astro:page-load', syncActive)
+</script>

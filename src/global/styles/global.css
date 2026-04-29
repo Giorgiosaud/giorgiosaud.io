@@ -34,9 +34,21 @@
     }
   }
 
+  @media (width < 48rem) {
+    body {
+      padding-bottom: 4.5rem;
+    }
+  }
+
   @view-transition {
     /* biome-ignore lint/correctness/noUnknownProperty: This is a standard-track CSS View Transition property. */
     navigation: auto;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
   }
 }
 
@@ -195,13 +207,5 @@
     border-color: light-dark(var(--color-dark), var(--color-light));
     background-color: light-dark(var(--color-light), var(--color-dark));
     outline-color: var(--color-main);
-  }
-}
-
-.opened+main {
-  padding-top: 68px;
-
-  @media (width >=48rem) {
-    padding: 0;
   }
 }

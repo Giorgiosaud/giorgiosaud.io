@@ -39,4 +39,12 @@ export const routes = {
     es: 'politica-de-privacidad',
     en: 'privacy-policy',
   },
+  terms: {
+    es: 'terminos-de-servicio',
+    en: 'terms-of-service',
+  },
+  cookies: {
+    es: 'politica-de-cookies',
+    en: 'cookie-policy',
+  },
 } as const
