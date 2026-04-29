@@ -35,4 +35,8 @@ export const routes = {
     es: 'panel',
     en: 'dashboard',
   },
+  privacy: {
+    es: 'politica-de-privacidad',
+    en: 'privacy-policy',
+  },
 } as const

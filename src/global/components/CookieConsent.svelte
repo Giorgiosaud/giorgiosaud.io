@@ -4,6 +4,7 @@ import { onMount } from 'svelte'
 const CONSENT_KEY = 'cookie_consent'
 const CONSENT_SESSION_KEY = 'consent_session_id'
 const CONSENT_VERSION = '1' // Bump this to re-ask consent
+const CONSENT_EXPIRY_MS = 365 * 24 * 60 * 60 * 1000 // 12 months
 
 type ConsentState = {
   necessary: boolean
@@ -65,8 +66,8 @@ onMount(() => {
   if (stored) {
     try {
       const parsed = JSON.parse(stored) as ConsentState
-      // Re-ask if version changed
-      if (parsed.version !== CONSENT_VERSION) {
+      const expired = Date.now() - (parsed.timestamp || 0) > CONSENT_EXPIRY_MS
+      if (parsed.version !== CONSENT_VERSION || expired) {
         showBanner = true
       } else {
         consent = parsed
@@ -77,6 +78,12 @@ onMount(() => {
     }
   } else {
     showBanner = true
+  }
+
+  // Expose re-open function globally so footer/other UI can trigger it
+  window.__openCookieSettings = () => {
+    showBanner = true
+    showSettings = false
   }
 })
 
@@ -142,16 +149,23 @@ declare global {
   interface Window {
     dataLayer: unknown[]
     gtag: (...args: unknown[]) => void
+    __openCookieSettings: () => void
   }
 }
 </script>
+
+{#if !showBanner}
+  <button type="button" class="manage-btn" onclick={() => { showBanner = true; showSettings = false }}>
+    🍪 Cookies
+  </button>
+{/if}
 
 {#if showBanner}
   <div class="cookie-banner" role="dialog" aria-label="Cookie consent">
     {#if !showSettings}
       <div class="banner-content">
         <p>
-          We use cookies to enhance your experience. By continuing, you agree to our use of cookies.
+          We use cookies to enhance your experience. Read our <a href="/privacy-policy" class="policy-link">Privacy Policy</a> to learn more.
         </p>
         <div class="banner-actions">
           <button type="button" class="btn-link" onclick={() => showSettings = true}>
@@ -208,52 +222,79 @@ declare global {
 
 <style>
   .cookie-banner {
+    --_font-size: clamp(0.6875rem, 1.5vw, 0.75rem);
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--color-surface, #fff);
-    border-top: 1px solid var(--color-border, #ddd);
-    padding: 1rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: min(360px, calc(100vw - 2rem));
+    background: #1e293b;
+    color: #e2e8f0;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-size: var(--_font-size);
     z-index: 9998;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  :global(.light) .cookie-banner,
+  :global([data-theme="light"]) .cookie-banner {
+    background: #ffffff;
+    color: #1e293b;
+    border-color: #e2e8f0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   }
 
   .banner-content, .settings-content {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .banner-content {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .banner-content p {
     margin: 0;
-    flex: 1;
-    min-width: 200px;
+    font-size: inherit;
+    line-height: 1.5;
+    color: #94a3b8;
+  }
+
+  .policy-link {
+    font-size: inherit;
+  }
+
+  :global(.light) .banner-content p,
+  :global([data-theme="light"]) .banner-content p {
+    color: #64748b;
   }
 
   .banner-actions, .settings-actions {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    justify-content: flex-end;
   }
 
   .settings-content h3 {
-    margin: 0 0 1rem;
-    font-size: 1.125rem;
+    margin: 0;
+    font-size: calc(var(--_font-size) * 1.2);
+    color: #f1f5f9;
+  }
+
+  :global(.light) .settings-content h3,
+  :global([data-theme="light"]) .settings-content h3 {
+    color: #0f172a;
   }
 
   .cookie-option {
-    margin-bottom: 1rem;
-    padding: 0.75rem;
-    background: var(--color-background, #f9f9f9);
-    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    padding: 0.625rem;
+    background: #0f172a;
+    border-radius: 6px;
+  }
+
+  :global(.light) .cookie-option,
+  :global([data-theme="light"]) .cookie-option {
+    background: #f1f5f9;
   }
 
   .cookie-option label {
@@ -261,61 +302,102 @@ declare global {
     align-items: center;
     gap: 0.5rem;
     cursor: pointer;
+    color: #e2e8f0;
+  }
+
+  :global(.light) .cookie-option label,
+  :global([data-theme="light"]) .cookie-option label {
+    color: #1e293b;
   }
 
   .option-title {
     font-weight: 500;
+    font-size: 0.875rem;
   }
 
   .option-desc {
     margin: 0.25rem 0 0 1.5rem;
-    font-size: 0.875rem;
-    color: var(--color-muted, #666);
+    font-size: inherit;
+    color: #64748b;
   }
 
   .btn-primary {
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.75rem;
     background: var(--color-main);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: inherit;
+    font-weight: 500;
   }
 
   .btn-secondary {
-    padding: 0.5rem 1rem;
-    background: var(--color-surface, #e5e5e5);
-    color: var(--color-text, #333);
+    padding: 0.3rem 0.75rem;
+    background: #334155;
+    color: #e2e8f0;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: inherit;
+  }
+
+  :global(.light) .btn-secondary,
+  :global([data-theme="light"]) .btn-secondary {
+    background: #e2e8f0;
+    color: #1e293b;
   }
 
   .btn-link {
-    padding: 0.5rem 1rem;
+    padding: 0.3rem 0.375rem;
     background: none;
     border: none;
-    color: var(--color-main);
+    color: #94a3b8;
     cursor: pointer;
-    font-size: 0.875rem;
+    font-size: inherit;
     text-decoration: underline;
   }
 
-  .btn-primary:hover, .btn-secondary:hover {
-    opacity: 0.9;
+  :global(.light) .btn-link,
+  :global([data-theme="light"]) .btn-link {
+    color: #64748b;
   }
 
-  @media (max-width: 600px) {
-    .banner-content {
-      flex-direction: column;
-      text-align: center;
-    }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-secondary:hover { opacity: 0.85; }
 
-    .banner-actions {
-      justify-content: center;
-      width: 100%;
-    }
+  .policy-link {
+    color: #7dd3fc;
+    text-decoration: underline;
+  }
+
+  :global(.light) .policy-link,
+  :global([data-theme="light"]) .policy-link {
+    color: #0369a1;
+  }
+
+  .manage-btn {
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    background: #1e293b;
+    color: #94a3b8;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 0.375rem 0.625rem;
+    font-size: 0.6875rem;
+    cursor: pointer;
+    z-index: 9997;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .manage-btn:hover { opacity: 1; }
+
+  :global(.light) .manage-btn,
+  :global([data-theme="light"]) .manage-btn {
+    background: #f8fafc;
+    color: #64748b;
+    border-color: #e2e8f0;
   }
 </style>
