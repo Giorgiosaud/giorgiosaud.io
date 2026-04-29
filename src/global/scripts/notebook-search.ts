@@ -191,8 +191,13 @@ export function initNotebookSearch(options: {
     lang: options.lang,
   }
 
-  async function fetchResults(params: SearchParams): Promise<void> {
-    resultsEl!.innerHTML = `<li class="loading"><p>${options.loadingText}</p></li>`
+  async function fetchResults(
+    params: SearchParams,
+    skipResults = false,
+  ): Promise<void> {
+    if (!skipResults) {
+      resultsEl!.innerHTML = `<li class="loading"><p>${options.loadingText}</p></li>`
+    }
 
     const sp = new URLSearchParams()
     if (params.q) sp.set('q', params.q)
@@ -212,7 +217,9 @@ export function initNotebookSearch(options: {
         collection: params.collection,
         lang,
       })
-      renderResults(data, resultsEl!, options.noResultsText, chipEls)
+      if (!skipResults) {
+        renderResults(data, resultsEl!, options.noResultsText, chipEls)
+      }
       if (paginationEl) {
         renderPagination(
           data,
@@ -230,7 +237,9 @@ export function initNotebookSearch(options: {
         )
       }
     } catch {
-      resultsEl!.innerHTML = `<li class="error"><p>${options.noResultsText}</p></li>`
+      if (!skipResults) {
+        resultsEl!.innerHTML = `<li class="error"><p>${options.noResultsText}</p></li>`
+      }
     }
   }
 
@@ -310,14 +319,12 @@ export function initNotebookSearch(options: {
   // Initialize from URL params on page load
   inputEl.value = currentParams.q
   updateChips(currentParams.collection)
-  // Skip initial fetch if the server already rendered the first page
+  // SSR rendered page 1 — skip replacing results, only render pagination
   const ssrRendered = resultsEl.dataset.ssr === 'true'
-  if (
-    !ssrRendered ||
-    currentParams.q ||
-    currentParams.collection ||
-    currentParams.page > 1
-  ) {
-    fetchResults(currentParams)
-  }
+  const isDefaultLoad =
+    ssrRendered &&
+    !currentParams.q &&
+    !currentParams.collection &&
+    currentParams.page === 1
+  fetchResults(currentParams, isDefaultLoad)
 }
