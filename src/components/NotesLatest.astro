@@ -16,12 +16,12 @@ const notes = (await getCollection(collection))
   .slice(0, 3)
 ---
 
-<section class="latest-notes" aria-label={t('notes.latest.title')}>
+<section class="latest-notes" aria-label={t("notes.latest.title")}>
   <h2>
-    {t('notes.latest.title')}
+    {t("notes.latest.title")}
   </h2>
   <ul class="notes-grid">
-    {notes.map(note => <NoteCardSticky note={note} />)}
+    {notes.map((note) => <NoteCardSticky note={note} />)}
   </ul>
 </section>
 
@@ -31,7 +31,7 @@ const notes = (await getCollection(collection))
     padding: 0;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, minmax(220px, 320px));
+    grid-template-columns: repeat(auto-fit, minmax(220px, 320px));
     gap: 1.25rem;
     align-items: start;
     justify-content: center;
