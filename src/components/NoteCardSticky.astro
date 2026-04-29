@@ -71,13 +71,33 @@ const showDraftBadge = isDraftInDevMode(note.data)
     position: relative;
     transform: rotate(var(--_tilt));
     transform-origin: center bottom;
-    transition: transform 0.25s cubic-bezier(.4,1.6,.5,1), filter 0.25s ease;
-    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.13));
+    transition: transform 0.25s cubic-bezier(.4,1.6,.5,1), box-shadow 0.25s ease;
+
+    background:
+      repeating-linear-gradient(
+        transparent,
+        transparent calc(1.6rem - 1px),
+        light-dark(hsl(var(--note-hue) 50% 84%), hsl(var(--note-hue) 30% 28%)) calc(1.6rem - 1px),
+        light-dark(hsl(var(--note-hue) 50% 84%), hsl(var(--note-hue) 30% 28%)) 1.6rem
+      ),
+      light-dark(hsl(var(--note-hue) 70% 93%), hsl(var(--note-hue) 25% 18%));
+    background-position: 0 3.2rem;
+    color: light-dark(hsl(var(--note-hue) 40% 18%), hsl(var(--note-hue) 15% 88%));
+    clip-path: polygon(0 0, calc(100% - var(--_fold)) 0, 100% var(--_fold), 100% 100%, 0 100%);
+    border-radius: 2px;
+
+    box-shadow:
+      3px 3px 0 1px light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
+      6px 6px 0 2px light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
+      0 6px 18px rgba(0,0,0,0.13);
   }
 
   article:hover {
     transform: rotate(0deg) translateY(-6px);
-    filter: drop-shadow(4px 12px 18px rgba(0,0,0,0.22));
+    box-shadow:
+      3px 3px 0 1px light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
+      6px 6px 0 2px light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
+      0 12px 24px rgba(0,0,0,0.22);
     z-index: 5;
   }
 
@@ -107,25 +127,12 @@ const showDraftBadge = isDraftInDevMode(note.data)
     z-index: 3;
     width: var(--_fold);
     height: var(--_fold);
-    background: linear-gradient(225deg, hsl(var(--note-hue) 40% 68%) 50%, transparent 50%);
-    filter: drop-shadow(-1px 1px 2px rgba(0,0,0,0.18));
+    background: linear-gradient(225deg, light-dark(hsl(var(--note-hue) 40% 68%), hsl(var(--note-hue) 20% 35%)) 50%, transparent 50%);
     pointer-events: none;
   }
 
   .wrapper {
     position: relative;
-    background:
-      repeating-linear-gradient(
-        transparent,
-        transparent calc(1.6rem - 1px),
-        light-dark(hsl(var(--note-hue) 50% 84%), hsl(var(--note-hue) 30% 28%)) calc(1.6rem - 1px),
-        light-dark(hsl(var(--note-hue) 50% 84%), hsl(var(--note-hue) 30% 28%)) 1.6rem
-      ),
-      light-dark(hsl(var(--note-hue) 70% 93%), hsl(var(--note-hue) 25% 18%));
-    background-position: 0 3.2rem;
-    color: light-dark(hsl(var(--note-hue) 40% 18%), hsl(var(--note-hue) 15% 88%));
-    clip-path: polygon(0 0, calc(100% - var(--_fold)) 0, 100% var(--_fold), 100% 100%, 0 100%);
-    border-radius: 2px;
     padding: 1.1rem 1.1rem 1.25rem;
     height: 100%;
     display: flex;

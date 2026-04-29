@@ -1,0 +1,196 @@
+---
+import { getCollection } from 'astro:content'
+import { getLangFromUrl, useTranslatedPath } from '@i18n/utils'
+
+const lang = getLangFromUrl(Astro.url)
+const { translatePath } = useTranslatedPath(lang)
+
+const collectionsCol = lang === 'es' ? 'colecciones' : 'collections'
+const notesCol = lang === 'es' ? 'notas' : 'notes'
+
+const allCollections = await getCollection(collectionsCol)
+const allNotes = await getCollection(notesCol)
+
+const hueMap: Record<string, number> = {
+  ai: 174,
+  architecture: 220,
+  astro: 24,
+  'common-issues': 0,
+  frontend: 142,
+  'industrial-engineering': 270,
+  integration: 190,
+  migration: 40,
+  patterns: 320,
+  strategy: 250,
+}
+
+const chipId = (id: string) => id.replace(/^\d{4}-\d{2}-\d{2}-/, '')
+
+const collectionsWithCount = allCollections
+  .map(col => {
+    const slug = chipId(col.id)
+    const count = allNotes.filter(note =>
+      (note.data.collections ?? []).some(
+        (
+          c:
+            | {
+                id?: string
+              }
+            | string,
+        ) => {
+          const id = typeof c === 'string' ? c : (c.id ?? '')
+          return chipId(id) === slug
+        },
+      ),
+    ).length
+    return {
+      col,
+      slug,
+      count,
+      hue: hueMap[slug] ?? 210,
+    }
+  })
+  .filter(({ count }) => count > 0)
+  .sort((a, b) => b.count - a.count)
+  .slice(0, 6)
+---
+
+<section class="collection-stack-section">
+  <h2>{lang === 'es' ? 'Explora por tema' : 'Explore by topic'}</h2>
+  <div class="stack">
+    {collectionsWithCount.map(({ col, slug, count, hue }, i) => (
+      <a
+        href={`${translatePath('notebook', lang)}?collection=${slug}`}
+        class="collection-card"
+        style={`--hue:${hue};--i:${i}`}
+        aria-label={`${col.data.title} — ${count} notes`}
+      >
+        <span class="icon">{col.data.icon}</span>
+        <span class="title">{col.data.title}</span>
+        <span class="count">{count}</span>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .collection-stack-section {
+    padding-block: 3rem;
+  }
+
+  h2 {
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .stack {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    max-width: 900px;
+    margin: 0 auto;
+
+    @media (max-width: 48rem) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 30rem) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .collection-card {
+    --_tilt: calc((var(--i, 0) % 3 - 1) * 1.5deg);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 2rem 1.5rem;
+    text-decoration: none;
+    cursor: pointer;
+
+    background:
+      repeating-linear-gradient(
+        transparent,
+        transparent calc(1.6rem - 1px),
+        light-dark(hsl(var(--hue) 50% 84%), hsl(var(--hue) 30% 28%)) calc(1.6rem - 1px),
+        light-dark(hsl(var(--hue) 50% 84%), hsl(var(--hue) 30% 28%)) 1.6rem
+      ),
+      light-dark(hsl(var(--hue) 70% 93%), hsl(var(--hue) 25% 18%));
+
+    color: light-dark(hsl(var(--hue) 40% 18%), hsl(var(--hue) 15% 88%));
+
+    --_fold: 24px;
+    clip-path: polygon(0 0, calc(100% - var(--_fold)) 0, 100% var(--_fold), 100% 100%, 0 100%);
+    border-radius: 2px;
+
+    transform: rotate(var(--_tilt));
+    transform-origin: center bottom;
+    transition: transform 0.3s cubic-bezier(.4,1.6,.5,1), box-shadow 0.3s ease;
+
+    /* simula hojas apiladas debajo */
+    box-shadow:
+      3px 3px 0 1px light-dark(hsl(var(--hue) 60% 80%), hsl(var(--hue) 20% 25%)),
+      6px 6px 0 2px light-dark(hsl(var(--hue) 55% 75%), hsl(var(--hue) 20% 20%)),
+      9px 9px 0 3px light-dark(hsl(var(--hue) 50% 70%), hsl(var(--hue) 20% 16%)),
+      0 8px 24px rgba(0,0,0,0.18);
+
+    /* folded corner */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: var(--_fold);
+      height: var(--_fold);
+      background: linear-gradient(225deg, hsl(var(--hue) 40% 68%) 50%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* pin */
+    &::after {
+      content: '';
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      translate: -50% 0;
+      width: 13px;
+      height: 13px;
+      background: radial-gradient(circle at 35% 35%, hsl(var(--hue) 60% 80%), hsl(var(--hue) 50% 45%));
+      border-radius: 50%;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.35);
+    }
+
+    &:hover, &:focus-visible {
+      transform: rotate(0deg) translateY(-6px);
+      box-shadow:
+        3px 3px 0 1px light-dark(hsl(var(--hue) 60% 80%), hsl(var(--hue) 20% 25%)),
+        6px 6px 0 2px light-dark(hsl(var(--hue) 55% 75%), hsl(var(--hue) 20% 20%)),
+        9px 9px 0 3px light-dark(hsl(var(--hue) 50% 70%), hsl(var(--hue) 20% 16%)),
+        0 12px 28px rgba(0,0,0,0.25);
+      z-index: 5;
+    }
+
+    &:active {
+      transform: rotate(0deg) translateY(-4px);
+    }
+  }
+
+  .icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .count {
+    font-size: 0.8rem;
+    opacity: 0.7;
+  }
+</style>

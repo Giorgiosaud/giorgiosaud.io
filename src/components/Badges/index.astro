@@ -2,7 +2,9 @@
 import { getCollection } from 'astro:content'
 import MinimalBadge from './MinimalBadge.astro'
 
-const badges = await getCollection('badges')
+const badges = (await getCollection('badges')).sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
+)
 interface Props {
   title: string
   readMore: string
@@ -52,6 +54,7 @@ const { title, readMore } = Astro.props as Props
   ul {
     display: grid;
     grid-auto-flow: column;
+    gap: 1rem;
     overflow-x: scroll;
     width: 100%;
     margin-block: calc(var(--spacing) * 20);
@@ -73,7 +76,10 @@ const { title, readMore } = Astro.props as Props
     }
   }
   li {
-    width: 250px;
+    width: 216px;
+    height: 300px;
+    display: flex;
+    align-items: stretch;
     scroll-snap-align: center;
     scroll-snap-stop: always;
     &::scroll-marker {
