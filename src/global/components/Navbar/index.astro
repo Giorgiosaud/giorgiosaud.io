@@ -1,111 +1,40 @@
 ---
 import { LoginButton, UserAvatar } from '@components/auth'
 import { getLangFromUrl, type RouteNames } from '@i18n/utils'
-import HamburgerIcon from './HamburgerIcon.astro'
 import LogoNavigation from './LogoNavigation.astro'
-import Navigation from './Navigation.astro'
-import TranslateButton from './TranslateButton.astro'
-
-const { pathToTranslate, pathToTranslateNote } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+import PillNavigation from './PillNavigation.astro'
 
 interface Props {
   pathToTranslate: RouteNames
   pathToTranslateNote?: string
 }
+
+const { pathToTranslate, pathToTranslateNote } = Astro.props
+const lang = getLangFromUrl(Astro.url)
 ---
 
-<nav aria-label="Main">
+<nav class="top-nav" aria-label="Site header">
   <LogoNavigation />
-  <Navigation />
+  <PillNavigation pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
   <div class="actions">
-    <div class="auth-container">
-      <LoginButton client:idle lang={lang} />
-      <UserAvatar client:idle lang={lang} />
-    </div>
-    <TranslateButton
-      pathToTranslate={pathToTranslate}
-      pathToTranslateNote={pathToTranslateNote}
-    />
-    <button
-      id="hamburger-menu"
-      aria-label="Toggle navigation menu"
-      aria-expanded="false"
-      aria-controls="menu"
-    >
-      <HamburgerIcon />
-    </button>
+    <LoginButton client:idle lang={lang} />
+    <UserAvatar client:idle lang={lang} />
   </div>
 </nav>
-<script>
-  const Menu = document.getElementById("menu") as HTMLElement;
-  const MenuButton = document.getElementById("hamburger-menu") as HTMLElement;
 
-  const Header = document.querySelector("header") as HTMLElement;
-  MenuButton?.addEventListener("click", () => {
-    Menu.dataset.opened = "true";
-    MenuButton.classList.toggle("opened");
-    Header.classList.toggle("opened");
-    const isOpened = MenuButton.classList.contains("opened");
-    MenuButton.setAttribute("aria-expanded", String(isOpened));
-    if (!isOpened) {
-      Menu.dataset.opened = "false";
-    }
-  });
-  (function () {
-    const hamburger = document.getElementById("hamburger-menu") as HTMLElement;
-    let scrollTimeout: NodeJS.Timeout;
-
-    let lastScrollY = window.scrollY;
-    let ticking = false;
-
-    function onScroll() {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY;
-
-          if (Math.abs(currentScrollY - lastScrollY) > 5) {
-            hamburger.classList.add("hamburger-hidden");
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-              hamburger.classList.remove("hamburger-hidden");
-            }, 200); // Show again after 200ms of no scroll
-          }
-
-          lastScrollY = currentScrollY;
-          ticking = false;
-        });
-
-        ticking = true;
-      }
-    }
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-  })();
-</script>
 <style>
-  nav {
+  .top-nav {
     display: grid;
-    place-items: center;
-    grid-template-columns: [logo] auto [menu] 1fr [actions] auto [end-actions];
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
     color: light-dark(var(--color-dark), var(--color-light));
-    .actions {
-      grid-column: actions / end-actions;
-      display: flex;
-      place-items: center;
-      align-self: start;
-      gap: 1rem;
-      z-index: 10;
-    }
-    .auth-container {
-      display: flex;
-      align-items: center;
-    }
-    #hamburger-menu {
-      width: 3ch;
-      @media screen and (width >= 48rem) {
-        display: none;
-      }
-    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-self: end;
   }
 </style>

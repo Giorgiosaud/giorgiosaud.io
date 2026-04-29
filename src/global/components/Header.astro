@@ -4,26 +4,31 @@ import Navbar from './Navbar/index.astro'
 
 interface Props {
   pathToTranslate: RouteNames
-  notePath?: string
   pathToTranslateNote?: string
 }
+
 const { pathToTranslate, pathToTranslateNote } = Astro.props
 ---
-<header >
+
+<header>
   <div class="content-grid">
     <Navbar pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
   </div>
 </header>
 <link
-    rel="alternate"
-    type="application/rss+xml"
-    title="Your Site's Title"
-    href={new URL("rss.xml", Astro.site)}
+  rel="alternate"
+  type="application/rss+xml"
+  title="Your Site's Title"
+  href={new URL("rss.xml", Astro.site)}
 />
+
 <style>
-  header{
+  header {
     view-transition-name: header;
-    background-color: light-dark(var(--color-light), var(--color-dark));
+    background-color: light-dark(
+      hsl(from var(--color-light) h s l / 0.7),
+      hsl(from var(--color-dark) h s l / 0.7)
+    );
     animation-timeline: scroll();
     animation-duration: 1ms;
     animation-range: 0px 30%;
@@ -35,22 +40,13 @@ const { pathToTranslate, pathToTranslateNote } = Astro.props
     top: 0px;
     isolation: isolate;
     z-index: 100;
-    background-color: light-dark(
-        hsl(from var(--color-light) h s l /.7),
-        hsl(from var(--color-dark) h s l /.7)
-      );
-    &:has([data-opened="true"]) {
-      height: 100dvh;
-      width: 100dvw;
-      position: fixed;
-    }
-
   }
-   @keyframes scroll-down {
+
+  @keyframes scroll-down {
     to {
       background-color: light-dark(
-        hsl(from var(--color-light) h s l /.2),
-        hsl(from var(--color-dark) h s l /.2)
+        hsl(from var(--color-light) h s l / 0.2),
+        hsl(from var(--color-dark) h s l / 0.2)
       );
       backdrop-filter: blur(10px);
       padding: calc(var(--spacing) * 4) 0;

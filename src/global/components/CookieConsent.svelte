@@ -400,4 +400,16 @@ declare global {
     color: #64748b;
     border-color: #e2e8f0;
   }
+
+  @media (width < 48rem) {
+    .cookie-banner {
+      bottom: calc(4.5rem + 1rem);
+      right: 0.75rem;
+      width: calc(100vw - 1.5rem);
+    }
+
+    .manage-btn {
+      bottom: calc(4.5rem + 0.5rem);
+    }
+  }
 </style>

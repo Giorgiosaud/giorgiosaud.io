@@ -16,10 +16,7 @@ href={translatePath("home", lang)}
 </a>
 <style>
   .logo {
-    width: 100%;
-    align-self: start;
-    grid-column: logo / menu;
-    --default-font-family:'Roboto Mono';
+    --default-font-family: 'Roboto Mono';
     font-family: var(
       --default-font-family,
       ui-sans-serif,
@@ -30,21 +27,14 @@ href={translatePath("home", lang)}
       "Segoe UI Symbol",
       "Noto Color Emoji"
     );
-    flex: 1;
     text-wrap-mode: nowrap;
-    z-index: 110;
     color: light-dark(var(--color-dark), var(--color-light));
     text-decoration: none;
     display: flex;
     font-weight: 800;
-    justify-content:center;
-    @media screen and (width >= 48rem) {
-      justify-content:start;
-    }
+
     .logo_accent {
-      color: light-dark(var(--color-main), var(--color-main));
-    }
-    a {
+      color: var(--color-main);
     }
   }
 </style>

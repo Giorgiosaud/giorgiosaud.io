@@ -136,6 +136,10 @@ const t = i18n[lang]
     position: fixed;
     bottom: 2rem;
     right: 2rem;
+
+    @media (width < 48rem) {
+      bottom: calc(4.5rem + 1rem);
+    }
     width: 64px;
     height: 64px;
     border-radius: 50%;
