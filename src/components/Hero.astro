@@ -73,7 +73,7 @@ const { title, description, showButtons = true } = Astro.props
         "buttons image";
     }
     align-items: center;
-    color: var(--color-main);
+    color: light-dark(var(--color-main), white);
 
     .hero__title {
       grid-area: title;
@@ -103,9 +103,6 @@ const { title, description, showButtons = true } = Astro.props
         max-width: 400px;
         aspect-ratio: 1;
         box-shadow: 10px 10px 15px -10px light-dark(var(--color-main),var(--color-light));
-      }
-      @media (prefers-color-scheme: dark) {
-        filter: sepia(1);
       }
     }
     .hero__buttons {

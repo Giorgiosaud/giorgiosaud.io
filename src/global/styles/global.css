@@ -4,8 +4,9 @@
   :root {
     color-scheme: light dark;
     --color-main: #62748e;
-    --color-dark: hsl(from var(--color-main) h s calc(l / 2));
+    --color-dark: hsl(from var(--color-main) h s calc(l / 1.1));
     --color-light: hsl(from var(--color-main) h s calc(l * 1.8));
+    --bg-dark: linear-gradient(160deg, #060d1f 0%, #0d2550 40%, #1a3a6e 70%, #0a1a35 100%);
     --spacing: 0.25rem;
     --breakpoint-lg: 48rem;
     --default-font-family: "Poppins", "Poppins Fallback";
@@ -16,16 +17,21 @@
   }
 
   body {
-    font-family: var(
-      --default-font-family,
-      ui-sans-serif,
-      system-ui,
-      sans-serif,
-      "Apple Color Emoji",
-      "Segoe UI Emoji",
-      "Segoe UI Symbol",
-      "Noto Color Emoji"
-    );
+    font-family: var(--default-font-family,
+        ui-sans-serif,
+        system-ui,
+        sans-serif,
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      );
+    background: white;
+    background-attachment: fixed;
+
+    @media (prefers-color-scheme: dark) {
+      background: var(--bg-dark);
+    }
   }
 
   @view-transition {
@@ -42,8 +48,7 @@
 
   h1,
   h2 {
-    --_color: light-dark(var(--color-dark), var(--color-light));
-    color: inherit;
+    color: light-dark(var(--color-dark), white);
     font-weight: 700;
   }
 
@@ -51,8 +56,7 @@
   h4,
   h5,
   h6 {
-    --_color: light-dark(var(--color-dark), var(--color-light));
-    color: inherit;
+    color: light-dark(var(--color-dark), white);
     font-weight: 600;
   }
 
@@ -156,7 +160,7 @@
     gap: 0.25rem;
   }
 
-  .button > svg {
+  .button>svg {
     width: 1.75rem;
     margin: 0 0.5rem;
     aspect-ratio: 1;
@@ -167,11 +171,9 @@
   }
 
   .button-primary {
-    --_color: light-dark(var(--color-light), var(--color-dark));
-    --_background-color: var(
-      --background-color,
-      light-dark(var(--color-dark), var(--color-main))
-    );
+    --_color: light-dark(var(--color-light), white);
+    --_background-color: var(--background-color,
+        light-dark(var(--color-dark), #2563eb));
     color: var(--color, var(--_color));
     background-color: var(--background-color, var(--_background-color));
 
@@ -185,7 +187,8 @@
 
   .button-outline {
     background: transparent;
-    border: 2px solid light-dark(var(--color-light), var(--color-dark));
+    border: 2px solid light-dark(var(--color-dark), white);
+    color: light-dark(var(--color-dark), white);
   }
 
   .button-outline:is(:hover, :focus-visible) {
@@ -194,9 +197,11 @@
     outline-color: var(--color-main);
   }
 }
-.opened + main {
+
+.opened+main {
   padding-top: 68px;
-  @media (width >= 48rem) {
+
+  @media (width >=48rem) {
     padding: 0;
   }
 }

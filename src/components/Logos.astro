@@ -6,109 +6,150 @@ import { getLangFromUrl, useTranslations } from '@i18n/utils'
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
 const TechCollection = await getEntry('technologies', 'techs')
-const Technologies: string[] =
-  TechCollection?.data.techs.map((tech: string) => tech) || []
+const techs: string[] = TechCollection?.data.techs ?? []
+
+const third = Math.ceil(techs.length / 3)
+const rows = [
+  techs.slice(0, third),
+  techs.slice(third, third * 2),
+  techs.slice(third * 2),
+]
 ---
 
-<section class="">
+<section>
   <header>
-    <h2 class="">{t("logos.title")}</h2>
+    <h2>{t("logos.title")}</h2>
   </header>
-  <div class="technologies">
-    {Technologies.map(tech=>(
-      <div class="technology" tabindex="0">
-        <Icon
-        name={tech}
-        />
-        <span></span>
+
+  <div class="marquee-wrap">
+    {rows.map((row, i) => (
+      <div class={`marquee-row ${i % 2 === 1 ? 'reverse' : ''}`}>
+        <div class="marquee-track">
+          {[...row, ...row].map(tech => (
+            <div class="tech-item">
+              <Icon name={tech} />
+              <span class="tech-name">{tech}</span>
+            </div>
+          ))}
+        </div>
       </div>
-      ))}
-    </div>
+    ))}
   </div>
 </section>
+
 <style>
   section {
     padding: calc(var(--spacing) * 16) 0;
   }
+
   header {
     text-align: center;
+    margin-bottom: 3rem;
   }
-  .technologies{
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(120px,1fr));
-    
 
-    .technology{
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      padding: 2rem;
-      width: 100%;
-      position: relative;
-      animation-name: logos;
-      animation-timeline: view();
-      animation-range: entry 40% cover 100%;
-      animation-fill-mode: both;
-      transition: opacity 0.3s ease-in-out;
-      span{ 
-        background-color: hsl(from var(--color-main) h s l / .01);
-        backdrop-filter: blur(20px);
-        display: none;
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        place-items: center;
-        opacity: 0;
-        transition-property: display,opacity;
-        transition-duration: 1s;
-        transition-behavior: allow-discrete;
-
-      }
-      svg {
-        max-height: 90%;
-      }
-      &:hover,&:active,&:focus{
-         span{
-          opacity: 1;
-          display: grid;
-        } 
-      }
-    
-    }
+  .marquee-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   }
-  .technology.in-view{
-    opacity: 1;
-    animation-name:none
 
+  .marquee-row {
+    overflow-x: clip;
+    padding-block: 3rem;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 8%,
+      black 92%,
+      transparent
+    );
   }
-  @keyframes logos {
-    0% {
-      opacity: 0.1;
-      scale: 1;
-    }
-    50% {
+
+  .marquee-track {
+    display: flex;
+    gap: 1.5rem;
+    width: max-content;
+    animation: marquee-left 40s linear infinite;
+  }
+
+  .marquee-row.reverse .marquee-track {
+    animation-name: marquee-right;
+    animation-duration: 45s;
+  }
+
+  .marquee-row:nth-child(3) .marquee-track {
+    animation-duration: 35s;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+
+  .tech-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    width: 72px;
+    flex-shrink: 0;
+    opacity: 0.7;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    cursor: default;
+
+    &:hover {
       opacity: 1;
-      scale: 1.3;
+      transform: scale(1.6);
+      z-index: 10;
+
+      .tech-name {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-    100% {
-      opacity: 0.1;
-      scale: 1;
+
+    svg {
+      width: 40px;
+      height: 40px;
     }
-   
+  }
+
+  .tech-name {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: light-dark(var(--color-dark), var(--color-light));
+  }
+
+  @keyframes marquee-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+
+  .marquee-track.paused {
+    animation-play-state: paused;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track {
+      animation: none;
+    }
   }
 </style>
+
 <script>
-import { isSafari } from "@global-scripts/isSafari";
-
-  if(isSafari()){
-    const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("in-view");
-    }
-  });
-});
-
-document.querySelectorAll(".technology").forEach(el => observer.observe(el));
-  };
+  document.querySelectorAll<HTMLElement>('.marquee-track').forEach(track => {
+    track.addEventListener('click', () => {
+      track.classList.toggle('paused')
+    })
+  })
 </script>
