@@ -55,7 +55,6 @@ const t = i18n[lang]
 
     // Show the summarizer button only when API is available
     summaryBubble.hidden = false;
-    summaryModal.hidden = false;
 
     // Cache for lazy-loaded marked library
     let markedModule = null;
@@ -70,50 +69,46 @@ const t = i18n[lang]
     }
 
     async function summarizeContent() {
-      const options = {
-        sharedContext:
-          "Este es un artículo para desarrolladores FrontEnd, usa el mismo idioma que el texto para el resumen, el autor es Giorgiosaud y el tono es menos formal pero técnico",
-        type: "teaser",
-        format: "markdown",
-        length: "medium",
-        expectedInputLanguages: [t.inputLang],
-        outputLanguage: t.outputLang,
-        monitor(m) {
-          m.addEventListener("downloadprogress", (e) => {
-            console.log(`Downloaded ${e.loaded * 100}%`);
-          });
-        },
-      };
-
-      const availability = await Summarizer.availability();
-      if (availability !== "available") {
-        summaryContent.innerHTML = `<p>${t.unavailable}</p>`;
-      }
-
       summaryContent.innerHTML = `<p>${t.loading}</p>`;
       summaryModal.classList.add("show");
 
-      // Lazy load marked only when actually summarizing
-      const marked = await getMarked();
+      try {
+        const options = {
+          sharedContext:
+            "Este es un artículo para desarrolladores FrontEnd, usa el mismo idioma que el texto para el resumen, el autor es Giorgiosaud y el tono es menos formal pero técnico",
+          type: "key-points",
+          format: "markdown",
+          length: "medium",
+          expectedInputLanguages: [t.inputLang],
+          expectedOutputLanguage: t.outputLang,
+          outputLanguage: t.outputLang,
+        };
+        const capabilities = await Summarizer.availability(options);
+        if (capabilities === "unavailable") {
+          summaryContent.innerHTML = `<p>${t.unavailable}</p>`;
+          return;
+        }
 
-      const summarizer = await Summarizer.create(options);
-      const text = document.getElementById("content").innerText;
-      const summary = await summarizer.summarizeStreaming(text, {
-        language: t.streamLang,
-      });
-      let result = "";
-      for await (const chunk of summary.values()) {
-        result += chunk;
-        summaryContent.innerHTML = marked.parse(result);
+        // Lazy load marked only when actually summarizing
+        const marked = await getMarked();
+
+        const summarizer = await Summarizer.create(options);
+        const text = document.getElementById("content").innerText;
+        const stream = summarizer.summarizeStreaming(text);
+        let result = "";
+        for await (const chunk of stream) {
+          result += chunk;
+          summaryContent.innerHTML = marked.parse(result);
+        }
+      } catch (err) {
+        summaryContent.innerHTML = `<p>${t.unavailable}</p>`;
+        console.error("Summarizer error:", err);
       }
     }
 
     summaryBubble.addEventListener("click", () => {
       summaryModal.classList.add("show");
       summarizeContent();
-      import("../helpers/datalayer").then(({ trackEvent }) => {
-        trackEvent({ event: 'ai_summarizer_open', note_id: summaryBubble.dataset.noteId ?? '', lang: (summaryBubble.dataset.lang ?? 'en') as 'en' | 'es' })
-      })
     });
 
     closeModalBtn.addEventListener("click", () => {
@@ -129,6 +124,20 @@ const t = i18n[lang]
       }
     });
   }
+</script>
+<script>
+  import { trackEvent } from "@helpers/datalayer";
+
+  const btn = document.getElementById(
+    "generate-summary-bubble",
+  ) as HTMLButtonElement | null;
+  btn?.addEventListener("click", () => {
+    trackEvent({
+      event: "ai_summarizer_open",
+      note_id: btn.dataset.noteId ?? "",
+      lang: (btn.dataset.lang ?? "en") as "en" | "es",
+    });
+  });
 </script>
 
 <style>
