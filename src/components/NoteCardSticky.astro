@@ -23,6 +23,20 @@ const slug = collectionId.replace(/^\d{4}-\d{2}-\d{2}-/, '')
 const imgVtn = `note-img-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 const titleVtn = `note-title-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 const showDraftBadge = isDraftInDevMode(note.data)
+
+const dateIso =
+  note.data.lastUpdate?.toISOString() ?? note.data.publishDate.toISOString()
+const dateLabel = note.data.lastUpdate
+  ? `Updated ${note.data.lastUpdate.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })}`
+  : note.data.publishDate.toLocaleDateString(undefined, {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
 ---
 
 <li class="note-card-item">
@@ -40,6 +54,10 @@ const showDraftBadge = isDraftInDevMode(note.data)
       <div class="description" title={note.data.description}>
         <p>{note.data.description}</p>
       </div>
+      <footer class="card-meta">
+        {slug && <span class="card-collection">{slug.replace(/-/g, ' ')}</span>}
+        <time datetime={dateIso} class="card-date">{dateLabel}</time>
+      </footer>
     </div>
     <a href={href} class="card-link" aria-label={note.data.coverAlt ?? note.data.title}></a>
   </article>
@@ -175,6 +193,31 @@ const showDraftBadge = isDraftInDevMode(note.data)
     overflow: hidden;
     flex: 1;
     line-height: 1.6rem;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 0.4rem;
+  }
+
+  .card-collection {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    background: light-dark(hsl(var(--note-hue) 60% 75%), hsl(var(--note-hue) 30% 35%));
+    color: light-dark(hsl(var(--note-hue) 40% 15%), hsl(var(--note-hue) 15% 92%));
+  }
+
+  .card-date {
+    font-size: 0.68rem;
+    opacity: 0.65;
+    margin-left: auto;
   }
 
   .card-link {

@@ -36,12 +36,31 @@ if (!hasQuery) {
       const imgHtml = note.coverSrc
         ? `<div class="card-thumb" style="view-transition-name:${imgVtn}"><img src="${note.coverSrc.replace(/"/g, '&quot;')}" alt="${coverAlt}" loading="lazy" /></div>`
         : ''
+      const collectionHtml = collection
+        ? `<span class="card-collection">${collection.replace(/-/g, ' ')}</span>`
+        : ''
+      const dateIso = note.lastUpdate ?? note.publishDate
+      const dateLabel = note.lastUpdate
+        ? `Actualizado ${new Date(dateIso).toLocaleDateString('es', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })}`
+        : new Date(dateIso).toLocaleDateString('es', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
       return `<li class="note-card-item">
       <article aria-label="${title}" data-link="${note.href}" data-collection="${collection}">
         <div class="wrapper">
           ${imgHtml}
           <div class="title" style="view-transition-name:${titleVtn}" title="${title}"><h2>${title}</h2></div>
           <div class="description" title="${description}"><p>${description}</p></div>
+          <footer class="card-meta">
+            ${collectionHtml}
+            <time datetime="${dateIso}" class="card-date">${dateLabel}</time>
+          </footer>
         </div>
         <a href="${note.href}" class="card-link" aria-label="${coverAlt}"></a>
       </article>
@@ -330,6 +349,31 @@ if (!hasQuery) {
     overflow: hidden;
     flex: 1;
     line-height: 1.6rem;
+  }
+
+  .note-card-item .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    padding-top: 0.4rem;
+  }
+
+  .note-card-item .card-collection {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: capitalize;
+    padding: 0.15rem 0.5rem;
+    border-radius: 9999px;
+    background: light-dark(hsl(var(--note-hue) 60% 75%), hsl(var(--note-hue) 30% 35%));
+    color: light-dark(hsl(var(--note-hue) 40% 15%), hsl(var(--note-hue) 15% 92%));
+  }
+
+  .note-card-item .card-date {
+    font-size: 0.68rem;
+    opacity: 0.65;
+    margin-left: auto;
   }
 
   .note-card-item .card-link {

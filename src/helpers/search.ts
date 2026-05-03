@@ -19,6 +19,7 @@ export interface NoteSearchEntry {
       | string
     )[]
     publishDate: Date
+    lastUpdate?: Date
     cover?: {
       src: string
     }
@@ -34,6 +35,7 @@ export interface NoteCard {
   coverAlt: string | undefined
   href: string
   publishDate: string
+  lastUpdate: string | undefined
   collections: string[]
 }
 
@@ -121,6 +123,7 @@ export function runSearch(
     coverAlt: note.data.coverAlt,
     href: `${hrefPrefix}/${note.id}`,
     publishDate: note.data.publishDate.toISOString(),
+    lastUpdate: note.data.lastUpdate?.toISOString(),
     collections: (note.data.collections ?? []).map(collectionId),
   }))
 

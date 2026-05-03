@@ -21,6 +21,7 @@ export interface NoteCard {
   coverAlt: string | undefined
   href: string
   publishDate: string
+  lastUpdate: string | undefined
   collections: string[]
 }
 
@@ -74,6 +75,14 @@ function vtn(prefix: string, id: string): string {
   return `${prefix}-${id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 }
 
+function formatDate(iso: string): string {
+  return new Date(iso).toLocaleDateString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  })
+}
+
 function renderCard(note: NoteCard): string {
   const title = note.title
     .replace(/&/g, '&amp;')
@@ -87,11 +96,19 @@ function renderCard(note: NoteCard): string {
   const collection = note.collections[0] ?? ''
   const imgVtn = vtn('note-img', note.id)
   const titleVtn = vtn('note-title', note.id)
+  const dateIso = note.lastUpdate ?? note.publishDate
+  const dateLabel = note.lastUpdate
+    ? `Updated ${formatDate(dateIso)}`
+    : `${formatDate(dateIso)}`
 
   const imgHtml = note.coverSrc
     ? `<div class="card-thumb" style="view-transition-name:${imgVtn}">
         <img src="${note.coverSrc.replace(/"/g, '&quot;')}" alt="${coverAlt}" loading="lazy" />
       </div>`
+    : ''
+
+  const collectionHtml = collection
+    ? `<span class="card-collection">${collection.replace(/-/g, ' ')}</span>`
     : ''
 
   return `<li class="note-card-item">
@@ -104,6 +121,10 @@ function renderCard(note: NoteCard): string {
         <div class="description" title="${description}">
           <p>${description}</p>
         </div>
+        <footer class="card-meta">
+          ${collectionHtml}
+          <time datetime="${dateIso}" class="card-date">${dateLabel}</time>
+        </footer>
       </div>
       <a href="${note.href}" class="card-link" aria-label="${coverAlt}"></a>
     </article>
