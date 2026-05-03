@@ -20,40 +20,33 @@ tags:
   - built-in-ai
 ---
 
-## The Browser Is Becoming an AI Runtime
+So you've probably noticed the 🤖 button floating on this page. That's Chrome's built-in Summarizer API in action — no server, no API key, the model runs entirely on your device. I thought it was worth writing about because it changes how we think about adding AI to the web.
 
-For the past few years AI features meant calling an external API — OpenAI, Anthropic, Google. You send text to a server, pay per token, and hope latency is acceptable. Chrome is changing that model. Starting with Chrome 131, a set of built-in AI APIs runs models **directly on the user's device**, inside the browser, with zero network requests.
+## What's going on here?
 
-The first one worth integrating today is the **Summarizer API**.
+Chrome 131 shipped a set of experimental AI APIs that run models locally using Gemini Nano. No network request, no cost per token, no data leaving the device. The Summarizer is the first one that felt practical enough to actually use.
 
-> **Try it now**: if you're on Chrome with the flag enabled, the 🤖 button on this page uses exactly this API to summarize the article you're reading.
-
-## What Is the Summarizer API?
-
-It's a native browser API that condenses text into a shorter form. The model runs locally using Chrome's on-device inference engine (powered by Gemini Nano). No API key, no server round-trip, no data leaving the device.
+The basic usage is pretty straightforward:
 
 ```js
-// Check availability
-const availability = await Summarizer.availability({ expectedOutputLanguage: 'en' })
-// → "available" | "downloadable" | "downloading" | "unavailable"
+if ('Summarizer' in self) {
+  const summarizer = await Summarizer.create({
+    type: 'key-points',
+    format: 'markdown',
+    length: 'medium',
+    expectedInputLanguages: ['en'],
+    expectedOutputLanguage: 'en',
+  })
 
-// Create a session
-const summarizer = await Summarizer.create({
-  type: 'key-points',
-  format: 'markdown',
-  length: 'medium',
-  expectedInputLanguages: ['en'],
-  expectedOutputLanguage: 'en',
-})
-
-// Summarize
-const summary = await summarizer.summarize(document.body.innerText)
-console.log(summary)
+  const summary = await summarizer.summarize(document.body.innerText)
+}
 ```
 
-## Streaming Output
+That's it. No imports, no auth, just a native browser API.
 
-For a better UX, stream the result as it generates — same pattern as any LLM streaming API:
+## The streaming version is better
+
+Waiting for the full summary to generate before showing anything feels bad. The streaming API fixes that — same `for await...of` pattern you'd use with any LLM stream:
 
 ```js
 const stream = summarizer.summarizeStreaming(text)
@@ -61,46 +54,15 @@ let result = ''
 
 for await (const chunk of stream) {
   result += chunk
-  outputEl.innerHTML = marked.parse(result) // render markdown incrementally
+  outputEl.innerHTML = marked.parse(result) // render as it comes in
 }
 ```
 
-The user sees the summary build up word by word instead of waiting for the whole thing.
+The user sees it build up word by word. Much better experience.
 
-## Configuration Options
+## A few things I learned the hard way
 
-### `type`
-Controls what kind of summary you get:
-
-| Value | Output |
-|-------|--------|
-| `tl;dr` | One sentence |
-| `teaser` | Engaging hook paragraph |
-| `key-points` | Bullet list of main ideas |
-| `headline` | Single headline |
-
-### `length`
-`short`, `medium`, or `long` — relative to the input size.
-
-### `format`
-`plain-text` or `markdown`. Use `markdown` if you're going to render it.
-
-### `sharedContext`
-A prompt that sets the tone and audience:
-
-```js
-const summarizer = await Summarizer.create({
-  sharedContext: 'A technical blog post for frontend developers. Keep the tone informal but precise.',
-  type: 'key-points',
-  format: 'markdown',
-  length: 'medium',
-  expectedOutputLanguage: 'en',
-})
-```
-
-## Checking Availability Before Use
-
-The model may need to download on first use. Always check before creating a session:
+**Pass options to `availability()` too.** The API won't just check if the model exists — it checks if it supports your specific configuration. If you skip the options, Chrome throws a warning and the check isn't accurate:
 
 ```js
 const options = {
@@ -110,132 +72,71 @@ const options = {
   expectedOutputLanguage: 'en',
 }
 
+// Pass the same options here, not just to create()
 const availability = await Summarizer.availability(options)
 
-if (availability === 'unavailable') {
-  // API not supported or disabled
-  return
-}
-
-if (availability === 'downloadable') {
-  // Model needs to download — can still create, but there'll be a delay
-  // Optionally show a "downloading model..." UI
-}
+if (availability === 'unavailable') return
+// "downloadable" means first-time download — still works, just slower
 
 const summarizer = await Summarizer.create(options)
 ```
 
-## Real Implementation: This Site
-
-Here's a condensed version of the 🤖 button on this page:
+**`sharedContext` is where you set the tone.** This is basically your system prompt — use it to tell the model what kind of content it's summarizing and how to respond:
 
 ```js
-if ('Summarizer' in self) {
-  // Show the button — API is available
-  button.hidden = false
-
-  button.addEventListener('click', async () => {
-    modal.classList.add('show')
-    content.innerHTML = '<p>Generating summary...</p>'
-
-    try {
-      const options = {
-        sharedContext: 'A frontend development article. Informal but technical tone.',
-        type: 'key-points',
-        format: 'markdown',
-        length: 'medium',
-        expectedInputLanguages: ['en'],
-        expectedOutputLanguage: 'en',
-      }
-
-      const availability = await Summarizer.availability(options)
-      if (availability === 'unavailable') {
-        content.innerHTML = '<p>Not available in this browser.</p>'
-        return
-      }
-
-      const { marked } = await import('https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js')
-      const summarizer = await Summarizer.create(options)
-      const stream = summarizer.summarizeStreaming(document.getElementById('content').innerText)
-
-      let result = ''
-      for await (const chunk of stream) {
-        result += chunk
-        content.innerHTML = marked.parse(result)
-      }
-    } catch (err) {
-      content.innerHTML = '<p>Something went wrong.</p>'
-      console.error(err)
-    }
-  })
-}
+const summarizer = await Summarizer.create({
+  sharedContext: 'A frontend development blog. Keep it informal but technically precise.',
+  type: 'key-points',
+  format: 'markdown',
+  length: 'medium',
+  expectedOutputLanguage: 'en',
+})
 ```
 
-A few things worth noting:
-- `marked` is lazy-loaded only when the user clicks — no impact on initial page load
-- The `define:vars` Astro script trick: `'Summarizer' in self` keeps it out of the module graph since TypeScript doesn't know about this API yet
-- Pass `options` to `Summarizer.availability(options)` — the API needs them to check model compatibility for your specific configuration
+**Lazy-load your markdown renderer.** Don't bundle `marked` on page load — most users won't click the button. Only import it when they do:
 
-## How to Enable It
+```js
+button.addEventListener('click', async () => {
+  const { marked } = await import('https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js')
+  // now use it
+})
+```
 
-The API is behind a flag in Chrome 131+:
+## How to enable it
+
+The API is behind a flag for now:
 
 1. Open `chrome://flags`
 2. Search for **Summarization API for Gemini Nano**
-3. Set to **Enabled**
-4. Relaunch Chrome
+3. Enable it and relaunch
 
-Chrome will then download the Gemini Nano model in the background (a few hundred MB, one-time).
+Chrome will download Gemini Nano in the background — a few hundred MB, one-time. After that it's instant.
 
-## Why This Matters
+## Why this matters
 
-On-device AI flips the usual tradeoffs:
+The usual AI integration story is: pick a provider, set up billing, handle API keys, deal with latency, worry about what data you're sending. This skips all of that.
 
-| | Cloud API | Built-in AI |
-|--|-----------|-------------|
-| **Cost** | Per token | Free |
-| **Latency** | Network round-trip | Near instant |
-| **Privacy** | Data leaves device | Stays on device |
-| **Offline** | ❌ | ✅ |
-| **Availability** | Any browser | Chrome only (for now) |
+For use cases where privacy matters — summarizing a private document, processing notes you don't want on a server — on-device is the only real option. And for everyone else, free and instant is hard to argue with.
 
-For features like summarizing private documents, offline note-taking apps, or adding AI to tools where sending data to a server isn't acceptable, on-device is the only viable option.
-
-## What's Coming
-
-The Summarizer is just the first. Chrome's built-in AI roadmap includes:
-
-- **Translator API** — translate text between languages on-device
-- **Language Detector API** — identify what language a string is written in
-- **Writer / Rewriter API** — generate and rephrase text
-- **Prompt API** — a general-purpose interface to Gemini Nano
-
-These are all experimental today, but the direction is clear: the browser is becoming a first-class AI runtime, and the APIs are being designed with web standards in mind from the start.
-
-## Progressive Enhancement Pattern
-
-Since this is Chrome-only for now, always treat it as an enhancement:
+The tradeoff is obvious: Chrome only, flag required for now. So always treat it as progressive enhancement:
 
 ```js
 async function addSummaryFeature() {
-  if (!('Summarizer' in self)) return // graceful no-op
+  if (!('Summarizer' in self)) return // silent no-op on Firefox, Safari, etc.
 
   const availability = await Summarizer.availability({ expectedOutputLanguage: 'en' })
   if (availability === 'unavailable') return
 
-  // Safe to proceed — show AI feature
+  // safe to proceed
 }
 ```
 
-Users on Firefox, Safari, or older Chrome get the normal experience. Users on Chrome with the feature available get the enhanced one. No broken states.
+Users without it get the normal experience. Users with it get something extra.
 
-## Key Takeaways
+## What's coming next
 
-1. **Zero cost, zero latency** — the model runs on the user's GPU
-2. **Pass options to `availability()`** — required for the API to check model compatibility
-3. **Stream for better UX** — `summarizeStreaming()` + `for await...of`
-4. **Lazy-load dependencies** — don't bundle markdown renderers on initial load
-5. **Progressive enhancement** — `'Summarizer' in self` before anything else
-6. **More APIs are coming** — Translator, Writer, Prompt API are all in the pipeline
+The Summarizer is just the first. Chrome's built-in AI roadmap also includes a Translator API, Language Detector, Writer/Rewriter, and a general-purpose Prompt API for direct access to Gemini Nano. All experimental, all worth watching.
 
-The web platform is getting smarter. This is worth watching.
+The browser becoming an AI runtime is a bigger shift than it sounds. Worth keeping an eye on.
+
+> **See it in action**: if you're on Chrome with the flag enabled, hit the 🤖 button on this page and let it summarize this article.

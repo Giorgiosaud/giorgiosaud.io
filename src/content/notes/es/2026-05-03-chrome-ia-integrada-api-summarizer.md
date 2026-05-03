@@ -20,40 +20,33 @@ tags:
   - built-in-ai
 ---
 
-## El Navegador Se Está Convirtiendo en un Runtime de IA
+Si estás en Chrome con el flag habilitado, habrás notado el botón 🤖 flotando en esta página. Eso es la API Summarizer integrada de Chrome funcionando — sin servidor, sin clave de API, el modelo corre completamente en tu dispositivo. Me pareció que valía la pena escribir sobre esto porque cambia la forma en que pensamos en agregar IA a la web.
 
-Durante los últimos años, las funcionalidades de IA significaban llamar a una API externa — OpenAI, Anthropic, Google. Enviabas texto a un servidor, pagabas por token y esperabas que la latencia fuera aceptable. Chrome está cambiando ese modelo. A partir de Chrome 131, un conjunto de APIs de IA integradas ejecuta modelos **directamente en el dispositivo del usuario**, dentro del navegador, sin ninguna petición de red.
+## ¿Qué está pasando acá?
 
-La primera que vale la pena integrar hoy es la **API Summarizer**.
+Chrome 131 lanzó un conjunto de APIs de IA experimentales que corren modelos localmente usando Gemini Nano. Sin petición de red, sin costo por token, sin datos saliendo del dispositivo. El Summarizer fue el primero que me pareció lo suficientemente práctico como para usarlo de verdad.
 
-> **Pruébalo ahora**: si estás en Chrome con el flag habilitado, el botón 🤖 de esta página usa exactamente esta API para resumir el artículo que estás leyendo.
-
-## ¿Qué Es la API Summarizer?
-
-Es una API nativa del navegador que condensa texto en una forma más corta. El modelo corre localmente usando el motor de inferencia en el dispositivo de Chrome (impulsado por Gemini Nano). Sin clave de API, sin viaje de ida y vuelta al servidor, sin datos que salgan del dispositivo.
+El uso básico es bastante directo:
 
 ```js
-// Verificar disponibilidad
-const availability = await Summarizer.availability({ expectedOutputLanguage: 'es' })
-// → "available" | "downloadable" | "downloading" | "unavailable"
+if ('Summarizer' in self) {
+  const summarizer = await Summarizer.create({
+    type: 'key-points',
+    format: 'markdown',
+    length: 'medium',
+    expectedInputLanguages: ['es'],
+    expectedOutputLanguage: 'es',
+  })
 
-// Crear una sesión
-const summarizer = await Summarizer.create({
-  type: 'key-points',
-  format: 'markdown',
-  length: 'medium',
-  expectedInputLanguages: ['es'],
-  expectedOutputLanguage: 'es',
-})
-
-// Resumir
-const summary = await summarizer.summarize(document.body.innerText)
-console.log(summary)
+  const summary = await summarizer.summarize(document.body.innerText)
+}
 ```
 
-## Salida en Streaming
+Eso es todo. Sin imports, sin auth, solo una API nativa del navegador.
 
-Para una mejor UX, transmite el resultado mientras se genera — el mismo patrón que cualquier API de LLM en streaming:
+## La versión en streaming es mejor
+
+Esperar a que se genere el resumen completo antes de mostrar algo se siente mal. La API de streaming lo soluciona — el mismo patrón `for await...of` que usarías con cualquier stream de LLM:
 
 ```js
 const stream = summarizer.summarizeStreaming(text)
@@ -61,46 +54,15 @@ let result = ''
 
 for await (const chunk of stream) {
   result += chunk
-  outputEl.innerHTML = marked.parse(result) // renderizar markdown de forma incremental
+  outputEl.innerHTML = marked.parse(result) // renderizar mientras llega
 }
 ```
 
-El usuario ve el resumen construirse palabra por palabra en lugar de esperar el resultado completo.
+El usuario lo ve construirse palabra por palabra. Mucho mejor experiencia.
 
-## Opciones de Configuración
+## Cosas que aprendí por las malas
 
-### `type`
-Controla qué tipo de resumen obtienes:
-
-| Valor | Resultado |
-|-------|-----------|
-| `tl;dr` | Una sola oración |
-| `teaser` | Párrafo introductorio atractivo |
-| `key-points` | Lista de puntos principales |
-| `headline` | Un titular |
-
-### `length`
-`short`, `medium` o `long` — relativo al tamaño del input.
-
-### `format`
-`plain-text` o `markdown`. Usa `markdown` si vas a renderizarlo.
-
-### `sharedContext`
-Un prompt que establece el tono y la audiencia:
-
-```js
-const summarizer = await Summarizer.create({
-  sharedContext: 'Un artículo técnico para desarrolladores frontend. Tono informal pero preciso.',
-  type: 'key-points',
-  format: 'markdown',
-  length: 'medium',
-  expectedOutputLanguage: 'es',
-})
-```
-
-## Verificar Disponibilidad Antes de Usar
-
-El modelo puede necesitar descargarse en el primer uso. Siempre verifica antes de crear una sesión:
+**Pasá las opciones a `availability()` también.** La API no solo verifica si el modelo existe — verifica si soporta tu configuración específica. Si omitís las opciones, Chrome lanza una advertencia y el chequeo no es preciso:
 
 ```js
 const options = {
@@ -110,132 +72,71 @@ const options = {
   expectedOutputLanguage: 'es',
 }
 
+// Pasá las mismas opciones acá, no solo a create()
 const availability = await Summarizer.availability(options)
 
-if (availability === 'unavailable') {
-  // API no soportada o deshabilitada
-  return
-}
-
-if (availability === 'downloadable') {
-  // El modelo necesita descargarse — puedes crear la sesión,
-  // pero habrá un retraso. Opcionalmente muestra "descargando modelo..."
-}
+if (availability === 'unavailable') return
+// "downloadable" significa descarga por primera vez — igual funciona, solo más lento
 
 const summarizer = await Summarizer.create(options)
 ```
 
-## Implementación Real: Este Sitio
-
-Aquí una versión condensada del botón 🤖 de esta página:
+**`sharedContext` es donde definís el tono.** Básicamente es tu system prompt — usalo para decirle al modelo qué tipo de contenido está resumiendo y cómo responder:
 
 ```js
-if ('Summarizer' in self) {
-  // Mostrar el botón — la API está disponible
-  button.hidden = false
-
-  button.addEventListener('click', async () => {
-    modal.classList.add('show')
-    content.innerHTML = '<p>Generando resumen...</p>'
-
-    try {
-      const options = {
-        sharedContext: 'Un artículo de desarrollo frontend. Tono informal pero técnico.',
-        type: 'key-points',
-        format: 'markdown',
-        length: 'medium',
-        expectedInputLanguages: ['es'],
-        expectedOutputLanguage: 'es',
-      }
-
-      const availability = await Summarizer.availability(options)
-      if (availability === 'unavailable') {
-        content.innerHTML = '<p>No disponible en este navegador.</p>'
-        return
-      }
-
-      const { marked } = await import('https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js')
-      const summarizer = await Summarizer.create(options)
-      const stream = summarizer.summarizeStreaming(document.getElementById('content').innerText)
-
-      let result = ''
-      for await (const chunk of stream) {
-        result += chunk
-        content.innerHTML = marked.parse(result)
-      }
-    } catch (err) {
-      content.innerHTML = '<p>Algo salió mal.</p>'
-      console.error(err)
-    }
-  })
-}
+const summarizer = await Summarizer.create({
+  sharedContext: 'Un blog de desarrollo frontend. Tono informal pero técnicamente preciso.',
+  type: 'key-points',
+  format: 'markdown',
+  length: 'medium',
+  expectedOutputLanguage: 'es',
+})
 ```
 
-Algunos puntos a destacar:
-- `marked` se carga de forma lazy solo cuando el usuario hace clic — sin impacto en la carga inicial
-- El truco del script `define:vars` en Astro: `'Summarizer' in self` lo mantiene fuera del grafo de módulos ya que TypeScript aún no conoce esta API
-- Pasa `options` a `Summarizer.availability(options)` — la API los necesita para verificar la compatibilidad del modelo con tu configuración específica
+**Cargá el renderer de markdown de forma lazy.** No incluyas `marked` en el bundle de la página — la mayoría de usuarios no van a hacer clic en el botón. Solo importalo cuando lo hagan:
 
-## Cómo Habilitarlo
+```js
+button.addEventListener('click', async () => {
+  const { marked } = await import('https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js')
+  // usarlo acá
+})
+```
 
-La API está detrás de un flag en Chrome 131+:
+## Cómo habilitarlo
 
-1. Abre `chrome://flags`
-2. Busca **Summarization API for Gemini Nano**
-3. Cambia a **Enabled**
-4. Reinicia Chrome
+La API está detrás de un flag por ahora:
 
-Chrome descargará el modelo Gemini Nano en segundo plano (unos cientos de MB, una sola vez).
+1. Abrí `chrome://flags`
+2. Buscá **Summarization API for Gemini Nano**
+3. Habilitalo y reiniciá Chrome
 
-## Por Qué Importa
+Chrome va a descargar Gemini Nano en segundo plano — unos cientos de MB, una sola vez. Después es instantáneo.
 
-La IA en el dispositivo invierte los tradeoffs habituales:
+## Por qué importa
 
-| | API en la Nube | IA Integrada |
-|--|----------------|--------------|
-| **Costo** | Por token | Gratis |
-| **Latencia** | Round-trip de red | Casi instantáneo |
-| **Privacidad** | Datos salen del dispositivo | Se quedan en el dispositivo |
-| **Offline** | ❌ | ✅ |
-| **Disponibilidad** | Cualquier navegador | Solo Chrome (por ahora) |
+La historia habitual de integración de IA es: elegir un proveedor, configurar facturación, manejar claves de API, lidiar con la latencia, preocuparse por qué datos estás enviando. Esto se salta todo eso.
 
-Para funcionalidades como resumir documentos privados, apps de notas offline, o agregar IA a herramientas donde enviar datos a un servidor no es aceptable, el procesamiento en el dispositivo es la única opción viable.
+Para casos donde la privacidad importa — resumir un documento privado, procesar notas que no querés en un servidor — el procesamiento en el dispositivo es la única opción real. Y para los demás, gratis e instantáneo es difícil de discutir.
 
-## Lo Que Viene
-
-El Summarizer es solo el primero. El roadmap de IA integrada de Chrome incluye:
-
-- **Translator API** — traduce texto entre idiomas en el dispositivo
-- **Language Detector API** — identifica en qué idioma está escrito un texto
-- **Writer / Rewriter API** — genera y reformula texto
-- **Prompt API** — una interfaz de propósito general para Gemini Nano
-
-Todos son experimentales hoy, pero la dirección es clara: el navegador se está convirtiendo en un runtime de IA de primera clase, con APIs diseñadas con estándares web desde el inicio.
-
-## Patrón de Mejora Progresiva
-
-Como esto es solo Chrome por ahora, trátalo siempre como una mejora:
+El tradeoff es obvio: solo Chrome, flag requerido por ahora. Así que siempre tratalo como mejora progresiva:
 
 ```js
 async function agregarFuncionResumen() {
-  if (!('Summarizer' in self)) return // no-op sin errores
+  if (!('Summarizer' in self)) return // no-op silencioso en Firefox, Safari, etc.
 
   const availability = await Summarizer.availability({ expectedOutputLanguage: 'es' })
   if (availability === 'unavailable') return
 
-  // Seguro para continuar — mostrar la funcionalidad de IA
+  // seguro para continuar
 }
 ```
 
-Los usuarios en Firefox, Safari o Chrome antiguo obtienen la experiencia normal. Los usuarios en Chrome con la funcionalidad disponible obtienen la versión mejorada. Sin estados rotos.
+Los usuarios sin el flag obtienen la experiencia normal. Los que lo tienen obtienen algo extra.
 
-## Conclusiones Clave
+## Qué viene después
 
-1. **Cero costo, cero latencia** — el modelo corre en la GPU del usuario
-2. **Pasa opciones a `availability()`** — requerido para que la API verifique compatibilidad
-3. **Streaming para mejor UX** — `summarizeStreaming()` + `for await...of`
-4. **Carga lazy de dependencias** — no incluyas renderers de markdown en la carga inicial
-5. **Mejora progresiva** — `'Summarizer' in self` antes que todo
-6. **Vienen más APIs** — Translator, Writer, Prompt API están en el pipeline
+El Summarizer es solo el primero. El roadmap de IA integrada de Chrome también incluye una Translator API, Language Detector, Writer/Rewriter, y una Prompt API de propósito general para acceso directo a Gemini Nano. Todo experimental, todo vale la pena seguir.
 
-La plataforma web se está volviendo más inteligente. Vale la pena seguirle el ritmo.
+El navegador convirtiéndose en un runtime de IA es un cambio más grande de lo que parece. Vale la pena tenerlo en el radar.
+
+> **Probalo en acción**: si estás en Chrome con el flag habilitado, hacé clic en el botón 🤖 de esta página y dejá que resuma este artículo.
