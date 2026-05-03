@@ -19,58 +19,71 @@ tags:
   - "2026"
 ---
 
-## Self-Healing URLs: Updated for Astro 5
+Here's a short story about link rot. You publish a post called "Getting Started with Astro". The URL is `/notebook/getting-started-with-astro`. Someone shares it on Twitter. Six months later you rename the post to "Astro Quickstart Guide" because the old title was boring. Now that tweet link is dead.
 
-Self-healing URLs ensure that shared links remain functional even when the slug changes. Like Medium's `article-title-abc123` pattern, a unique identifier allows redirection to the current URL regardless of how the path is malformed.
+Medium solved this years ago with URLs like `/my-post-title-a3f7b2` — a short code at the end that never changes even when the title does. I built the same thing for giorgiosaud.io, and it runs on every note you're reading right now.
 
-Astro 5 introduced significant changes to content collections. Here's how to implement self-healing URLs with the new API.
+## How it works
 
-## What Changed in Astro 5
-
-### Old API (Astro 4)
-
-```typescript
-import { getCollection } from 'astro:content'
-
-const notes = await getCollection('notes')
-// notes[0].slug was auto-generated from filename
-```
-
-### New API (Astro 5)
-
-```typescript
-import { getCollection } from 'astro:content'
-
-const notes = await getCollection('notes')
-// notes[0].id is now the identifier
-// Slug must be explicitly defined in frontmatter or derived from id
-```
-
-Key changes:
-1. `slug` is no longer auto-generated - use `id` or explicit `slug` in frontmatter
-2. Collections use `glob` loader with explicit configuration
-3. References work differently with the new schema system
-
-## Implementing Self-Healing Codes
-
-### 1. Schema Definition
+Each note has a `selfHealing` field in frontmatter — 6 consonants, no vowels, generated from the title:
 
 ```typescript
 // src/content/schemas/noteSchema.ts
-import { z } from 'astro:content'
-
-export const noteSchema = z.object({
-  draft: z.boolean(),
-  title: z.string(),
-  description: z.string(),
-  publishDate: z.date(),
-  // Self-healing code: 6 characters, no vowels
-  selfHealing: z.string().regex(/^[^aeiouAEIOU-]{6}$/).length(6),
-  // ... other fields
-})
+selfHealing: z.string().regex(/^[^aeiouAEIOU-]{6}$/).length(6),
 ```
 
-### 2. Collection Configuration
+There's a CLI to generate these:
+
+```bash
+bun run generate:selfheal "Self-Healing URLs in Astro 5"
+# → selfHealing: "slfhln"
+```
+
+Then a catch-all route intercepts any URL containing a valid 6-consonant code and redirects to wherever the note actually lives:
+
+```astro
+---
+// src/pages/notebook/[selfheal].astro
+import { getCollection } from 'astro:content'
+
+export const prerender = false
+
+const path = Astro.url.pathname
+const codeMatch = path.match(/([^aeiouAEIOU\-\/]{6})(?:\/)?$/)
+
+if (!codeMatch) return Astro.redirect('/404')
+
+const code = codeMatch[1]
+const notes = await getCollection('notes', (entry) => entry.data.selfHealing === code)
+
+if (notes.length > 0) {
+  const note = notes[0]
+  const slug = note.data.slug || note.id.replace(/\.md$/, '')
+  return Astro.redirect(`/notebook/${slug}`)
+}
+
+return Astro.redirect('/404')
+---
+```
+
+So `/notebook/anything-slfhln` or just `/notebook/slfhln` both find this post and redirect to the canonical URL. The title can change as many times as you want.
+
+## What changed from Astro 4 to Astro 5
+
+The main difference is how you derive the redirect target. Astro 4 gave you an auto-generated `slug`; Astro 5 uses `id` instead:
+
+**Astro 4:**
+```typescript
+const redirect = `/notebook/${note.slug}`
+```
+
+**Astro 5:**
+```typescript
+const slug = note.data.slug || note.id.replace(/\.md$/, '')
+const redirect = `/notebook/${slug}`
+```
+
+Collections are also configured differently now, using the `glob` loader:
 
 ```typescript
 // src/content/notes/config.ts
@@ -87,219 +100,6 @@ export const notes = defineCollection({
 })
 ```
 
-### 3. Generate Self-Healing Codes
+That's really the whole migration. The self-healing concept is identical — the code just lands in `note.id` instead of `note.slug`.
 
-Create a CLI tool for consistent code generation:
-
-```typescript
-// scripts/generateSelfHealingCode.ts
-function generateCode(title: string): string {
-  // Remove vowels and special characters
-  const consonants = title
-    .toLowerCase()
-    .replace(/[aeiou\s\-\_\.\,\!\?\:\;]/g, '')
-    .slice(0, 6)
-    .padEnd(6, 'x')
-
-  return consonants
-}
-
-function validateCode(code: string): boolean {
-  return /^[^aeiouAEIOU-]{6}$/.test(code) && code.length === 6
-}
-
-// Usage
-const title = process.argv[2]
-const code = generateCode(title)
-console.log(`selfHealing: "${code}"`)
-```
-
-### 4. Self-Healing Route Handler
-
-```astro
----
-// src/pages/notebook/[selfheal].astro
-import { getCollection } from 'astro:content'
-
-export const prerender = false
-
-const path = Astro.url.pathname
-
-// Extract potential self-healing code (6 consonants at end)
-const codeMatch = path.match(/([^aeiouAEIOU\-\/]{6})(?:\/)?$/)
-
-if (!codeMatch) {
-  return Astro.redirect('/404')
-}
-
-const code = codeMatch[1]
-
-// Find note with matching selfHealing code
-const notes = await getCollection('notes', (entry) => {
-  return entry.data.selfHealing === code
-})
-
-if (notes.length > 0) {
-  const note = notes[0]
-  // In Astro 5, use id or explicit slug
-  const slug = note.data.slug || note.id.replace(/\.md$/, '')
-  return Astro.redirect(`/notebook/${slug}`)
-}
-
-return Astro.redirect('/404')
----
-```
-
-### 5. Helper Functions
-
-```typescript
-// src/helpers/selfHeal.ts
-import { getCollection } from 'astro:content'
-
-export async function findNoteByHealingCode(code: string) {
-  const notes = await getCollection('notes', (entry) => {
-    return entry.data.selfHealing === code
-  })
-  return notes[0] || null
-}
-
-export function extractHealingCode(path: string): string | null {
-  const match = path.match(/([^aeiouAEIOU\-\/]{6})(?:\/)?$/)
-  return match ? match[1] : null
-}
-
-export function buildSharableUrl(baseUrl: string, slug: string, code: string): string {
-  // Include healing code for resilient sharing
-  return `${baseUrl}/notebook/${slug}-${code}`
-}
-```
-
-## Using Self-Healing URLs
-
-### In Templates
-
-```astro
----
-import { buildSharableUrl } from '@helpers/selfHeal'
-
-const { note } = Astro.props
-const shareUrl = buildSharableUrl(
-  Astro.site.origin,
-  note.id,
-  note.data.selfHealing
-)
----
-
-<a href={shareUrl} class="share-link">
-  Share this article
-</a>
-```
-
-### Social Media Meta Tags
-
-```astro
----
-const canonicalUrl = `${Astro.site}notebook/${note.id}`
-const shareUrl = `${Astro.site}notebook/${note.id}-${note.data.selfHealing}`
----
-
-<head>
-  <link rel="canonical" href={canonicalUrl} />
-  <!-- Use healing URL for sharing -->
-  <meta property="og:url" content={shareUrl} />
-</head>
-```
-
-## Type-Safe Implementation
-
-### With TypeScript
-
-```typescript
-// src/types/content.ts
-import type { CollectionEntry } from 'astro:content'
-
-type NoteEntry = CollectionEntry<'notes'>
-
-export function getNoteUrl(note: NoteEntry): string {
-  const slug = note.data.slug || note.id.replace(/\.md$/, '')
-  return `/notebook/${slug}`
-}
-
-export function getShareableUrl(note: NoteEntry): string {
-  const slug = note.data.slug || note.id.replace(/\.md$/, '')
-  return `/notebook/${slug}-${note.data.selfHealing}`
-}
-```
-
-## Migration from Astro 4
-
-### Before (Astro 4)
-
-```typescript
-const notes = await getCollection('notes')
-const redirect = `/notebook/${note.slug}`
-```
-
-### After (Astro 5)
-
-```typescript
-const notes = await getCollection('notes')
-// Use id or explicit slug from frontmatter
-const slug = note.data.slug || note.id.replace(/\.md$/, '')
-const redirect = `/notebook/${slug}`
-```
-
-## SEO Considerations
-
-### Canonical URLs
-
-Always set canonical to the "clean" URL:
-
-```astro
-<link rel="canonical" href={`${Astro.site}notebook/${slug}`} />
-```
-
-### Sitemap
-
-Include only canonical URLs in sitemap:
-
-```typescript
-// astro.config.mjs
-export default defineConfig({
-  integrations: [
-    sitemap({
-      filter: (page) => !page.includes('-') || page.split('-').pop().length !== 6
-    })
-  ]
-})
-```
-
-## Testing Self-Healing
-
-```typescript
-// tests/selfHealing.test.ts
-import { describe, it, expect } from 'vitest'
-import { extractHealingCode, findNoteByHealingCode } from '@helpers/selfHeal'
-
-describe('Self-Healing URLs', () => {
-  it('extracts code from URL', () => {
-    expect(extractHealingCode('/notebook/my-post-brwsrn')).toBe('brwsrn')
-    expect(extractHealingCode('/notebook/brwsrn')).toBe('brwsrn')
-  })
-
-  it('rejects invalid codes', () => {
-    expect(extractHealingCode('/notebook/post-abc')).toBe(null) // too short
-    expect(extractHealingCode('/notebook/aeiou')).toBe(null) // vowels
-  })
-})
-```
-
-## Key Takeaways
-
-1. **Astro 5 uses `id`** - Not `slug` for content identification
-2. **Explicit slugs** - Define in frontmatter or derive from `id`
-3. **Glob loader** - Collections configured with `glob()` pattern
-4. **Code validation** - 6 consonants, regex validated in schema
-5. **Canonical matters** - Always point canonical to clean URL
-
-Self-healing URLs protect against link rot and improve share link resilience. With Astro 5's content collections changes, the implementation is slightly different but the concept remains powerful for SEO and user experience.
+Every note on this site has had a `selfHealing` code since the beginning, and I've renamed a few posts since then without breaking any shared links. Worth the small upfront setup.

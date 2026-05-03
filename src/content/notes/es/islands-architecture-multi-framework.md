@@ -21,26 +21,15 @@ tags:
   - architecture
 ---
 
-## ¿Qué es Islands Architecture?
+Este sitio usa React, Vue y Svelte al mismo tiempo. No es un experimento — es la forma en que Astro funciona, y tiene mucho sentido cuando lo entendés.
 
-Las SPAs tradicionales envían JavaScript para toda la página, incluso si la mayoría es contenido estático. Islands Architecture invierte esto - tu página es HTML estático por defecto, con "islas" de interactividad que se hidratan independientemente.
+La idea de Islands Architecture es que tu página es HTML estático por defecto. Solo las partes que necesitan interactividad se hidratan, y cada una puede usar el framework que quieras.
 
-Astro fue pionero en este enfoque, y es transformador para el rendimiento. Pero lo que es aún más poderoso es que cada isla puede usar un framework diferente.
+## Los tres frameworks lado a lado
 
-## ¿Por Qué Múltiples Frameworks?
+El mismo contador en React, Vue y Svelte:
 
-"¿Por qué alguien querría eso?" te preguntarás. Razones del mundo real:
-
-1. **Experiencia del equipo** - Diferentes miembros conocen diferentes frameworks
-2. **La mejor herramienta para el trabajo** - Algunos frameworks destacan en casos de uso específicos
-3. **Rutas de migración** - Mover gradualmente de un framework a otro
-4. **Componentes de terceros** - Usa esa librería Vue perfecta aunque seas un equipo de React
-
-## Los Tres Frameworks Lado a Lado
-
-Aquí está el mismo componente contador en React, Vue y Svelte:
-
-### React: useState + useEffect
+### React
 
 ```tsx
 // buttonReact.tsx
@@ -64,7 +53,7 @@ export default function Counter() {
 }
 ```
 
-### Vue: Composition API
+### Vue
 
 ```vue
 <!-- buttonVue.vue -->
@@ -86,7 +75,7 @@ onMounted(() => {
 </template>
 ```
 
-### Svelte: Variables Reactivas
+### Svelte
 
 ```svelte
 <!-- buttonSvelte.svelte -->
@@ -106,14 +95,7 @@ onMount(() => {
 </div>
 ```
 
-Misma funcionalidad, tres filosofías diferentes:
-- **React**: Hooks de estado explícitos, componentes funcionales
-- **Vue**: Composition API con refs, sintaxis de template
-- **Svelte**: Reactivo por defecto, boilerplate mínimo
-
-## Usándolos en Astro
-
-Impórtalos y úsalos en cualquier archivo `.astro`:
+## Cómo usarlos en Astro
 
 ```astro
 ---
@@ -133,105 +115,9 @@ import SvelteCounter from '@components/svelte/buttonSvelte.svelte'
 <SvelteCounter client:idle />
 ```
 
-## Directivas de Hidratación Explicadas
+Las directivas `client:*` controlan cuándo se hidrata cada isla. `client:load` hidrata inmediatamente al cargar — para elementos críticos que el usuario ve primero. `client:visible` espera hasta que el elemento entra al viewport — ideal para contenido debajo del fold. `client:idle` espera a que el navegador esté desocupado — para cosas que necesitás pronto pero que no son urgentes. Sin directiva, el componente se renderiza a HTML estático y no envía nada de JavaScript al cliente.
 
-La magia está en las directivas `client:*`:
-
-| Directiva | Cuándo se Hidrata | Caso de Uso |
-|-----------|-------------------|-------------|
-| `client:load` | Inmediatamente al cargar | Elementos interactivos críticos |
-| `client:idle` | Cuando el navegador está inactivo | No crítico pero necesario pronto |
-| `client:visible` | Cuando el elemento entra al viewport | Contenido debajo del pliegue |
-| `client:media` | Cuando la media query coincide | Interacciones solo móvil |
-| `client:only` | Nunca SSR, solo cliente | Componentes que no pueden ser SSR |
-
-### Sin Directiva = Cero JS
-
-```astro
-<!-- Esto NO envía JavaScript al cliente -->
-<ReactCounter />
-```
-
-El componente se renderiza a HTML estático en tiempo de build. Perfecto para contenido que no necesita interactividad.
-
-## Ejemplo Práctico: Dashboard
-
-Aquí hay una página multi-framework realista:
-
-```astro
----
-// React para manejo de estado complejo
-import DataGrid from '@components/react/DataGrid.tsx'
-
-// Vue para su excelente manejo de formularios
-import FilterForm from '@components/vue/FilterForm.vue'
-
-// Svelte para animaciones ligeras
-import AnimatedChart from '@components/svelte/AnimatedChart.svelte'
-
-// Astro para contenido estático
-import Header from '@components/Header.astro'
-import Footer from '@components/Footer.astro'
----
-
-<Header />
-
-<main>
-  <FilterForm client:load />
-  <DataGrid client:load />
-  <AnimatedChart client:visible />
-</main>
-
-<Footer />
-```
-
-El header y footer envían cero JS. El formulario de filtros y la grilla de datos se hidratan inmediatamente. El gráfico solo se hidrata cuando se hace scroll hasta él.
-
-## Estilos Específicos del Framework
-
-Cada framework puede usar su propio enfoque de estilos:
-
-```vue
-<!-- Vue con estilos con scope -->
-<style scoped>
-.vue-button {
-  background: hsl(from green h s calc(l * 1.1));
-}
-</style>
-```
-
-```svelte
-<!-- Svelte con estilos de componente (automáticamente con scope) -->
-<style>
-.svelte-button {
-  background: hsl(from pink h s calc(l * 1.02));
-}
-</style>
-```
-
-```tsx
-// React con CSS Modules o estilos inline
-<button style={{ background: 'blue', color: 'white' }}>
-  Haz clic
-</button>
-```
-
-## Marco de Decisión
-
-Cuándo usar qué framework:
-
-| Caso de Uso | Framework Recomendado |
-|-------------|----------------------|
-| Estado complejo, gran ecosistema | React |
-| Aplicaciones con muchos formularios | Vue |
-| Mucha animación, bundle mínimo | Svelte |
-| Renderizado en servidor, sin hidratación | Astro |
-
-Pero honestamente, usa lo que tu equipo conoce mejor. Los beneficios de rendimiento de Islands Architecture funcionan independientemente del framework que elijas.
-
-## Configuración
-
-En `astro.config.mjs`:
+## La configuración
 
 ```javascript
 import { defineConfig } from 'astro/config'
@@ -248,14 +134,6 @@ export default defineConfig({
 })
 ```
 
-Eso es todo. Astro maneja el resto.
+Eso es todo. Astro maneja el bundling de cada framework por separado — solo se envía el JavaScript del framework que efectivamente necesita cada isla.
 
-## Puntos Clave
-
-1. **Estático por defecto** - Componentes se renderizan a HTML a menos que agregues hidratación
-2. **Hidratación selectiva** - Solo hidratar lo que necesita interactividad
-3. **Mezcla frameworks libremente** - Usa la mejor herramienta para cada componente
-4. **Ganancias de rendimiento** - Envía menos JavaScript automáticamente
-5. **Mejora progresiva** - Empieza estático, agrega interactividad según necesites
-
-Islands Architecture no es solo una optimización de rendimiento - es una forma diferente de pensar sobre aplicaciones web. Tu página es una composición de islas independientes, agnósticas de framework, que cada una hace una cosa bien.
+El resultado es que podés usar la mejor herramienta para cada componente sin pagar el costo de enviar todo al cliente. Eso es todo por ahora.
