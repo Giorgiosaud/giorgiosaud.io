@@ -3,6 +3,12 @@ import { getViteConfig } from 'astro/config'
 export default getViteConfig({
   test: {
     include: ['tests/**/*.test.{ts,tsx}'],
+    exclude: ['tests/e2e/**'],
+    server: {
+      deps: {
+        inline: ['astro:content'],
+      },
+    },
     // Use node environment by default, jsdom for component tests
     environment: 'node',
     environmentMatchGlobs: [
