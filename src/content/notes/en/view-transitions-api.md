@@ -19,9 +19,7 @@ tags:
   - animation
 ---
 
-## The Simplest Upgrade You Can Make
-
-For years, smooth page transitions were exclusive to SPAs. Multi-page apps had jarring full-page reloads. The View Transitions API changes that with literally one CSS rule.
+Here's something that stopped me in my tracks when I first saw it: smooth page transitions across a multi-page site with a single line of CSS. No JavaScript, no library, no framework magic.
 
 ```css
 @view-transition {
@@ -29,22 +27,7 @@ For years, smooth page transitions were exclusive to SPAs. Multi-page apps had j
 }
 ```
 
-That's it. Your entire site now has smooth fade transitions between pages. No JavaScript, no libraries, no complex setup.
-
-## How It Works
-
-When you navigate between pages:
-
-1. Browser captures a "screenshot" of the current page
-2. New page loads in the background
-3. Browser captures the new page state
-4. Crossfade animation plays between them
-
-All automatic, all native, all performant.
-
-## The Implementation
-
-Here's the actual CSS from this site:
+That's literally it. Your entire site now crossfades between pages. I added this to giorgiosaud.io wrapped in a `@layer` block and it took about two minutes:
 
 ```css
 @layer root {
@@ -54,19 +37,17 @@ Here's the actual CSS from this site:
 }
 ```
 
-Wrapped in a `@layer` for proper cascade management, but the core is just that one declaration.
+Navigate between pages on this site right now and you'll see it working.
 
-## Customizing the Transition
+## Customizing the animation
 
-The default crossfade is nice, but you can customize it:
+The default crossfade is fine, but you can swap it for something with more character:
 
 ```css
-/* Customize the outgoing page animation */
 ::view-transition-old(root) {
   animation: 300ms ease-out both fade-out;
 }
 
-/* Customize the incoming page animation */
 ::view-transition-new(root) {
   animation: 300ms ease-in both fade-in;
 }
@@ -82,33 +63,23 @@ The default crossfade is nice, but you can customize it:
 }
 ```
 
-## Element-Level Transitions
+During a transition, the browser builds a pseudo-element tree you can target individually — `::view-transition-old(root)` is the outgoing page snapshot, `::view-transition-new(root)` is the incoming one.
 
-Here's where it gets magical. Give elements the same `view-transition-name` on different pages, and they'll morph between states:
+## The part that's actually magic: element morphing
 
-**Page 1 - Product listing:**
+Give an element the same `view-transition-name` on two different pages and the browser animates it moving between positions. Like this:
+
 ```html
-<img
-  src="product.jpg"
-  alt="Product"
-  style="view-transition-name: product-image;"
-/>
+<!-- Page 1: listing -->
+<img src="product.jpg" style="view-transition-name: product-image;" />
+
+<!-- Page 2: detail -->
+<img src="product.jpg" style="view-transition-name: product-image;" />
 ```
 
-**Page 2 - Product detail:**
-```html
-<img
-  src="product.jpg"
-  alt="Product"
-  style="view-transition-name: product-image;"
-/>
-```
+The image literally flies from its position on the listing page to its position on the detail page. No JavaScript involved. The browser handles all the interpolation.
 
-The browser sees matching names and creates a fluid animation of the image moving and resizing between its positions on each page.
-
-## Real Example: Persistent Header
-
-Keep your header in place during transitions:
+You can do the same with headers to keep them anchored during transitions:
 
 ```css
 .header {
@@ -116,146 +87,8 @@ Keep your header in place during transitions:
 }
 ```
 
-Now the header stays fixed while the rest of the page transitions. No layout shift, no flash.
+## Browser support
 
-## The Pseudo-Element Tree
+As of early 2026 this is in Chrome, Edge, Firefox, and Safari. For older browsers, the `@view-transition` rule is simply ignored — users get normal instant navigation, which is what they always had. Progressive enhancement for free.
 
-During a transition, the browser creates a pseudo-element tree:
-
-```
-::view-transition
-├── ::view-transition-group(root)
-│   ├── ::view-transition-old(root)
-│   └── ::view-transition-new(root)
-├── ::view-transition-group(header)
-│   ├── ::view-transition-old(header)
-│   └── ::view-transition-new(header)
-└── ...
-```
-
-Target any of these for custom animations:
-
-```css
-::view-transition-group(header) {
-  animation-duration: 0.5s;
-}
-
-::view-transition-old(header) {
-  /* Old header fades out */
-}
-
-::view-transition-new(header) {
-  /* New header fades in */
-}
-```
-
-## Slide Transitions
-
-Create directional slide effects:
-
-```css
-@keyframes slide-from-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-@keyframes slide-to-left {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
-}
-
-::view-transition-old(root) {
-  animation: 300ms slide-to-left ease-out;
-}
-
-::view-transition-new(root) {
-  animation: 300ms slide-from-right ease-out;
-}
-```
-
-## Conditional Transitions
-
-Different transitions for different navigation patterns:
-
-```css
-/* Only apply transitions for same-origin navigations */
-@view-transition {
-  navigation: auto;
-  types: slide, fade; /* Custom types you define */
-}
-
-/* Different animations based on navigation type */
-html:active-view-transition-type(slide) {
-  &::view-transition-old(root) {
-    animation-name: slide-out;
-  }
-  &::view-transition-new(root) {
-    animation-name: slide-in;
-  }
-}
-```
-
-## Disable for Specific Links
-
-Some navigations shouldn't animate:
-
-```html
-<a href="/logout" style="view-transition-name: none;">Logout</a>
-```
-
-Or disable programmatically:
-
-```javascript
-// Skip transition for this navigation
-document.startViewTransition(() => {
-  window.location.href = '/instant-page'
-}, { skipTransition: true })
-```
-
-## Performance Considerations
-
-View transitions are GPU-accelerated and optimized:
-
-1. **Automatic optimization** - Browser handles layer creation
-2. **No layout thrashing** - Works on compositor thread
-3. **Memory efficient** - Only captures what's needed
-
-But be mindful:
-- Very large pages may have capture delays
-- Complex animations can still drop frames
-- Test on low-end devices
-
-## Browser Support (2026)
-
-As of early 2026:
-- **Chrome 111+**: Full support
-- **Edge 111+**: Full support
-- **Firefox 129+**: Full support
-- **Safari 18+**: Full support
-
-The feature has reached mainstream adoption!
-
-## Graceful Degradation
-
-For older browsers, the CSS is simply ignored:
-
-```css
-@view-transition {
-  navigation: auto;
-}
-/* ↑ Unknown at-rule? Ignored. No errors. */
-```
-
-Users on older browsers get normal instant navigation - which is what they've always had.
-
-## Key Takeaways
-
-1. **One line activation** - `@view-transition { navigation: auto; }`
-2. **Zero JavaScript** - Pure CSS for basic transitions
-3. **Element morphing** - Same `view-transition-name` = magic
-4. **Full customization** - Control every pseudo-element
-5. **Progressive enhancement** - Works everywhere, enhanced where supported
-
-View Transitions bring SPA-like polish to multi-page apps. The barrier to entry is essentially zero - add one CSS rule and you're done. Then customize as needed.
-
-> **Experience it now**: Navigate between pages on this site. Notice the smooth crossfade? That's View Transitions in action.
+Worth keeping in mind: each `view-transition-name` must be unique on the page or the browser won't know what to animate.

@@ -20,20 +20,18 @@ tags:
   - design-patterns
 ---
 
-## El Problema con Traducciones Basadas en Strings
-
-La mayoría de librerías i18n usan claves de string:
+El problema con la mayoría de librerías i18n es que las claves son strings sueltos:
 
 ```typescript
 t('nav.home')  // Sin autocompletado, sin verificación de tipos
-t('nav.hoem')  // ¿Typo? Error en runtime o texto faltante
+t('nav.hoem')  // Un typo — error silencioso en runtime
 ```
 
-¿Qué si pudieras tener autocompletado completo y verificación en tiempo de compilación para claves de traducción? Eso es lo que construiremos.
+Lo aprendí de las malas. Un typo en una clave de traducción no te explota en build time — simplemente muestra texto vacío o la clave cruda al usuario. Armé un sistema type-safe para que eso no pase.
 
-## El Tipo DeepKeyOf
+## El tipo DeepKeyOf
 
-La magia es un tipo TypeScript recursivo que extrae todas las rutas de claves anidadas posibles:
+La base es un tipo recursivo que extrae todas las rutas posibles de un objeto anidado:
 
 ```typescript
 type DeepKeyOf<T> = T extends object
@@ -47,16 +45,7 @@ type DeepKeyOf<T> = T extends object
   : never
 ```
 
-Desglosemos esto:
-
-1. **Caso base**: Si `T` no es objeto, retorna `never`
-2. **Para cada clave `K`**: Verifica si el valor es un objeto
-3. **Si es objeto (no array)**: Crea tanto rutas `K` como `K.anidado`
-4. **Si es primitivo o array**: Solo retorna `K`
-
-## Ejemplo Práctico
-
-Dado este objeto de traducciones:
+Dado esto:
 
 ```typescript
 const translations = {
@@ -73,22 +62,11 @@ const translations = {
 }
 ```
 
-`DeepKeyOf<typeof translations>` produce:
+`DeepKeyOf<typeof translations>` te genera la unión completa: `'nav'`, `'nav.home'`, `'nav.about'`, `'nav.nested'`, `'nav.nested.deep'`, `'footer'`, `'footer.copyright'`. TypeScript te va a autocompletar cada una de esas.
 
-```typescript
-type Keys =
-  | 'nav'
-  | 'nav.home'
-  | 'nav.about'
-  | 'nav.nested'
-  | 'nav.nested.deep'
-  | 'footer'
-  | 'footer.copyright'
-```
+## La función t()
 
-## La Función de Traducción
-
-Ahora construye una función `t()` type-safe:
+Con el tipo armado, construís la función de traducción:
 
 ```typescript
 // Define claves válidas basadas en traducciones en inglés
@@ -121,12 +99,9 @@ export function useTranslations(lang: SupportedLanguages) {
 }
 ```
 
-Características clave:
-- **Claves type-safe**: `NestedKeys` solo permite rutas válidas
-- **Cadena de fallback**: Intenta idioma actual → idioma por defecto → clave misma
-- **Notación de punto**: Maneja objetos anidados naturalmente
+La cadena de fallback es importante: intenta el idioma actual, después el idioma por defecto, y si no encuentra nada te devuelve la clave. Así nunca mostrás una pantalla rota.
 
-## Usándolo en Componentes
+## Usándolo en componentes
 
 ```astro
 ---
@@ -143,54 +118,9 @@ const t = useTranslations(lang)
 </nav>
 ```
 
-## Organizando Traducciones
+## Traducción de rutas
 
-Estructura tus traducciones por característica:
-
-```
-src/i18n/
-├── locales/
-│   ├── en/
-│   │   ├── nav.ts
-│   │   ├── footer.ts
-│   │   └── index.ts
-│   └── es/
-│       ├── nav.ts
-│       ├── footer.ts
-│       └── index.ts
-├── ui.ts
-└── utils.ts
-```
-
-Cada archivo de característica:
-
-```typescript
-// locales/en/nav.ts
-export const nav = {
-  home: 'Home',
-  about: 'About',
-  contact: 'Contact',
-}
-
-// locales/es/nav.ts
-export const nav = {
-  home: 'Inicio',
-  about: 'Acerca de',
-  contact: 'Contacto',
-}
-```
-
-Re-exportar desde index:
-
-```typescript
-// locales/en/index.ts
-export * from './nav'
-export * from './footer'
-```
-
-## Traducción de Rutas
-
-Para rutas URL, mantén un mapa de rutas separado:
+Para las URLs también conviene tener tipado. Usá un mapa de rutas separado:
 
 ```typescript
 // routes.ts
@@ -208,7 +138,7 @@ export const routes = {
 export type RouteNames = keyof typeof routes
 ```
 
-Y un traductor de rutas:
+Y el helper para traducirlas:
 
 ```typescript
 export function useTranslatedPath(lang: SupportedLanguages) {
@@ -229,7 +159,7 @@ export function useTranslatedPath(lang: SupportedLanguages) {
 }
 ```
 
-Uso:
+Entonces:
 
 ```typescript
 const { translatePath } = useTranslatedPath('en')
@@ -238,59 +168,4 @@ translatePath('notebook', 'en')  // '/notebook'
 translatePath('notebook', 'es')  // '/es/cuaderno'
 ```
 
-## Detección de Idioma
-
-Extraer idioma desde URL:
-
-```typescript
-export function getLangFromUrl(url: URL): SupportedLanguages {
-  const [, lang] = url.pathname.split('/')
-
-  if (isSupportedLanguage(lang)) return lang
-  return defaultLang
-}
-
-function isSupportedLanguage(lang: string): lang is SupportedLanguages {
-  return lang in resources
-}
-```
-
-## Ejemplo Completo
-
-Así es como todo se une:
-
-```astro
----
-import { getLangFromUrl, useTranslations, useTranslatedPath } from '@i18n/utils'
-
-const lang = getLangFromUrl(Astro.url)
-const t = useTranslations(lang)
-const { translatePath } = useTranslatedPath(lang)
-
-// Obtener idioma opuesto para el switcher
-const altLang = lang === 'en' ? 'es' : 'en'
----
-
-<header>
-  <nav>
-    <a href={translatePath('home', lang)}>{t('nav.home')}</a>
-    <a href={translatePath('notebook', lang)}>{t('nav.notebook')}</a>
-    <a href={translatePath('contact', lang)}>{t('nav.contact')}</a>
-  </nav>
-
-  <!-- Selector de idioma -->
-  <a href={translatePath('home', altLang)}>
-    {altLang === 'es' ? 'Español' : 'English'}
-  </a>
-</header>
-```
-
-## Puntos Clave
-
-1. **Tipos recursivos** - `DeepKeyOf` extrae todas las rutas anidadas
-2. **Template literal types** - Construye uniones de strings desde formas de objetos
-3. **Type guards** - `isSupportedLanguage` reduce string a unión
-4. **Cadenas de fallback** - Intenta actual → defecto → clave para resiliencia
-5. **Separar concerns** - Traducciones UI vs traducciones de rutas
-
-La inversión inicial en configurar i18n type-safe se paga inmediatamente. Cada clave de traducción obtiene autocompletado, los typos se convierten en errores de compilación, y refactorizar es seguro.
+La inversión inicial en configurar esto se paga sola. Cualquier typo en una clave de traducción se convierte en error de compilación, y refactorizar es seguro. Eso es todo por ahora.
