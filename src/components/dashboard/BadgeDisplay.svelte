@@ -1,5 +1,5 @@
 <script lang="ts">
-import { $user as userStore } from '@lib/stores/auth'
+import { userStore } from '@lib/stores/auth'
 import type { User } from 'better-auth/types'
 import { onMount } from 'svelte'
 

@@ -1,16 +1,16 @@
 <script lang="ts">
 import {
-  $authError as authErrorStore,
+  authErrorStore,
   clearAuthError,
   initAuthState,
-  $isAuthenticated as isAuthenticatedStore,
-  $isLoading as isLoadingStore,
+  isAuthenticatedStore,
+  isLoadingStore,
   loginWithEmail,
   loginWithFacebook,
   loginWithGitHub,
   loginWithGoogle,
   loginWithPasskey,
-  $oauthLoading as oauthLoadingStore,
+  oauthLoadingStore,
   signUpWithEmail,
 } from '@lib/stores/auth'
 import { onMount } from 'svelte'

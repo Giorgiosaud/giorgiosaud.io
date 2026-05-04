@@ -2,7 +2,7 @@ import { fileURLToPath } from 'node:url'
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
-import svelte from '@astrojs/svelte'
+import svelte, { vitePreprocess } from '@astrojs/svelte'
 import vercel from '@astrojs/vercel'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
@@ -14,7 +14,7 @@ export default defineConfig({
     mdx(),
     react(),
     vue(),
-    svelte(),
+    svelte({ preprocess: vitePreprocess({ script: true }), configFile: false }),
     sitemap(),
   ],
 

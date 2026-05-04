@@ -3,16 +3,18 @@ import type { Session, User } from 'better-auth/types'
 import { atom, computed } from 'nanostores'
 
 // Auth state atoms
-export const $user = atom<User | null>(null)
-export const $session = atom<Session | null>(null)
-export const $isLoading = atom<boolean>(true)
-export const $authError = atom<string | null>(null)
-export const $oauthLoading = atom<'github' | 'google' | 'facebook' | null>(null)
+export const userStore = atom<User | null>(null)
+export const sessionStore = atom<Session | null>(null)
+export const isLoadingStore = atom<boolean>(true)
+export const authErrorStore = atom<string | null>(null)
+export const oauthLoadingStore = atom<'github' | 'google' | 'facebook' | null>(
+  null,
+)
 
 // Computed stores
-export const $isAuthenticated = computed($user, user => user !== null)
-export const $isAdmin = computed(
-  $user,
+export const isAuthenticatedStore = computed(userStore, user => user !== null)
+export const isAdminStore = computed(
+  userStore,
   user =>
     (
       user as
@@ -25,7 +27,7 @@ export const $isAdmin = computed(
 
 // Initialize auth state from server
 export async function initAuthState() {
-  $isLoading.set(true)
+  isLoadingStore.set(true)
   try {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 5000)
@@ -36,25 +38,25 @@ export async function initAuthState() {
     const data = await response.json()
 
     if (data.authenticated && data.user) {
-      $user.set(data.user)
-      $session.set(data.session)
+      userStore.set(data.user)
+      sessionStore.set(data.session)
     } else {
-      $user.set(null)
-      $session.set(null)
+      userStore.set(null)
+      sessionStore.set(null)
     }
   } catch (error) {
     console.error('Failed to initialize auth state:', error)
-    $user.set(null)
-    $session.set(null)
+    userStore.set(null)
+    sessionStore.set(null)
   } finally {
-    $isLoading.set(false)
+    isLoadingStore.set(false)
   }
 }
 
 // Email/password login
 export async function loginWithEmail(email: string, password: string) {
-  $authError.set(null)
-  $isLoading.set(true)
+  authErrorStore.set(null)
+  isLoadingStore.set(true)
   try {
     const result = await signIn.email({
       email,
@@ -64,21 +66,21 @@ export async function loginWithEmail(email: string, password: string) {
       },
     })
     if (result.error) {
-      $authError.set(result.error.message || 'Login failed')
+      authErrorStore.set(result.error.message || 'Login failed')
       return false
     }
     await initAuthState()
     return true
   } catch (error) {
     console.error('Login error:', error)
-    $authError.set(
+    authErrorStore.set(
       error instanceof Error
         ? error.message
         : 'Login failed. Please try again.',
     )
     return false
   } finally {
-    $isLoading.set(false)
+    isLoadingStore.set(false)
   }
 }
 
@@ -88,8 +90,8 @@ export async function signUpWithEmail(
   password: string,
   name: string,
 ) {
-  $authError.set(null)
-  $isLoading.set(true)
+  authErrorStore.set(null)
+  isLoadingStore.set(true)
   try {
     const result = await signUp.email({
       email,
@@ -100,28 +102,28 @@ export async function signUpWithEmail(
       },
     })
     if (result.error) {
-      $authError.set(result.error.message || 'Sign up failed')
+      authErrorStore.set(result.error.message || 'Sign up failed')
       return false
     }
     await initAuthState()
     return true
   } catch (error) {
     console.error('Signup error:', error)
-    $authError.set(
+    authErrorStore.set(
       error instanceof Error
         ? error.message
         : 'Sign up failed. Please try again.',
     )
     return false
   } finally {
-    $isLoading.set(false)
+    isLoadingStore.set(false)
   }
 }
 
 // Passkey login
 export async function loginWithPasskey() {
-  $authError.set(null)
-  $isLoading.set(true)
+  authErrorStore.set(null)
+  isLoadingStore.set(true)
   try {
     // Use signIn.passkey() - the correct method per Better Auth docs
     const result = await signIn.passkey({
@@ -129,46 +131,46 @@ export async function loginWithPasskey() {
         credentials: 'include',
         onSuccess: async () => {
           await initAuthState()
-          $isLoading.set(false)
+          isLoadingStore.set(false)
         },
         onError: context => {
           console.error(
             'Passkey authentication failed:',
             context.error?.message,
           )
-          $authError.set(context.error?.message || 'Passkey login failed')
-          $isLoading.set(false)
+          authErrorStore.set(context.error?.message || 'Passkey login failed')
+          isLoadingStore.set(false)
         },
       },
     })
     if (result?.error) {
-      $authError.set(result.error.message || 'Passkey login failed')
-      $isLoading.set(false)
+      authErrorStore.set(result.error.message || 'Passkey login failed')
+      isLoadingStore.set(false)
       return false
     }
     return true
   } catch (error) {
     console.error('Passkey login error:', error)
-    $authError.set('Passkey login failed. Please try again.')
-    $isLoading.set(false)
+    authErrorStore.set('Passkey login failed. Please try again.')
+    isLoadingStore.set(false)
     return false
   }
 }
 
 // Register passkey for current user
 export async function registerPasskey(name?: string) {
-  $authError.set(null)
+  authErrorStore.set(null)
   try {
     const result = await passkey.addPasskey({
       name,
     })
     if (result?.error) {
-      $authError.set(result.error.message || 'Failed to register passkey')
+      authErrorStore.set(result.error.message || 'Failed to register passkey')
       return false
     }
     return true
   } catch (_error) {
-    $authError.set('Failed to register passkey. Please try again.')
+    authErrorStore.set('Failed to register passkey. Please try again.')
     return false
   }
 }
@@ -177,8 +179,8 @@ export async function registerPasskey(name?: string) {
 type OAuthProvider = 'github' | 'google' | 'facebook'
 
 function loginWithOAuthRedirect(provider: OAuthProvider) {
-  $authError.set(null)
-  $oauthLoading.set(provider)
+  authErrorStore.set(null)
+  oauthLoadingStore.set(provider)
   // Redirect to OAuth provider, return to current page after auth
   signIn.social({
     provider,
@@ -203,8 +205,8 @@ export function loginWithFacebook() {
 export async function logout() {
   try {
     await signOut()
-    $user.set(null)
-    $session.set(null)
+    userStore.set(null)
+    sessionStore.set(null)
     window.location.href = '/'
   } catch (error) {
     console.error('Failed to logout:', error)
@@ -213,5 +215,5 @@ export async function logout() {
 
 // Clear error
 export function clearAuthError() {
-  $authError.set(null)
+  authErrorStore.set(null)
 }

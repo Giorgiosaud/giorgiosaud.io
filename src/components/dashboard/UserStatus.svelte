@@ -1,8 +1,5 @@
 <script lang="ts">
-import {
-  $isLoading as isLoadingStore,
-  $user as userStore,
-} from '@lib/stores/auth'
+import { isLoadingStore, userStore } from '@lib/stores/auth'
 import type { User } from 'better-auth/types'
 import { onMount } from 'svelte'
 
@@ -44,6 +41,13 @@ let profileData = $state<{
 } | null>(null)
 
 const t = $derived(translations[lang])
+const isAdmin = $derived(
+  (
+    user as unknown as {
+      role?: string
+    }
+  )?.role === 'admin',
+)
 
 // Format date for display
 function formatDate(dateStr?: string): string {
@@ -55,28 +59,6 @@ function formatDate(dateStr?: string): string {
     day: 'numeric',
   }).format(date)
 }
-
-onMount(() => {
-  const unsub1 = userStore.subscribe(v => (user = v))
-  const unsub2 = isLoadingStore.subscribe(v => (isLoading = v))
-
-  // Fetch profile data
-  fetch('/api/dashboard/profile.json')
-    .then(res => res.json())
-    .then((data: { user: User }) => {
-      if (data.user) {
-        profileData = {
-          createdAt: data.user.createdAt?.toISOString(),
-        }
-      }
-    })
-    .catch(err => console.error('Failed to load profile:', err))
-
-  return () => {
-    unsub1()
-    unsub2()
-  }
-})
 </script>
 
 {#if isLoading}
@@ -94,19 +76,14 @@ onMount(() => {
     <div class="status-grid">
       <div class="status-item">
         <span class="label">{t.role}</span>
-        <span
-          class="value role-badge"
-          class:admin={(user as { role?: string }).role === "admin"}
-        >
-          {(user as { role?: string }).role === "admin" ? t.admin : t.user}
-        </span>
+        <span class="value role-badge" class:admin={isAdmin}>{isAdmin ? t.admin : t.user}</span>
       </div>
 
       <div class="status-item">
         <span class="label">{t.memberSince}</span>
         <span class="value"
           >{formatDate(
-            profileData?.createdAt || user.createdAt.toISOString()
+            profileData?.createdAt || user.createdAt.toISOString(),
           )}</span
         >
       </div>

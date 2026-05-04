@@ -66,19 +66,22 @@ function truncateContent(content: string, maxLength: number = 150): string {
   return `${content.substring(0, maxLength).trim()}...`
 }
 
-onMount(async () => {
-  try {
-    const res = await fetch('/api/dashboard/comments.json')
-    const data = await res.json()
-    if (data.comments) {
-      comments = data.comments
+onMount(() => {
+  async function getComments() {
+    try {
+      const res = await fetch('/api/dashboard/comments.json')
+      const data = await res.json()
+      if (data.comments) {
+        comments = data.comments
+      }
+    } catch (err) {
+      console.error('Failed to load comments:', err)
+      error = 'Failed to load comments'
+    } finally {
+      isLoading = false
     }
-  } catch (err) {
-    console.error('Failed to load comments:', err)
-    error = 'Failed to load comments'
-  } finally {
-    isLoading = false
   }
+  getComments()
 })
 </script>
 

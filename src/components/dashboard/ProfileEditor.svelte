@@ -1,4 +1,5 @@
 <script lang="ts">
+import { getPropagationHint } from 'astro/runtime/server/render/astro/factory.js'
 import { onMount } from 'svelte'
 
 interface Props {
@@ -53,24 +54,27 @@ let saveError = $state<string | null>(null)
 
 const t = $derived(translations[lang])
 
-onMount(async () => {
-  try {
-    const res = await fetch('/api/dashboard/profile.json')
-    const data = await res.json()
+onMount(() => {
+  async function GetProfile() {
+    try {
+      const res = await fetch('/api/dashboard/profile.json')
+      const data = await res.json()
 
-    if (data.user) {
-      username = data.user.displayUsername || data.user.username || ''
+      if (data.user) {
+        username = data.user.displayUsername || data.user.username || ''
+      }
+      if (data.profile) {
+        displayName = data.profile.displayName || ''
+        bio = data.profile.bio || ''
+        website = data.profile.website || ''
+      }
+    } catch (err) {
+      console.error('Failed to load profile:', err)
+    } finally {
+      isLoading = false
     }
-    if (data.profile) {
-      displayName = data.profile.displayName || ''
-      bio = data.profile.bio || ''
-      website = data.profile.website || ''
-    }
-  } catch (err) {
-    console.error('Failed to load profile:', err)
-  } finally {
-    isLoading = false
   }
+  GetProfile()
 })
 
 async function handleSubmit(e: Event) {
