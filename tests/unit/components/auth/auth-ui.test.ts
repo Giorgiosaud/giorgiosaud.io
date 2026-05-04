@@ -26,6 +26,12 @@ vi.mock('@nanostores/react', () => ({
   useStore: vi.fn(store => store.get()),
 }))
 
+// Mock Svelte auth components (avoids Svelte compiler dependency in unit tests)
+vi.mock('@components/auth', () => ({
+  LoginButton: vi.fn(),
+  UserAvatar: vi.fn(),
+}))
+
 // Mock fetch
 global.fetch = vi.fn()
 

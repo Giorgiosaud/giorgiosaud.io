@@ -7,15 +7,15 @@ import {
   unsubscribeFromPush,
 } from '@lib/push-client'
 import {
-  $authError as authErrorStore,
+  authErrorStore,
   clearAuthError,
   initAuthState,
-  $isAdmin as isAdminStore,
-  $isAuthenticated as isAuthenticatedStore,
-  $isLoading as isLoadingStore,
+  isAdminStore,
+  isAuthenticatedStore,
+  isLoadingStore,
   logout,
   registerPasskey,
-  $user as userStore,
+  userStore,
 } from '@lib/stores/auth'
 import type { User } from 'better-auth/types'
 import { onMount } from 'svelte'
@@ -55,8 +55,9 @@ let user = $state<User | null>(null)
 let isAuthenticated = $state(false)
 let isLoading = $state(true)
 let isAdmin = $state(false)
-let showMenu = $state(false)
+
 let authError = $state<string | null>(null)
+let showMenu = $state(false)
 let passkeySuccess = $state(false)
 let isAddingPasskey = $state(false)
 
@@ -79,9 +80,16 @@ const initials = $derived(
     : '?',
 )
 
-// Push user data to dataLayer when authenticated
 function pushUserToDataLayer(
-  userData: User | null,
+  userData: {
+    id: string
+    createdAt: Date
+    updatedAt: Date
+    email: string
+    emailVerified: boolean
+    name: string
+    image?: string | null | undefined
+  } | null,
   authenticated: boolean,
   admin: boolean,
 ) {
@@ -97,7 +105,6 @@ function pushUserToDataLayer(
 
 onMount(() => {
   initAuthState()
-
   let lastAuthState = false
   const unsub1 = userStore.subscribe(v => (user = v))
   const unsub2 = isAuthenticatedStore.subscribe(v => {
@@ -112,15 +119,14 @@ onMount(() => {
   const unsub3 = isLoadingStore.subscribe(v => (isLoading = v))
   const unsub4 = isAdminStore.subscribe(v => (isAdmin = v))
   const unsub5 = authErrorStore.subscribe(v => (authError = v))
-
-  // Initialize push notification state
-  ;(async () => {
+  async function initNotifications() {
     pushSupported = isPushSupported()
     if (pushSupported) {
       pushPermission = getPermissionState()
       pushSubscribed = await isSubscribed()
     }
-  })()
+  }
+  initNotifications()
 
   const handleClickOutside = (e: MouseEvent) => {
     const target = e.target as HTMLElement
@@ -128,9 +134,7 @@ onMount(() => {
       showMenu = false
     }
   }
-
   document.addEventListener('click', handleClickOutside)
-
   return () => {
     unsub1()
     unsub2()
