@@ -1,21 +1,22 @@
 ---
-import { getCollection, render } from 'astro:content'
-import '@global-styles/md.css'
+import { getCollection } from 'astro:content'
 
 export async function getStaticPaths() {
   const pages = await getCollection('notas')
-  return pages.map(page => {
-    return {
-      params: {
-        note: page.id,
-      },
-      props: {
-        page,
-      },
-    }
-  })
+  return pages.map(page => ({
+    params: {
+      note: page.id,
+    },
+    props: {
+      page,
+    },
+  }))
 }
 
 const { page } = Astro.props
+return new Response(page.body, {
+  headers: {
+    'Content-Type': 'text/markdown; charset=utf-8',
+  },
+})
 ---
-{page.body}

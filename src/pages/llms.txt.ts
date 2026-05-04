@@ -11,6 +11,12 @@ export const GET: APIRoute = async () => {
 
 > Web developer notebook with notes on Astro, JavaScript, TypeScript, and modern web development.
 
+## Content access
+
+Every note is available in two formats:
+- HTML: \`/notebook/{slug}\`
+- Markdown: \`/notebook/{slug}.md\` — served with \`Content-Type: text/markdown; charset=utf-8\`
+
 ## Notes
 ${sorted.map(n => `- [${n.data.title}](/notebook/${n.id}.md): ${n.data.description || ''}`).join('\n')}
 `
