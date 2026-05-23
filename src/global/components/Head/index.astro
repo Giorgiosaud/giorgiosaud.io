@@ -55,16 +55,24 @@ const lang = getLangFromUrl(Astro.url)
   <!-- Font metrics fallback to prevent CLS -->
   <style set:html={fontMetricsFallback}></style>
 
-  <!-- GA4 -->
-  <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.GA4_MEASUREMENT_ID ?? ''}`}></script>
+  <!-- GA4: consent defaults must be set before gtag.js loads -->
   <script>
     import { GA4_MEASUREMENT_ID } from "astro:env/client";
     window.dataLayer = window.dataLayer || [];
     function gtag(..._args: unknown[]) { window.dataLayer.push(arguments); }
     window.gtag = gtag;
+    // Default consent: denied until user accepts via cookie banner
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      wait_for_update: 500,
+    });
     gtag('js', new Date());
     gtag('config', GA4_MEASUREMENT_ID ?? '', { anonymize_ip: true, send_page_view: true });
   </script>
+  <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.GA4_MEASUREMENT_ID ?? ''}`}></script>
   <!-- End GA4 -->
   <meta charset="UTF-8" />
   <meta

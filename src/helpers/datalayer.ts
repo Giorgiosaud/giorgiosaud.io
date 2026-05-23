@@ -58,12 +58,7 @@ type AnalyticsEvent =
     }
 
 export function trackEvent(payload: AnalyticsEvent): void {
-  window.dataLayer = window.dataLayer || []
-  if (typeof window.gtag !== 'function') {
-    window.gtag = (...args: unknown[]) => {
-      window.dataLayer!.push(args)
-    }
-  }
+  if (typeof window.gtag !== 'function') return
   const { event, ...params } = payload
   window.gtag('event', event, params)
 }
