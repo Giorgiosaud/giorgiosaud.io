@@ -4,7 +4,7 @@ title: "Venezuela 51: El Refactoring del Estado y el Hub de Puerto Ordaz"
 description: Un análisis técnico sobre por qué la integración con EE. UU. y el desarrollo de Puerto Ordaz representan el 'deployment' más importante de nuestra historia.
 cover: ../../../assets/images/venezuela-51-refactoring.png
 coverAlt: Arquitectura de una nueva Venezuela integrada
-selfHealing: VEN51REF
+selfHealing: rfctrn
 slug: venezuela-51-refactoring-estado-puerto-ordaz
 publishDate: 2026-05-14T19:00:00.000Z
 category: Geopolítica & Tech
