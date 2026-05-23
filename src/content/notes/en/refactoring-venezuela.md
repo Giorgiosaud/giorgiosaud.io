@@ -4,7 +4,7 @@ title: "Venezuela 51: State Refactoring and the Puerto Ordaz Hub"
 description: A technical analysis on why US integration and the development of Puerto Ordaz represent the most important system deployment in our history.
 cover: ../../../assets/images/venezuela-51-refactoring.png
 coverAlt: Architecture of a new integrated Venezuela
-selfHealing: vnzlst
+selfHealing: rfctrn
 slug: venezuela-51-state-refactoring-puerto-ordaz
 publishDate: 2026-05-14T19:00:00.000Z
 category: Geopolitics & Tech
