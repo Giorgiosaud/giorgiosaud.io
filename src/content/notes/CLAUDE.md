@@ -136,6 +136,8 @@ Manual rules:
 - No vowels (aeiouAEIOU) or dashes
 - Regex validation: `/^[^aeiouAEIOU-]{6}$/`
 
+> **IMPORTANT — Translation linking**: The `selfHealing` code is used to link the EN and ES versions of the same post. Both language versions of a post **must share the same `selfHealing` value**. If they differ, the "read in [language]" translation link will break.
+
 ## Category Guidelines
 
 Common categories:
