@@ -32,18 +32,23 @@ const t = i18n[lang]
 <button
   id="generate-summary-bubble"
   class="summary-bubble"
+  aria-label={t.buttonTitle}
   title={t.buttonTitle}
   data-note-id={noteId}
   data-lang={lang}
   hidden
 >
-  <span>🤖</span>
+  <span aria-hidden="true">🤖</span>
 </button>
 
 <!-- Emergent bubble/modal for summary result -->
-<dialog id="summary-modal" class="summary-modal">
-  <button id="close-summary-modal" class="close-summary-modal">&times;</button>
-  <div id="summary-content"></div>
+<dialog
+  id="summary-modal"
+  class="summary-modal"
+  aria-label={t.buttonTitle}
+>
+  <button id="close-summary-modal" class="close-summary-modal" aria-label="Close">&times;</button>
+  <div id="summary-content" aria-live="polite" aria-atomic="false"></div>
 </dialog>
 
 <script define:vars={{ t }}>
@@ -117,11 +122,14 @@ const t = i18n[lang]
 
     summaryBubble.addEventListener("click", () => {
       summarizeContent();
+      // Move focus into dialog for keyboard/screen reader users
+      setTimeout(() => closeModalBtn.focus(), 50);
     });
 
     closeModalBtn.addEventListener("click", () => {
       summaryModal.close();
       summaryContent.innerHTML = "";
+      summaryBubble.focus();
     });
 
     summaryModal.addEventListener("click", (e) => {
@@ -168,7 +176,6 @@ const t = i18n[lang]
     z-index: 2000;
     border: 2px solid rgba(255,255,255,0.15);
     transition: transform 0.2s, box-shadow 0.2s;
-    anchor-name: --summary-bot;
   }
 
   .summary-bubble:hover {
@@ -178,10 +185,18 @@ const t = i18n[lang]
 
   .summary-modal {
     position: fixed;
-    position-anchor: --summary-bot;
-    position-area: top left;
-    width: 280px;
-    max-width: 90vw;
+    bottom: 6rem;
+    right: 2rem;
+    @media (width < 48rem) {
+      bottom: calc(4.5rem + 1rem + 4rem);
+      right: 1rem;
+      left: 1rem;
+      width: auto;
+    }
+    width: 320px;
+    max-width: calc(100vw - 2rem);
+    max-height: 70vh;
+    overflow-y: auto;
     background: #fff;
     border-radius: 1.5rem;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
@@ -209,6 +224,9 @@ const t = i18n[lang]
     font-size: 1.5rem;
     color: #333;
     cursor: pointer;
+    line-height: 1;
+    padding: 0.25rem;
+    &:hover { color: #000; }
   }
 
   #summary-content {
@@ -216,15 +234,10 @@ const t = i18n[lang]
     color: #222;
   }
 
-  @media screen and (width > 500px) {
-    .summary-modal {
-      width: 100%;
-    }
-  }
   @keyframes bubbleIn {
     from {
       opacity: 0;
-      transform: translateY(40px) scale(0.9);
+      transform: translateY(20px) scale(0.95);
     }
     to {
       opacity: 1;
