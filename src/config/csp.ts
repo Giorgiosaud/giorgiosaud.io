@@ -9,6 +9,8 @@ export const cspPolicy = {
   'script-src': {
     static: [
       "'self'",
+      "'strict-dynamic'",
+      "'unsafe-inline'",
     ],
     externalDomains: [
       'https://www.googletagmanager.com',
@@ -54,5 +56,8 @@ export const cspPolicy = {
   ],
   'form-action': [
     "'self'",
+  ],
+  'require-trusted-types-for': [
+    "'script'",
   ],
 } as const

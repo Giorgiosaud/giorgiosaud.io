@@ -61,18 +61,10 @@ const scriptSrc = [
   ...cspPolicy['script-src'].externalDomains,
 ].join(' ')
 
-const directives: string[] = [
-  `default-src ${cspPolicy['default-src'].join(' ')}`,
-  `script-src ${scriptSrc}`,
-  `style-src ${cspPolicy['style-src'].join(' ')}`,
-  `img-src ${cspPolicy['img-src'].join(' ')}`,
-  `connect-src ${cspPolicy['connect-src'].join(' ')}`,
-  `worker-src ${cspPolicy['worker-src'].join(' ')}`,
-  `frame-src ${cspPolicy['frame-src'].join(' ')}`,
-  `object-src ${cspPolicy['object-src'].join(' ')}`,
-  `base-uri ${cspPolicy['base-uri'].join(' ')}`,
-  `form-action ${cspPolicy['form-action'].join(' ')}`,
-]
+const directives: string[] = Object.entries(cspPolicy).map(([key, value]) => {
+  if (key === 'script-src') return `script-src ${scriptSrc}`
+  return `${key} ${(value as readonly string[]).join(' ')}`
+})
 
 const cspValue = directives.join('; ') + ';'
 
