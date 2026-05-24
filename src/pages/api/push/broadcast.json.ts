@@ -23,27 +23,33 @@ function isAdmin(user: User | null): boolean {
 
 // POST /api/push/broadcast.json - Send notification to all subscribers (admin only)
 export const POST: APIRoute = async ({ request, locals }) => {
-  // Must be logged in as admin
-  if (!locals.user) {
-    return Response.json(
-      {
-        error: 'Authentication required',
-      },
-      {
-        status: 401,
-      },
-    )
-  }
+  // Allow either admin session OR a server-to-server secret (used by post-build notify script)
+  const notifySecret =
+    import.meta.env.NOTIFY_SECRET || import.meta.env.BETTER_AUTH_SECRET
+  const headerSecret = request.headers.get('x-notify-secret')
+  const isServerCall = notifySecret && headerSecret === notifySecret
 
-  if (!isAdmin(locals.user)) {
-    return Response.json(
-      {
-        error: 'Admin access required',
-      },
-      {
-        status: 403,
-      },
-    )
+  if (!isServerCall) {
+    if (!locals.user) {
+      return Response.json(
+        {
+          error: 'Authentication required',
+        },
+        {
+          status: 401,
+        },
+      )
+    }
+    if (!isAdmin(locals.user)) {
+      return Response.json(
+        {
+          error: 'Admin access required',
+        },
+        {
+          status: 403,
+        },
+      )
+    }
   }
 
   if (!isPushConfigured()) {
@@ -67,6 +73,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
       postSlug,
       postTitle,
       postExcerpt,
+      postSlugEs,
+      postTitleEs,
+      postExcerptEs,
     } = body
 
     let result: {
@@ -75,18 +84,30 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     if (type === 'new-post') {
-      // New post notification
-      if (!postSlug || !postTitle) {
+      const { postSlugEs, postTitleEs, postExcerptEs } = body
+      if (!postSlug || !postTitle || !postSlugEs || !postTitleEs) {
         return Response.json(
           {
-            error: 'postSlug and postTitle required for new-post type',
+            error:
+              'postSlug, postTitle, postSlugEs, postTitleEs required for new-post type',
           },
           {
             status: 400,
           },
         )
       }
-      result = await sendNewPostNotification(postTitle, postSlug, postExcerpt)
+      result = await sendNewPostNotification(
+        {
+          slug: postSlug,
+          title: postTitle,
+          excerpt: postExcerpt,
+        },
+        {
+          slug: postSlugEs,
+          title: postTitleEs,
+          excerpt: postExcerptEs,
+        },
+      )
     } else if (type === 'custom') {
       // Custom broadcast
       if (!title || !messageBody) {

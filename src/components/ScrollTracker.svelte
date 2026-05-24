@@ -1,4 +1,9 @@
 <script lang="ts">
+import {
+  isPushSupported,
+  isSubscribed,
+  subscribeToPush,
+} from '@lib/push-client'
 import { onMount } from 'svelte'
 import { trackEvent } from '../helpers/datalayer'
 
@@ -6,9 +11,15 @@ interface Props {
   noteId: string
   lang?: 'en' | 'es'
   threshold?: number
+  pushPromptDelay?: number
 }
 
-let { noteId, lang = 'en', threshold = 0.5 }: Props = $props()
+let {
+  noteId,
+  lang = 'en',
+  threshold = 0.5,
+  pushPromptDelay = 30_000,
+}: Props = $props()
 
 let maxScrollDepth = 0
 let startTime = 0
@@ -81,12 +92,25 @@ function updateScrollDepth() {
   }
 }
 
+async function maybePromptPush() {
+  const PROMPT_KEY = 'push_prompt_shown'
+  if (sessionStorage.getItem(PROMPT_KEY)) return
+  if (!isPushSupported()) return
+  if (Notification.permission !== 'default') return
+  if (await isSubscribed()) return
+
+  sessionStorage.setItem(PROMPT_KEY, '1')
+  subscribeToPush()
+}
+
 onMount(() => {
   startTime = Date.now()
   window.addEventListener('scroll', updateScrollDepth, {
     passive: true,
   })
   updateScrollDepth()
+
+  const pushTimer = setTimeout(maybePromptPush, pushPromptDelay)
 
   const handleUnload = () => {
     if (!tracked && maxScrollDepth > 0.1) {
@@ -121,6 +145,7 @@ onMount(() => {
   window.addEventListener('beforeunload', handleUnload)
 
   return () => {
+    clearTimeout(pushTimer)
     window.removeEventListener('scroll', updateScrollDepth)
     window.removeEventListener('beforeunload', handleUnload)
   }

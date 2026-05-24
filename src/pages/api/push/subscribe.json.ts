@@ -12,6 +12,7 @@ interface PushSubscriptionData {
     auth: string
   }
   expirationTime?: number | null
+  lang?: 'en' | 'es'
 }
 
 // Subscribe to push notifications
@@ -35,6 +36,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const userId = locals.user?.id || null
     const userAgent = request.headers.get('user-agent') || null
+    const lang = body.lang === 'es' ? 'es' : 'en'
 
     // Check if subscription already exists
     const existing = await db.query.pushSubscriptions.findFirst({
@@ -47,6 +49,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         .update(pushSubscriptions)
         .set({
           userId,
+          lang,
           p256dh: body.keys.p256dh,
           auth: body.keys.auth,
           expirationTime: body.expirationTime
@@ -76,6 +79,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     // Create new subscription
     await db.insert(pushSubscriptions).values({
       userId,
+      lang,
       endpoint: body.endpoint,
       p256dh: body.keys.p256dh,
       auth: body.keys.auth,

@@ -61,6 +61,10 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
  * Subscribe to push notifications
  * Returns true if successful, false otherwise
  */
+function detectLang(): 'en' | 'es' {
+  return window.location.pathname.startsWith('/es') ? 'es' : 'en'
+}
+
 export async function subscribeToPush(): Promise<boolean> {
   if (!isPushSupported()) {
     console.error('Push notifications not supported')
@@ -97,7 +101,10 @@ export async function subscribeToPush(): Promise<boolean> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(subscription.toJSON()),
+      body: JSON.stringify({
+        ...subscription.toJSON(),
+        lang: detectLang(),
+      }),
       credentials: 'include',
     })
 

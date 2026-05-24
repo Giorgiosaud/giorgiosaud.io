@@ -23,6 +23,7 @@ export const pushSubscriptions = pgTable(
     auth: text('auth').notNull(),
 
     // Metadata
+    lang: text('lang').notNull().default('en'),
     expirationTime: timestamp('expiration_time', {
       withTimezone: true,
     }),
