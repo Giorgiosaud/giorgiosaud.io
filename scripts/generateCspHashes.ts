@@ -1,17 +1,14 @@
 /**
  * Post-build script: scans dist/client HTML files, extracts inline scripts,
- * generates SHA-256 hashes, and injects them into:
- *   - vercel.json (committed, used for header key/value template)
- *   - .vercel/output/config.json (used by Vercel at deploy time)
+ * generates SHA-256 hashes, and updates the CSP script-src in vercel.json.
  *
  * Run after `astro build` — wired into the build script in package.json.
  */
 import { createHash } from 'node:crypto'
-import { existsSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
+import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 const VERCEL_JSON = join(process.cwd(), 'vercel.json')
-const VERCEL_OUTPUT_CONFIG = join(process.cwd(), '.vercel/output/config.json')
 const DIST_DIR = join(process.cwd(), 'dist/client')
 
 function collectHtmlFiles(dir: string): string[] {
@@ -45,7 +42,6 @@ function sha256(content: string): string {
   return createHash('sha256').update(content).digest('base64')
 }
 
-// Collect hashes from built HTML
 const htmlFiles = collectHtmlFiles(DIST_DIR)
 const hashSet = new Set<string>()
 for (const file of htmlFiles) {
@@ -57,7 +53,6 @@ for (const file of htmlFiles) {
 const hashes = [...hashSet].sort()
 console.log(`Found ${hashes.length} unique hashes across ${htmlFiles.length} HTML files`)
 
-// Build the script-src value with hashes
 const scriptSrc = [
   "'self'",
   ...hashes,
@@ -67,7 +62,6 @@ const scriptSrc = [
   'https://static.cloudflareinsights.com',
 ].join(' ')
 
-// Read the base CSP value from vercel.json (source of truth for other directives)
 const vercel = JSON.parse(readFileSync(VERCEL_JSON, 'utf-8'))
 const cspEntry = vercel.headers[0].headers.find(
   (h: { key: string }) =>
@@ -79,34 +73,6 @@ if (!cspEntry) {
   process.exit(1)
 }
 
-const cspValue = cspEntry.value.replace(/script-src\s+[^;]+;/, `script-src ${scriptSrc};`)
-
-// Update vercel.json (for pre-push reference and local preview)
-cspEntry.value = cspValue
+cspEntry.value = cspEntry.value.replace(/script-src\s+[^;]+;/, `script-src ${scriptSrc};`)
 writeFileSync(VERCEL_JSON, `${JSON.stringify(vercel, null, 2)}\n`)
-console.log('vercel.json updated')
-
-// Patch .vercel/output/config.json so Vercel uses build-time hashes at deploy
-if (existsSync(VERCEL_OUTPUT_CONFIG)) {
-  const config = JSON.parse(readFileSync(VERCEL_OUTPUT_CONFIG, 'utf-8'))
-
-  // Remove any existing CSP header route we previously injected
-  config.routes = config.routes.filter(
-    (r: { src?: string }) => r.src !== '^/(.*)$' || !('headers' in r) ||
-      !Object.keys((r as { headers: Record<string, string> }).headers).some(k =>
-        k.toLowerCase().includes('content-security-policy'),
-      ),
-  )
-
-  // Prepend a catch-all route that sets the CSP header on every response
-  config.routes.unshift({
-    src: '^/(.*)',
-    headers: { [cspEntry.key]: cspValue },
-    continue: true,
-  })
-
-  writeFileSync(VERCEL_OUTPUT_CONFIG, `${JSON.stringify(config, null, 2)}\n`)
-  console.log('.vercel/output/config.json updated — hashes match this build')
-} else {
-  console.log('.vercel/output/config.json not found — skipping (run after astro build)')
-}
+console.log('vercel.json updated — unsafe-inline removed, hashes injected')
