@@ -1,4 +1,8 @@
-import 'dotenv/config'
+import { config } from 'dotenv'
+
+// Load in priority order: .env.development.local overrides .env
+config({ path: '.env' })
+config({ path: '.env.development.local', override: true })
 import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
@@ -6,7 +10,7 @@ export default defineConfig({
   schema: './src/db/schema/index.ts',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.POSTGRES_URL || process.env.DATABASE_URL!,
+    url: process.env.DATABASE_URL || process.env.POSTGRES_URL!,
   },
   verbose: true,
   strict: true,
