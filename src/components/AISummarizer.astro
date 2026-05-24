@@ -144,29 +144,28 @@ const t = i18n[lang]
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-
     @media (width < 48rem) {
       bottom: calc(4.5rem + 1rem);
     }
-    width: 64px;
-    height: 64px;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #ff00cc, #3333ff, #00ffcc, #ffcc00);
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    background: conic-gradient(from 180deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
+    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #fff;
-    font-size: 2rem;
+    font-size: 1.5rem;
     cursor: pointer;
     z-index: 2000;
-    border: none;
-    transition: transform 0.2s;
+    border: 2px solid rgba(255,255,255,0.15);
+    transition: transform 0.2s, box-shadow 0.2s;
     anchor-name: --summary-bot;
   }
 
   .summary-bubble:hover {
-    transform: scale(1.1);
+    transform: scale(1.08);
+    box-shadow: 0 6px 28px rgba(124, 58, 237, 0.55);
   }
 
   .summary-modal {
