@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && bun scripts/generateCspHashes.ts",
+    "csp:hashes": "bun scripts/generateCspHashes.ts",
     "preview": "astro preview",
     "lint": "biome lint --write .",
     "lint:fix": "biome check --write .",
