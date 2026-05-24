@@ -1,0 +1,168 @@
+---
+import { getCollection } from 'astro:content'
+import { getPublishedNotes } from '@helpers/collections'
+import Base from '@templates/Base.astro'
+import { runSearch } from '../helpers/search'
+import '@global-styles/notebook-listing.css'
+
+interface Props {
+  lang: 'en' | 'es'
+}
+
+const { lang } = Astro.props
+
+const ui = {
+  en: {
+    title: 'Notebook',
+    searchPlaceholder: 'Search notes…',
+    searchAriaLabel: 'Search notes',
+    filterAriaLabel: 'Filter by collection',
+    allLabel: 'All',
+    loadingText: 'Loading…',
+    noResultsText: 'No notes found.',
+    prevLabel: '← Previous',
+    nextLabel: 'Next →',
+    paginationAriaLabel: 'Pagination',
+    updatedPrefix: 'Updated',
+    dateLocale: 'en',
+  },
+  es: {
+    title: 'Cuaderno',
+    searchPlaceholder: 'Buscar notas…',
+    searchAriaLabel: 'Buscar notas',
+    filterAriaLabel: 'Filtrar por colección',
+    allLabel: 'Todas',
+    loadingText: 'Cargando…',
+    noResultsText: 'No se encontraron notas.',
+    prevLabel: '← Anterior',
+    nextLabel: 'Siguiente →',
+    paginationAriaLabel: 'Paginación',
+    updatedPrefix: 'Actualizado',
+    dateLocale: 'es',
+  },
+} as const
+
+const t = ui[lang]
+const collectionKey = lang === 'en' ? 'collections' : 'colecciones'
+const chipId = (id: string) => id.replace(/^\d{4}-\d{2}-\d{2}-/, '')
+
+const collections = await getCollection(collectionKey)
+const url = Astro.url
+const hasQuery = url.searchParams.has('q') || url.searchParams.has('collection')
+
+let initialHtml = ''
+if (!hasQuery) {
+  const allNotes = await getPublishedNotes(lang)
+  const result = runSearch(allNotes, {
+    lang,
+    page: 1,
+  })
+  initialHtml = result.results
+    .map(note => {
+      const title = note.title
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      const description = (note.description ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+      const coverAlt = (note.coverAlt ?? title).replace(/"/g, '&quot;')
+      const collection = note.collections[0] ?? ''
+      const imgVtn = `note-img-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+      const titleVtn = `note-title-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+      const imgHtml = note.coverSrc
+        ? `<div class="card-thumb" style="view-transition-name:${imgVtn}"><img src="${note.coverSrc.replace(/"/g, '&quot;')}" alt="${coverAlt}" loading="lazy" /></div>`
+        : ''
+      const collectionHtml = collection
+        ? `<span class="card-collection">${collection.replace(/-/g, ' ')}</span>`
+        : ''
+      const dateIso = note.lastUpdate ?? note.publishDate
+      const dateLabel = note.lastUpdate
+        ? `${t.updatedPrefix} ${new Date(dateIso).toLocaleDateString(
+            t.dateLocale,
+            {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            },
+          )}`
+        : new Date(dateIso).toLocaleDateString(t.dateLocale, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
+      return `<li class="note-card-item">
+      <article aria-label="${title}" data-link="${note.href}" data-collection="${collection}">
+        <div class="wrapper">
+          ${imgHtml}
+          <div class="title" style="view-transition-name:${titleVtn}" title="${title}"><h2>${title}</h2></div>
+          <div class="description" title="${description}"><p>${description}</p></div>
+          <footer class="card-meta">
+            ${collectionHtml}
+            <time datetime="${dateIso}" class="card-date">${dateLabel}</time>
+          </footer>
+        </div>
+        <a href="${note.href}" class="card-link" aria-label="${coverAlt}"></a>
+      </article>
+    </li>`
+    })
+    .join('')
+}
+---
+
+<Base title={t.title} pathToTranslate="notebook">
+  <section
+    class="search-section"
+    data-lang={lang}
+    data-no-results={t.noResultsText}
+    data-loading={t.loadingText}
+    data-prev={t.prevLabel}
+    data-next={t.nextLabel}
+  >
+    <h1>{t.title}</h1>
+
+    <div class="search-bar">
+      <input
+        id="search-input"
+        type="search"
+        placeholder={t.searchPlaceholder}
+        aria-label={t.searchAriaLabel}
+        autocomplete="off"
+      />
+    </div>
+
+    <div class="chip-bar" role="group" aria-label={t.filterAriaLabel}>
+      <button class="chip active" data-collection-chip="" aria-pressed="true">
+        {t.allLabel}
+      </button>
+      {collections.map(col => (
+        <button class="chip" data-collection-chip={chipId(col.id)} aria-pressed="false">
+          {col.data.title ?? chipId(col.id)}
+        </button>
+      ))}
+    </div>
+
+    <ul id="search-results" class="notes-grid" aria-live="polite" data-ssr={!hasQuery ? 'true' : 'false'}>
+      {hasQuery
+        ? <li class="loading"><p>{t.loadingText}</p></li>
+        : <Fragment set:html={initialHtml} />
+      }
+    </ul>
+
+    <nav id="pagination" class="pagination" aria-label={t.paginationAriaLabel}></nav>
+  </section>
+</Base>
+
+<script>
+  import { initNotebookSearch } from '@global-scripts/notebook-search'
+
+  const section = document.querySelector<HTMLElement>('.search-section')!
+  initNotebookSearch({
+    lang: section.dataset.lang ?? 'en',
+    noResultsText: section.dataset.noResults ?? 'No results.',
+    loadingText: section.dataset.loading ?? 'Loading…',
+    prevLabel: section.dataset.prev ?? '←',
+    nextLabel: section.dataset.next ?? '→',
+  })
+</script>
