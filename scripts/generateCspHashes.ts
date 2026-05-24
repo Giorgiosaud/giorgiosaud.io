@@ -32,8 +32,8 @@ function extractInlineScripts(html: string): string[] {
     const tag = m[0]
     if (/\ssrc=/.test(tag)) continue
     if (/type=["']application\/ld\+json["']/.test(tag)) continue
-    const content = m[1].trim()
-    if (content) scripts.push(content)
+    const raw = m[1]
+    if (raw.trim()) scripts.push(raw)
   }
   return scripts
 }
