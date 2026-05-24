@@ -1,0 +1,24 @@
+.comments-wrapper {
+  grid-column: content;
+}
+figure {
+  text-align: center;
+  padding-top: 1lh;
+  & img {
+    margin: auto;
+    border-radius: 10px;
+  }
+}
+.byline {
+  font-size: 0.875rem;
+  color: light-dark(#666, #aaa);
+  margin-top: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+#content {
+  width: 100%;
+  max-width: 80ch;
+  margin: auto;
+  padding: 1rem;
+  line-height: 1.6;
+}
