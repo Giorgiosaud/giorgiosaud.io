@@ -185,7 +185,10 @@ const t = i18n[lang]
   }
 
   .summary-modal {
+    /* Reset browser dialog centering defaults */
     position: fixed;
+    margin: 0;
+    inset: auto;
     bottom: 6rem;
     right: 2rem;
     @media (width < 48rem) {
@@ -209,30 +212,34 @@ const t = i18n[lang]
     animation: bubbleIn 0.3s ease;
     &[open] { display: flex; }
   }
-  .summary-modal::backdrop { background: transparent; }
+  .summary-modal::backdrop { background: rgba(0,0,0,0.3); }
   code {
-    background: #f4f4f4;
+    background: #e8e8e8;
+    color: #1a1a1a;
     padding: 0.2rem 0.4rem;
     border-radius: 0.3rem;
   }
 
   .close-summary-modal {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 0.75rem;
+    right: 0.75rem;
     background: none;
     border: none;
     font-size: 1.5rem;
-    color: #333;
+    color: #1a1a1a;
     cursor: pointer;
     line-height: 1;
-    padding: 0.25rem;
-    &:hover { color: #000; }
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    &:hover { background: #f0f0f0; }
+    &:focus-visible { outline: 2px solid #7c3aed; outline-offset: 2px; }
   }
 
   #summary-content {
     font-size: 1rem;
-    color: #222;
+    color: #1a1a1a;
+    & p, & li { line-height: 1.6; }
   }
 
   @keyframes bubbleIn {
