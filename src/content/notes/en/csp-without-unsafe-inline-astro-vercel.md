@@ -3,7 +3,7 @@ draft: false
 selfHealing: "cspwth"
 starred: false
 title: "CSP Without unsafe-inline in Astro + Vercel"
-description: "How to remove unsafe-inline from your Content Security Policy in an Astro site deployed to Vercel, using SHA-256 hashes generated automatically at build time — and the pitfalls we hit along the way."
+description: "How to remove unsafe-inline from your Content Security Policy in an Astro site deployed to Vercel, using SHA-256 hashes generated automatically at build time — and every pitfall we hit along the way."
 publishDate: 2026-05-24T00:00:00.000Z
 category: security
 author: giorgio-saud
@@ -20,35 +20,72 @@ coverAlt: "CSP without unsafe-inline in Astro and Vercel"
 lang: en
 ---
 
-I was auditing the security headers on giorgiosaud.io and realized my CSP had `'unsafe-inline'` in `script-src`. That's the one directive that makes most of the XSS protection pointless — any inline script runs, including ones an attacker injected. The problem: Astro generates inline scripts everywhere and I didn't want to add middleware just to handle nonces.
+I was auditing the security headers on this site and realized my `script-src` had `'unsafe-inline'`. That one directive makes most of the XSS protection pointless — any inline script runs, including ones an attacker injected. The problem: Astro generates inline scripts everywhere and I didn't want to add middleware just to handle nonces.
 
-Hashes turned out to be the right fix for a mostly-static site. But getting there was not a straight line.
+Hashes turned out to be the right approach for a mostly-static site. But getting there was not a straight line. This post covers the full implementation *and* every mistake I made in production.
 
 ## What Astro inlines and why it's annoying
 
 Astro generates several kinds of inline `<script>` tags in the final HTML:
 
 - **Island hydration stubs** — tiny scripts that lazy-load `client:idle`, `client:visible` components
-- **`define:vars` blocks** — inline scripts that pass server variables to the client (post slugs, titles, feature flags)
+- **`define:vars` blocks** — inline scripts that pass server variables to the client
 - **Speculation Rules** — `<script type="speculationrules">` for prerender hints
-- **Your own inline scripts** — anything you write directly in a `.astro` file
+- **Your own inline scripts** — anything written directly in a `.astro` file
 
-You can't hardcode hashes for `define:vars` manually because the content changes per page — each post has a different slug and title baked in. You'd have to maintain hundreds of hashes by hand.
+You can't hardcode hashes manually because `define:vars` content changes per page. The solution is to generate them from the build output automatically.
 
-The solution is to generate them from the build output automatically.
+## The architecture
 
-## The approach
+Two pieces: a config file that's the single source of truth for all CSP directives, and a build script that scans the HTML output, computes hashes, and writes the final policy to `vercel.json`.
 
-After `astro build` runs, every page is already rendered to `dist/client`. The inline scripts are right there in the HTML. Scan every file, extract each inline script, compute its SHA-256, and write the hashes into `vercel.json`. Then strip `'unsafe-inline'`.
+### 1. Config file: `src/config/csp.ts`
 
-### The script
+Keep all human-editable directives here. Adding a domain anywhere in this file automatically reflects in the next push — no manual `vercel.json` edits.
 
-Create `scripts/generateCspHashes.ts`:
+```typescript
+export const cspPolicy = {
+  'default-src': ["'self'"],
+  'script-src': {
+    static: ["'self'"],
+    externalDomains: [
+      'https://www.googletagmanager.com',
+      'https://cdn.jsdelivr.net',
+      'https://challenges.cloudflare.com',
+      'https://static.cloudflareinsights.com',
+    ],
+    // hashes injected at build time
+  },
+  'style-src': ["'self'", "'unsafe-inline'"],
+  'img-src': [
+    "'self'", 'data:', 'blob:',
+    'https://platform.linkedin.com',
+    'https://developers.google.com',
+    'https://avatars.githubusercontent.com',
+  ],
+  'connect-src': [
+    "'self'",
+    'https://www.google-analytics.com',
+    'https://analytics.google.com',
+    'https://www.googletagmanager.com',
+  ],
+  'worker-src': ["'self'", 'blob:'],
+  'frame-src': ['https://challenges.cloudflare.com'],
+  'object-src': ["'none'"],
+  'base-uri': ["'self'"],
+  'form-action': ["'self'"],
+} as const
+```
+
+### 2. Hash generator: `scripts/generateCspHashes.ts`
+
+Run after `astro build`. Scans every HTML file, extracts inline scripts, computes SHA-256 hashes, and builds the full CSP string from the config.
 
 ```typescript
 import { createHash } from 'node:crypto'
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { cspPolicy } from '../src/config/csp'
 
 const VERCEL_JSON = join(process.cwd(), 'vercel.json')
 const DIST_DIR = join(process.cwd(), 'dist/client')
@@ -72,10 +109,11 @@ function extractInlineScripts(html: string): string[] {
   let m: RegExpExecArray | null
   while ((m = re.exec(html)) !== null) {
     const tag = m[0]
-    if (/\ssrc=/.test(tag)) continue                           // skip external
-    if (/type=["']application\/ld\+json["']/.test(tag)) continue // skip JSON-LD
-    const content = m[1].trim()
-    if (content) scripts.push(content)
+    if (/\ssrc=/.test(tag)) continue
+    if (/type=["']application\/ld\+json["']/.test(tag)) continue
+    // Use raw content — never trim before hashing (see pitfall #2)
+    const raw = m[1]
+    if (raw.trim()) scripts.push(raw)
   }
   return scripts
 }
@@ -86,34 +124,47 @@ function sha256(content: string): string {
 
 const htmlFiles = collectHtmlFiles(DIST_DIR)
 const hashSet = new Set<string>()
-
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf-8')
   for (const script of extractInlineScripts(html)) {
     hashSet.add(`'sha256-${sha256(script)}'`)
   }
 }
-
 const hashes = [...hashSet].sort()
-console.log(`${hashes.length} unique hashes across ${htmlFiles.length} HTML files`)
+
+const scriptSrc = [
+  ...cspPolicy['script-src'].static,
+  ...hashes,
+  ...cspPolicy['script-src'].externalDomains,
+].join(' ')
+
+// Build all directives dynamically from config — adding a new directive
+// to cspPolicy automatically appears in the CSP with no script changes
+const directives = Object.entries(cspPolicy).map(([key, value]) => {
+  if (key === 'script-src') return `script-src ${scriptSrc}`
+  return `${key} ${(value as readonly string[]).join(' ')}`
+})
+
+const cspValue = directives.join('; ') + ';'
 
 const vercel = JSON.parse(readFileSync(VERCEL_JSON, 'utf-8'))
-const cspHeader = vercel.headers[0].headers.find(
+const headers = vercel.headers[0].headers
+const cspIndex = headers.findIndex(
   (h: { key: string }) =>
     h.key === 'Content-Security-Policy' ||
     h.key === 'Content-Security-Policy-Report-Only',
 )
+if (cspIndex === -1) {
+  headers.splice(0, 0, { key: 'Content-Security-Policy-Report-Only', value: cspValue })
+} else {
+  headers[cspIndex].value = cspValue
+}
 
-cspHeader.value = cspHeader.value.replace(
-  /script-src\s+[^;]+;/,
-  `script-src 'self' ${hashes.join(' ')} https://www.googletagmanager.com https://cdn.jsdelivr.net;`,
-)
-
-writeFileSync(VERCEL_JSON, JSON.stringify(vercel, null, 2) + '\n')
-console.log('vercel.json updated — unsafe-inline removed')
+writeFileSync(VERCEL_JSON, `${JSON.stringify(vercel, null, 2)}\n`)
+console.log(`CSP updated — ${hashes.length} hashes across ${htmlFiles.length} HTML files`)
 ```
 
-### Wire it into the build
+### 3. Wire it into the build
 
 ```json
 {
@@ -124,97 +175,114 @@ console.log('vercel.json updated — unsafe-inline removed')
 }
 ```
 
-### Pre-push hook so it never goes stale
+### 4. Pre-push hook so hashes never go stale
 
-Add this to `.husky/pre-push` so the hashes are always regenerated before the code reaches Vercel:
+`.husky/pre-push`:
 
 ```bash
 bun run test
 bun run build
-bun run csp:hashes
 git diff --exit-code vercel.json || (git add vercel.json && git commit -m "chore(security): update CSP hashes [pre-push]")
 ```
 
-If `vercel.json` changed after the build (new pages, changed scripts), the hook automatically commits the updated hashes before pushing. You never push stale hashes.
+The build step regenerates hashes. If `vercel.json` changed (new pages, changed scripts), the hook auto-commits before pushing. You never push stale hashes to production.
 
-## Start in Report-Only mode
-
-Don't enforce the CSP immediately. Use `Content-Security-Policy-Report-Only` first and watch the browser console for violations:
+### 5. Start in Report-Only mode
 
 ```json
 {
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Content-Security-Policy-Report-Only",
-          "value": "default-src 'self'; script-src 'self' 'sha256-...' ...;"
-        }
-      ]
-    }
-  ]
+  "key": "Content-Security-Policy-Report-Only",
+  "value": "default-src 'self'; script-src 'self' 'sha256-...' ...;"
 }
 ```
 
-Browse your site, hit every page type, check for violations. Once the console is clean, flip the key to `Content-Security-Policy` and enforce.
+Browse every page type, check the browser console for violations. Once clean, change the key to `Content-Security-Policy` to enforce.
 
-## What went wrong along the way
+---
 
-This is where the post gets honest. I hit three separate problems after the initial implementation looked like it was working.
+## Pitfalls
 
-### Problem 1: Two CSP headers, all protection gone
+This is where the post gets honest. These are real mistakes I hit in production, each one after thinking the previous one was the final fix.
 
-My first attempt patched two files: `vercel.json` for the header configuration, and `.vercel/output/config.json` (the file the Astro adapter generates at build time) to also inject the hashes there.
+### Pitfall 1: Two CSP headers — all protection gone
 
-That was a mistake.
+My first attempt patched both `vercel.json` and `.vercel/output/config.json` (the file the Astro Vercel adapter generates at build time).
 
-When both files define a `Content-Security-Policy-Report-Only` header, Vercel serves **both**. Browsers don't pick one — they **intersect** multiple CSP headers: only directives that satisfy *all* policies are allowed. The result was a `script-src` that reduced to `'unsafe-inline' 'unsafe-eval'` (the intersection of my hash list and the adapter's default), and a `connect-src 'none'` that blocked every fetch on the page.
+That was a mistake. When two responses both include `Content-Security-Policy-Report-Only`, browsers don't pick one — they **intersect** all policies. Only what satisfies every policy simultaneously is allowed. The intersection of my hash list and the adapter's default `'unsafe-inline' 'unsafe-eval'` produced a `script-src` that was effectively useless, plus a `connect-src 'none'` that blocked every network request on the page.
 
-```
-Refused to execute a script: 'unsafe-inline' appears in both policies
-connect-src 'none' — no outbound connections allowed
-```
+**Fix**: Only ever write to `vercel.json`. Never touch `.vercel/output/config.json` — the adapter owns that file and regenerates it on every build.
 
-The fix: **only patch `vercel.json`**. Never touch `.vercel/output/config.json` — that file is owned by the adapter and gets regenerated on every build. If you write to it, you race the adapter and lose.
+### Pitfall 2: Trimming script content before hashing
 
-### Problem 2: Cloudflare proxy injecting its own CSP
+The original `extractInlineScripts` function did this:
 
-Before disabling the Cloudflare proxy (orange cloud → grey cloud, routing traffic directly to Vercel), Cloudflare's bot challenge page was injecting its own strict CSP on certain requests. This showed up as violations for scripts that weren't mine at all.
-
-If you're using Cloudflare in front of Vercel and seeing CSP errors you can't explain, check whether the proxy is wrapping responses with its own headers. The challenge page (`/cdn-cgi/challenge-platform/`) operates under a stricter policy that conflicts with any custom CSP.
-
-Solution: route traffic directly to Vercel, or configure Cloudflare's security level to avoid challenge pages on your main content.
-
-### Problem 3: ISR pages produce hashes that weren't pre-computed
-
-This one is expected behavior, but worth understanding. The pre-push hook computes hashes from the build output at push time. Pages that are statically generated (SSG) are fully baked — their hashes are stable.
-
-ISR pages are different. Vercel regenerates them on a schedule or on-demand after deployment. If the regenerated HTML contains `define:vars` blocks with different content (a new post slug, updated metadata), the hashes won't be in `vercel.json`.
-
-In Report-Only mode you'll see violations for those pages:
-
-```
-Refused to execute a script because its hash ... does not appear in the script-src directive
+```typescript
+const content = m[1].trim()  // ❌ wrong
+if (content) scripts.push(content)
 ```
 
-This is not a bug — it's the fundamental limitation of pre-computed hashes on dynamically regenerated content. Options:
+The browser computes the hash over the **raw bytes** of the script content — exactly as it appears between the `<script>` tags, including any leading/trailing whitespace or newlines. Trimming before hashing produces a hash that never matches.
 
-1. **Accept it in report-only** — violations are logged but nothing is blocked. Fine while you're auditing.
-2. **Flip ISR pages to SSG** — regenerate the full static build on every deploy. Slower deploys, but clean CSP.
-3. **Use nonces for ISR routes** — add Astro middleware that generates a per-request nonce for those specific routes.
+This broke `<script type="speculationrules">` which Astro emits with surrounding newlines. The fix:
 
-For a mostly-blog site, option 1 is fine. The inline scripts on ISR pages are Astro-generated and not user-controlled, so the real XSS risk is low.
+```typescript
+const raw = m[1]             // ✅ correct — hash the raw content
+if (raw.trim()) scripts.push(raw)
+```
 
-## A few things to know
+Check emptiness with `.trim()`, but push the untrimmed `raw` value for hashing.
 
-**The hash list gets long.** Each unique `define:vars` combination produces a distinct hash. A site with 100 posts ends up with 150+ hashes in `script-src`. That's fine — the header is cached and browsers handle it without a sweat.
+### Pitfall 3: `'strict-dynamic'` breaks external scripts on static sites
 
-**Speculation rules need a hash too.** The `<script type="speculationrules">` tag is treated as executable by the CSP spec. The script above handles it automatically since it doesn't filter by `type`.
+After seeing a browser DevTools recommendation to use `'strict-dynamic'`, I added it to `script-src`. This immediately caused 20+ violations as every `/_astro/*.js` script was blocked.
 
-**Service workers cache response headers.** If a previous deployment served a broken CSP (like the double-header situation above), your service worker may have cached those responses. Bumping the service worker cache name forces a cache bust on the next load.
+`'strict-dynamic'` makes host allowlists irrelevant for supporting browsers. `'self'` stops working. Scripts loaded via `<script src="...">` in the HTML are no longer trusted unless they have a nonce or hash. For a static site that can't generate per-request nonces, that means all your external scripts are blocked.
 
-**This only covers SSG and ISR pages.** If you have truly server-rendered pages that produce different inline script content on each request, their hashes can't be pre-computed — you'd need nonces from Astro middleware for those. For statically rendered pages (which is most of Astro), hashes work perfectly.
+`'strict-dynamic'` is designed for nonce-based CSP where a server generates a fresh nonce per request and stamps it on every `<script>` tag. It doesn't compose with the hash + host allowlist approach used here.
+
+**Fix**: Don't use `'strict-dynamic'` on a static site without a nonce infrastructure.
+
+### Pitfall 4: `require-trusted-types-for 'script'` breaks GTM
+
+Same DevTools recommendation — I added `require-trusted-types-for 'script'`. It immediately produced violations from Google Tag Manager, which uses `innerHTML` and other DOM sinks internally.
+
+Trusted Types enforcement requires all DOM XSS sinks to receive `TrustedHTML`/`TrustedScript` objects rather than raw strings. GTM doesn't support Trusted Types and there's no configuration to make it do so. If enforced, your analytics breaks.
+
+**Fix**: Skip `require-trusted-types-for` unless every third-party script you load supports Trusted Types (rare in 2026).
+
+### Pitfall 5: Cloudflare Bot Fight Mode injects unhashable scripts
+
+With Bot Fight Mode enabled, Cloudflare injects an inline challenge script into HTML responses at the edge. The script contains a per-request dynamic token:
+
+```javascript
+window.__CF$cv$params={r:'a00e1621a822892e',t:'MTc3...'};
+```
+
+Because the token changes on every request, the hash changes on every request. You can never pre-compute it. The violation appears in the console even when every other script is correctly hashed.
+
+**Fix**: Disable Bot Fight Mode in the Cloudflare dashboard (Security → Bots → Bot Fight Mode → Off). The challenge script disappears from the HTML after ~5 minutes of propagation.
+
+---
+
+## Why this site is still in Report-Only mode
+
+After all the fixes above, the CSP is implemented correctly — but I'm keeping it in `Content-Security-Policy-Report-Only` rather than switching to enforcement for one reason: **Cloudflare's edge still occasionally injects scripts I don't control**.
+
+Even with Bot Fight Mode disabled, other Cloudflare features (Rocket Loader, certain WAF rules, challenge pages) can inject inline scripts into HTML at the edge layer after the response leaves Vercel. Those scripts change per-request and can't be pre-hashed. If I enforce the CSP while any of those are active, real users on challenge pages would have a broken experience.
+
+The policy to enforce:
+
+1. Confirm all Cloudflare inline-script injections are disabled
+2. Check the browser console across all page types — zero violations
+3. Change the header key from `Content-Security-Policy-Report-Only` to `Content-Security-Policy`
+
+That last step is one line change in `vercel.json`. The infrastructure is ready — it's just waiting on a clean console.
+
+---
+
+## What the console should look like
+
+After all fixes, Report-Only violations should be zero — or limited only to browser extensions injecting their own scripts into your page (which you can't prevent and which won't affect real users without that extension installed).
 
 ## The result
 
@@ -227,15 +295,10 @@ script-src 'self' 'unsafe-inline' https://www.googletagmanager.com
 After:
 
 ```
-script-src 'self' 'sha256-+78eXcH...' 'sha256-Ab3kpQ...' ... https://www.googletagmanager.com
+script-src 'self'
+  'sha256-ncBTDHd...' 'sha256-znA0iCf...' [~150 more hashes]
+  https://www.googletagmanager.com https://cdn.jsdelivr.net
+  https://challenges.cloudflare.com https://static.cloudflareinsights.com;
 ```
 
-No `'unsafe-inline'`, no nonce infrastructure, no middleware. Just a script that keeps the allowlist honest on every push — and three hard lessons about what breaks when you think it's working.
-
-## What's still pending
-
-As of this writing, the CSP on this site is still in **Report-Only** mode. The hash list is generated correctly and the script runs on every push, but I haven't flipped the header to enforcement yet.
-
-The remaining step is straightforward: once the browser console shows zero violations across all page types (including ISR-regenerated ones), change the key in `vercel.json` from `Content-Security-Policy-Report-Only` to `Content-Security-Policy`. That's it — one key change and the policy moves from "observer" to "enforcer."
-
-I'll update this post once I make the flip and confirm nothing breaks.
+No `'unsafe-inline'`, no nonce infrastructure, no middleware. The hash list updates automatically on every push.
