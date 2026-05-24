@@ -231,3 +231,11 @@ script-src 'self' 'sha256-+78eXcH...' 'sha256-Ab3kpQ...' ... https://www.googlet
 ```
 
 No `'unsafe-inline'`, no nonce infrastructure, no middleware. Just a script that keeps the allowlist honest on every push — and three hard lessons about what breaks when you think it's working.
+
+## What's still pending
+
+As of this writing, the CSP on this site is still in **Report-Only** mode. The hash list is generated correctly and the script runs on every push, but I haven't flipped the header to enforcement yet.
+
+The remaining step is straightforward: once the browser console shows zero violations across all page types (including ISR-regenerated ones), change the key in `vercel.json` from `Content-Security-Policy-Report-Only` to `Content-Security-Policy`. That's it — one key change and the policy moves from "observer" to "enforcer."
+
+I'll update this post once I make the flip and confirm nothing breaks.

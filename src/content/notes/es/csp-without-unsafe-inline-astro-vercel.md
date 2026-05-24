@@ -231,3 +231,11 @@ script-src 'self' 'sha256-+78eXcH...' 'sha256-Ab3kpQ...' ... https://www.googlet
 ```
 
 Sin `'unsafe-inline'`, sin infraestructura de nonces, sin middleware. Solo un script que mantiene el allowlist honesto en cada push — y tres lecciones difíciles sobre qué se rompe cuando pensás que todo funciona.
+
+## Lo que queda pendiente
+
+Al momento de escribir esto, el CSP de este sitio todavía está en modo **Report-Only**. La lista de hashes se genera correctamente y el script corre en cada push, pero aún no cambié el header a enforcement.
+
+El paso restante es simple: una vez que la consola del navegador muestre cero violaciones en todos los tipos de páginas (incluyendo las regeneradas por ISR), cambiar la clave en `vercel.json` de `Content-Security-Policy-Report-Only` a `Content-Security-Policy`. Eso es todo — un cambio de clave y la política pasa de "observadora" a "aplicada".
+
+Actualizaré este post cuando haga el cambio y confirme que nada se rompe.

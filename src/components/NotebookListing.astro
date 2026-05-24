@@ -71,6 +71,7 @@ if (!hasQuery) {
       const collection = note.collections[0] ?? ''
       const imgVtn = `note-img-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
       const titleVtn = `note-title-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+      const cardVtn = `note-card-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
       const imgHtml = note.coverSrc
         ? `<div class="card-thumb" style="view-transition-name:${imgVtn}"><img src="${note.coverSrc.replace(/"/g, '&quot;')}" alt="${coverAlt}" loading="lazy" /></div>`
         : ''
@@ -93,7 +94,7 @@ if (!hasQuery) {
             day: 'numeric',
           })
       return `<li class="note-card-item">
-      <article aria-label="${title}" data-link="${note.href}" data-collection="${collection}">
+      <article aria-label="${title}" data-link="${note.href}" data-collection="${collection}" style="view-transition-name:${cardVtn}">
         <div class="wrapper">
           ${imgHtml}
           <div class="title" style="view-transition-name:${titleVtn}" title="${title}"><h2>${title}</h2></div>

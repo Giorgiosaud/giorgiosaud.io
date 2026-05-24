@@ -22,6 +22,7 @@ const collectionId =
 const slug = collectionId.replace(/^\d{4}-\d{2}-\d{2}-/, '')
 const imgVtn = `note-img-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 const titleVtn = `note-title-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
+const cardVtn = `note-card-${note.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`
 const showDraftBadge = isDraftInDevMode(note.data)
 
 const dateIso =
@@ -40,7 +41,7 @@ const dateLabel = note.data.lastUpdate
 ---
 
 <li class="note-card-item">
-  <article aria-label={note.data.title} data-link={href} data-collection={slug}>
+  <article aria-label={note.data.title} data-link={href} data-collection={slug} style={`view-transition-name:${cardVtn}`}>
     {showDraftBadge && <span class="draft-badge">DRAFT</span>}
     <div class="wrapper">
       {note.data.cover && (
