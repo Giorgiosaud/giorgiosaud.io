@@ -28,6 +28,8 @@ pnpm-debug.log*
 .vercel/
 .frontmatter
 .vercel
+.superpowers/
 .env*.local
 .pollinations-last-request
 scripts/generateCoverImage.ts
+.env*
