@@ -1,5 +1,5 @@
 // Service worker for push notifications + minimal page cache
-const CACHE_NAME = 'pages-v1'
+const CACHE_NAME = 'pages-v2'
 
 // Configurable via postMessage from client
 let config = {
