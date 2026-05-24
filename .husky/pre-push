@@ -1,2 +1,3 @@
 bun run test
 bun run build
+git diff --exit-code vercel.json || (git add vercel.json && git commit -m "chore(security): update CSP hashes [pre-push]")
