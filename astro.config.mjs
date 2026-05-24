@@ -173,11 +173,5 @@ export default defineConfig({
 
   adapter: vercel({
     skewProtection: true,
-    isr: {
-      // Exclude API routes from ISR to preserve query parameters (e.g., OAuth callbacks)
-      exclude: [
-        /^\/api\/.+/,
-      ],
-    },
   }),
 })
