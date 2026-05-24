@@ -1,12 +1,13 @@
 /**
  * Post-build script: scans dist/client HTML files, extracts inline scripts,
- * generates SHA-256 hashes, and updates the CSP script-src in vercel.json.
+ * generates SHA-256 hashes, and rebuilds the CSP in vercel.json from src/config/csp.ts.
  *
  * Run after `astro build` — wired into the build script in package.json.
  */
 import { createHash } from 'node:crypto'
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { cspPolicy } from '../src/config/csp'
 
 const VERCEL_JSON = join(process.cwd(), 'vercel.json')
 const DIST_DIR = join(process.cwd(), 'dist/client')
@@ -53,14 +54,27 @@ for (const file of htmlFiles) {
 const hashes = [...hashSet].sort()
 console.log(`Found ${hashes.length} unique hashes across ${htmlFiles.length} HTML files`)
 
+// Build full CSP string from config
 const scriptSrc = [
-  "'self'",
+  ...cspPolicy['script-src'].static,
   ...hashes,
-  'https://www.googletagmanager.com',
-  'https://cdn.jsdelivr.net',
-  'https://challenges.cloudflare.com',
-  'https://static.cloudflareinsights.com',
+  ...cspPolicy['script-src'].externalDomains,
 ].join(' ')
+
+const directives: string[] = [
+  `default-src ${cspPolicy['default-src'].join(' ')}`,
+  `script-src ${scriptSrc}`,
+  `style-src ${cspPolicy['style-src'].join(' ')}`,
+  `img-src ${cspPolicy['img-src'].join(' ')}`,
+  `connect-src ${cspPolicy['connect-src'].join(' ')}`,
+  `worker-src ${cspPolicy['worker-src'].join(' ')}`,
+  `frame-src ${cspPolicy['frame-src'].join(' ')}`,
+  `object-src ${cspPolicy['object-src'].join(' ')}`,
+  `base-uri ${cspPolicy['base-uri'].join(' ')}`,
+  `form-action ${cspPolicy['form-action'].join(' ')}`,
+]
+
+const cspValue = directives.join('; ') + ';'
 
 const vercel = JSON.parse(readFileSync(VERCEL_JSON, 'utf-8'))
 const cspEntry = vercel.headers[0].headers.find(
@@ -73,6 +87,6 @@ if (!cspEntry) {
   process.exit(1)
 }
 
-cspEntry.value = cspEntry.value.replace(/script-src\s+[^;]+;/, `script-src ${scriptSrc};`)
+cspEntry.value = cspValue
 writeFileSync(VERCEL_JSON, `${JSON.stringify(vercel, null, 2)}\n`)
-console.log('vercel.json updated — unsafe-inline removed, hashes injected')
+console.log('vercel.json updated from csp.ts config with fresh hashes')
