@@ -3,7 +3,7 @@ draft: false
 selfHealing: "cspwth"
 starred: false
 title: "CSP Without unsafe-inline in Astro + Vercel"
-description: "How to remove unsafe-inline from your Content Security Policy in an Astro site deployed to Vercel, using SHA-256 hashes generated automatically at build time."
+description: "How to remove unsafe-inline from your Content Security Policy in an Astro site deployed to Vercel, using SHA-256 hashes generated automatically at build time — and the pitfalls we hit along the way."
 publishDate: 2026-05-24T00:00:00.000Z
 category: security
 author: giorgio-saud
@@ -22,7 +22,7 @@ lang: en
 
 I was auditing the security headers on giorgiosaud.io and realized my CSP had `'unsafe-inline'` in `script-src`. That's the one directive that makes most of the XSS protection pointless — any inline script runs, including ones an attacker injected. The problem: Astro generates inline scripts everywhere and I didn't want to add middleware just to handle nonces.
 
-Hashes turned out to be the right fix for a mostly-static site.
+Hashes turned out to be the right fix for a mostly-static site. But getting there was not a straight line.
 
 ## What Astro inlines and why it's annoying
 
@@ -159,11 +159,60 @@ Don't enforce the CSP immediately. Use `Content-Security-Policy-Report-Only` fir
 
 Browse your site, hit every page type, check for violations. Once the console is clean, flip the key to `Content-Security-Policy` and enforce.
 
+## What went wrong along the way
+
+This is where the post gets honest. I hit three separate problems after the initial implementation looked like it was working.
+
+### Problem 1: Two CSP headers, all protection gone
+
+My first attempt patched two files: `vercel.json` for the header configuration, and `.vercel/output/config.json` (the file the Astro adapter generates at build time) to also inject the hashes there.
+
+That was a mistake.
+
+When both files define a `Content-Security-Policy-Report-Only` header, Vercel serves **both**. Browsers don't pick one — they **intersect** multiple CSP headers: only directives that satisfy *all* policies are allowed. The result was a `script-src` that reduced to `'unsafe-inline' 'unsafe-eval'` (the intersection of my hash list and the adapter's default), and a `connect-src 'none'` that blocked every fetch on the page.
+
+```
+Refused to execute a script: 'unsafe-inline' appears in both policies
+connect-src 'none' — no outbound connections allowed
+```
+
+The fix: **only patch `vercel.json`**. Never touch `.vercel/output/config.json` — that file is owned by the adapter and gets regenerated on every build. If you write to it, you race the adapter and lose.
+
+### Problem 2: Cloudflare proxy injecting its own CSP
+
+Before disabling the Cloudflare proxy (orange cloud → grey cloud, routing traffic directly to Vercel), Cloudflare's bot challenge page was injecting its own strict CSP on certain requests. This showed up as violations for scripts that weren't mine at all.
+
+If you're using Cloudflare in front of Vercel and seeing CSP errors you can't explain, check whether the proxy is wrapping responses with its own headers. The challenge page (`/cdn-cgi/challenge-platform/`) operates under a stricter policy that conflicts with any custom CSP.
+
+Solution: route traffic directly to Vercel, or configure Cloudflare's security level to avoid challenge pages on your main content.
+
+### Problem 3: ISR pages produce hashes that weren't pre-computed
+
+This one is expected behavior, but worth understanding. The pre-push hook computes hashes from the build output at push time. Pages that are statically generated (SSG) are fully baked — their hashes are stable.
+
+ISR pages are different. Vercel regenerates them on a schedule or on-demand after deployment. If the regenerated HTML contains `define:vars` blocks with different content (a new post slug, updated metadata), the hashes won't be in `vercel.json`.
+
+In Report-Only mode you'll see violations for those pages:
+
+```
+Refused to execute a script because its hash ... does not appear in the script-src directive
+```
+
+This is not a bug — it's the fundamental limitation of pre-computed hashes on dynamically regenerated content. Options:
+
+1. **Accept it in report-only** — violations are logged but nothing is blocked. Fine while you're auditing.
+2. **Flip ISR pages to SSG** — regenerate the full static build on every deploy. Slower deploys, but clean CSP.
+3. **Use nonces for ISR routes** — add Astro middleware that generates a per-request nonce for those specific routes.
+
+For a mostly-blog site, option 1 is fine. The inline scripts on ISR pages are Astro-generated and not user-controlled, so the real XSS risk is low.
+
 ## A few things to know
 
-**The hash list gets long.** Each unique `define:vars` combination produces a distinct hash. A site with 100 posts might end up with 150+ hashes in `script-src`. That's fine — the header is cached and browsers handle it without a sweat.
+**The hash list gets long.** Each unique `define:vars` combination produces a distinct hash. A site with 100 posts ends up with 150+ hashes in `script-src`. That's fine — the header is cached and browsers handle it without a sweat.
 
 **Speculation rules need a hash too.** The `<script type="speculationrules">` tag is treated as executable by the CSP spec. The script above handles it automatically since it doesn't filter by `type`.
+
+**Service workers cache response headers.** If a previous deployment served a broken CSP (like the double-header situation above), your service worker may have cached those responses. Bumping the service worker cache name forces a cache bust on the next load.
 
 **This only covers SSG and ISR pages.** If you have truly server-rendered pages that produce different inline script content on each request, their hashes can't be pre-computed — you'd need nonces from Astro middleware for those. For statically rendered pages (which is most of Astro), hashes work perfectly.
 
@@ -181,4 +230,4 @@ After:
 script-src 'self' 'sha256-+78eXcH...' 'sha256-Ab3kpQ...' ... https://www.googletagmanager.com
 ```
 
-No `'unsafe-inline'`, no nonce infrastructure, no middleware. Just a script that keeps the allowlist honest on every push.
+No `'unsafe-inline'`, no nonce infrastructure, no middleware. Just a script that keeps the allowlist honest on every push — and three hard lessons about what breaks when you think it's working.
