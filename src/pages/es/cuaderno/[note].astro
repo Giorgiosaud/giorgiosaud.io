@@ -6,6 +6,7 @@ import AISummarizer from '@components/AISummarizer.astro'
 import { CommentsSection } from '@components/comments'
 import RelatedNotes from '@components/RelatedNotes.astro'
 import ScrollTracker from '@components/ScrollTracker.svelte'
+import ShareSection from '@components/ShareSection.astro'
 import { getPublishedNotes } from '@helpers/collections'
 import { getRelatedNotes } from '@helpers/relatedNotes'
 import NoteTemplate from '@templates/Note.astro'
@@ -57,15 +58,11 @@ llmPath={`/es/cuaderno/${page.id}.md`}
   <figcaption>{coverAlt}</figcaption>
 </figure>
 <AISummarizer lang="es" noteId={selfHealing} />
-<div id="content">
+<article id="content">
   <h1 style={`view-transition-name:note-title-${page.id.replace(/[^a-zA-Z0-9_-]/g, '-')}`}>{title}</h1>
   <Content/>
-</div>
-<section class="share">
-  <p>Comparte esta nota:</p>
-  <p id="notification">Link copiado al portapapeles!</p>
-  <button id="share" class="button button-primary" popovertarget="#share-notification">Compartir</button>
-</section>
+</article>
+<ShareSection lang="es" selfHealing={selfHealing} publishDate={publishDate} />
 <div class="comments-wrapper">
   <CommentsSection client:load noteId={selfHealing} lang="es" turnstileSiteKey={TURNSTILE_SITE_KEY} />
 </div>
@@ -83,72 +80,13 @@ llmPath={`/es/cuaderno/${page.id}.md`}
 
   trackEvent({ event: 'note_view', note_id: selfHealing, note_title: title, category: '', lang: 'es' })
 
-  const notification = document.getElementById('notification')
-  const shareButton = document.getElementById('share')
-  const urlToShare = `${window.location.href}-${selfHealing}`
-
-  const copyLink = async (link) => {
-    if (navigator.clipboard) {
-      await navigator.clipboard.writeText(link)
-      notification.style.display = 'block'
-      setTimeout(() => { notification.style.display = 'none' }, 2000)
-    } else {
-      throw new Error('Clipboard API not supported')
-    }
+  window.__trackShare = (noteId, method, lang) => {
+    trackEvent({ event: 'share_click', note_id: noteId, method, lang })
   }
-
-  const shareViaShareApi = async ({ title, text, url }) => {
-    if (navigator.share) {
-      await navigator.share({ title, text, url })
-    } else {
-      throw new Error('Share API not supported')
-    }
-  }
-
-  const shareContent = async () => {
-    const shareData = {
-      title: document.querySelector('h1').textContent,
-      text: document.querySelector('meta[name="description"]').content,
-      url: urlToShare,
-    }
-    try {
-      await shareViaShareApi(shareData)
-      trackEvent({ event: 'share_click', note_id: selfHealing, method: 'native', lang: 'es' })
-    } catch {
-      try {
-        await copyLink(shareData.url)
-        trackEvent({ event: 'share_click', note_id: selfHealing, method: 'copy', lang: 'es' })
-      } catch (error) {
-        console.error('Error copying link:', error)
-      }
-    }
-  }
-  shareButton.addEventListener('click', shareContent)
 </script>
 <style >
   .comments-wrapper {
     grid-column: content;
-  }
-  #share{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-top: 1rem;
-    color: light-dark(var(--color-light), var(--color-dark));
-    anchor-name: --share-button;
-  }
-  #notification{
-    display:none;
-    position: fixed;
-    right: 10px;
-    background-color: var(--color-main);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 1000;
-    position-anchor: --share-button;
-    bottom: calc(anchor(top) + 10px);
   }
   figure {
     text-align: center;
