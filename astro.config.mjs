@@ -7,6 +7,24 @@ import vercel from '@astrojs/vercel'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
 
+// Suppress LightningCSS warnings for bleeding-edge pseudo-elements not yet in its spec database
+const suppressKnownWarnings = {
+  name: 'suppress-known-warnings',
+  configResolved(config) {
+    const original = config.logger.warn.bind(config.logger)
+    config.logger.warn = (msg, options) => {
+      // scroll-marker* are progressive enhancement carousel features, not yet in lightningcss spec db
+      if (msg.includes('lightningcss') && (
+        msg.includes('scroll-marker') ||
+        msg.includes('scroll-marker-group') ||
+        msg.includes('target-current')
+      )) return
+      if (msg.includes('"getTelemetryAuthConfig"') || msg.includes('"optionsMiddleware"')) return
+      original(msg, options)
+    }
+  },
+}
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://giorgiosaud.io',
@@ -19,6 +37,7 @@ export default defineConfig({
   ],
 
   vite: {
+    plugins: [suppressKnownWarnings],
     resolve: {
       alias: {
         '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
