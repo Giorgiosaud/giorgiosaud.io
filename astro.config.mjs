@@ -14,12 +14,18 @@ const suppressKnownWarnings = {
     const original = config.logger.warn.bind(config.logger)
     config.logger.warn = (msg, options) => {
       // scroll-marker* are progressive enhancement carousel features, not yet in lightningcss spec db
-      if (msg.includes('lightningcss') && (
-        msg.includes('scroll-marker') ||
-        msg.includes('scroll-marker-group') ||
-        msg.includes('target-current')
-      )) return
-      if (msg.includes('"getTelemetryAuthConfig"') || msg.includes('"optionsMiddleware"')) return
+      if (
+        msg.includes('lightningcss') &&
+        (msg.includes('scroll-marker') ||
+          msg.includes('scroll-marker-group') ||
+          msg.includes('target-current'))
+      )
+        return
+      if (
+        msg.includes('"getTelemetryAuthConfig"') ||
+        msg.includes('"optionsMiddleware"')
+      )
+        return
       original(msg, options)
     }
   },
@@ -32,12 +38,19 @@ export default defineConfig({
     mdx(),
     react(),
     vue(),
-    svelte({ preprocess: vitePreprocess({ script: true }), configFile: false }),
+    svelte({
+      preprocess: vitePreprocess({
+        script: true,
+      }),
+      configFile: false,
+    }),
     sitemap(),
   ],
 
   vite: {
-    plugins: [suppressKnownWarnings],
+    plugins: [
+      suppressKnownWarnings,
+    ],
     resolve: {
       alias: {
         '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
@@ -56,7 +69,7 @@ export default defineConfig({
     },
     build: {
       cssMinify: 'lightningcss',
-      inlineStylesheets: 'never'
+      inlineStylesheets: 'never',
     },
   },
 

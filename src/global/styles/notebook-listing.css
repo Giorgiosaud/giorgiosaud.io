@@ -43,7 +43,9 @@ h1 {
   cursor: pointer;
   font-size: 0.9rem;
   font-family: inherit;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .chip.active,
@@ -78,55 +80,99 @@ h1 {
 }
 
 /* ── Collection hues ── */
-.note-card-item { --note-hue: 210; }
+.note-card-item {
+  --note-hue: 210;
+}
 
-[data-collection="ai"]                    { --note-hue: 174; }
-[data-collection="architecture"]          { --note-hue: 220; }
-[data-collection="astro"]                 { --note-hue: 24;  }
-[data-collection="common-issues"]         { --note-hue: 0;   }
-[data-collection="frontend"]              { --note-hue: 142; }
-[data-collection="industrial-engineering"]{ --note-hue: 270; }
-[data-collection="integration"]           { --note-hue: 190; }
-[data-collection="migration"]             { --note-hue: 40;  }
-[data-collection="patterns"]              { --note-hue: 320; }
-[data-collection="security"]              { --note-hue: 0;   }
-[data-collection="strategy"]              { --note-hue: 250; }
-[data-collection="geopolitica"]           { --note-hue: 160; }
+[data-collection="ai"] {
+  --note-hue: 174;
+}
+[data-collection="architecture"] {
+  --note-hue: 220;
+}
+[data-collection="astro"] {
+  --note-hue: 24;
+}
+[data-collection="common-issues"] {
+  --note-hue: 0;
+}
+[data-collection="frontend"] {
+  --note-hue: 142;
+}
+[data-collection="industrial-engineering"] {
+  --note-hue: 270;
+}
+[data-collection="integration"] {
+  --note-hue: 190;
+}
+[data-collection="migration"] {
+  --note-hue: 40;
+}
+[data-collection="patterns"] {
+  --note-hue: 320;
+}
+[data-collection="security"] {
+  --note-hue: 0;
+}
+[data-collection="strategy"] {
+  --note-hue: 250;
+}
+[data-collection="geopolitica"] {
+  --note-hue: 160;
+}
 
 /* ── Sticky-note cards ── */
 .note-card-item {
   container: note / inline-size;
   --_tilt: 0deg;
 }
-.note-card-item:nth-child(3n+1) { --_tilt: -1.1deg; }
-.note-card-item:nth-child(3n+2) { --_tilt:  0.7deg; }
-.note-card-item:nth-child(3n)   { --_tilt: -0.4deg; }
+.note-card-item:nth-child(3n + 1) {
+  --_tilt: -1.1deg;
+}
+.note-card-item:nth-child(3n + 2) {
+  --_tilt: 0.7deg;
+}
+.note-card-item:nth-child(3n) {
+  --_tilt: -0.4deg;
+}
 
 .note-card-item article {
   --_fold: 28px;
   position: relative;
   transform: rotate(var(--_tilt));
   transform-origin: center bottom;
-  transition: transform 0.25s cubic-bezier(.4,1.6,.5,1), box-shadow 0.25s ease;
-  clip-path: polygon(0 0, calc(100% - var(--_fold)) 0, 100% var(--_fold), 100% 100%, 0 100%);
+  transition:
+    transform 0.25s cubic-bezier(0.4, 1.6, 0.5, 1),
+    box-shadow 0.25s ease;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--_fold)) 0,
+    100% var(--_fold),
+    100% 100%,
+    0 100%
+  );
   box-shadow:
-    3px 3px 0 1px light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
-    6px 6px 0 2px light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
-    0 6px 18px rgba(0,0,0,0.13);
+    3px 3px 0 1px
+    light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
+    6px 6px 0 2px
+    light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
+    0 6px 18px rgba(0, 0, 0, 0.13);
 }
 
 .note-card-item article:hover {
   transform: rotate(0deg) translateY(-6px);
   box-shadow:
-    3px 3px 0 1px light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
-    6px 6px 0 2px light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
-    0 12px 24px rgba(0,0,0,0.22);
+    3px 3px 0 1px
+    light-dark(hsl(var(--note-hue) 60% 80%), hsl(var(--note-hue) 20% 25%)),
+    6px 6px 0 2px
+    light-dark(hsl(var(--note-hue) 55% 75%), hsl(var(--note-hue) 20% 20%)),
+    0 12px 24px rgba(0, 0, 0, 0.22);
   z-index: 5;
 }
 
 /* pin at the top center */
 .note-card-item article::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -7px;
   left: 50%;
@@ -139,13 +185,15 @@ h1 {
     hsl(var(--note-hue) 50% 45%)
   );
   border-radius: 50%;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.35), inset 0 -1px 2px rgba(0,0,0,0.2);
+  box-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.35),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.2);
   z-index: 4;
 }
 
 /* folded corner */
 .note-card-item article::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   right: 0;
@@ -157,7 +205,7 @@ h1 {
     hsl(var(--note-hue) 40% 68%) 50%,
     transparent 50%
   );
-  filter: drop-shadow(-1px 1px 2px rgba(0,0,0,0.18));
+  filter: drop-shadow(-1px 1px 2px rgba(0, 0, 0, 0.18));
   pointer-events: none;
 }
 
@@ -167,24 +215,14 @@ h1 {
     repeating-linear-gradient(
       transparent,
       transparent calc(1.6rem - 1px),
-      light-dark(
-        hsl(var(--note-hue) 50% 84%),
-        hsl(var(--note-hue) 30% 28%)
-      ) calc(1.6rem - 1px),
-      light-dark(
-        hsl(var(--note-hue) 50% 84%),
-        hsl(var(--note-hue) 30% 28%)
-      ) 1.6rem
+      light-dark(hsl(var(--note-hue) 50% 84%), hsl(var(--note-hue) 30% 28%))
+        calc(1.6rem - 1px),
+      light-dark(hsl(var(--note-hue) 50% 84%), hsl(var(--note-hue) 30% 28%))
+        1.6rem
     ),
-    light-dark(
-      hsl(var(--note-hue) 70% 93%),
-      hsl(var(--note-hue) 25% 18%)
-    );
+    light-dark(hsl(var(--note-hue) 70% 93%), hsl(var(--note-hue) 25% 18%));
   background-position: 0 3.2rem;
-  color: light-dark(
-    hsl(var(--note-hue) 40% 18%),
-    hsl(var(--note-hue) 15% 88%)
-  );
+  color: light-dark(hsl(var(--note-hue) 40% 18%), hsl(var(--note-hue) 15% 88%));
   border-radius: 2px;
   padding: 1.1rem 1.1rem 1.25rem;
   height: 100%;
@@ -244,7 +282,10 @@ h1 {
   text-transform: capitalize;
   padding: 0.15rem 0.5rem;
   border-radius: 9999px;
-  background: light-dark(hsl(var(--note-hue) 60% 75%), hsl(var(--note-hue) 30% 35%));
+  background: light-dark(
+    hsl(var(--note-hue) 60% 75%),
+    hsl(var(--note-hue) 30% 35%)
+  );
   /* AA-compliant: very dark on light bg, near-white on dark bg */
   color: light-dark(hsl(var(--note-hue) 40% 12%), hsl(var(--note-hue) 10% 95%));
 }
@@ -281,7 +322,9 @@ h1 {
   cursor: pointer;
   font-size: 0.95rem;
   font-family: inherit;
-  transition: background 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    color 0.15s;
 }
 
 .pagination-btn:hover {

@@ -1,22 +1,13 @@
 import { reference, z } from 'astro:content'
 import { SELF_HEALING_REGEX } from '@config/constants'
 
-/**
- * Shared schema for notes collection (used by both EN and ES versions).
- *
- * Features:
- * - Self-healing URLs via 6-char consonant-only codes
- * - Type-safe author and collections references
- * - Image handling with Astro's image() helper
- */
-export const noteSchema = ({
-  image,
-}: {
-  image: () => ReturnType<typeof z.custom>
-}) =>
+export const noteSchema = ({ image }: { image: () => z.ZodType }) =>
   z.object({
     draft: z.boolean({
-      required_error: 'draft is required',
+      error: issue =>
+        issue.input === undefined
+          ? 'Draft is required'
+          : 'Value must be true or false',
     }),
     title: z.string(),
     resume: z.string().optional(),
