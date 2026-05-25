@@ -305,6 +305,49 @@ No `'unsafe-inline'`, no nonce infrastructure, no middleware. The hash list upda
 
 ---
 
+## Nonce strategies compared
+
+When people say "use a nonce instead of hashes," there are actually three different things they might mean — each with a different security profile.
+
+### Per-request nonce (the gold standard)
+
+A server generates a cryptographically random value on every HTTP request and stamps it on every `<script>` tag. The CSP header includes `'nonce-{value}'`. The nonce is single-use — it's useless after the response is sent.
+
+This is what `'strict-dynamic'` is designed for. It's the most secure approach but requires a server rendering every page on every request. Not compatible with static site generation.
+
+### Deploy-rotating nonce (tempting shortcut)
+
+One random nonce is generated at build time and baked into every HTML file across the entire site. It stays valid until the next deploy, then a new one is generated.
+
+This sounds appealing for static sites — simpler than scanning every HTML file for hashes. But it has a fundamental weakness: **the nonce is visible in every page's HTML source**. Anyone can open view-source, read the nonce value, and include it on an injected script. Within a deploy window, the nonce provides no protection against XSS at all — it only prevents replaying nonces from *previous* deploys.
+
+```html
+<!-- attacker reads this from view-source -->
+<script nonce="abc123">legitimate code</script>
+
+<!-- attacker injects this anywhere on the page -->
+<script nonce="abc123">steal(document.cookie)</script>
+```
+
+### Per-script hashes (what this site uses)
+
+Each inline script's exact content is hashed at build time. Only scripts whose SHA-256 matches a hash in `script-src` are allowed to run. The hashes rotate every deploy automatically.
+
+An attacker who reads your hashes from the CSP header gains nothing — knowing `sha256-ncBTDHd...` doesn't help inject a different script, because the hash of a different script is a different value.
+
+### Comparison
+
+| Strategy | Rotates | Visible to attacker | Protects against XSS | Works on static sites |
+|---|---|---|---|---|
+| Per-request nonce | Every request | Yes (in HTML) | ✅ Yes | ❌ No |
+| Deploy nonce | Every deploy | Yes (in HTML) | ❌ No | ✅ Yes |
+| Per-script hashes | Every deploy | Yes (in CSP header) | ✅ Yes | ✅ Yes |
+| `'unsafe-inline'` | Never | — | ❌ No | ✅ Yes |
+
+The deploy nonce is the worst of both worlds: it has the operational complexity of a nonce (you need to stamp every script tag at build time) without the security benefit. Per-script hashes are strictly better for static sites — same deploy cadence, same automation, actual XSS protection.
+
+---
+
 ## When to give up on CSP
 
 Not every site should implement a strict CSP. Here's an honest assessment of when to stop and why.

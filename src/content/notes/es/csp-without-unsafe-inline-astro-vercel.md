@@ -183,6 +183,49 @@ Sin `'unsafe-inline'`, sin infraestructura de nonces, sin middleware. Los hashes
 
 ---
 
+## Comparación de estrategias con nonces
+
+Cuando alguien dice "usá un nonce en vez de hashes" hay en realidad tres cosas distintas que puede significar — cada una con un perfil de seguridad diferente.
+
+### Nonce por request (el estándar de oro)
+
+El servidor genera un valor criptográficamente aleatorio en cada request HTTP y lo estampa en cada tag `<script>`. El header CSP incluye `'nonce-{valor}'`. El nonce es de uso único — es inútil después de que se envía la respuesta.
+
+Es el enfoque más seguro pero requiere que el servidor renderice cada página en cada request. No es compatible con generación de sitios estáticos.
+
+### Nonce rotativo por deploy (atajo tentador)
+
+Se genera un único nonce aleatorio en build time y se hornea en todos los archivos HTML del sitio. Permanece válido hasta el próximo deploy, luego se genera uno nuevo.
+
+Suena atractivo para sitios estáticos — más simple que escanear cada archivo HTML en busca de hashes. Pero tiene una debilidad fundamental: **el nonce es visible en el source HTML de cada página**. Cualquiera puede abrir view-source, leer el valor del nonce, e incluirlo en un script inyectado. Dentro de una ventana de deploy, el nonce no provee ninguna protección contra XSS — solo evita reutilizar nonces de deploys *anteriores*.
+
+```html
+<!-- el atacante lee esto de view-source -->
+<script nonce="abc123">código legítimo</script>
+
+<!-- el atacante inyecta esto en cualquier parte de la página -->
+<script nonce="abc123">robar(document.cookie)</script>
+```
+
+### Hashes por script (lo que usa este sitio)
+
+El contenido exacto de cada script inline se hashea en build time. Solo los scripts cuyo SHA-256 coincide con un hash en `script-src` pueden ejecutarse. Los hashes rotan en cada deploy automáticamente.
+
+Un atacante que lee tus hashes del header CSP no gana nada — conocer `sha256-ncBTDHd...` no ayuda a inyectar un script diferente, porque el hash de un script diferente es un valor diferente.
+
+### Comparación
+
+| Estrategia | Rota | Visible para el atacante | Protege contra XSS | Funciona en sitios estáticos |
+|---|---|---|---|---|
+| Nonce por request | Cada request | Sí (en HTML) | ✅ Sí | ❌ No |
+| Nonce por deploy | Cada deploy | Sí (en HTML) | ❌ No | ✅ Sí |
+| Hashes por script | Cada deploy | Sí (en header CSP) | ✅ Sí | ✅ Sí |
+| `'unsafe-inline'` | Nunca | — | ❌ No | ✅ Sí |
+
+El nonce por deploy es lo peor de ambos mundos: tiene la complejidad operativa de un nonce (hay que estampar cada tag de script en build time) sin el beneficio de seguridad. Los hashes por script son estrictamente mejores para sitios estáticos — mismo ritmo de deploy, misma automatización, protección XSS real.
+
+---
+
 ## Cuándo desistir del CSP
 
 No todos los sitios deberían implementar un CSP estricto. Una evaluación honesta de cuándo parar y por qué.
