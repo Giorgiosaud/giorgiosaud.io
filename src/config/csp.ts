@@ -15,6 +15,8 @@ export const cspPolicy = {
     buildEnvHashes: [
       "'sha256-BrDhGE1lwa85arfXcrBxSo+n37uVSX5CAROXnIM6Q+g='",
       "'sha256-kq+o1kpk7kk0Qt8m8OePmXS/+PA6WWL4ICxEtJomMro='",
+      "'sha256-JlDKC/qsFRwOsca2/SKFPusSqV57tl1xIM6pb8K9mXI='",
+      "'sha256-/M4Ej0rZL/4nqdav6qiQeduhvnTBq3GSJC+qCWeIoV4='",
     ],
     externalDomains: [
       'https://www.googletagmanager.com',
