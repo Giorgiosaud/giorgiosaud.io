@@ -27,6 +27,7 @@ Live: https://giorgiosaud.io
 ## Quickstart
 
 Prerequisites
+
 - Node.js 20+ (or Bun 1.0+)
 
 Install dependencies
@@ -53,6 +54,7 @@ bun run preview
 ```
 
 Scripts (from package.json)
+
 - dev – astro dev
 - build – astro build
 - preview – astro preview
@@ -76,11 +78,12 @@ RESEND_API_KEY=""
 
 # Email defaults (server)
 PUBLIC_RESEND_TO_EMAIL="jorgelsaud@gmail.com"
-PUBLIC_RESEND_FROM_EMAIL="notebook@web.giorgiosaud.io"
+PUBLIC_RESEND_FROM_EMAIL="notebook@giorgiosaud.io"
 PUBLIC_RESEND_FROM_NAME="Notebook"
 ```
 
 Notes
+
 - In code, access via `astro:env/client` or `astro:env/server`. Astro handles exposure based on `access` (public/secret) and `context` (client/server).
 
 ---
@@ -229,6 +232,7 @@ public/              # static assets
 - Environment variables can be set in Vercel Project Settings.
 
 Caching & ISR
+
 - The adapter is configured with `isr: true` and `skewProtection: true`.
 
 ---

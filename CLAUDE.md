@@ -37,6 +37,7 @@ This is a **multilingual (English/Spanish) personal web development notebook** b
 The content is organized using Astro Content Collections with strict TypeScript schemas. Each collection is defined in `src/content/{collection}/config.ts` and uses Astro's `glob` loader to load content from language-specific directories.
 
 **Collection Mappings**:
+
 - `notes` (en) / `notas` (es) - Blog posts and articles
 - `portfolio` (en) / `portafolio` (es) - Project showcases
 - `team` (en) / `equipo` (es) - Author profiles
@@ -68,6 +69,7 @@ The content is organized using Astro Content Collections with strict TypeScript 
 ### Multi-Framework Islands
 
 Components can be written in multiple frameworks that coexist in the same project:
+
 - **Astro components** (`.astro`) - For static layouts and server-rendered content
 - **React islands** (`.tsx`) - Interactive components with React
 - **Vue islands** (`.vue`) - Interactive components with Vue
@@ -78,6 +80,7 @@ Only use `client:*` directives when components need client-side interactivity.
 ### I18n Implementation
 
 **Routing**:
+
 - English is the default language (no prefix)
 - Spanish routes use `/es` prefix
 - Route translations defined in `src/global/i18n/routes.ts`
@@ -85,6 +88,7 @@ Only use `client:*` directives when components need client-side interactivity.
 - Utilities in `src/global/i18n/utils.ts` handle language detection and translation helpers
 
 **Content Structure**:
+
 - English content: `src/content/{collection}/en/`
 - Spanish content: `src/content/{collection}/es/`
 
@@ -109,6 +113,7 @@ Configured in `tsconfig.json` for cleaner imports:
 ### Server Actions
 
 Server actions live in `src/actions/` and are exported from `src/actions/index.ts`:
+
 - `sendEmail` - Email sending via Resend API with enhanced error handling
   - Returns specific error codes: `BAD_REQUEST`, `TOO_MANY_REQUESTS`, `INTERNAL_SERVER_ERROR`
 - Actions use Astro's form actions feature (available in `.astro` files)
@@ -118,16 +123,19 @@ Server actions live in `src/actions/` and are exported from `src/actions/index.t
 Environment variables are defined in `astro.config.mjs` using Astro's `envField` system:
 
 **Client-side (public)**:
+
 - `TAG_MANAGER_ID` - Google Tag Manager ID (optional)
 - `TURNSTILE_SITE_KEY` - Cloudflare Turnstile site key for comments (optional)
 
 **Server-side (secret)**:
+
 - `TURNSTILE_SECRET_KEY` - Cloudflare Turnstile secret key (optional)
 - `RESEND_API_KEY` - Resend email API key (optional)
 
 **Server-side (public)**:
+
 - `RESEND_TO_EMAIL` - Default recipient (default: `jorgelsaud@gmail.com`)
-- `RESEND_FROM_EMAIL` - Default sender (default: `notebook@web.giorgiosaud.io`)
+- `RESEND_FROM_EMAIL` - Default sender (default: `notebook@giorgiosaud.io`)
 - `RESEND_FROM_NAME` - Default sender name (default: `Notebook`)
 
 In code, access these via `import.meta.env.TAG_MANAGER_ID`, etc. Astro handles the public/secret distinction automatically.
@@ -135,22 +143,26 @@ In code, access these via `import.meta.env.TAG_MANAGER_ID`, etc. Astro handles t
 ### Page Routing
 
 **Dynamic Routes**:
+
 - `/notebook/[note]` - Individual note pages with self-healing redirects via `/notebook/[selfheal].astro`
 - `/notebook/[page]` - Paginated note listings
 - `/[slug]` - Static pages from content collections
 - `/team/[member]` - Team member profiles
 
 **Spanish Routes**:
+
 - All routes mirror under `/es/` prefix
 - Route translations handled in `src/global/i18n/routes.ts`
 
 **Special Routes**:
+
 - `/rss.xml.ts` - RSS feed generation
 - `/robots.txt.ts` - Dynamic robots.txt
 
 ### Testing
 
 Tests use Vitest with Astro's experimental container API for component testing:
+
 - Test files in `tests/` directory
 - Use `experimental_AstroContainer` to render Astro components
 - Example: `tests/components/contactform.test.tsx`
@@ -160,6 +172,7 @@ No `vitest.config.ts` is present; Vitest uses defaults.
 ## Deployment (Vercel)
 
 Configured with `@astrojs/vercel` adapter in `astro.config.mjs`:
+
 - **ISR enabled**: Incremental Static Regeneration
 - **Skew protection**: Enabled for gradual rollouts
 - Set environment variables in Vercel dashboard
@@ -167,11 +180,13 @@ Configured with `@astrojs/vercel` adapter in `astro.config.mjs`:
 ## Code Quality
 
 **Biome** is used for both linting and formatting (replaces ESLint + Prettier):
+
 - Configuration: `biome.json`
 - Runs on all file types (JS, TS, JSX, TSX, Astro, etc.)
 - Integrated into `bun run lint` and `bun run lint:fix`
 
 **TypeScript**:
+
 - Extends `astro/tsconfigs/strict`
 - Strict null checks enabled
 - All imports should use path aliases where appropriate
@@ -179,6 +194,7 @@ Configured with `@astrojs/vercel` adapter in `astro.config.mjs`:
 ### Performance Optimizations
 
 **Self-hosted Fonts**: Uses fontsource packages instead of Google Fonts for better performance and privacy:
+
 - `@fontsource/poppins` (400, 500, 600, 700 weights)
 - `@fontsource/roboto-mono` (400, 500 weights)
 - Imported in `src/global/components/Head/index.astro`
@@ -188,9 +204,11 @@ Configured with `@astrojs/vercel` adapter in `astro.config.mjs`:
 ### Developer Tools
 
 **Self-healing Code Generator**:
+
 ```bash
 bun run generate:selfheal "My Post Title"     # Generate code from title
 bun run generate:selfheal --validate "rhythm" # Validate existing code
 bun run generate:selfheal --alts "Title"      # Generate alternatives
 ```
+
 Located in `scripts/generateSelfHealingCode.ts`.
