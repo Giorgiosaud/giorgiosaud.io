@@ -153,19 +153,87 @@ Con Bot Fight Mode habilitado, Cloudflare inyecta un script de challenge con un 
 
 **Fix**: Deshabilitar Bot Fight Mode en Cloudflare (Security → Bots → Bot Fight Mode → Off).
 
+### Error 6: El "monitoreo continuo de scripts" de Cloudflare inyecta un segundo header CSP
+
+Después de deshabilitar Bot Fight Mode, seguía con una pared de violations CSP en la consola. Cada una era un falso positivo — scripts que ya había permitido. La causa fue una feature completamente diferente de Cloudflare: **Continuous script monitoring** (en Security → Detection).
+
+Cuando está habilitado, Cloudflare inyecta su propio header `Content-Security-Policy-Report-Only` a nivel del edge:
+
+```
+Content-Security-Policy-Report-Only: script-src 'unsafe-inline' 'unsafe-eval';
+  connect-src 'none';
+  report-uri https://csp-reporting.cloudflare.com/cdn-cgi/script_monitor/report
+```
+
+Esto es separado de Page Shield y de Bot Fight Mode. Dos headers `Content-Security-Policy-Report-Only` en la misma respuesta hacen que el navegador evalúe cada política de forma independiente y reporte violations contra *cada una*. La política inyectada por Cloudflare tiene `connect-src 'none'` — entonces cada llamada a analytics, cada request a una API, cada carga de fuente parece una violation. La consola se llena de cientos de falsos positivos que no tienen nada que ver con tu CSP real.
+
+**Fix**: Deshabilitar Continuous script monitoring en Cloudflare → Security → Detection. No está en la sección Bots — buscalo bajo el tab Detection. Después de deshabilitarlo, las violations de esta política dejan de aparecer de inmediato.
+
+Vale la pena saber esto porque "Bot Fight Mode deshabilitado → igual aparecen violations CSP" es un estado confuso. Las dos features son completamente independientes y hay que deshabilitarlas por separado.
+
+### Error 7: El entorno de build de Vercel produce hashes de scripts diferentes a los del build local
+
+Después de eliminar todo el ruido de Cloudflare, seguía viendo 2–4 hashes de violation en producción que mi `generateCspHashes.ts` local nunca producía. Ejemplo:
+
+```
+Refused to execute inline script because it violates the following Content Security Policy directive:
+sha256-JlDKC/qsFRwOsca2/SKFPusSqV57tl1xIM6pb8K9mXI= was not found in script-src
+```
+
+La causa: el code-splitting de Vite produce diferentes límites de chunk en el entorno CI de Vercel que localmente. Cuando se agregan nuevas páginas, el grafo de chunks cambia, lo que cambia los hashes en algunos scripts inline generados. El build local refleja los hashes de chunks locales; el CI de Vercel refleja los suyos propios.
+
+La solución es un array `buildEnvHashes` en `csp.ts` para fijar los hashes conocidos que solo Vercel produce:
+
+```typescript
+'script-src': {
+  static: ["'self'"],
+  buildEnvHashes: [
+    "'sha256-BrDhGE1lwa85arfXcrBxSo+n37uVSX5CAROXnIM6Q+g='",
+    "'sha256-kq+o1kpk7kk0Qt8m8OePmXS/+PA6WWL4ICxEtJomMro='",
+    "'sha256-JlDKC/qsFRwOsca2/SKFPusSqV57tl1xIM6pb8K9mXI='",
+    "'sha256-/M4Ej0rZL/4nqdav6qiQeduhvnTBq3GSJC+qCWeIoV4='",
+  ],
+  externalDomains: [...],
+},
+```
+
+Y en `generateCspHashes.ts`, incluirlos en el string final:
+
+```typescript
+const scriptSrc = [
+  ...cspPolicy['script-src'].static,
+  ...hashes,                               // hashes del build local
+  ...cspPolicy['script-src'].buildEnvHashes, // hashes del CI de Vercel
+  ...cspPolicy['script-src'].externalDomains,
+].join(' ')
+```
+
+**¿Cuándo cambian estos hashes?** Cuando agregás o eliminás páginas, o cambiás significativamente la composición del bundle JS, Vite re-divide los chunks y produce nuevos hashes. Verás nuevos hashes de violation aparecer en la consola del navegador después del deploy. El flujo de trabajo es:
+
+1. Ver nuevos hashes de violation en la consola de producción
+2. Agregar esos hashes a `buildEnvHashes` en `csp.ts`
+3. Push — el hook pre-push regenera `vercel.json` automáticamente
+4. Los hashes se estabilizan hasta el próximo cambio significativo de bundle
+
+Es un poco manual, pero solo ocurre cuando el grafo de chunks cambia de forma significativa — no en cada push.
+
 ---
 
-## Por qué este sitio todavía está en modo Report-Only
+## Por qué este sitio ya está listo para enforcement
 
-El CSP está implementado correctamente — pero lo mantengo en Report-Only porque el edge de Cloudflare ocasionalmente inyecta scripts que no controlo. Incluso con Bot Fight Mode deshabilitado, otras features de Cloudflare pueden inyectar scripts inline que cambian por request y no se pueden pre-hashear.
+Después de todos los fixes, el CSP está completamente implementado y la consola está limpia. Lo que bloqueaba el enforcement:
 
-El plan para aplicar cumplimiento:
+- **Bot Fight Mode** ✅ deshabilitado
+- **Continuous script monitoring** ✅ deshabilitado
+- **Divergencia de hashes del entorno de build de Vercel** ✅ manejada via `buildEnvHashes`
 
-1. Confirmar que todas las inyecciones de Cloudflare están deshabilitadas
-2. Consola del navegador limpia en todos los tipos de página
-3. Cambiar la key de `Content-Security-Policy-Report-Only` a `Content-Security-Policy`
+El camino al enforcement ahora está despejado:
 
-La infraestructura está lista — es un cambio de una línea cuando llegue el momento.
+1. Deployar y verificar cero violations en todos los tipos de página
+2. Cambiar `Content-Security-Policy-Report-Only` a `Content-Security-Policy` en `vercel.json`
+3. Push
+
+Ese último paso es un cambio de una línea. La infraestructura está lista.
 
 ## El resultado
 
