@@ -1,7 +1,7 @@
 import { db } from '@db'
 import { comments } from '@db/schema'
 import type { APIRoute } from 'astro'
-import { and, eq, isNull } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 
 export const prerender = false
 

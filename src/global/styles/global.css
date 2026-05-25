@@ -6,7 +6,13 @@
     --color-main: #62748e;
     --color-dark: hsl(from var(--color-main) h s calc(l / 1.1));
     --color-light: hsl(from var(--color-main) h s calc(l * 1.8));
-    --bg-dark: linear-gradient(160deg, #060d1f 0%, #0d2550 40%, #1a3a6e 70%, #0a1a35 100%);
+    --bg-dark: linear-gradient(
+      160deg,
+      #060d1f 0%,
+      #0d2550 40%,
+      #1a3a6e 70%,
+      #0a1a35 100%
+    );
     --spacing: 0.25rem;
     --breakpoint-lg: 48rem;
     --default-font-family: "Poppins", "Poppins Fallback";
@@ -17,15 +23,16 @@
   }
 
   body {
-    font-family: var(--default-font-family,
-        ui-sans-serif,
-        system-ui,
-        sans-serif,
-        "Apple Color Emoji",
-        "Segoe UI Emoji",
-        "Segoe UI Symbol",
-        "Noto Color Emoji"
-      );
+    font-family: var(
+      --default-font-family,
+      ui-sans-serif,
+      system-ui,
+      sans-serif,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol",
+      "Noto Color Emoji"
+    );
     background: white;
     background-attachment: fixed;
 
@@ -41,7 +48,6 @@
   }
 
   @view-transition {
-    /* biome-ignore lint/correctness/noUnknownProperty: This is a standard-track CSS View Transition property. */
     navigation: auto;
   }
 
@@ -172,7 +178,7 @@
     gap: 0.25rem;
   }
 
-  .button>svg {
+  .button > svg {
     width: 1.75rem;
     margin: 0 0.5rem;
     aspect-ratio: 1;
@@ -184,8 +190,10 @@
 
   .button-primary {
     --_color: light-dark(var(--color-light), white);
-    --_background-color: var(--background-color,
-        light-dark(var(--color-dark), #2563eb));
+    --_background-color: var(
+      --background-color,
+      light-dark(var(--color-dark), #2563eb)
+    );
     color: var(--color, var(--_color));
     background-color: var(--background-color, var(--_background-color));
 

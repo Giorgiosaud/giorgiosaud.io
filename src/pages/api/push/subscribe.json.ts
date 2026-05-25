@@ -139,7 +139,7 @@ export const DELETE: APIRoute = async ({ request }) => {
     }
 
     // Mark subscription as inactive instead of deleting
-    const result = await db
+    await db
       .update(pushSubscriptions)
       .set({
         isActive: false,

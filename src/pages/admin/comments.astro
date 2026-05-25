@@ -43,7 +43,7 @@ const url = new URL(Astro.request.url)
 const filterPost = url.searchParams.get('post') || ''
 const filterStatus = url.searchParams.get('status') || 'all'
 const searchQuery = url.searchParams.get('q') || ''
-const page = parseInt(url.searchParams.get('page') || '1')
+const page = parseInt(url.searchParams.get('page') || '1', 10)
 const limit = 20
 
 // Build where conditions

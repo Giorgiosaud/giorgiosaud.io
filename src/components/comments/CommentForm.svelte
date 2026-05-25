@@ -4,7 +4,7 @@ import Turnstile from '@components/Turnstile.svelte'
 interface Props {
   noteId: string
   parentId?: string
-  onSubmit: (comment: any) => void
+  onSubmit: (comment: unknown) => void
   onCancel?: () => void
   lang: 'en' | 'es'
   turnstileSiteKey?: string

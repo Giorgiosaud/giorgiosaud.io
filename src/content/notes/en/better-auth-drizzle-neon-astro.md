@@ -4,6 +4,7 @@ title: "Better Auth with Drizzle and Neon in Astro"
 description: "Wire up Better Auth with Drizzle and Neon in Astro — email/password, social OAuth, passkeys, and the two-config-file pattern explained."
 publishDate: 2026-05-24
 selfHealing: bttrth
+starred: false
 cover: ../../../assets/images/better-auth-drizzle-neon-astro.png
 coverAlt: Authentication flow with Drizzle and Neon database on a dark background
 lang: en

@@ -22,125 +22,93 @@ Notes should follow this pattern:
 4. **Use Cases** - Real scenarios where you'd use this
 5. **Gotchas** - Common mistakes or things to watch out for (optional)
 
-## Creating a New Note
+## Creating a New Note — Step by Step
 
-### 1. English Version (`src/content/notes/en/{slug}.md`)
+### 1. Generate the selfHealing code
+
+```bash
+bun run generate:selfheal "Your Post Title"
+```
+
+This outputs a 6-character consonant-only code to use in frontmatter. Both language versions **must share the same code** — it's used to link EN ↔ ES translations.
+
+### 2. Choose a filename
+
+Files go in `src/content/notes/en/` and `src/content/notes/es/`. Use a descriptive kebab-case slug **without a date prefix**:
+
+```
+good: better-auth-drizzle-neon-astro.md
+bad:  2026-05-24-better-auth-drizzle-neon-astro.md
+```
+
+### 3. Generate a cover image prompt for Gemini
+
+Before writing the post, generate a cover image using [Google Gemini](https://gemini.google.com) or any image generation tool. Use this prompt template (replace the bracketed parts):
+
+```
+Create a clean, modern tech blog cover image for a post titled "[POST TITLE]".
+Style: flat illustration, dark background (#0f172a or similar), vibrant accent colors.
+Include visual metaphors for [MAIN TOPICS, e.g. "authentication, database, lock icon"].
+No text in the image. 16:9 aspect ratio. Minimalist and professional.
+```
+
+Save the generated image to `src/assets/images/{slug}.webp` and reference it in the frontmatter as:
+```yaml
+cover: ../../../assets/images/{slug}.webp
+coverAlt: Brief description of the image
+```
+
+### 4. Write the English version
 
 ```markdown
 ---
-draft: false
-selfHealing: "ptrnsn"  # 6 chars, no vowels/dashes (use consonants from title)
-starred: false  # Set true for featured notes
-title: "Understanding the Observer Pattern in JavaScript"
-description: "Learn the Observer pattern with practical examples for building reactive applications and event-driven architectures."
-image:
-  src: "observer-pattern-diagram"
-  alt: "Observer pattern visualization"
-publishDate: 2025-01-15T10:00:00.000Z
-category: "development"  # development, patterns, architecture, performance, etc.
-author: 000001-jorge-saud
+draft: true
+title: "Your Post Title"
+description: "One or two sentence summary for SEO and previews."
+publishDate: YYYY-MM-DD
+selfHealing: xxxxxx   # from step 1
+lang: en
+category: development
+author: giorgio-saud
 collections:
-  - patterns
-  - architecture
+  - relevant-collection
 tags:
-  - design-patterns
-  - javascript
-  - architecture
-cover: ../../../assets/images/observer-pattern.webp
-coverAlt: "Understanding the Observer Pattern"
-fmContentType: Notes
+  - tag1
+  - tag2
+cover: ../../../assets/images/{slug}.webp
+coverAlt: Image description
 ---
 
-In this post, I'll explain the Observer pattern in a way that makes sense for real-world JavaScript development. This pattern is everywhere - from event listeners to reactive frameworks - so understanding it will level up your architectural thinking.
-
-## What Problem Does It Solve?
-
-Imagine you're building a dashboard that needs to update multiple widgets when data changes. Without the Observer pattern, you'd have tightly coupled code where the data source has to know about every single widget. That's a maintenance nightmare.
-
-## The Pattern, Simplified
-
-The Observer pattern lets objects "subscribe" to events from another object. When something happens, all subscribers get notified automatically.
-
-\`\`\`javascript
-class DataStore {
-  constructor() {
-    this.observers = []
-    this.data = {}
-  }
-
-  subscribe(observer) {
-    this.observers.push(observer)
-  }
-
-  notify(data) {
-    this.observers.forEach(observer => observer.update(data))
-  }
-
-  updateData(newData) {
-    this.data = { ...this.data, ...newData }
-    this.notify(this.data)
-  }
-}
-
-// Usage
-const store = new DataStore()
-
-const widget1 = {
-  update: (data) => console.log('Widget 1 received:', data)
-}
-
-const widget2 = {
-  update: (data) => console.log('Widget 2 received:', data)
-}
-
-store.subscribe(widget1)
-store.subscribe(widget2)
-
-store.updateData({ temperature: 23 })
-// Both widgets receive the update automatically
-\`\`\`
-
-## Real-World Use Cases
-
-1. **Event systems** - DOM events, custom application events
-2. **State management** - Redux, MobX, Vue reactivity
-3. **Real-time updates** - Chat apps, live dashboards
-4. **Form validation** - Multiple validators responding to input changes
-
-## Watch Out For
-
-- **Memory leaks**: Always unsubscribe when you're done
-- **Update storms**: Too many observers can hurt performance
-- **Debugging complexity**: Hard to trace where updates come from
-
-The Observer pattern is powerful but use it wisely. For simple cases, direct function calls might be clearer.
+Content here...
 ```
 
-### 2. Spanish Version (`src/content/notes/es/{slug}.md`)
+### 5. Write the Spanish version
 
-Translate the content while maintaining the same voice and structure. Keep technical terms in English when appropriate (e.g., "Observer pattern").
+Same frontmatter with `lang: es`, title and description translated. Keep technical terms in English when natural (e.g., "passkeys", "OAuth"). The `selfHealing` code must be identical.
 
-## Self-Healing Field Guide
+### 6. Publishing checklist
 
-Generate the `selfHealing` field using the CLI tool:
+Before setting `draft: false`:
+- [ ] `selfHealing` is the same in both EN and ES files
+- [ ] Code examples are tested and working
+- [ ] Cover image exists at the referenced path
+- [ ] Author reference exists in the team collection
+- [ ] Collection references exist
+- [ ] Both EN and ES versions are complete
 
-```bash
-bun run generate:selfheal "My Post Title"     # Generate code from title
-bun run generate:selfheal --validate "rhythm" # Validate existing code
-bun run generate:selfheal --alts "Title"      # Generate alternatives
-```
+## Self-Healing Field Reference
 
-Manual rules:
-- Extract consonants from the title: "Observer Pattern" → "bsrvr" or "ptrnsn"
-- Must be exactly 6 characters
-- No vowels (aeiouAEIOU) or dashes
-- Regex validation: `/^[^aeiouAEIOU-]{6}$/`
+The `selfHealing` code enables two features:
+1. Redirects old slugs to the current URL if the filename ever changes
+2. Links the EN and ES versions of the same post for the "read in [language]" button
 
-> **IMPORTANT — Translation linking**: The `selfHealing` code is used to link the EN and ES versions of the same post. Both language versions of a post **must share the same `selfHealing` value**. If they differ, the "read in [language]" translation link will break.
+Rules:
+- Exactly 6 characters
+- No vowels (`aeiouAEIOU`) and no dashes
+- Regex: `/^[^aeiouAEIOU-]{6}$/`
 
 ## Category Guidelines
 
-Common categories:
 - `development` - General coding practices
 - `patterns` - Design patterns, architectural patterns
 - `architecture` - System design, project structure
@@ -149,16 +117,6 @@ Common categories:
 - `devops` - Deployment, CI/CD
 - `frontend` - UI/UX, frameworks
 - `backend` - APIs, databases
-
-## Collections Guidelines
-
-Link to relevant collection tags:
-- `patterns` - Design patterns
-- `architecture` - Architectural concepts
-- `javascript` - JS-specific content
-- `typescript` - TS-specific content
-- `react`, `vue`, `astro` - Framework-specific
-- `performance` - Performance topics
 - `security` - Security topics
 
 ## Examples of Good Note Titles
@@ -166,20 +124,8 @@ Link to relevant collection tags:
 ✅ "Understanding the Observer Pattern in JavaScript"
 ✅ "Simplified Explanation of React Hooks"
 ✅ "Why Your API is Slow (and How to Fix It)"
-✅ "Preflight Requests and CORS Explained"
+✅ "Better Auth with Drizzle and Neon in Astro"
 
 ❌ "Design Patterns" (too broad)
 ❌ "My Thoughts on Code" (not specific)
 ❌ "Tutorial #5" (not descriptive)
-
-## Publishing Checklist
-
-Before setting `draft: false`:
-- [ ] Title is clear and specific
-- [ ] `selfHealing` matches regex pattern
-- [ ] Code examples are tested and working
-- [ ] Spanish translation is complete (if applicable)
-- [ ] Author reference exists in team collection
-- [ ] Collections references exist
-- [ ] Cover image is added and optimized
-- [ ] Content adds genuine value (not just rehashing docs)

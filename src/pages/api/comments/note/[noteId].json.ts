@@ -94,9 +94,10 @@ function buildThreadedComments(flatComments: Comment[]): Comment[] {
 
   // Second pass: build tree structure
   for (const comment of flatComments) {
-    const mappedComment = commentMap.get(comment.id)!
+    const mappedComment = commentMap.get(comment.id)
+    if (!mappedComment) continue
     if (comment.parentId && commentMap.has(comment.parentId)) {
-      commentMap.get(comment.parentId)!.replies!.push(mappedComment)
+      commentMap.get(comment.parentId)?.replies?.push(mappedComment)
     } else {
       rootComments.push(mappedComment)
     }

@@ -73,9 +73,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
       postSlug,
       postTitle,
       postExcerpt,
-      postSlugEs,
-      postTitleEs,
-      postExcerptEs,
     } = body
 
     let result: {

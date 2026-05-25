@@ -217,7 +217,7 @@ export function initNotebookSearch(options: {
     skipResults = false,
   ): Promise<void> {
     if (!skipResults) {
-      resultsEl!.innerHTML = `<li class="loading"><p>${options.loadingText}</p></li>`
+      resultsEl.innerHTML = `<li class="loading"><p>${options.loadingText}</p></li>`
     }
 
     const sp = new URLSearchParams()
@@ -239,7 +239,7 @@ export function initNotebookSearch(options: {
         lang,
       })
       if (!skipResults) {
-        renderResults(data, resultsEl!, options.noResultsText, chipEls)
+        renderResults(data, resultsEl, options.noResultsText, chipEls)
       }
       if (paginationEl) {
         renderPagination(
@@ -259,7 +259,7 @@ export function initNotebookSearch(options: {
       }
     } catch {
       if (!skipResults) {
-        resultsEl!.innerHTML = `<li class="error"><p>${options.noResultsText}</p></li>`
+        resultsEl.innerHTML = `<li class="error"><p>${options.noResultsText}</p></li>`
       }
     }
   }
@@ -278,7 +278,7 @@ export function initNotebookSearch(options: {
   const debouncedFetch = debounce(() => {
     currentParams = {
       ...currentParams,
-      q: inputEl!.value,
+      q: inputEl?.value,
       page: 1,
     }
     syncURL(currentParams)
@@ -313,7 +313,7 @@ export function initNotebookSearch(options: {
       lang: options.lang,
     }
     currentParams = restored
-    inputEl!.value = restored.q
+    if (inputEl) inputEl.value = restored.q
     updateChips(restored.collection)
     fetchResults(currentParams)
   })
@@ -324,7 +324,8 @@ export function initNotebookSearch(options: {
     const article = link.closest('article')
     if (!article) return
     const items = Array.from(resultsEl.querySelectorAll('.note-card-item'))
-    const position = items.indexOf(article.closest('.note-card-item')!) + 1
+    const position =
+      items.indexOf(article.closest('.note-card-item') as Element) + 1
     const noteId = article.dataset.link ?? ''
     const noteTitle = article.querySelector('h2')?.textContent ?? ''
     const lang = options.lang === 'es' ? 'es' : 'en'
