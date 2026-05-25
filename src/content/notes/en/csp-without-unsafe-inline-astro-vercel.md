@@ -302,3 +302,21 @@ script-src 'self'
 ```
 
 No `'unsafe-inline'`, no nonce infrastructure, no middleware. The hash list updates automatically on every push.
+
+---
+
+## When to give up on CSP
+
+Not every site should implement a strict CSP. Here's an honest assessment of when to stop and why.
+
+**Give up if you rely heavily on third-party scripts that inject inline code.** GTM, Intercom, Hotjar, Drift, Zendesk — these tools routinely write `<script>` tags and `innerHTML` at runtime. You can't hash runtime-injected scripts. You'd have to whitelist entire domains (`'unsafe-inline'`) which defeats the purpose, or replace those tools with self-hosted alternatives.
+
+**Give up if your CDN or proxy injects scripts you can't disable.** Cloudflare Bot Fight Mode, Rocket Loader, certain WAF rules — all inject inline scripts into your HTML at the edge. If your contract or security requirements prevent disabling them, pre-computed hashes won't work.
+
+**Give up if your site uses heavy server-side rendering with dynamic inline scripts.** If every page renders different inline script content per request (not just `define:vars` with stable values, but truly dynamic per-user data baked in), you'd need nonces — which requires an Astro middleware that generates a nonce on every request and stamps it into every `<script>` tag. That's a meaningful architecture change.
+
+**Give up if your team doesn't own the full deployment pipeline.** CSP enforcement on a site you don't fully control (shared hosting, CMS with plugin ecosystem, marketing team adding GTM tags without review) will break things at unpredictable times.
+
+**Don't give up just because it's complex.** If you control your stack, use no inline-injecting third parties, and have a clean build pipeline, the hash approach works and the maintenance overhead is essentially zero — it's fully automated after the initial setup.
+
+The test: if you can get `Content-Security-Policy-Report-Only` to show zero violations across all your page types with a clean browser profile (no extensions), you can enforce it. If violations keep appearing from sources outside your control, keep it in report-only or remove it and focus on other security layers instead.

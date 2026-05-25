@@ -180,3 +180,21 @@ script-src 'self' 'sha256-ncBTDHd...' [~150 hashes] https://www.googletagmanager
 ```
 
 Sin `'unsafe-inline'`, sin infraestructura de nonces, sin middleware. Los hashes se actualizan automáticamente en cada push.
+
+---
+
+## Cuándo desistir del CSP
+
+No todos los sitios deberían implementar un CSP estricto. Una evaluación honesta de cuándo parar y por qué.
+
+**Desistir si dependés fuertemente de scripts de terceros que inyectan código inline.** GTM, Intercom, Hotjar, Drift, Zendesk — estas herramientas rutinariamente escriben tags `<script>` e `innerHTML` en runtime. No podés hashear scripts inyectados en runtime. Tendrías que whitelist dominios enteros con `'unsafe-inline'`, lo que anula el propósito.
+
+**Desistir si tu CDN o proxy inyecta scripts que no podés deshabilitar.** Cloudflare Bot Fight Mode, Rocket Loader, ciertas reglas WAF — todas inyectan scripts inline en tu HTML a nivel del edge. Si tu contrato o requerimientos de seguridad impiden deshabilitarlos, los hashes pre-computados no funcionarán.
+
+**Desistir si tu sitio usa SSR pesado con scripts inline verdaderamente dinámicos.** Si cada página renderiza contenido de script inline diferente por request (no solo `define:vars` con valores estables, sino datos dinámicos por usuario), necesitarías nonces — lo que requiere un middleware de Astro que genere un nonce en cada request y lo estampe en cada tag `<script>`. Es un cambio de arquitectura significativo.
+
+**Desistir si tu equipo no controla el pipeline de deployment completo.** CSP enforcement en un sitio que no controlás totalmente (hosting compartido, CMS con ecosistema de plugins, equipo de marketing que agrega tags de GTM sin revisión) va a romper cosas en momentos impredecibles.
+
+**No desistir solo porque es complejo.** Si controlás tu stack, no usás terceros que inyecten inline, y tenés un pipeline de build limpio, el enfoque de hashes funciona y el overhead de mantenimiento es esencialmente cero — está completamente automatizado después de la configuración inicial.
+
+La prueba: si podés hacer que `Content-Security-Policy-Report-Only` muestre cero violations en todos tus tipos de página con un perfil de navegador limpio (sin extensiones), podés aplicar cumplimiento. Si las violations siguen apareciendo desde fuentes fuera de tu control, mantenelo en report-only o eliminalo y enfocate en otras capas de seguridad.
