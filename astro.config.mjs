@@ -174,7 +174,7 @@ export default defineConfig({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'notebook@web.giorgiosaud.io',
+        default: 'notebook@bepartnerlabs.com',
       }),
       RESEND_FROM_NAME: envField.string({
         context: 'server',

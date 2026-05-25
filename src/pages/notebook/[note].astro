@@ -12,6 +12,7 @@ import { getRelatedNotes } from '@helpers/relatedNotes'
 import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
 import '@global-styles/note-page.css'
+export const prerender = true
 export async function getStaticPaths() {
   const pages = await getCollection('notes')
   const pagesTranslated = await getCollection('notas')

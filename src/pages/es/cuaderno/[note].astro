@@ -13,6 +13,7 @@ import NoteTemplate from '@templates/Note.astro'
 import '@global-styles/md.css'
 import '@global-styles/note-page.css'
 
+export const prerender = true
 export async function getStaticPaths() {
   const pages = await getCollection('notas')
   const pagesTranslated = await getCollection('notes')
