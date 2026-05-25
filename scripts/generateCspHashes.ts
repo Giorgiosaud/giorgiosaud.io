@@ -58,6 +58,7 @@ console.log(`Found ${hashes.length} unique hashes across ${htmlFiles.length} HTM
 const scriptSrc = [
   ...cspPolicy['script-src'].static,
   ...hashes,
+  ...cspPolicy['script-src'].buildEnvHashes,
   ...cspPolicy['script-src'].externalDomains,
 ].join(' ')
 
