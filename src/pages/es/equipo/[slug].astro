@@ -6,6 +6,7 @@ import { isRouteName } from '@i18n/utils'
 import Base from '@templates/Base.astro'
 import '@global-styles/md.css'
 
+export const prerender = true
 export async function getStaticPaths() {
   const pages = await getCollection('equipo')
   return pages.map(page => ({

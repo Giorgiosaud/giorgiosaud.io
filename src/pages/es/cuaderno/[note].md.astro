@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 
+export const prerender = true
 export async function getStaticPaths() {
   const pages = await getCollection('notas')
   return pages.map(page => ({
