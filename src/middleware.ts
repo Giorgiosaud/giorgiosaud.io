@@ -1,26 +1,25 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
 
-type NoteModule = {
-  frontmatter: {
-    selfHealing?: string
-  }
+const enRaw = import.meta.glob('./content/notes/en/**/*.{md,mdx}', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>
+
+const esRaw = import.meta.glob('./content/notes/es/**/*.{md,mdx}', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+}) as Record<string, string>
+
+function extractSelfHealing(raw: string): string | undefined {
+  const match = raw.match(/^selfHealing:\s*["']?([^"'\s]+)["']?/m)
+  return match?.[1]
 }
-const enNotes = import.meta.glob<NoteModule>(
-  './content/notes/en/**/*.{md,mdx}',
-  {
-    eager: true,
-  },
-)
-const esNotes = import.meta.glob<NoteModule>(
-  './content/notes/es/**/*.{md,mdx}',
-  {
-    eager: true,
-  },
-)
 
 const selfHealMap = new Map<string, string>()
-for (const [path, mod] of Object.entries(enNotes)) {
-  const code = mod.frontmatter?.selfHealing
+for (const [path, raw] of Object.entries(enRaw)) {
+  const code = extractSelfHealing(raw)
   if (code) {
     const slug = path
       .replace('./content/notes/en/', '')
@@ -28,8 +27,8 @@ for (const [path, mod] of Object.entries(enNotes)) {
     selfHealMap.set(code, `/notebook/${slug}`)
   }
 }
-for (const [path, mod] of Object.entries(esNotes)) {
-  const code = mod.frontmatter?.selfHealing
+for (const [path, raw] of Object.entries(esRaw)) {
+  const code = extractSelfHealing(raw)
   if (code) {
     const slug = path
       .replace('./content/notes/es/', '')
