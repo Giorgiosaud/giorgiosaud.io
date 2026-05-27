@@ -51,7 +51,7 @@ Para un **proyecto nuevo**, primero crea el proyecto Astro (`bun create astro`) 
 
 Crea un proyecto en [neon.tech](https://neon.tech) y copia el string de conexión. Agrégalo a `.env`:
 
-```env
+```ini
 POSTGRES_URL=postgresql://usuario:contraseña@host/basededatos?sslmode=require
 ```
 
@@ -59,7 +59,7 @@ POSTGRES_URL=postgresql://usuario:contraseña@host/basededatos?sslmode=require
 
 ## Variables de entorno
 
-```env
+```ini
 # Base de datos
 POSTGRES_URL=postgresql://usuario:contraseña@host/basededatos?sslmode=require
 
@@ -96,21 +96,21 @@ Vive en la raíz del proyecto. Lo usa **únicamente** `bunx @better-auth/cli`. L
 
 ```ts
 // auth.config.ts
-import 'dotenv/config'
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { admin, username } from 'better-auth/plugins'
-import { passkey } from '@better-auth/passkey'
-import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
-import * as schema from './src/db/schema'
+import "dotenv/config";
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { admin, username } from "better-auth/plugins";
+import { passkey } from "@better-auth/passkey";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import * as schema from "./src/db/schema";
 
-const client = postgres(process.env.POSTGRES_URL!, { prepare: false })
-const db = drizzle(client, { schema })
+const client = postgres(process.env.POSTGRES_URL!, { prepare: false });
+const db = drizzle(client, { schema });
 
 export default betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
     schema: {
       user: schema.users,
       session: schema.sessions,
@@ -121,11 +121,15 @@ export default betterAuth({
   }),
   emailAndPassword: { enabled: true },
   plugins: [
-    admin({ defaultRole: 'user', adminRoles: ['admin'] }),
-    passkey({ rpID: 'localhost', rpName: 'Mi App', origin: 'http://localhost:4321' }),
+    admin({ defaultRole: "user", adminRoles: ["admin"] }),
+    passkey({
+      rpID: "localhost",
+      rpName: "Mi App",
+      origin: "http://localhost:4321",
+    }),
     username({ minLength: 3, maxLength: 30 }),
   ],
-})
+});
 ```
 
 ### `src/lib/auth.ts` — runtime
@@ -134,33 +138,48 @@ Lo usa el servidor de Astro. Lee las variables desde `astro:env`, incluye los pr
 
 ```ts
 // src/lib/auth.ts
-import { BETTER_AUTH_URL } from 'astro:env/client'
+import { BETTER_AUTH_URL } from "astro:env/client";
 import {
   BETTER_AUTH_SECRET,
-  GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET,
-  GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET,
-  FACEBOOK_CLIENT_ID, FACEBOOK_CLIENT_SECRET,
-} from 'astro:env/server'
-import { passkey } from '@better-auth/passkey'
-import { db } from '@db'
-import * as schema from '@db/schema'
-import { betterAuth } from 'better-auth'
-import { drizzleAdapter } from 'better-auth/adapters/drizzle'
-import { admin, username } from 'better-auth/plugins'
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  FACEBOOK_CLIENT_ID,
+  FACEBOOK_CLIENT_SECRET,
+} from "astro:env/server";
+import { passkey } from "@better-auth/passkey";
+import { db } from "@db";
+import * as schema from "@db/schema";
+import { betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { admin, username } from "better-auth/plugins";
 
-const isProd = import.meta.env.PROD
+const isProd = import.meta.env.PROD;
 
-const socialProviders: Record<string, { clientId: string; clientSecret: string }> = {}
+const socialProviders: Record<
+  string,
+  { clientId: string; clientSecret: string }
+> = {};
 if (GITHUB_CLIENT_ID && GITHUB_CLIENT_SECRET)
-  socialProviders.github = { clientId: GITHUB_CLIENT_ID, clientSecret: GITHUB_CLIENT_SECRET }
+  socialProviders.github = {
+    clientId: GITHUB_CLIENT_ID,
+    clientSecret: GITHUB_CLIENT_SECRET,
+  };
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET)
-  socialProviders.google = { clientId: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET }
+  socialProviders.google = {
+    clientId: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+  };
 if (FACEBOOK_CLIENT_ID && FACEBOOK_CLIENT_SECRET)
-  socialProviders.facebook = { clientId: FACEBOOK_CLIENT_ID, clientSecret: FACEBOOK_CLIENT_SECRET }
+  socialProviders.facebook = {
+    clientId: FACEBOOK_CLIENT_ID,
+    clientSecret: FACEBOOK_CLIENT_SECRET,
+  };
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: 'pg',
+    provider: "pg",
     schema: {
       user: schema.users,
       session: schema.sessions,
@@ -183,22 +202,22 @@ export const auth = betterAuth({
     updateAge: 60 * 60 * 24,
   },
   plugins: [
-    admin({ defaultRole: 'user', adminRoles: ['admin'] }),
+    admin({ defaultRole: "user", adminRoles: ["admin"] }),
     passkey({
-      rpID: isProd ? 'tudominio.com' : 'localhost',
-      rpName: 'Mi App',
+      rpID: isProd ? "tudominio.com" : "localhost",
+      rpName: "Mi App",
       origin: BETTER_AUTH_URL,
     }),
     username({ minLength: 3, maxLength: 30 }),
   ],
   advanced: {
-    cookiePrefix: 'myapp',
+    cookiePrefix: "myapp",
     useSecureCookies: isProd,
   },
   trustedOrigins: [BETTER_AUTH_URL],
-})
+});
 
-export type Auth = typeof auth
+export type Auth = typeof auth;
 ```
 
 La regla es simple: **si agregas un plugin a un archivo, agrégalo al otro**.
@@ -223,7 +242,7 @@ export {
   session as sessions,
   user as users,
   verification as verifications,
-} from '../../auth-schema.generated'
+} from "../../auth-schema.generated";
 ```
 
 Así, `bun run auth:generate` regenera el archivo raíz y todos los imports dentro de `src/db/` recogen los cambios automáticamente.
@@ -242,10 +261,10 @@ Better Auth necesita una ruta catch-all. En Astro:
 
 ```ts
 // src/pages/api/auth/[...all].ts
-import type { APIRoute } from 'astro'
-import { auth } from '@lib/auth'
+import type { APIRoute } from "astro";
+import { auth } from "@lib/auth";
 
-export const ALL: APIRoute = ({ request }) => auth.handler(request)
+export const ALL: APIRoute = ({ request }) => auth.handler(request);
 ```
 
 ## Configuración de OAuth social
@@ -291,15 +310,17 @@ Nunca agregues columnas personalizadas a las tablas de autenticación — Better
 
 ```ts
 // src/db/schema/user-profiles.ts
-import { pgTable, text, uuid } from 'drizzle-orm/pg-core'
-import { users } from './auth'
+import { pgTable, text, uuid } from "drizzle-orm/pg-core";
+import { users } from "./auth";
 
-export const userProfiles = pgTable('user_profiles', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  bio: text('bio'),
-  website: text('website'),
-})
+export const userProfiles = pgTable("user_profiles", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  bio: text("bio"),
+  website: text("website"),
+});
 ```
 
 Esto mantiene el schema limpio: las tablas de autenticación se regeneran libremente, los datos de la app permanecen estables.

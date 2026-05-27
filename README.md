@@ -67,7 +67,7 @@ Scripts (from package.json)
 
 Defined in `astro.config.mjs` via `envField`. Create a `.env` file at the project root.
 
-```env
+```ini
 # Public (client) – optional
 TAG_MANAGER_ID="GTM-XXXXXX"
 TURNSTILE_SITE_KEY=""
