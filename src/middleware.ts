@@ -1,4 +1,66 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
+
+type NoteModule = {
+  frontmatter: {
+    selfHealing?: string
+  }
+}
+const enNotes = import.meta.glob<NoteModule>(
+  './content/notes/en/**/*.{md,mdx}',
+  {
+    eager: true,
+  },
+)
+const esNotes = import.meta.glob<NoteModule>(
+  './content/notes/es/**/*.{md,mdx}',
+  {
+    eager: true,
+  },
+)
+
+const selfHealMap = new Map<string, string>()
+for (const [path, mod] of Object.entries(enNotes)) {
+  const code = mod.frontmatter?.selfHealing
+  if (code) {
+    const slug = path
+      .replace('./content/notes/en/', '')
+      .replace(/\.(md|mdx)$/, '')
+    selfHealMap.set(code, `/notebook/${slug}`)
+  }
+}
+for (const [path, mod] of Object.entries(esNotes)) {
+  const code = mod.frontmatter?.selfHealing
+  if (code) {
+    const slug = path
+      .replace('./content/notes/es/', '')
+      .replace(/\.(md|mdx)$/, '')
+    selfHealMap.set(`es:${code}`, `/es/cuaderno/${slug}`)
+  }
+}
+
+const selfHealRegex = /(?:^|-)[b-df-hj-np-tv-z]{6}(?:-|$)/g
+
+const selfhealMiddleware = defineMiddleware((context, next) => {
+  const { pathname } = context.url
+  const isEs = pathname.startsWith('/es/cuaderno/')
+  const isEn = pathname.startsWith('/notebook/')
+  if (!isEn && !isEs) return next()
+
+  const segment = isEs
+    ? pathname.replace('/es/cuaderno/', '')
+    : pathname.replace('/notebook/', '')
+
+  const match = segment.match(selfHealRegex)
+  if (!match) return next()
+
+  const code = match[0].replace(/-/g, '')
+  const key = isEs ? `es:${code}` : code
+  const destination = selfHealMap.get(key)
+  if (destination) return context.redirect(destination, 301)
+
+  return next()
+})
+
 import { db } from '@db'
 import { users } from '@db/schema'
 import { auth } from '@lib/auth'
@@ -109,6 +171,7 @@ const dashboardMiddleware = defineMiddleware(async (context, next) => {
 })
 
 export const onRequest = sequence(
+  selfhealMiddleware,
   authMiddleware,
   banCheckMiddleware,
   adminMiddleware,
