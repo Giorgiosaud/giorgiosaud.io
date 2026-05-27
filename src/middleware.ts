@@ -1,41 +1,7 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
+import selfhealMapData from './generated/selfheal-map.json'
 
-const enRaw = import.meta.glob('./content/notes/en/**/*.{md,mdx}', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-}) as Record<string, string>
-
-const esRaw = import.meta.glob('./content/notes/es/**/*.{md,mdx}', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-}) as Record<string, string>
-
-function extractSelfHealing(raw: string): string | undefined {
-  const match = raw.match(/^selfHealing:\s*["']?([^"'\s]+)["']?/m)
-  return match?.[1]
-}
-
-const selfHealMap = new Map<string, string>()
-for (const [path, raw] of Object.entries(enRaw)) {
-  const code = extractSelfHealing(raw)
-  if (code) {
-    const slug = path
-      .replace('./content/notes/en/', '')
-      .replace(/\.(md|mdx)$/, '')
-    selfHealMap.set(code, `/notebook/${slug}`)
-  }
-}
-for (const [path, raw] of Object.entries(esRaw)) {
-  const code = extractSelfHealing(raw)
-  if (code) {
-    const slug = path
-      .replace('./content/notes/es/', '')
-      .replace(/\.(md|mdx)$/, '')
-    selfHealMap.set(`es:${code}`, `/es/cuaderno/${slug}`)
-  }
-}
+const selfHealMap = new Map<string, string>(Object.entries(selfhealMapData))
 
 const selfHealRegex = /(?:^|-)[b-df-hj-np-tv-z]{6}(?:-|$)/g
 

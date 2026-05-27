@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && bun scripts/generateCspHashes.ts && bun scripts/notifyNewPosts.ts",
+    "build": "bun scripts/generateSelfHealMap.ts && astro build && bun scripts/generateCspHashes.ts && bun scripts/notifyNewPosts.ts",
     "csp:hashes": "bun scripts/generateCspHashes.ts",
     "preview": "astro preview",
     "lint": "biome lint --write .",
