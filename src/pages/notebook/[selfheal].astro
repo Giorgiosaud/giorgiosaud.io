@@ -1,13 +1,22 @@
 ---
-import { selfHeal } from '@helpers/selfHeal'
-import NotFound from '@pages/404.astro'
+import { getCollection } from 'astro:content'
 
-export const prerender = false
+export const prerender = true
 
-const redirect = await selfHeal(Astro, 'notes')
-if (redirect) {
-  return redirect
+export async function getStaticPaths() {
+  const notes = await getCollection('notes')
+  return notes
+    .filter(note => note.data.selfHealing)
+    .map(note => ({
+      params: {
+        selfheal: note.data.selfHealing,
+      },
+      props: {
+        noteId: note.id.replace(/\.(md|mdx)$/, ''),
+      },
+    }))
 }
----
 
-<NotFound />
+const { noteId } = Astro.props
+return Astro.redirect(`/notebook/${noteId}`, 301)
+---
