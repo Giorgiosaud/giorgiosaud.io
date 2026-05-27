@@ -1,8 +1,11 @@
 ---
 import { LoginButton, UserAvatar } from '@components/auth'
-import { getLangFromUrl, type RouteNames } from '@i18n/utils'
-import LogoNavigation from './LogoNavigation.astro'
-import PillNavigation from './PillNavigation.astro'
+import {
+  getLangFromUrl,
+  type RouteNames,
+  useTranslatedPath,
+  useTranslations,
+} from '@i18n/utils'
 
 interface Props {
   pathToTranslate: RouteNames
@@ -11,30 +14,182 @@ interface Props {
 
 const { pathToTranslate, pathToTranslateNote } = Astro.props
 const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const { translatePath } = useTranslatedPath(lang)
+
+const langToTranslate = lang === 'es' ? 'en' : 'es'
+const langLabel = lang === 'es' ? 'EN' : 'ES'
+
+const menuItems = [
+  {
+    title: t('nav.title'),
+    path: translatePath('notebook', lang),
+  },
+  {
+    title: t('nav.about-me'),
+    path: translatePath('about-me', lang),
+  },
+  {
+    title: t('nav.contact'),
+    path: translatePath('contact', lang),
+  },
+]
 ---
 
-<nav class="top-nav" aria-label="Site header">
-  <LogoNavigation />
-  <PillNavigation pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
-  <div class="actions">
-    <LoginButton client:idle lang={lang} />
-    <UserAvatar client:idle lang={lang} />
+<nav class="floating-nav" aria-label="Site header">
+  <div class="pill">
+    <a class="logo" href={translatePath('home', lang)}>
+      Giorgiosaud<span class="logo-accent">.io</span>
+    </a>
+
+    <div class="sep" aria-hidden="true"></div>
+
+    {menuItems.map(({ title, path }) => (
+      <a
+        href={path}
+        class:list={['nav-link', { active: path === Astro.url.pathname && path !== '/' }]}
+        aria-current={path === Astro.url.pathname && path !== '/' ? 'page' : undefined}
+      >
+        {title}
+      </a>
+    ))}
+
+    <div class="sep" aria-hidden="true"></div>
+
+    <a
+      href={translatePath(pathToTranslate, langToTranslate, pathToTranslateNote)}
+      class="nav-link lang-link"
+    >
+      {langLabel}
+    </a>
+
+    <div class="auth-actions">
+      <LoginButton client:idle lang={lang} />
+      <UserAvatar client:idle lang={lang} />
+    </div>
   </div>
 </nav>
 
 <style>
-  .top-nav {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
-    gap: 1rem;
-    color: light-dark(var(--color-dark), var(--color-light));
+  .floating-nav {
+    display: none;
+    pointer-events: auto;
+
+    @media (width >= 48rem) {
+      display: flex;
+      justify-content: center;
+    }
   }
 
-  .actions {
+  .pill {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    justify-self: end;
+    background: light-dark(
+      hsl(from var(--color-light) h s l / 0.75),
+      hsl(from var(--color-dark) h s l / 0.75)
+    );
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid light-dark(#e2e8f0, #334155);
+    border-radius: 999px;
+    padding: 0.4rem 0.8rem;
+    box-shadow: 0 4px 24px light-dark(rgba(0,0,0,0.08), rgba(0,0,0,0.4));
+    animation: compress-pill linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 120px;
+  }
+
+  @keyframes compress-pill {
+    to {
+      gap: 0.1rem;
+      padding: 0.3rem 0.4rem;
+      backdrop-filter: blur(5px);
+    }
+  }
+
+  @keyframes compress-link {
+    to {
+      padding: 0.4rem 0.4rem;
+    }
+  }
+
+  .logo {
+    --default-font-family: 'Roboto Mono';
+    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif);
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: light-dark(var(--color-dark), var(--color-light));
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 0.3rem 1rem;
+    animation: compress-link linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 120px;
+
+    .logo-accent {
+      color: var(--color-main);
+    }
+  }
+
+  .sep {
+    width: 1px;
+    height: 18px;
+    background: light-dark(#e2e8f0, #334155);
+    margin: 0 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .nav-link {
+    color: light-dark(#64748b, #94a3b8);
+    font-size: 0.875rem;
+    padding: 0.4rem 1rem;
+    animation: compress-link linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0px 120px;
+    border-radius: 999px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.15s, background 0.15s;
+
+    &:hover {
+      color: light-dark(#0f172a, #f8fafc);
+    }
+
+    &.active {
+      background: var(--color-main);
+      color: #fff;
+      font-weight: 500;
+    }
+  }
+
+  .lang-link {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .auth-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 </style>
+
+<script>
+  function syncActive() {
+    const path = window.location.pathname
+    document.querySelectorAll<HTMLAnchorElement>('.floating-nav .nav-link:not(.lang-link)').forEach(a => {
+      const matches = a.getAttribute('href') === path && path !== '/'
+      a.classList.toggle('active', matches)
+      if (matches) {
+        a.setAttribute('aria-current', 'page')
+      } else {
+        a.removeAttribute('aria-current')
+      }
+    })
+  }
+
+  syncActive()
+  document.addEventListener('astro:page-load', syncActive)
+</script>

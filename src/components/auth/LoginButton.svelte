@@ -493,14 +493,19 @@ function goBack() {
   }
 
   .loading {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: light-dark(#3d5166, #e2e8f0);
+    color: light-dark(#ffffff80, #0f172a80);
+    border-radius: 6px;
     font-size: 0.9rem;
-    color: light-dark(hsl(0 0% 40%), hsl(0 0% 60%));
+    pointer-events: none;
   }
 
   .button {
     padding: 0.5rem 1rem;
-    background: #3d5166;
-    color: #fff;
+    background: light-dark(#3d5166, #e2e8f0);
+    color: light-dark(#fff, #0f172a);
     border: none;
     border-radius: 6px;
     font-size: 0.9rem;
