@@ -44,7 +44,7 @@ const dateISO = publishDate.toISOString()
   const notification = document.getElementById('share-notification')
   const copyBtn = document.getElementById('share-copy')
   const nativeBtn = document.getElementById('share-native')
-  const urlToShare = `${window.location.href}-${selfHealing}`
+  const urlToShare = window.location.href
 
   const showNotification = () => {
     notification.style.display = 'block'
