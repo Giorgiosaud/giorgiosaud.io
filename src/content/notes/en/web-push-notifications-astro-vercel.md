@@ -19,6 +19,13 @@ tags:
 cover: ../../../assets/images/web-push-notifications-astro-vercel.png
 coverAlt: "Web Push Notifications with Astro and Vercel"
 lang: en
+linkedinCopy: |
+  Fellow devs — web push notifications sound straightforward until you are debugging VAPID keys, service worker scope issues, and Vercel serverless function cold starts at the same time. I implemented the full stack in Astro on Vercel and documented every failure mode. If you are building push notifications and want to skip the painful parts, this is your guide. Sign in and tell me what push notification bug haunts you most.
+  Read more: https://www.giorgiosaud.io/notebook/wbpshn
+  
+  #Astro #Vercel #WebPush #ServiceWorker #FrontEnd #Backend #PushOrBeIgnored #VAPIDKeysAreNotEasyOkay
+twitterCopy: |
+  Fellow devs — web push notifications in Astro + Vercel: VAPID keys, service workers, and everything that can go wrong. Sign in and comment: https://www.giorgiosaud.io/notebook/wbpshn #Astro #VAPIDKeysAreNotEasyOkay
 ---
 
 Web Push lets you send notifications to users even when they're not on your site. I added it to this blog so readers can opt in to new post alerts. The implementation is straightforward in principle — but there are enough moving parts that it's worth walking through all of them, including what breaks when one is missing.

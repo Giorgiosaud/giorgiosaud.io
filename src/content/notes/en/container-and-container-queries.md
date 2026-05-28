@@ -15,6 +15,13 @@ tags:
 publishDate: 2025-07-22T05:00:00.000Z
 cover: ../../../assets/images/container-query.webp
 coverAlt: Containers Wood
+linkedinCopy: |
+  Fellow devs — container queries were the CSS feature I did not know I was waiting for. Instead of asking how wide the viewport is, you ask how wide the parent component is. I used @container to redesign my notebook layout and the result is components that genuinely adapt to their context. Sign in and tell me if you have made the switch from media queries to container queries.
+  Read more: https://www.giorgiosaud.io/notebook/CQX001
+  
+  #CSS #ContainerQueries #FrontEnd #WebDev #ViewportQueriesAreForBoomers #ComponentFirst
+twitterCopy: |
+  Fellow devs — container queries: stop asking the viewport, ask the parent. Game changer for component design. Sign in and comment: https://www.giorgiosaud.io/notebook/CQX001 #CSS #ViewportQueriesAreForBoomers
 ---
 
 Container queries are a Baseline 2023 feature, now available in all major browsers including Chrome, Edge, Firefox, and Safari.

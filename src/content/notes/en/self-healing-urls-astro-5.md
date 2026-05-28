@@ -17,6 +17,13 @@ tags:
   - urls
   - seo
   - "2026"
+linkedinCopy: |
+  Fellow devs — Astro 5 changed the content collections API and the self-healing URL implementation needed an update. glob loaders replace getCollection for this use case and the type-safe URL healing pattern is cleaner now. I document the migration from the Astro 4 approach. Sign in and share what Astro 5 migration surprised you most.
+  Read more: https://www.giorgiosaud.io/notebook/slfhln
+  
+  #Astro #WebDev #SEO #URLs #2026 #Astro5OrBust #ContentCollectionsSurvivor
+twitterCopy: |
+  Fellow devs — self-healing URLs updated for Astro 5: glob loaders, new API, same resilient links. Sign in and comment: https://www.giorgiosaud.io/notebook/slfhln #Astro #Astro5OrBust
 ---
 
 Here's a short story about link rot. You publish a post called "Getting Started with Astro". The URL is `/notebook/getting-started-with-astro`. Someone shares it on Twitter. Six months later you rename the post to "Astro Quickstart Guide" because the old title was boring. Now that tweet link is dead.

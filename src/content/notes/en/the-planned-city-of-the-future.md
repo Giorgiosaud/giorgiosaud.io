@@ -19,6 +19,13 @@ tags:
   - strategy
 cover: ../../../assets/images/PuertoOrdaz.png
 coverAlt: Modern Puerto Ordaz skyline blended with digital data overlays
+linkedinCopy: |
+  Fellow devs and digital architects — Puerto Ordaz as a beta test for Venezuela's recovery: digital identity, transparent infrastructure, and smart contracts as the operating system for an industrial city. This is the most ambitious system design I have ever written about and I think the framework applies beyond Venezuela. Sign in and tell me how you think about digital infrastructure at city scale.
+  Read more: https://www.giorgiosaud.io/notebook/000009
+  
+  #Venezuela #SmartCity #DigitalTransformation #Architecture #Strategy #PuertoOrdazAlpha #DigitalCityOrBust
+twitterCopy: |
+  Fellow devs — Puerto Ordaz as a beta test for Venezuela's digital recovery. Digital identity, smart contracts, city-scale architecture. Sign in and comment: https://www.giorgiosaud.io/notebook/000009 #Venezuela #PuertoOrdazAlpha
 ---
 
 Growing up in **Puerto Ordaz**, you feel the geometry of the city. It was the last major "planned from scratch" city in Latin American history. It was designed with a specific purpose: to be the industrial heart of a nation. But as a Solution Architect, I see that the physical grid is no longer enough. To recover the south—and the country—we need to build a **Digital Grid**.

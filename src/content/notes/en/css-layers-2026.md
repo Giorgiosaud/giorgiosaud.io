@@ -17,6 +17,13 @@ tags:
   - cascade-layers
   - architecture
   - "2026"
+linkedinCopy: |
+  Fellow devs — CSS Cascade Layers at 98% browser support means specificity wars are officially optional. @layer lets you declare the order of precedence between your resets, framework styles, component styles, and utilities. I cover the production patterns for integrating third-party frameworks without fighting their specificity. Sign in and tell me if @layer has changed how you organize your CSS.
+  Read more: https://www.giorgiosaud.io/notebook/csslyr
+  
+  #CSS #CascadeLayers #FrontEnd #Architecture #2026 #SpecificityWarsAreOver #LayersOnLayers
+twitterCopy: |
+  Fellow devs — CSS @layer at 98% support in 2026. Specificity wars are now a choice, not a fate. Sign in and comment: https://www.giorgiosaud.io/notebook/csslyr #CSS #SpecificityWarsAreOver
 ---
 
 ## CSS @layer: The Specificity Problem is Solved

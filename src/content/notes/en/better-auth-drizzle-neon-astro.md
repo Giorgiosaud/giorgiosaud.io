@@ -22,6 +22,13 @@ tags:
   - authentication
   - oauth
   - passkeys
+linkedinCopy: |
+  Fellow devs — setting up auth in Astro from scratch is one of those things that should be simple and somehow takes a full day. Better Auth plus Drizzle plus Neon is the stack that finally clicked for me. Two config files, email, OAuth, passkeys — the whole thing explained without the usual boilerplate maze. Sign in and tell me what auth setup you are using in your Astro projects.
+  Read more: https://www.giorgiosaud.io/notebook/bttrth
+  
+  #Astro #Auth #Drizzle #Postgres #WebDev #AuthAgainSeriouslyWhyIsThisHard #PasskeysForever
+twitterCopy: |
+  Fellow devs — Better Auth + Drizzle + Neon in Astro: email, OAuth, passkeys explained without the maze. Sign in and comment: https://www.giorgiosaud.io/notebook/bttrth #Astro #Auth #PasskeysForever
 ---
 
 Authentication is one of those things that looks simple until you're an hour deep and realize you've reimplemented a session store by hand. Better Auth is a TypeScript-first auth library that handles all of that for you — sessions, OAuth providers, passkeys, admin roles — and integrates cleanly with Drizzle ORM.

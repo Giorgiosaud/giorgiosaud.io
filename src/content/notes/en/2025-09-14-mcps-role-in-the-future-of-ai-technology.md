@@ -18,6 +18,13 @@ tags:
    - personalized interactions
    - secure integration
 fmContentType: Notes
+linkedinCopy: |
+  Fellow devs — MCP (Model Context Protocol) is quietly reshaping how AI integrates with real applications. If you are building anything with LLMs and have not looked at MCP yet, you are going to want to. I wrote about where this is heading and why it matters for how we architect AI-powered systems. Sign in and drop your take in the comments — I want to know if you are already using MCP in production.
+  Read more: https://www.giorgiosaud.io/notebook/MCPNRF
+  
+  #AI #MCP #LLM #SoftwareArchitecture #WhoNeedsPluginsAnymore #MCPOrBust
+twitterCopy: |
+  Fellow devs — MCP is changing how AI connects to real apps and it is moving fast. Are you building with it yet? Sign in and comment: https://www.giorgiosaud.io/notebook/MCPNRF #AI #MCP #WhoNeedsPluginsAnymore
 ---
 
 We are entering a new era of Artificial Intelligence where the interaction between humans and machines will feel much more **personal, contextual, and useful**. Large Language Models (LLMs) like GPT or Gemini are powerful today, but they often live in isolation—limited to text generation and disconnected from the daily tools we actually use.  

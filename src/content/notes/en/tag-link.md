@@ -15,6 +15,13 @@ tags:
   - srcset
 cover: ../../../assets/images/link_siloo8.webp
 coverAlt: Link for SEO
+linkedinCopy: |
+  Fellow devs — the link tag in the HTML head is one of the most underused performance tools available. Preload, prefetch, preconnect, and modulepreload done right can meaningfully improve your Core Web Vitals. I cover the right tag for the right use case and the common mistakes that hurt instead of help. Sign in and share which link tag recommendations have made the biggest difference for you.
+  Read more: https://www.giorgiosaud.io/notebook/000004
+  
+  #WebDev #FrontEnd #Performance #SEO #CoreWebVitals #LinkTagNotThatLink #PreloadOrDieSlowly
+twitterCopy: |
+  Fellow devs — link tags done right: preload, prefetch, preconnect. The ones that help vs the ones that hurt. Sign in and comment: https://www.giorgiosaud.io/notebook/000004 #WebDev #PreloadOrDieSlowly
 ---
 
 Here is a short story about a small trick that can help us separate constraints, optimize performance, and have a cool way to insert styles into our pages.

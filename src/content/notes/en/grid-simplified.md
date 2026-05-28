@@ -16,6 +16,13 @@ tags:
   - webdevelopment
 cover: ../../../assets/images/grid-simplified.webp
 coverAlt: Grid elements in preview
+linkedinCopy: |
+  Fellow devs — one CSS grid class to rule responsive layouts. No media queries, no breakpoint juggling, just a grid that adapts. I show how a single reusable grid utility can handle the majority of your layout needs and why it beats a 12-column framework for most projects. Sign in and share your favorite CSS grid trick.
+  Read more: https://www.giorgiosaud.io/notebook/GSWBRL
+  
+  #CSS #Grid #FrontEnd #WebDev #ResponsiveDesign #OneClassToRuleThemAll #GridGang
+twitterCopy: |
+  Fellow devs — one CSS grid class for responsive layouts. No breakpoints, no media queries, just math. Sign in and comment: https://www.giorgiosaud.io/notebook/GSWBRL #CSS #Grid #OneClassToRuleThemAll
 ---
 
 ## Intro

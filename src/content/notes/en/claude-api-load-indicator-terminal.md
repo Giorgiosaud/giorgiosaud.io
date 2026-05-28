@@ -19,6 +19,13 @@ tags:
   - ai
   - devops
   - "2026"
+linkedinCopy: |
+  Fellow devs — I was tired of not knowing if Claude API was slow or if it was just my network. So I built a zsh plugin that shows live API latency in my Powerlevel10k prompt using a background launchd job and a rolling baseline. Every terminal prompt now tells me the current state. This is the kind of devtools rabbit hole I cannot stop going down. Sign in and tell me what terminal customizations you are obsessed with.
+  Read more: https://www.giorgiosaud.io/notebook/bldngc
+  
+  #Terminal #ZSH #DevOps #AI #Claude #TerminalPersonalityDisorder #PromptEngineeringButLiterally
+twitterCopy: |
+  Fellow devs — I put Claude API latency in my terminal prompt using a launchd background job. Because why not. Sign in and comment: https://www.giorgiosaud.io/notebook/bldngc #Terminal #Claude #PromptEngineeringButLiterally
 ---
 
 If you spend a lot of time in Claude Code or the Anthropic API, you've probably wondered: *is it slow right now, or is it just me?* This post walks through how I built a small zsh plugin that answers that question directly in my terminal prompt.

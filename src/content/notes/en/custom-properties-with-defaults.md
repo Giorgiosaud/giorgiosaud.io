@@ -15,6 +15,13 @@ tags:
   - design-patterns
 cover: ../../../assets/images/custom-properties-with-defaults.jpeg
 coverAlt: CSS Private and public props
+linkedinCopy: |
+  Fellow devs — handling default values in CSS variables has two patterns: the pseudo-private technique that works everywhere today, and the @property rule that gives you type safety and proper inheritance control. I compare both with real examples and show when to use each. This is the kind of CSS detail that makes design systems much more maintainable. Sign in and share which pattern you have been using.
+  Read more: https://www.giorgiosaud.io/notebook/LVCSTP
+  
+  #CSS #DesignSystems #FrontEnd #WebDev #CSSVariablesHaveDefaultsToo #TypedOrUntyped
+twitterCopy: |
+  Fellow devs — CSS custom properties with defaults: pseudo-private vs @property. When to use each. Sign in and comment: https://www.giorgiosaud.io/notebook/LVCSTP #CSS #CSSVariablesHaveDefaultsToo
 ---
 
 Back in 2021, Lea Verou shared a brilliant pattern for handling default values in CSS variables. Now, in 2026, while that pattern remains useful, we also have the powerful `@property` rule as a standard feature. Let's look at both the "Classic" and "Modern" ways to handle component defaults.

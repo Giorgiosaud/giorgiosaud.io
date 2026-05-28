@@ -18,6 +18,13 @@ tags:
   - routing
   - middleware
   - "2026"
+linkedinCopy: |
+  Fellow devs — implementing self-healing URLs in Astro deployed on Vercel has silent failure modes that took me a while to find. Middleware routing order, Vercel output config, and the exact architecture that actually works — I document every gotcha. If you are doing this on Vercel, read this before you spend three hours debugging routing. Sign in and share your Vercel routing war stories.
+  Read more: https://www.giorgiosaud.io/notebook/slfhln
+  
+  #Astro #Vercel #Routing #Middleware #WebDev #VercelGotchasAreReal #SelfHealingInProduction
+twitterCopy: |
+  Fellow devs — self-healing URLs on Astro + Vercel: the gotchas that silently break things and the fix. Sign in and comment: https://www.giorgiosaud.io/notebook/slfhln #Astro #Vercel #VercelGotchasAreReal
 ---
 
 A self-healing URL is a short code embedded in a URL that lets the server redirect to the correct destination even if the rest of the URL is wrong or outdated. This post documents the real implementation path — including every approach that failed — on an Astro site deployed to Vercel.

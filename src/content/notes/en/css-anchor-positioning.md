@@ -18,6 +18,13 @@ tags:
   - ui
   - tooltips
   - modals
+linkedinCopy: |
+  Fellow devs — CSS Anchor Positioning is the feature that lets you throw away every JavaScript tooltip library you have ever reluctantly installed. Position popovers, dropdowns, and modals relative to any element, natively, with CSS. I built real examples: tooltips, dropdown menus, and context menus with no JavaScript. Sign in and tell me which JS positioning library you are finally ready to delete.
+  Read more: https://www.giorgiosaud.io/notebook/cssnch
+  
+  #CSS #FrontEnd #WebDev #UI #GoodbyePopper #CSSDoingThingsAgain #TooltipsNeedNoJS
+twitterCopy: |
+  Fellow devs — CSS Anchor Positioning is here and your tooltip library can finally retire. Sign in and comment: https://www.giorgiosaud.io/notebook/cssnch #CSS #GoodbyePopper #CSSDoingThingsAgain
 ---
 
 ## The Problem with JavaScript Positioning

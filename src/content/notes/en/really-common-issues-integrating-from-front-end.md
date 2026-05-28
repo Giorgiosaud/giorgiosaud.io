@@ -17,6 +17,13 @@ tags:
   - issues
 cover: ../../../assets/images/Really common issues integrating frontend.webp
 coverAlt: Man writting in desktop
+linkedinCopy: |
+  Fellow devs — Content Security Policy is one of the most valuable security tools you can add to your site and one of the most misunderstood. I cover the basics of how CSP works, why it matters against XSS, and how to implement it without breaking everything on day one. A good starting point before you go deep. Sign in and share your CSP setup or the error that sent you back to unsafe-inline.
+  Read more: https://www.giorgiosaud.io/notebook/000001
+  
+  #Security #CSP #WebDev #FrontEnd #XSS #CSPorNoCSP #unsafe-inlineIsASinActually
+twitterCopy: |
+  Fellow devs — CSP basics: what it is, why it matters, how to add it without breaking your site. Sign in and comment: https://www.giorgiosaud.io/notebook/000001 #Security #CSP #unsafe-inlineIsASinActually
 ---
 
 Hi welcome to another mini-post, this is about CSP let's start defining CSP content security policy this is a security layer based on mitigation of XSS attacks and data injection.

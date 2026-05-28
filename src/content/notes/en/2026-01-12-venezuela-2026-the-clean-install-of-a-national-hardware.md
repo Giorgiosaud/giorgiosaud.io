@@ -18,6 +18,13 @@ tags:
 cover: ../../../assets/images/Venezuela.png
 coverAlt: Investment flow diagram and strategic resources in Venezuela
 slug: clean-install-venezuela
+linkedinCopy: |
+  What if you could reboot a country like a system? That is exactly the mental model I applied to Venezuela's current moment — dollarization, industrial reset, and a new social algorithm emerging from chaos. This is not a political take, it is a solution architect's read on resource orchestration at national scale. Sign in and tell me where you think the bottlenecks are.
+  Read more: https://www.giorgiosaud.io/notebook/VPRNF2
+  
+  #Venezuela #DigitalTransformation #SolutionArchitecture #NationAsAPlatform #CleanInstallNotAvailable
+twitterCopy: |
+  What if you could reboot a country like a system? My architect's take on Venezuela 2026. Sign in and comment: https://www.giorgiosaud.io/notebook/VPRNF2 #Venezuela #NationAsAPlatform #CleanInstallNotAvailable
 ---
 
 In my previous post, I defined Venezuela as a platform requiring a **re-platforming**. But for software to run effectively, the **physical hardware** must be efficient.

@@ -18,6 +18,13 @@ tags:
 cover: ../../../assets/images/csp-unsafe-inline-astro-vercel.png
 coverAlt: "CSP without unsafe-inline in Astro and Vercel"
 lang: en
+linkedinCopy: |
+  Fellow devs — removing unsafe-inline from your CSP sounds simple until you are knee-deep in Astro inline scripts and Vercel edge functions. I went through every pitfall: build-time hash generation, hydration scripts, third-party embeds. The result is a fully automated SHA-256 hash pipeline that runs at build time. Sign in and tell me if you have fought this battle on your own projects.
+  Read more: https://www.giorgiosaud.io/notebook/cspwth
+  
+  #Security #CSP #Astro #Vercel #WebSecurity #UnsafeInlineIsVeryActuallySafe #HashItAndForgetIt
+twitterCopy: |
+  Fellow devs — removing unsafe-inline from CSP in Astro + Vercel: every pitfall documented. Sign in and comment: https://www.giorgiosaud.io/notebook/cspwth #Security #CSP #HashItAndForgetIt
 ---
 
 I was auditing the security headers on this site and realized my `script-src` had `'unsafe-inline'`. That one directive makes most of the XSS protection pointless — any inline script runs, including ones an attacker injected. The problem: Astro generates inline scripts everywhere and I didn't want to add middleware just to handle nonces.

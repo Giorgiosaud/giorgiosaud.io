@@ -17,6 +17,13 @@ tags:
   - testing
   - typescript
   - "2026"
+linkedinCopy: |
+  Fellow devs — unit testing Astro content collection helpers is not obvious and the official docs leave a gap. I found the exact pattern to mock getCollection, control import.meta.env.DEV, and make tests that actually reflect production filtering behavior instead of lying to you with false passes. This one cost me a few hours and now you do not have to pay that. Sign in and tell me what else you have had to figure out the hard way with Astro testing.
+  Read more: https://www.giorgiosaud.io/notebook/hwtmck
+  
+  #Astro #Vitest #Testing #TypeScript #WebDev #MockItLikeYouMeanIt #TestsThatActuallyTest
+twitterCopy: |
+  Fellow devs — mocking astro:content in Vitest is not obvious. Here is the exact pattern that works. Sign in and comment: https://www.giorgiosaud.io/notebook/hwtmck #Astro #Vitest #MockItLikeYouMeanIt
 ---
 
 If you've built helpers that call `getCollection` from `astro:content`, you've probably noticed that unit testing them is non-trivial. The module is virtual — it doesn't exist on disk — so Vitest can't resolve it like a normal import. And if your helper reads `import.meta.env.DEV` to decide whether to include drafts, you've got a second problem on top of that.

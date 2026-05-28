@@ -18,6 +18,13 @@ tags:
   - better-auth
   - dependencies
   - "2026"
+linkedinCopy: |
+  Fellow devs — upgrading a production Astro site to Astro 6, Svelte 5, and Better Auth 1.6 at the same time turned into a dependency conflict archaeology project. TypeScript preprocessing failures, transitive dependency hell, and a Vercel build cache that made everything worse. I documented everything that broke and exactly how I fixed it. Sign in and share your most chaotic upgrade story.
+  Read more: https://www.giorgiosaud.io/notebook/pgrdng
+  
+  #Astro #Svelte #WebDev #Dependencies #DependencyHell #UpgradeOrDieTrying #SemVerIsALie
+twitterCopy: |
+  Fellow devs — upgrading Astro 6 + Svelte 5 + Better Auth 1.6 in production. Everything that broke and how I fixed it. Sign in and comment: https://www.giorgiosaud.io/notebook/pgrdng #Astro #UpgradeOrDieTrying
 ---
 
 I spent a Sunday upgrading giorgiosaud.io from Astro 5 to Astro 6, `@astrojs/svelte` 7 to 8, and `better-auth` 1.4 to 1.6. The build broke in three distinct ways. Here's a post-mortem so you don't have to rediscover each one.

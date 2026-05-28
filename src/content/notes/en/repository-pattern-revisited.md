@@ -17,6 +17,13 @@ tags:
   - backend
 cover: ../../../assets/images/datalayer.webp
 coverAlt: Dataset pattern invisible
+linkedinCopy: |
+  Fellow devs — the Repository pattern has a better name: Data Layer Architecture. Separating your API calls from your UI code is not just about testability, it is about giving your frontend a clean abstraction over whatever data source you have today. I revisit the pattern with modern frontend examples. Sign in and share how you structure your data layer.
+  Read more: https://www.giorgiosaud.io/notebook/000008
+  
+  #FrontEnd #Architecture #WebDev #DataLayer #DesignPatterns #RepositoryPatternWalksIntoABar #DataLayerUp
+twitterCopy: |
+  Fellow devs — the Repository pattern is actually called Data Layer Architecture and here is why the name matters. Sign in and comment: https://www.giorgiosaud.io/notebook/000008 #Architecture #DataLayerUp
 ---
 
 This post is created because @Kevcastle talk to me about the complex structure of the previous post related to Repository pattern and I try to resolve it in a simples way in more than one post, this is the first of Datalayer series.

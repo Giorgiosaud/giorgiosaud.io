@@ -16,6 +16,13 @@ tags:
   - backend
 coverAlt: Repository pattern in frontend
 cover: ../../../assets/images/repository_pattern.webp
+linkedinCopy: |
+  Fellow devs — the Repository pattern in frontend development solves the problem of business logic getting tangled with data fetching. Better testability, cleaner components, and a data layer you can swap without touching the UI. I show the pattern with real frontend examples and why it improves maintainability. Sign in and tell me if you are using it in your current project.
+  Read more: https://www.giorgiosaud.io/notebook/000005
+  
+  #FrontEnd #Architecture #WebDev #DesignPatterns #MicrofrontEnd #PatternOfTheDay #FetchSeparated
+twitterCopy: |
+  Fellow devs — the Repository pattern in frontend: testable, swappable, and your components will thank you. Sign in and comment: https://www.giorgiosaud.io/notebook/000005 #FrontEnd #FetchSeparated
 ---
 
 In the world of frontend development, managing data efficiently is crucial for building scalable and maintainable applications. One architectural pattern that has proven to be highly effective in achieving this goal is the Repository Pattern. Traditionally used in backend development, the Repository Pattern is increasingly being adopted in frontend development for its ability to decouple data access logic from business logic.

@@ -17,6 +17,13 @@ tags:
   - custom-properties
   - design-systems
   - "2026"
+linkedinCopy: |
+  Fellow devs — @property is now universally supported and it changes everything about how we build design systems. Typed variables, animatable custom properties, and inheritance control are all production-ready. I wrote about the patterns that matter: typed tokens, animated gradients, and scoped theming without the usual hacks. Sign in and tell me if you have started using @property in your design system.
+  Read more: https://www.giorgiosaud.io/notebook/csscst
+  
+  #CSS #DesignSystems #FrontEnd #WebDev #2026 #TypedCSSIsFinally #CustomPropertiesGrowUp
+twitterCopy: |
+  Fellow devs — @property is universal in 2026. Typed variables, animated custom properties, proper design tokens. Sign in and comment: https://www.giorgiosaud.io/notebook/csscst #CSS #TypedCSSIsFinally
 ---
 
 ## CSS Custom Properties: @property Is Now Universal

@@ -18,6 +18,13 @@ tags:
   - carousels
   - scroll-snap
   - "2026"
+linkedinCopy: |
+  Fellow devs — I wrote the carousel guide I wished existed when I started: complete, copy-paste ready, covering scroll snap, scroll markers, scroll buttons, browser support, and progressive enhancement. No JavaScript, no library, just HTML and CSS doing the full job. Structured for both humans reading and AI tools referencing. Sign in and tell me if you are finally shipping JS-free carousels.
+  Read more: https://www.giorgiosaud.io/notebook/htmlcs
+  
+  #CSS #HTML #Carousels #FrontEnd #WebDev #CopyPasteAndShip #NoJSCarousel #ScrollSnapFTW
+twitterCopy: |
+  Fellow devs — the complete HTML+CSS carousel guide: snap, markers, buttons, no JS. Copy-paste ready. Sign in and comment: https://www.giorgiosaud.io/notebook/htmlcs #CSS #CopyPasteAndShip #ScrollSnapFTW
 ---
 
 This is the definitive implementation reference for HTML + CSS carousels — written so a developer (or an AI agent) can follow it from zero to a fully working carousel without touching JavaScript.

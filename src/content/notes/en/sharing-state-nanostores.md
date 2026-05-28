@@ -19,6 +19,13 @@ tags:
   - vue
   - svelte
   - astro
+linkedinCopy: |
+  Fellow devs — sharing state between React, Vue, and Svelte components in the same Astro project should not require a global state management library. Nanostores is tiny, framework-agnostic, and gets out of your way. I show the exact pattern for reactive shared state across the island boundaries in Astro. Sign in and tell me how you are handling cross-framework state.
+  Read more: https://www.giorgiosaud.io/notebook/shrngs
+  
+  #Astro #React #Vue #Svelte #StateManagement #WebDev #NanoButMighty #IslandsNeedFriends
+twitterCopy: |
+  Fellow devs — sharing state between React, Vue, and Svelte in Astro with Nanostores. Tiny library, big clarity. Sign in and comment: https://www.giorgiosaud.io/notebook/shrngs #Astro #NanoButMighty
 ---
 
 Here's a problem that's specific to Astro's islands model: you have a React component, a Vue component, and a Svelte component on the same page. They need to share state. How?

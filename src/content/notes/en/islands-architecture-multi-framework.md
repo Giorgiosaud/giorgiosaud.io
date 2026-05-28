@@ -18,6 +18,13 @@ tags:
   - vue
   - svelte
   - architecture
+linkedinCopy: |
+  Fellow devs — Astro's Islands Architecture lets you run React, Vue, and Svelte in the same project and only hydrate the parts that need to be interactive. I explain the model, the client directives, and why this approach delivers better performance than a full SPA for most content-heavy sites. Sign in and tell me which framework combination you are running in your Astro project.
+  Read more: https://www.giorgiosaud.io/notebook/slndsr
+  
+  #Astro #React #Vue #Svelte #Architecture #WebDev #IslandsNotAnArchipelago #HydrateResponsibly
+twitterCopy: |
+  Fellow devs — React + Vue + Svelte in one project, only hydrating what needs to be interactive. Astro Islands. Sign in and comment: https://www.giorgiosaud.io/notebook/slndsr #Astro #HydrateResponsibly
 ---
 
 This site uses React, Vue, and Svelte — all on the same page in some places. That's not an accident or a sign of chaos. It's Astro's islands architecture doing exactly what it's designed for.

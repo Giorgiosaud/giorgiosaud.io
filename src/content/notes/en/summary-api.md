@@ -15,6 +15,13 @@ tags:
   - frontend
   - evolution
 slug: introducing-summary-api-browsers
+linkedinCopy: |
+  Fellow devs — browser-native AI summarization is no longer a proposal, it is shipping. The Summary API lets browsers generate AI-powered summaries of web content without any external service. I introduce the API, show what it can do today, and where it is heading. Sign in and share how you are thinking about integrating browser AI into your apps.
+  Read more: https://www.giorgiosaud.io/notebook/SMMPPN
+  
+  #AI #FrontEnd #WebDev #BrowserAPI #Evolution #SummarizeAllTheThings #BrowserAIHasArrived
+twitterCopy: |
+  Fellow devs — browser-native AI summarization is shipping. The Summary API is here and worth your attention. Sign in and comment: https://www.giorgiosaud.io/notebook/SMMPPN #AI #SummarizeAllTheThings
 ---
 
 ## What is the Summary API?

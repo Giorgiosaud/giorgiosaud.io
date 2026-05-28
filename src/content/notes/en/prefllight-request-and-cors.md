@@ -19,6 +19,13 @@ tags:
   - common-issues
 cover: ../../../assets/images/preflight-request-12.webp
 coverAlt: PReflight plane from pc
+linkedinCopy: |
+  Fellow devs — CORS errors in the browser console are one of the most common and most confusing integration problems. Preflight requests, OPTIONS methods, allowed headers — I break it all down clearly with real examples of what goes wrong and how to fix it on both the client and server side. Sign in and share your most memorable CORS war story.
+  Read more: https://www.giorgiosaud.io/notebook/000007
+  
+  #CORS #WebDev #FrontEnd #Security #Integration #CORSisNotACurse #PreflightFrenzy
+twitterCopy: |
+  Fellow devs — CORS and preflight requests demystified. What actually happens and how to fix it. Sign in and comment: https://www.giorgiosaud.io/notebook/000007 #CORS #CORSisNotACurse
 ---
 
 When we talk about client-side applications, advantages of microservices and micro-frontend, integrations from the client-side, and make our apps more independent we are talking about these common issues lets describe them briefly.

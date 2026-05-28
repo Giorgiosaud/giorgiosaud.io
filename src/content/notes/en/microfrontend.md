@@ -15,6 +15,13 @@ tags:
 fmContentType: Notes
 coverAlt: Books Repository Pattern
 cover: ../../../assets/images/microfrontend_klswbm.webp
+linkedinCopy: |
+  Fellow devs — micro frontends get a lot of hype and a lot of skepticism. I break down the architecture pattern clearly: what it is, when it makes sense, and the real tradeoffs around team autonomy, bundle size, and complexity. If you are on a team debating whether to go this route, this is a good starting point for the conversation. Sign in and share your experience with micro frontend architecture.
+  Read more: https://www.giorgiosaud.io/notebook/000003
+  
+  #MicroFrontend #Architecture #WebDev #FrontEnd #ScaleOrFail #MicrofrontendsAreJustFrontends #TeamAutonomy
+twitterCopy: |
+  Fellow devs — micro frontend architecture: what it actually is, when it makes sense, real tradeoffs. Sign in and comment: https://www.giorgiosaud.io/notebook/000003 #Architecture #MicrofrontendsAreJustFrontends
 ---
 
 In a [previous article at modyo blog](https://blog.modyo.com/posts/micro-frontends-empower-your-developers-to-build-better-digital-products), we talked about how micro frontends offer more freedom for teams and deliver more efficient applications. Because of this, they are becoming popular among architects and developers because large organizations and industry leaders are successfully managing their own web applications using micro frontend architectures.

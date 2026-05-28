@@ -16,6 +16,13 @@ tags:
   - webdevelopment
 cover: ../../../assets/images/css-carousels.webp
 coverAlt: "CSS Carousels Without JavaScript: A Guide"
+linkedinCopy: |
+  Fellow devs — building a carousel used to mean reaching for a JavaScript library. Not anymore. scroll-marker and scroll-marker-group are now real CSS properties and they give you pagination dots, keyboard navigation, and snap behavior with zero JS. I built one step by step and documented every part. Sign in and tell me if you are still reaching for JS carousels or making the switch.
+  Read more: https://www.giorgiosaud.io/notebook/0JSCRS
+  
+  #CSS #NoJS #Carousel #FrontEnd #WebDev #JavaScriptWentForCigarettes #CSSWins
+twitterCopy: |
+  Fellow devs — CSS carousels with pagination dots and snap, zero JavaScript. scroll-marker is here. Sign in and comment: https://www.giorgiosaud.io/notebook/0JSCRS #CSS #NoJS #JavaScriptWentForCigarettes
 ---
 
 

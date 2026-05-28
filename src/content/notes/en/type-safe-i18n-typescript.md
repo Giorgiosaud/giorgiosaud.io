@@ -17,6 +17,13 @@ tags:
   - i18n
   - type-safety
   - design-patterns
+linkedinCopy: |
+  Fellow devs — TypeScript autocomplete for every nested key in your translation files is not a nice-to-have, it is a typo-catching superpower. I built a recursive deep key extraction type that gives you full type safety for i18n without any code generation step. The TypeScript is a little gnarly but I explain every part. Sign in and share how you are handling i18n type safety in your projects.
+  Read more: https://www.giorgiosaud.io/notebook/typsf1
+  
+  #TypeScript #i18n #FrontEnd #WebDev #TypeSafety #AutocompleteOrAnarchy #RecursiveTypesAreNotScary
+twitterCopy: |
+  Fellow devs — type-safe i18n in TypeScript with full autocomplete for nested translation keys. No codegen. Sign in and comment: https://www.giorgiosaud.io/notebook/typsf1 #TypeScript #AutocompleteOrAnarchy
 ---
 
 So you've been there: you write `t('nav.hoem')` instead of `t('nav.home')`, ship it, and a user reports a blank link on production. Runtime error. No warning at build time. Nothing.

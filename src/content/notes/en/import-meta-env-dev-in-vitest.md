@@ -17,6 +17,13 @@ tags:
   - testing
   - typescript
   - "2026"
+linkedinCopy: |
+  Fellow devs — vi.stubEnv sets a string. Vite's DEV is a boolean. The string 'false' is truthy. Your tests pass when they should fail. I hit this exact bug and tracked it down to a one-line fix that is not in any FAQ. This is the kind of silent failure that makes you question your entire test suite. Sign in and share what silent test bug has cost you the most time.
+  Read more: https://www.giorgiosaud.io/notebook/mprtmt
+  
+  #Vitest #Vite #Astro #Testing #TypeScript #FalseIsActuallyTrue #TrustyourTestsNot #BooleanLies
+twitterCopy: |
+  Fellow devs — vi.stubEnv('DEV', 'false') sets a string. Strings are truthy. Your tests lie. Here is the fix: https://www.giorgiosaud.io/notebook/mprtmt #Vitest #BooleanLies #TrustYourTestsNot
 ---
 
 This one cost me a debugging session. Short post, but worth writing down.

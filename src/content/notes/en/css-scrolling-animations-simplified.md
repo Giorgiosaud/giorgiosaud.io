@@ -15,6 +15,13 @@ tags:
   - css
 cover: ../../../assets/images/css-animations.webp
 coverAlt: CSS Scrolling Animations Simplified
+linkedinCopy: |
+  Fellow devs — animation-timeline and animation-range are the two CSS properties that make scroll-driven animations actually readable. I wrote a simplified guide that skips the academic spec-speak and goes straight to the patterns you will actually use. If you have been putting off learning scroll animations because the docs look intimidating, this is the starting point. Sign in and tell me which animation you are building first.
+  Read more: https://www.giorgiosaud.io/notebook/000016
+  
+  #CSS #Animation #FrontEnd #WebDev #SimplifiedOrBust #ScrollAndLearn #CSSIsNotSoScary
+twitterCopy: |
+  Fellow devs — CSS scroll animations demystified. animation-timeline, animation-range: the parts that actually matter. Sign in and comment: https://www.giorgiosaud.io/notebook/000016 #CSS #SimplifiedOrBust
 ---
 
 ## Introduction

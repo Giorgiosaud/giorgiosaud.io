@@ -16,6 +16,13 @@ tags:
     - css
 cover: ../../../assets/images/css-global-props.webp
 coverAlt: Css Global Props
+linkedinCopy: |
+  Fellow devs — new CSS global properties are making theming and transitions much cleaner than the old workarounds. I am using them on this site and the code is simpler than I expected. Real examples from a production site, not a demo. Sign in and share which CSS global properties you have already adopted or are planning to.
+  Read more: https://www.giorgiosaud.io/notebook/NCSSPG
+  
+  #CSS #FrontEnd #WebDev #Theming #CSSEvolvesAgain #GloballyStyled
+twitterCopy: |
+  Fellow devs — new CSS global properties in production: cleaner theming, simpler transitions. Real examples. Sign in and comment: https://www.giorgiosaud.io/notebook/NCSSPG #CSS #CSSEvolvesAgain
 ---
 In my latest project, I explored some exciting CSS features that simplify web development and enhance the user experience. These tools are perfect for creating modern, dynamic websites with surprisingly little code.
 

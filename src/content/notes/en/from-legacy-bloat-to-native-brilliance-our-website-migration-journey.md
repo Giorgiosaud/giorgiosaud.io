@@ -19,6 +19,13 @@ fmContentType: Notes
 date: 2025-08-31T04:14:38.000Z
 cover: ../../../assets/images/from-legacy-bloat-to-native-brilliance-our-website-migration-journey_fuemvo.webp
 coverAlt: "Transforming My Website: A Migration Success Story"
+linkedinCopy: |
+  Fellow devs — I migrated my personal site from a bloated legacy stack to modern native web standards and documented every decision. Faster, more accessible, smaller bundle, less JavaScript. The journey had more gotchas than I expected and I share all of them. Sign in and tell me what your current migration pain point is or what you have already conquered.
+  Read more: https://www.giorgiosaud.io/notebook/FLBTNB
+  
+  #WebDev #FrontEnd #Migration #Performance #Evolution #BloatNoBueno #NativeOrNative
+twitterCopy: |
+  Fellow devs — migrated from legacy bloat to native web standards. Faster, leaner, fewer regrets. Sign in and comment: https://www.giorgiosaud.io/notebook/FLBTNB #WebDev #BloatNoBueno #NativeOrNative
 ---
 
 Over the past year, I embarked on a mission that many developers know but often dread: refactoring my web application. The project, this notebook and portal in the developers knowledge sector, was weighed down by months of accumulated technical debt, heavy frameworks, and a lot of refactors that led me to make the final one. My goal was clear: migrate to modern, native CSS and HTML features to build a faster, more maintainable, and highly accessible platform for the future.

@@ -14,6 +14,13 @@ tags:
   - functionalfeatures
 cover: ../../../assets/images/selfhealing_url_lygv2g.webp
 coverAlt: Self healing symbol
+linkedinCopy: |
+  Fellow devs — renaming a blog post should not break all the links pointing to it. Self-healing URLs in Astro solve this by mapping a stable short code to the current slug, so old links redirect automatically forever. I built the first version of this feature and documented the approach. Sign in and tell me how you handle URL stability in your content sites.
+  Read more: https://www.giorgiosaud.io/notebook/000010
+  
+  #Astro #WebDev #Architecture #SEO #URLs #LinksLiveLongAndProsper #SelfHealingNotSelfHelp
+twitterCopy: |
+  Fellow devs — self-healing URLs in Astro: rename your posts without breaking a single link. Sign in and comment: https://www.giorgiosaud.io/notebook/000010 #Astro #SelfHealingNotSelfHelp
 ---
 
 First start to define what a self-healing URL is, a self-healing URL is like [medium. com](https://giorgiosaud.medium.com) posts a URL that has a unique identifier to allow redirect to a beauty URL path the structure of the URL normally is `https://giorgiosaud.medium.com/arquitectura-de-micro-frontend-trabaja-inteligentemente-no-m%C3%A1s-duro-8995417d821a` this structure is the ${baseUrl}/${post-name}-${id} this is the one which allows us to detect a malformed URL, if this is in the name will be replaced with the original one for example `https://giorgiosaud.medium.com/anything-8995417d821a` will redirect you to the self-healed original URL,

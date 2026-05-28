@@ -18,6 +18,13 @@ tags:
   - browser-api
   - summarizer
   - built-in-ai
+linkedinCopy: |
+  Fellow devs — Chrome ships a native Summarizer API and the model runs entirely on device. No API keys, no server costs, no sending user content to the cloud. I explored the full API surface: availability detection, streaming, multi-language, and graceful fallback. If you are building content-heavy apps this is worth your attention right now. Sign in and share how you are thinking about on-device AI in your stack.
+  Read more: https://www.giorgiosaud.io/notebook/chrmbl
+  
+  #AI #Chrome #BrowserAPI #WebDev #FreeAIUntilItIsnt #OnDeviceOrBust
+twitterCopy: |
+  Fellow devs — Chrome now ships a native Summarizer API. No keys, no server, no cost. Runs on device. Sign in and comment: https://www.giorgiosaud.io/notebook/chrmbl #AI #Chrome #FreeAIUntilItIsnt
 ---
 
 So you've probably noticed the 🤖 button floating on this page. That's Chrome's built-in Summarizer API in action — no server, no API key, the model runs entirely on your device. I thought it was worth writing about because it changes how we think about adding AI to the web.

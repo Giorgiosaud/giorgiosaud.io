@@ -17,6 +17,13 @@ tags:
   - carousels
   - scroll-snap
   - "2026"
+linkedinCopy: |
+  Fellow devs — building carousels with pure CSS is no longer a hack. scroll-marker, scroll-button, and scroll snap are all here in 2026 and they give you pagination dots, previous/next buttons, and keyboard navigation without touching JavaScript. I put together a full guide from zero to production-ready. Sign in and tell me if you are finally ready to delete that carousel library from your package.json.
+  Read more: https://www.giorgiosaud.io/notebook/csscrs
+  
+  #CSS #Carousels #FrontEnd #WebDev #2026 #DeletingSwiper #NativeOrNothingNow #ScrollSnapFTW
+twitterCopy: |
+  Fellow devs — CSS carousels in 2026: native scroll markers, snap, and buttons. No JS library needed. Sign in and comment: https://www.giorgiosaud.io/notebook/csscrs #CSS #DeletingSwiper #ScrollSnapFTW
 ---
 
 ## CSS Carousels: Finally No JavaScript Required

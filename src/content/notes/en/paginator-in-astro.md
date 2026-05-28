@@ -16,6 +16,13 @@ tags:
   - backend
 coverAlt: Paginator in astro do it like a pro
 cover: ../../../assets/images/paginator.webp
+linkedinCopy: |
+  Fellow devs — pagination in Astro is one of those things that looks simple until you are deep in the paginate() API trying to figure out URL patterns and getStaticPaths. I built a production-ready paginator and documented the setup that actually works, including the edge cases most tutorials skip. Sign in and tell me what part of Astro pagination tripped you up.
+  Read more: https://www.giorgiosaud.io/notebook/000006
+  
+  #Astro #FrontEnd #WebDev #Pagination #DoItLikeAPro #PageTwoExistsApparently #AstroGotchas
+twitterCopy: |
+  Fellow devs — Astro pagination done right, including the edge cases tutorials skip. Sign in and comment: https://www.giorgiosaud.io/notebook/000006 #Astro #PageTwoExistsApparently
 ---
 
 # Basis of Pagination

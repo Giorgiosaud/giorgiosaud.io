@@ -15,6 +15,13 @@ tags:
   - srcset
 cover: ../../../assets/images/link_siloo8.webp
 coverAlt: Link from zelds viewen pics
+linkedinCopy: |
+  Fellow devs — most of us use img tags every day and most of us are leaving performance on the table by not using srcset and sizes correctly. The browser can pick the right image for the right screen but only if you give it the right hints. I break down the exact syntax, the mental model for sizes, and the real-world impact on Core Web Vitals. Sign in and tell me if you have tackled this in your projects.
+  Read more: https://www.giorgiosaud.io/notebook/000002
+  
+  #WebDev #FrontEnd #Performance #Images #CoreWebVitals #SrcsetIsNotScary #ResponsiveImages
+twitterCopy: |
+  Fellow devs — srcset and sizes: stop serving 2x images to 1x screens. Your CWV will thank you. Sign in and comment: https://www.giorgiosaud.io/notebook/000002 #WebDev #SrcsetIsNotScary
 ---
 
 In this blog post, Jorge Saud explains the efficient and effective use of the

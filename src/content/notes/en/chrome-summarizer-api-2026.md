@@ -17,6 +17,13 @@ tags:
   - ai
   - summarization
   - "2026"
+linkedinCopy: |
+  Fellow devs — Chrome's built-in Summarizer API went mainstream in 2026 and the patterns for using it in production are clearer now. I cover availability detection, the latest capabilities, and what to do when the model has not downloaded yet on a fresh device. On-device AI for content summarization is no longer a prototype. Sign in and share how you are planning to use it.
+  Read more: https://www.giorgiosaud.io/notebook/chrmsm
+  
+  #AI #Chrome #BrowserAPI #WebDev #2026 #AIRanOutOfExcuses #OnDeviceIsHere
+twitterCopy: |
+  Fellow devs — Chrome's Summarizer API is mainstream in 2026. Here are the production patterns. Sign in and comment: https://www.giorgiosaud.io/notebook/chrmsm #AI #Chrome #AIRanOutOfExcuses
 ---
 
 ## Chrome Summarizer API: From Experimental to Production

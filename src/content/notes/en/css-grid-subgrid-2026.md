@@ -18,6 +18,13 @@ tags:
   - subgrid
   - layout
   - "2026"
+linkedinCopy: |
+  Fellow devs — subgrid landed in all major browsers and it solves the card alignment problem that CSS developers have been workarounding for years. Nested grids that participate in their parent's tracks. I show the patterns: aligned card footers, nested form labels, editorial layouts that actually work. Sign in and share which layout problem you are solving with subgrid.
+  Read more: https://www.giorgiosaud.io/notebook/cssgrd
+  
+  #CSS #Grid #Subgrid #Layout #FrontEnd #WebDev #AlignmentTherapy #GridInAGrid
+twitterCopy: |
+  Fellow devs — CSS subgrid is universal in 2026. Card alignment nightmares: solved. Sign in and comment: https://www.giorgiosaud.io/notebook/cssgrd #CSS #Grid #AlignmentTherapy
 ---
 
 ## Subgrid: The Missing Piece is Now Universal

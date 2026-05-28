@@ -17,6 +17,13 @@ tags:
   - testing
   - devops
   - "2026"
+linkedinCopy: |
+  Fellow devs — if your tests run fine with bun run test but fail with vitest: command not found inside a Bun script, this post is for you. The fix is one word: bunx. I explain exactly why Bun does not always put node_modules/.bin on PATH and when it matters. It is one of those things that costs you an hour the first time. Sign in and share what other Bun gotchas you have hit.
+  Read more: https://www.giorgiosaud.io/notebook/bnxvts
+  
+  #Bun #Vitest #Testing #DevOps #OneWordFix #BunGotchaOfTheDay #TestingInTheDark
+twitterCopy: |
+  Fellow devs — bun run test works but vitest says command not found? One word fix: bunx. Here is why: https://www.giorgiosaud.io/notebook/bnxvts #Bun #Vitest #OneWordFix
 ---
 
 Short one. If `bun run test` is failing with `vitest: command not found` even though vitest is clearly in your `devDependencies`, read on.

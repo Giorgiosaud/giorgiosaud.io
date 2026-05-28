@@ -17,6 +17,13 @@ tags:
   - view-transitions
   - navigation
   - animation
+linkedinCopy: |
+  Fellow devs — smooth page transitions with a single CSS rule felt impossible until the View Transitions API shipped. No JavaScript animation library, no SPA overhead, just native browser transitions between pages. I show how to customize animations for specific elements and create SPA-like experiences that actually respect progressive enhancement. Sign in and tell me if you have shipped view transitions in production.
+  Read more: https://www.giorgiosaud.io/notebook/vwtrns
+  
+  #CSS #WebDev #FrontEnd #Animation #ViewTransitions #SpaVibesWithoutTheSpa #TransitionsForFree
+twitterCopy: |
+  Fellow devs — smooth page transitions with one CSS rule. The View Transitions API is better than it looks. Sign in and comment: https://www.giorgiosaud.io/notebook/vwtrns #CSS #TransitionsForFree
 ---
 
 Here's something that stopped me in my tracks when I first saw it: smooth page transitions across a multi-page site with a single line of CSS. No JavaScript, no library, no framework magic.

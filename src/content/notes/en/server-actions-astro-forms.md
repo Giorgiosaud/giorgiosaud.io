@@ -18,6 +18,13 @@ tags:
   - validation
   - security
   - backend
+linkedinCopy: |
+  Fellow devs — Astro's server actions are the cleanest way to handle form submissions I have found in any framework. Zod validation, type-safe errors, and bot protection all in one pattern. No separate API route, no client-side fetch, just progressive enhancement that works without JavaScript. Sign in and tell me what your current form handling setup looks like.
+  Read more: https://www.giorgiosaud.io/notebook/srvrct
+  
+  #Astro #WebDev #Forms #Backend #Security #FormsAreHardActually #ZodToTheRescue #NoApiRouteNeeded
+twitterCopy: |
+  Fellow devs — Astro server actions: forms with Zod validation, type-safe errors, and bot protection. No API route needed. Sign in and comment: https://www.giorgiosaud.io/notebook/srvrct #Astro #ZodToTheRescue
 ---
 
 ## Why Server Actions?

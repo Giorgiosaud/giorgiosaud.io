@@ -17,6 +17,13 @@ tags:
   - ai
   - seo
   - astro
+linkedinCopy: |
+  Fellow devs — llms.txt is a simple standard that makes your site legible to AI crawlers and language models. I implemented it in Astro with per-page .md endpoints and the setup is lighter than you think. If you want your content to be properly indexed and cited by AI tools, this is the right move. Sign in and tell me if you have added llms.txt to your sites yet.
+  Read more: https://www.giorgiosaud.io/notebook/llmstx
+  
+  #AI #SEO #Astro #WebDev #LLMs #RobotsButFriendly #AIReadableOrInvisible
+twitterCopy: |
+  Fellow devs — llms.txt: make your site readable by AI crawlers. Implemented in Astro in an afternoon. Sign in and comment: https://www.giorgiosaud.io/notebook/llmstx #AI #SEO #AIReadableOrInvisible
 ---
 
 So you've probably noticed that AI assistants are increasingly used to look things up on the web. The problem is that HTML pages are noisy — navigation, footers, cookie banners, ads — and LLMs have to work harder to extract the actual content.

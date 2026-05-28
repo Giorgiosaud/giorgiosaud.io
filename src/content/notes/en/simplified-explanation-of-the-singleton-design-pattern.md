@@ -20,6 +20,13 @@ cover: ../../../assets/images/singleton_hbupze.webp
 coverAlt: Simplified Explanation of the Singleton Design Pattern
 fmContentType: Notes
 date: 2025-08-31T04:20:03.000Z
+linkedinCopy: |
+  Fellow devs — the Singleton pattern gets used without thinking and misunderstood more often than not. I wrote the simplified explanation I wish I had when I first encountered it: what it actually does, when it genuinely makes sense for configuration and state management, and when you should reach for something else. Sign in and tell me your honest take on Singletons.
+  Read more: https://www.giorgiosaud.io/notebook/000011
+  
+  #DesignPatterns #Architecture #WebDev #Development #SingletonNotASocialState #PatternOrAntiPattern #OnlyOneInstance
+twitterCopy: |
+  Fellow devs — the Singleton pattern: simplified, honest, and when to actually use it. Sign in and comment: https://www.giorgiosaud.io/notebook/000011 #DesignPatterns #OnlyOneInstance
 ---
 
 in this blog post, I will try to explain the pattern in a simplified way the Singleton Design Pattern, its main purpose is to reconstruct the instantiation of a class to a singular instance, I need to clarify that the use case is very difficult to find but if you think about it in a deeper way I found some interesting uses.

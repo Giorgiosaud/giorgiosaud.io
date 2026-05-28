@@ -17,6 +17,13 @@ tags:
   - scroll-animations
   - animation
   - "2026"
+linkedinCopy: |
+  Fellow devs — remember fighting with JavaScript intersection observers just to animate on scroll? That era is over. CSS Scroll Animations hit full browser support in 2026 and I have been using them in production. View timeline, scroll timeline, animation-range — all stable, all pure CSS. I wrote a practical breakdown with real examples so you can start today. Drop your questions in the comments, I would love to hear how you are using scroll animations in your projects.
+  Read more: https://www.giorgiosaud.io/notebook/cssscr
+  
+  #CSS #ScrollAnimations #FrontEnd #WebDev #NoMoreJSForThis #CSSWins #ScrollWithoutTherapy
+twitterCopy: |
+  Fellow devs — CSS Scroll Animations are production-ready in 2026. No JS, no observers, just CSS doing what we always wanted. Sign in and comment: https://www.giorgiosaud.io/notebook/cssscr #CSS #NoMoreJSForThis #CSSWins
 ---
 
 ## Scroll Animations: Now Production-Ready

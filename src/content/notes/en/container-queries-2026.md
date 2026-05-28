@@ -17,6 +17,13 @@ tags:
   - container-queries
   - responsive-design
   - "2026"
+linkedinCopy: |
+  Fellow devs — container queries hit 95% browser support in 2026 and the advanced patterns are now worth learning. Style queries, named containers, and component-level responsive design are all production-ready. I wrote a practical guide with real card layouts and form designs that were genuinely impossible before universal support. Sign in and share the pattern you are most excited to use.
+  Read more: https://www.giorgiosaud.io/notebook/cntnrq
+  
+  #CSS #ContainerQueries #ResponsiveDesign #FrontEnd #2026 #RIPMediaQueries #ComponentFirstForReal
+twitterCopy: |
+  Fellow devs — container queries at 95% support in 2026. Style queries, named containers: all production-ready. Sign in and comment: https://www.giorgiosaud.io/notebook/cntnrq #CSS #RIPMediaQueries
 ---
 
 ## Container Queries: Fully Mature in 2026

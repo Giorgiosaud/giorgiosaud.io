@@ -19,6 +19,13 @@ tags:
   - solution-architecture
 cover: ../../../assets/images/Venezuela.png
 coverAlt: Abstract visualization of industrial automation in Venezuelan landscape
+linkedinCopy: |
+  Fellow devs with a broader perspective — I applied solution architecture thinking to Venezuela's industrial future. Automation in oil, mining, and tourism as priority vectors during a new investment cycle. This is the kind of systems thinking that rarely gets applied to national-scale problems and I think it should. Sign in and tell me how you think about technology and society at scale.
+  Read more: https://www.giorgiosaud.io/notebook/000008
+  
+  #Venezuela #DigitalTransformation #Automation #SolutionArchitecture #IndustrialStrategy #ArchitectingANation #OilButMakeItDigital
+twitterCopy: |
+  Fellow devs — applying solution architecture to Venezuela's industrial recovery. Automation, strategy, and systems thinking at national scale. Sign in and comment: https://www.giorgiosaud.io/notebook/000008 #Venezuela #ArchitectingANation
 ---
 
 When we talk about the recovery of a nation, especially one with the industrial weight of Venezuela, we are not just talking about repairing machinery or opening wells. We are entering an age of investment where the challenge isn't just "bringing it back," but "bringing it forward."

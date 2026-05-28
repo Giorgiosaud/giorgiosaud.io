@@ -18,6 +18,13 @@ tags:
   - lazy-loading
   - performance
   - javascript
+linkedinCopy: |
+  Fellow devs — lazy loading an AI model that runs entirely in the browser felt like science fiction two years ago. Chrome's Summarizer API makes it real today. I went deep on the streaming API, multi-language support, and how to handle the cases where the model is not available yet. No backend, no keys, just the browser doing the work. Sign in and let me know if you are experimenting with browser-native AI.
+  Read more: https://www.giorgiosaud.io/notebook/brwsrn
+  
+  #AI #Chrome #JavaScript #Performance #WebDev #BrowserDoingHeavyLifting #LazyLoadTheModel
+twitterCopy: |
+  Fellow devs — Chrome's Summarizer API: AI in the browser, no backend, no keys, just works. Sign in and comment: https://www.giorgiosaud.io/notebook/brwsrn #AI #Chrome #BrowserDoingHeavyLifting
 ---
 
 ## Why Browser-Native AI Matters

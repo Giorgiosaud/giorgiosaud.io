@@ -23,6 +23,13 @@ keywords:
   - venezuela
   - new
 preview: ../../../assets/images/Venezuela.png
+linkedinCopy: |
+  Fellow devs with a global perspective — I applied platform thinking to Venezuela's repositioning for global investment. What are the technical and industrial priorities that matter most? How do you architect a country for the next cycle? This is the kind of problem I find as interesting as any software system. Sign in and share how you think about technology and national scale.
+  Read more: https://www.giorgiosaud.io/notebook/VPRNFG
+  
+  #Venezuela #Architecture #DigitalTransformation #Investment #Strategy #VenezuelaAsAStartup #NationScaleThinking
+twitterCopy: |
+  Fellow devs — Venezuela as a platform: a solution architect's take on the technical priorities for global repositioning. Sign in and comment: https://www.giorgiosaud.io/notebook/VPRNFG #Venezuela #NationScaleThinking
 ---
 
 This is a series of posts I will be writing based on my experience as a Venezuelan and what I have learned in my professional career.

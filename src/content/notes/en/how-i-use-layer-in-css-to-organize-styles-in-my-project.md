@@ -17,6 +17,13 @@ tags:
   - layer
 cover: ../../../assets/images/css-layer.webp
 coverAlt: Css Layers image
+linkedinCopy: |
+  Fellow devs — I refactored my entire CSS architecture around @layer and the clarity it brought to specificity management is hard to overstate. Resets in one layer, component styles in another, utilities on top. The cascade becomes something you control instead of something you fight. I share my exact setup and the order that works for me. Sign in and tell me how you are organizing your CSS.
+  Read more: https://www.giorgiosaud.io/notebook/LYRCSS
+  
+  #CSS #CascadeLayers #FrontEnd #Architecture #WebDev #FightingTheCascadeNoMore #LayeredAndProud
+twitterCopy: |
+  Fellow devs — @layer in CSS: I refactored my whole style architecture around it and I am not going back. Sign in and comment: https://www.giorgiosaud.io/notebook/LYRCSS #CSS #LayeredAndProud
 ---
 
 The `@layer` rule is one of the most useful innovations in modern CSS for organizing and controlling CSS in large projects. It allows you to define style layers, making it easier to manage priorities and avoid conflicts between components, utilities, and global styles.
