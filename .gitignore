@@ -5,6 +5,7 @@ dist/
 coverage/
 # generated types
 .astro/
+src/generated/selfheal-map.json
 
 # dependencies
 node_modules/

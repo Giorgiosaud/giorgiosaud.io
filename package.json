@@ -7,6 +7,7 @@
     "node": "24"
   },
   "scripts": {
+    "predev": "bun scripts/generateSelfHealMap.ts",
     "dev": "astro dev",
     "build": "bun scripts/generateSelfHealMap.ts && astro build && bun scripts/patchVercelRoutes.ts && bun scripts/generateCspHashes.ts && bun scripts/notifyNewPosts.ts",
     "csp:hashes": "bun scripts/generateCspHashes.ts",
