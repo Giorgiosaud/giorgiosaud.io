@@ -13,14 +13,18 @@ Add a "Share" tab to the user dashboard that shows copyable social media text fo
 
 ## Schema Changes
 
-Add two optional URL fields to `noteSchema` in `src/content/schemas/noteSchema.ts`:
+Add four optional fields to `noteSchema` in `src/content/schemas/noteSchema.ts`:
 
 ```ts
-linkedin: z.string().url().optional(),
-twitter: z.string().url().optional(),
+linkedinCopy: z.string().optional(),   // hand-written LinkedIn post text
+twitterCopy: z.string().optional(),    // hand-written tweet text
+linkedin: z.string().url().optional(), // URL of the published LinkedIn post
+twitter: z.string().url().optional(),  // URL of the published tweet
 ```
 
-These fields are optional — omitting them means the note hasn't been shared yet. Adding a URL marks it as shared and the card gets a "shared" visual state.
+`linkedinCopy` / `twitterCopy` — authored by you in frontmatter, shown verbatim in the copy block. A note missing both is flagged as "needs copy written".
+
+`linkedin` / `twitter` — URL added after sharing. Presence marks the note as shared and changes the card's visual state.
 
 ---
 
@@ -41,7 +45,7 @@ These fields are optional — omitting them means the note hasn't been shared ye
 
 ## Data Flow
 
-1. `share.astro` runs server-side: calls `getCollection('notes')`, filters out drafts, sorts by `publishDate` desc, maps to a plain serializable array with: `{ title, description, tags, selfHealing, publishDate, linkedin?, twitter? }`
+1. `share.astro` runs server-side: calls `getCollection('notes')`, filters out drafts, sorts by `publishDate` desc, maps to a plain serializable array with: `{ title, selfHealing, publishDate, linkedinCopy?, twitterCopy?, linkedin?, twitter? }`
 2. Passes the array as a prop to `<SocialShareCards client:load notes={notes} lang={lang} />`
 3. Svelte island handles pagination (12 cards/page), copy state, and shared/unshared visual distinction — no further server calls needed
 
@@ -56,31 +60,18 @@ These fields are optional — omitting them means the note hasn't been shared ye
 - Filter toggle: "All" | "Unshared only" — defaults to "Unshared only"
 
 ### Card anatomy (per note)
-- Header: note title + publish date + shared badges (LinkedIn ✓ / Twitter ✓ if URLs present)
-- Shared state: card has muted/green border, collapsed by default — click to expand
+- Header: note title + publish date + status badges (LinkedIn ✓ / Twitter ✓ if post URLs present)
+- Shared state: card has muted/green border, collapsed by default — click to expand for repost
 - Unshared state: card expanded by default
-- **LinkedIn copy block**: textarea (readonly) with generated text + "Copy" button
-- **Twitter/X copy block**: textarea (readonly) with generated text + "Copy" button
+- **LinkedIn copy block**: readonly textarea showing `linkedinCopy` value + "Copy" button. If `linkedinCopy` is missing, shows a "Write LinkedIn copy in frontmatter" placeholder message instead.
+- **Twitter/X copy block**: readonly textarea showing `twitterCopy` value + "Copy" button. Same placeholder if missing.
 - Copy button changes to "Copied!" for 2 seconds on click
+- Cards missing both `linkedinCopy` and `twitterCopy` get a "needs copy" warning badge
 
-### Generated text format
-
-**LinkedIn** (longer):
-```
-{title}
-
-{description or resume}
-
-Read more: https://www.giorgiosaud.io/notebook/{selfHealing}
-
-#{tag1} #{tag2} #{tag3} ...
-```
-
-**Twitter/X** (≤280 chars, truncated gracefully):
-```
-{title} — https://www.giorgiosaud.io/notebook/{selfHealing} #{tag1} #{tag2} #{tag3}
-```
-Tags are added until 280-char limit is reached; title is never truncated.
+### Filter states
+- **"Unshared only"** (default): notes where `linkedin` or `twitter` URL is absent
+- **"Needs copy"**: notes where `linkedinCopy` or `twitterCopy` is absent
+- **"All"**: every published note
 
 ---
 
