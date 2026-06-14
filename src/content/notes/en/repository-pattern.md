@@ -2,254 +2,285 @@
 draft: false
 selfHealing: "000005"
 title: Repository pattern in frontend
-description: Discover how the Repository Pattern enhances frontend development by improving data management, testability, and code maintainability.
-publishDate: 2024-05-21T04:00:00.000Z
+description: How the Repository Pattern applies to Next.js 15 App Router projects — server repos, client repos, React Query hooks, and thin route handlers that keep every layer honest.
+publishDate: 2026-06-14T04:00:00.000Z
 category: Architecture
 author: 000001-jorge-saud
 collections:
   - architecture
   - patterns
 tags:
-  - microfrontend
+  - nextjs
   - development
   - frontend
   - backend
+  - react-query
+  - drizzle
 coverAlt: Repository pattern in frontend
 cover: ../../../assets/images/repository_pattern.webp
 linkedinCopy: |
-  Fellow devs — the Repository pattern in frontend development solves the problem of business logic getting tangled with data fetching. Better testability, cleaner components, and a data layer you can swap without touching the UI. I show the pattern with real frontend examples and why it improves maintainability. Sign in and tell me if you are using it in your current project.
+  Fellow devs — the Repository pattern has two sides in a Next.js 15 App Router project: a server layer (Drizzle ORM) and a client layer (fetch). Add React Query on top and you get a data stack where every layer knows its job and nothing else. I rewrote my original post with real TypeScript examples for each layer and the same STAR-D principles that made the pattern click the first time. Sign in and tell me if you are using it.
   Read more: https://www.giorgiosaud.io/notebook/000005
   
-  #FrontEnd #Architecture #WebDev #DesignPatterns #MicrofrontEnd #PatternOfTheDay #FetchSeparated
+  #FrontEnd #Architecture #NextJS #ReactQuery #Drizzle #DesignPatterns #PatternOfTheDay
 twitterCopy: |
-  Fellow devs — the Repository pattern in frontend: testable, swappable, and your components will thank you. Sign in and comment: https://www.giorgiosaud.io/notebook/000005 #FrontEnd #FetchSeparated
+  The Repository pattern for Next.js 15 App Router: server repos, client repos, React Query hooks, thin route handlers. Updated post with real TS examples: https://www.giorgiosaud.io/notebook/000005 #NextJS #ReactQuery #Drizzle
 ---
 
-In the world of frontend development, managing data efficiently is crucial for building scalable and maintainable applications. One architectural pattern that has proven to be highly effective in achieving this goal is the Repository Pattern. Traditionally used in backend development, the Repository Pattern is increasingly being adopted in frontend development for its ability to decouple data access logic from business logic.
+_This is an updated version of my original [Repository pattern in frontend](/notebook/000005) post from May 2024. The core ideas are the same; this edition adds the server/client split and React Query layer that Next.js 15 App Router projects call for._
 
-This has been growing with techniques like micro-frontend architecture where we need to decouple and isolate terms but also keep some elements shareables between projects to keep consistency here is where the data management can become a mess, and we need to take some architectural decisions to accomplish this consistency, and avoid rework.
+---
 
-## The Repository Pattern is important for several reasons, that I call STAR-D
+Managing data in a Next.js 15 App Router project is deceptively easy to get wrong. The framework gives you so many places to fetch — Server Components, Route Handlers, Client Components — that without a deliberate structure, data logic ends up scattered everywhere.
 
-- **Separation of concerns (Definition of Clients and Separation of Scopes):** The pattern helps define clear boundaries between different parts of the application. It separates the data access logic (clients, repositories) from the business logic, and Api calls, ensuring that each part of the code has a single responsibility and is easier to manage.
+The Repository Pattern is the answer I keep coming back to. I first wrote about it in 2024 from a framework-agnostic angle. This is the evolved version: two concrete repository sides, a React Query binding layer, and thin route handlers. Same principles, sharper implementation.
 
-- **Testability:** This means that repositories methods can be easily mocked, making it simpler to write unit tests for your micro-frontend. Leading to more reliable and maintainable code, and also allow us to make mock of simplest request actions and test the failed request scenarios.
+## Why it still matters — the STAR-D framework
 
-- **Abstracted data hadling (Decoupling Component Logic from Data Consumption and Delivery):** The Repository Pattern allows the definition of the component and its logic to be decoupled from how data is consumed and delivered. This means that components can focus purely on rendering and user interaction, while repositories handle data retrieval and processing. This separation of concerns leads to cleaner and more maintainable code.
+### Separation of concerns
 
-- **Reusablity:** When we separate the client of the request and the repository method from the interface and declare the methods that shoud be used from the component, you are making a segregation that allows us to use the same client for many repositories because not always but many times when we work with SSO the authorization method in apis is the same, then you dont need to write this login in every call you only write the client well and make the request in the repository, wich allow us also to make the request more abstract and if for come reason the client or request changes the component get the same data and work as well as before, even if the mapping changes the repository take charge of it to avoid changes in the component.
+Clear boundaries between data access and business logic. Server repositories own the database; client repositories own the HTTP calls; React Query hooks own caching and state; components own rendering. None of these layers bleeds into another.
 
-- **Definition Clarity (Type Safety with TypeScript):** Typescript allow us to make more predictable code, and not wait until raise a local dev environment or use console logs to get typos errors, with Ts we can define the interface of our component and the interface of our apis responses to make easy the mapping of the request.
+### Testability
 
-By incorporating the Repository Pattern, frontend developers can create applications that are not only easier to test and maintain but also more flexible and adaptable to changes.
+Every layer is independently mockable. You can unit-test a component by faking the React Query hook, test the hook by faking the client repository, and test the route handler by faking the server repository. No need to mock Drizzle internals or intercept real network requests in component tests.
 
-## Example
+### Abstracted data handling
 
-In this example, I will explore how to implement the Repository Pattern in a React application using TypeScript. I will create a folder structure that includes repositories for fetching data from an API and a mock data source. This setup allows us to switch bet
-en real and mock data sources seamlessly, demonstrating the flexibility and ease of testing that the Repository Pattern provides.
+Components never know whether data comes from a database, a third-party API, or a cache. Swap the underlying source and nothing upstream changes.
 
-### Folder Structure
+### Reusability
 
-In this folder structure, you can create a repository pattern that is framework-agnostic, making it suitable for use in any framework.
+A single client repository can be called by multiple hooks. A single server repository can be called by multiple route handlers. Auth headers, base URLs, and response parsing live in one place.
 
-```zsh
-src/
-  ├── repositories/
-  │   ├── clients/
-  │   │   └── ApiClient.ts
-  │   ├── SummaryRepository.ts
-  │   ├── TransactionsRepository.ts
-  │   └── RepositoryFactory.ts
-  ├── interfaces/
-  │   └── apis
-  │       └── summary
-  │           └── Get.d.ts
-  │           └── GetPaths.ts
-  │       └── transactions
-  │           └── Get.d.ts
-  │           └── GetPaths.ts
-  │           └── Post.d.ts
-  │   └── IApiClient.ts
-  └── components/
-      └── DataComponent.tsx
+### Definition clarity (Type Safety with TypeScript)
+
+Every layer exposes typed inputs and outputs. TypeScript catches mismatches at the boundary between layers at compile time, not at runtime.
+
+## The four-layer structure
+
+```
+lib/
+  repositories/
+    transaction.server.ts   ← Drizzle queries, server-only
+    transaction.client.ts   ← fetch calls, client-safe
+  queries/
+    use-transactions.ts     ← React Query hooks
+app/
+  api/
+    transactions/
+      route.ts              ← thin route handler
 ```
 
-### Implementation
+### Layer 1 — Server repositories (`*.server.ts`)
 
-Now, I will define each file in this folder structure, starting with the simplest one: the interface definitions. Here, we will define and agree upon the API or SDK contract between our component and the requested resource.
-
-```ts
-// src/interfaces/apis/summary/Get.d.ts
-import { GetPaths } from "./GetPaths";
-
-export interface ISummaryAccountsResponse {
-  amount: number;
-}
-export interface ISummaryCardsResponse {
-  amount: number;
-}
-type GetSummaryAccounts = (
-  string: TPaths.SUMMARY_ACCOUNT,
-) => Promise<ISummaryAccountsResponse>;
-type GetSummaryCards = (
-  string: TPaths.SUMMARY_CARD,
-) => Promise<ISummaryCardsResponse>;
-export type GetData = GetSummaryAccounts & GetSummaryCards;
-export enum TPaths {
-  SUMMARY_ACCOUNT = "summary",
-  SUMMARY_CARD = "summary/card",
-}
-```
-
-And the endpoint paths in GetPaths
+Server repositories abstract Drizzle ORM queries. They receive a `userId` (or whatever scoping identifier makes sense), perform the query, and return typed data. They are never imported by client code — the `.server.ts` suffix enforces this in Next.js.
 
 ```ts
-// src/interfaces/apis/summary/GetPaths.ts
-export enum GetPaths {
-  KEY = "key",
-  PULIC_KEY = "pubkey",
+// lib/repositories/transaction.server.ts
+import { db } from '@/lib/db'
+import { transactions } from '@/lib/db/schema'
+import { eq, desc } from 'drizzle-orm'
+
+export type Transaction = {
+  id: string
+  date: Date
+  description: string
+  amount: number
+  isCleared: boolean
+}
+
+export async function getTransactions(userId: string): Promise<Transaction[]> {
+  return db
+    .select()
+    .from(transactions)
+    .where(eq(transactions.userId, userId))
+    .orderBy(desc(transactions.date))
+}
+
+export async function createTransaction(
+  userId: string,
+  payload: Omit<Transaction, 'id'>
+): Promise<Transaction> {
+  const [row] = await db
+    .insert(transactions)
+    .values({ ...payload, userId })
+    .returning()
+  return row
 }
 ```
 
-Transactions should be the same as before
+No HTTP here. No response formatting. Just the query and the type.
+
+### Layer 2 — Route handlers (thin layer)
+
+Route handlers validate the session, call the server repository, and return JSON. Business logic does not live here.
 
 ```ts
-// src/interfaces/apis/transactions/Get.ts
-import { TPaths } from './GetPaths';
+// app/api/transactions/route.ts
+import { NextResponse } from 'next/server'
+import { auth } from '@/lib/auth'
+import {
+  getTransactions,
+  createTransaction,
+  type Transaction,
+} from '@/lib/repositories/transaction.server'
 
-interface ITransaction{
-    date: Date;
-    description: string;
-    amount: number;
-    isCleared: boolean;
-}
-export interface ITransactions {
-  transactions[]: ITransaction[];
-}
-
-type GetTransactions = (string:TPaths.TRANSACTIONS)=>Promise<ITransactions>;
-export type GetData = GetTransactions;
-```
-
-```ts
-// src/interfaces/apis/transactions/GetPaths.ts
-export enum TPaths {
-  TRANSACTIONS = "transactions",
-}
-```
-
-All the elements defined in these interfaces are the ones that our already-made component requires to work properly.
-
-Then lets go for more, lets work in the client and try to implement it in 2 ways an axios one and a fetch one
-
-I can also use axios and simplify this client like this
-
-```ts
-// src/repositories/clients/apiClient.ts
-
-import axios from "axios";
-
-const BASE_URL = "https://api.example.com";
-const TOKEN = "MY_JWT_TOKEN";
-const ApiClient = axios.create(BASE_URL);
-const addTokenInterceptor = (config) => {
-  const newConfig = { ...config };
-  return newConfig.commons.headers({
-    Authorization: `Bearer ${TOKEN}`,
-  });
-};
-
-ApiClient.interceptors.request.use(addTokenInterceptor);
-
-export default ApiClient;
-```
-
-or use fetch like this
-
-```ts
-// IapiClient.d.ts
-import { GetData as TGetData } from "./apis/transactions/Get";
-import { GetData as SGetData } from "./apis/summary/Post";
-
-type GetData = TGetData & SGetData;
-
-export interface IApiClient {
-  getData: GetData;
-  postData: PostData;
-}
-```
-
-This will allow us to use any method request in our repository file, and we can use these clients to fetch data in those repository files.
-
-The repository file:
-
-```ts
-// src/repositories/summaryRepository.ts
-// if you have request definitions import here like this
-/*import {
-  type ITransactionRequest,
-} from './interfaces/apis/transactions/Get.ts';
-*/
-import ApiClient from "./clients/apiClient.ts";
-
-const summaryRepository = {
-  //and use the payload as param typed from ITransactionRequest
-  async getSummary(): ISummary {
-    const summary = await Apiclient.getData("summary")<ISummary>;
-    /**
-     * We can get the data, parse it to
-     * comply with ISummary, and then return it.
-     * */
-    return summary;
-  },
-};
-
-export default summaryRepository;
-```
-
-Now we can create as many repositories as we want.
-
-Then we will use the repository factory to allow use one single factory method to get the repository
-
-```ts
-// src/repositories/RepositoryFactory.ts
-
-import SummaryRepository, { ISummaryRepository } from "./summaryRepository.ts";
-import OtherRepository, { IOtherRepository } from "./OtherRepository.ts";
-
-type Repositories = "summary" | "other";
-function get(string: "summary"): ISummaryRepository;
-function get(string: "other"): IOtherRepository;
-function get(string: Repositories): unknown;
-
-function get(name: Repositories) {
-  switch (name) {
-    case "summary":
-      return SummaryRepository;
-    case "other":
-      return OtherRepository;
-    default:
-      return null;
+export async function GET() {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
+
+  const data = await getTransactions(session.user.id)
+  return NextResponse.json(data)
 }
 
-export default {
-  get,
-};
+export async function POST(request: Request) {
+  const session = await auth()
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  const body: Omit<Transaction, 'id'> = await request.json()
+  const created = await createTransaction(session.user.id, body)
+  return NextResponse.json(created, { status: 201 })
+}
 ```
 
-This allow us to make test more easy than mocking axios with moxios or thigs like this because we can use a spy on the repository and mock the resolved value for it when we run the test
+Thin on purpose. Any logic you add here is logic you cannot reuse and cannot test without spinning up a route.
+
+### Layer 3 — Client repositories (`*.client.ts`)
+
+Client repositories abstract `fetch` calls to your own API routes. They handle request construction, headers, and response parsing. They never import Drizzle or any server-only module.
 
 ```ts
-import SummaryRepository from '@/repository/summaryRepository.ts';
+// lib/repositories/transaction.client.ts
+import type { Transaction } from './transaction.server'
 
-jest.spyOn(SummaryRepository,'getSummary').mockResolvedValue({
-  amount: 100;
-  currency: "$";
-  accountNumber: "123-123-123";
-});
+const BASE = '/api/transactions'
+
+export async function fetchTransactions(): Promise<Transaction[]> {
+  const res = await fetch(BASE)
+  if (!res.ok) throw new Error(`Failed to fetch transactions: ${res.status}`)
+  return res.json()
+}
+
+export async function postTransaction(
+  payload: Omit<Transaction, 'id'>
+): Promise<Transaction> {
+  const res = await fetch(BASE, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  if (!res.ok) throw new Error(`Failed to create transaction: ${res.status}`)
+  return res.json()
+}
 ```
 
-As simple as this we can mock the method getSummary and get example data for our test or make it fail.
+If you ever need to add an auth header, a base URL prefix, or retry logic, there is one place to do it.
 
-Please note that there might be errors in this code as it was not run; it is only meant to illustrate how to use the repository factory. If you find any issues, please report them to my email. "Once I find the best solution, I will post it with the name of the person who fits best and was first to provide it ;) ....
+### Layer 4 — React Query hooks (`lib/queries/use-*.ts`)
+
+Hooks wrap client repositories with `useQuery` and `useMutation`. They handle caching, invalidation, and loading/error states. They know nothing about HTTP — they only call client repositories.
+
+```ts
+// lib/queries/use-transactions.ts
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  fetchTransactions,
+  postTransaction,
+} from '@/lib/repositories/transaction.client'
+import type { Transaction } from '@/lib/repositories/transaction.server'
+
+const QUERY_KEY = ['transactions']
+
+export function useTransactions() {
+  return useQuery({
+    queryKey: QUERY_KEY,
+    queryFn: fetchTransactions,
+  })
+}
+
+export function useCreateTransaction() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (payload: Omit<Transaction, 'id'>) => postTransaction(payload),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEY })
+    },
+  })
+}
+```
+
+### Components only import from `lib/queries/`
+
+```tsx
+// components/TransactionList.tsx
+'use client'
+
+import { useTransactions, useCreateTransaction } from '@/lib/queries/use-transactions'
+
+export function TransactionList() {
+  const { data, isPending, isError } = useTransactions()
+  const { mutate: create, isPending: isCreating } = useCreateTransaction()
+
+  if (isPending) return <p>Loading…</p>
+  if (isError) return <p>Something went wrong.</p>
+
+  return (
+    <ul>
+      {data.map((tx) => (
+        <li key={tx.id}>
+          {tx.description} — {tx.amount}
+        </li>
+      ))}
+    </ul>
+  )
+}
+```
+
+The component has zero knowledge of fetch, Drizzle, or route paths. If the API changes, only the client repository changes. If the database schema changes, only the server repository changes. The component does not notice.
+
+## The hard rules
+
+- **Components** only import from `lib/queries/`
+- **Route handlers** only import from `lib/repositories/*.server.ts`
+- **Client repositories** only call `fetch` to known API routes — no Drizzle, no server imports
+- **Server repositories** only call Drizzle — no HTTP, no Response objects
+
+Enforce the first two with ESLint's `no-restricted-imports` rule if your team needs the guardrail automated.
+
+## Testing each layer
+
+```ts
+// Testing a component — mock the hook
+vi.mock('@/lib/queries/use-transactions', () => ({
+  useTransactions: () => ({
+    data: [{ id: '1', description: 'Coffee', amount: -4.5, isCleared: true, date: new Date() }],
+    isPending: false,
+    isError: false,
+  }),
+  useCreateTransaction: () => ({ mutate: vi.fn(), isPending: false }),
+}))
+
+// Testing the route handler — mock the server repository
+vi.mock('@/lib/repositories/transaction.server', () => ({
+  getTransactions: vi.fn().mockResolvedValue([]),
+}))
+
+// Testing the client repository — mock fetch
+global.fetch = vi.fn().mockResolvedValue(
+  new Response(JSON.stringify([]), { status: 200 })
+)
+```
+
+Each layer is a clean seam. You mock at the seam, not inside Drizzle internals or axios.
+
+## What changed from the 2024 version
+
+The original post used a single `RepositoryFactory` that dispatched to named repositories. That works in a pure client app. In Next.js 15, the boundary between server and client is first-class, so splitting the repository into `.server.ts` and `.client.ts` makes that boundary explicit rather than conventional. React Query replaces manual `useEffect` fetching and gives you caching and invalidation for free.
+
+The STAR-D principles are the same. The implementation is sharper.
