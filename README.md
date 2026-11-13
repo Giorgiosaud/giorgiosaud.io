@@ -33,7 +33,7 @@ Prerequisites
 Install dependencies
 
 ```sh
-# With bun (recommended, bun.lockb present)
+# With bun (recommended, bun.lock present)
 bun install
 
 # or with npm

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-**Package Manager**: Use Bun (primary - `bun.lockb` present) or pnpm (`pnpm-lock.yaml`) for this project.
+**Package Manager**: Use Bun (primary - `bun.lock` present) or pnpm (`pnpm-lock.yaml`) for this project.
 
 ```bash
 # Install dependencies
