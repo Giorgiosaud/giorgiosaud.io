@@ -228,7 +228,8 @@ public/              # static assets
 ## Deployment (Cloudflare Workers)
 
 - Adapter: `@astrojs/cloudflare`, Worker config in `wrangler.jsonc`.
-- Deploy with `bun run deploy`; set secrets with `bunx wrangler secret put NAME`.
+- Production deploys run when a GitHub release is published (merges to `main` only update the Release Drafter draft).
+- Local deploy with `bun run deploy`; set secrets with `bunx wrangler secret put NAME`.
 - Custom domains `giorgiosaud.io` and `www.giorgiosaud.io` are attached to the Worker.
 
 ---
