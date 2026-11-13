@@ -135,6 +135,17 @@ const dashboardMiddleware = defineMiddleware(async (context, next) => {
   return next()
 })
 
+// www -> apex (301). Covers server-rendered routes; static assets on www are handled by a
+// Cloudflare Redirect Rule, since the assets layer answers before the Worker runs.
+const canonicalHostMiddleware = defineMiddleware((context, next) => {
+  const url = new URL(context.request.url)
+  if (url.hostname === 'www.giorgiosaud.io') {
+    url.hostname = 'giorgiosaud.io'
+    return Response.redirect(url.toString(), 301)
+  }
+  return next()
+})
+
 // Security headers for server-rendered responses. Static assets get the same set from
 // public/_headers, which Cloudflare only applies to files served from the assets bucket.
 const SECURITY_HEADERS: Record<string, string> = {
@@ -163,6 +174,7 @@ const securityHeadersMiddleware = defineMiddleware(async (_context, next) => {
 
 export const onRequest = sequence(
   securityHeadersMiddleware,
+  canonicalHostMiddleware,
   selfhealMiddleware,
   authMiddleware,
   banCheckMiddleware,

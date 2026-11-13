@@ -55,6 +55,8 @@ const workerCssTarget = {
 // https://astro.build/config
 export default defineConfig({
   site: 'https://giorgiosaud.io',
+  // Canonical URLs have no trailing slash (matches internal links and the sitemap)
+  trailingSlash: 'never',
   integrations: [
     mdx(),
     react(),

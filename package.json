@@ -2,7 +2,7 @@
   "name": "new-giorgiosaud-io",
   "type": "module",
   "version": "2.0.0",
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "bun@1.3.11",
   "engines": {
     "node": "24"
   },
