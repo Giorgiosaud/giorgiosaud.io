@@ -6,8 +6,7 @@
   h5,
   h6,
   p {
-    --_padding-block: var(--padding-block, 0.5lh);
-    padding-block: var(--_padding-block);
+    padding-block: var(--site-prose-padding-block, 0.5lh);
   }
   h1,
   h2,
@@ -55,7 +54,7 @@
     text-align: center;
   }
   .focus {
-    --padding-block: 1lh;
+    --site-prose-padding-block: 1lh;
     color: var(--bp-primary-fg);
     background-color: var(--bp-primary-subtle);
     border-inline-start: 4px solid var(--bp-primary);

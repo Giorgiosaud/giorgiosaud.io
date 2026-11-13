@@ -11,7 +11,7 @@ const link = lang === 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`
 const nameImage = `${note.id}-${context}`
 const showDraftBadge = isDraftInDevMode(note.data)
 ---
-<article aria-label={note.data.title} data-link={link} id={nameImage} style="position:relative;">
+<article class="note-card" aria-label={note.data.title} data-link={link} id={nameImage}>
     {showDraftBadge && <span class="bp-badge bp-badge--warning draft-badge">DRAFT</span>}
     <div class="wrapper">
         <div class="title" title={note.data.title}>
@@ -28,6 +28,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
 </article>
 <style define:vars={{nameImage}}>
     article{
+        position: relative;
         container: note/inline-size;
     }
     .draft-badge {
@@ -38,9 +39,13 @@ const showDraftBadge = isDraftInDevMode(note.data)
     }
     .wrapper{
         position: relative;
-        --_color:var(--color,var(--bp-color-text));
-        --_background-color:var(--background-color,var(--bp-color-bg-subtle));
-        --_border-radius:var(--border-radius,var(--bp-radius-lg));
+        --_color:var(--site-note-color,var(--bp-color-text));
+        --_background-color:var(--site-note-background-color,var(--bp-color-bg-subtle));
+        --_border-radius:var(--site-note-border-radius,var(--bp-radius-lg));
+        /* Child tokens resolve on the root and are only read by children (DS rule 3/5) */
+        --_title-padding-inline: var(--site-note-title-padding-inline, var(--bp-space-4));
+        --_title-font-size: var(--site-note-title-font-size, clamp(1rem, 7cqw, 2rem));
+        --_description-font-size: var(--site-note-description-font-size, clamp(.8rem, 5cqw, 1rem));
         display: grid;
         border-radius: var(--_border-radius);
         background-color: var(--_background-color);
@@ -59,17 +64,17 @@ const showDraftBadge = isDraftInDevMode(note.data)
         left: 0;
         bottom: 0;
         width: 100%;
-        background: rgba(0,0,0,0.5);
-        color: #fff;
+        /* Overlay on the cover photo: force the DS dark scheme so the text stays light */
+        color-scheme: dark;
+        background: color-mix(in srgb, var(--bp-color-bg) 70%, transparent);
+        color: var(--bp-color-text);
         z-index: 2;
-        padding-block: 0.5rem;
+        padding-block: var(--bp-space-2);
         text-align: center;
-        --_padding-inline: var(--padding-inline, 1rem);
-        padding-inline: var(--_padding-inline);
+        padding-inline: var(--_title-padding-inline);
         & h2 {
             color: inherit;
-            --_font-size: var(--font-size, clamp(1rem, 7cqw, 2rem));
-            font-size: var(--_font-size);
+            font-size: var(--_title-font-size);
             text-wrap: balance;
             text-decoration: none;
             display: -webkit-box;
@@ -125,6 +130,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
         }
         .title {
             position: static;
+            color-scheme: inherit;
             background: none;
             color: inherit;
             text-align: left;
@@ -144,8 +150,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
             padding: 0;
         }
         .description p {
-            --_font-size: var(--font-size, clamp(.8rem, 5cqw, 1rem));
-            font-size: var(--_font-size);
+            font-size: var(--_description-font-size);
             text-wrap: pretty;
             text-decoration: none;
             display: -webkit-box;
@@ -191,6 +196,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
             grid-column: 2;
             grid-row: 1;
             position: static;
+            color-scheme: inherit;
             background: none;
             color: inherit;
             text-align: left;

@@ -135,7 +135,7 @@ const rows = [
     to   { transform: translateX(0); }
   }
 
-  .marquee-track.paused {
+  .marquee-track[data-state='paused'] {
     animation-play-state: paused;
   }
 
@@ -149,7 +149,9 @@ const rows = [
 <script>
   document.querySelectorAll<HTMLElement>('.marquee-track').forEach(track => {
     track.addEventListener('click', () => {
-      track.classList.toggle('paused')
+      // State lives in an attribute, not a style class (DS contract)
+      if (track.dataset.state === 'paused') delete track.dataset.state
+      else track.dataset.state = 'paused'
     })
   })
 </script>

@@ -122,10 +122,16 @@ h1 {
   --note-hue: 160;
 }
 
+/*
+ * Sticky-note cards are an illustration, not UI chrome: each topic gets its own
+ * hue (--note-hue, from content data), so these hsl() values are intentionally
+ * outside the DS palette. Text keeps >= 4.5:1 against its own note color.
+ */
 /* ── Sticky-note cards ── */
 .note-card-item {
   container: note / inline-size;
   --_tilt: 0deg;
+  --_fold: 28px;
 }
 .note-card-item:nth-child(3n + 1) {
   --_tilt: -1.1deg;
@@ -138,7 +144,6 @@ h1 {
 }
 
 .note-card-item article {
-  --_fold: 28px;
   position: relative;
   transform: rotate(var(--_tilt));
   transform-origin: center bottom;

@@ -66,9 +66,12 @@ const dateLabel = note.data.lastUpdate
 </li>
 
 <style>
+  /* Sticky-note illustration: per-topic hue (--note-hue) is content data, so these
+     hsl() values are intentionally outside the DS palette (see notebook-listing.css). */
   .note-card-item {
     container: note / inline-size;
     --_tilt: 0deg;
+    --_fold: 28px;
     --note-hue: 210;
   }
   .note-card-item:nth-child(3n+1) { --_tilt: -1.1deg; }
@@ -87,7 +90,6 @@ const dateLabel = note.data.lastUpdate
   [data-collection="strategy"]              { --note-hue: 250; }
 
   article {
-    --_fold: 28px;
     position: relative;
     transform: rotate(var(--_tilt));
     transform-origin: center bottom;

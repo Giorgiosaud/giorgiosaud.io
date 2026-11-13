@@ -10,6 +10,7 @@
     "predev": "bun scripts/generateSelfHealMap.ts",
     "dev": "astro dev",
     "build": "bun scripts/generateSelfHealMap.ts && astro build && bun scripts/notifyNewPosts.ts",
+    "validate:ds": "node scripts/validate-ds-consumer.js",
     "preview": "astro preview",
     "deploy": "bun run build && wrangler deploy",
     "lint": "biome lint --write .",
