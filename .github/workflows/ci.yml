@@ -22,7 +22,9 @@ jobs:
       - run: bun install --frozen-lockfile
       - run: bun run test
       - name: Build
-        run: bunx astro build
+        # Same as `bun run build` minus notifyNewPosts (no push notifications from PRs);
+        # the self-heal map is gitignored and must be generated before astro build
+        run: bun scripts/generateSelfHealMap.ts && bunx astro build
         env:
           # Client vars are inlined at build time
           BETTER_AUTH_URL: https://giorgiosaud.io
