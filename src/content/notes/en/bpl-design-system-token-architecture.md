@@ -3,8 +3,8 @@ draft: false
 title: "Four Levels and No @property: How the BPL Design System Wires Its Tokens"
 description: "A tour of the token architecture behind BPL DS — primitives, semantic base tokens, component slots and private --_* resolvers — and why we deliberately stopped registering our theme tokens with @property."
 publishDate: 2026-11-13
-cover: ../../../assets/images/css-custom-properties-2026.png
-coverAlt: Layers of CSS custom properties flowing from a raw color palette into semantic tokens and then into components
+cover: ../../../assets/images/bpl-design-system-token-architecture.webp
+coverAlt: "Four stacked translucent layers, from raw color swatches to semantic tokens, a component and a locked private level, next to a half light, half dark moon"
 selfHealing: tknsbp
 lang: en
 category: Architecture

@@ -3,8 +3,8 @@ draft: false
 title: "Una interfaz WebMCP para mi cuaderno: dos herramientas de solo lectura para agentes del navegador"
 description: "WebMCP le permite a una página darles a los agentes de IA herramientas reales en vez de obligarlos a raspar el DOM. Así está la API a fines de 2026, así expuse búsqueda y lectura en Markdown en este cuaderno en menos de 300 líneas, y esto es lo que todavía no he verificado."
 publishDate: 2026-11-13
-cover: ../../../assets/images/llms-txt-implementation.png
-coverAlt: Una ventana de navegador que le expone íconos de herramientas a un agente de IA en lugar del markup crudo de la página
+cover: ../../../assets/images/webmcp-notebook-tools.webp
+coverAlt: "Una ventana de navegador con un cuaderno abierto conectado a un agente de IA mediante dos tools de solo lectura: buscar y leer"
 selfHealing: wbmcpn
 lang: es
 category: Development
