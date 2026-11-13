@@ -9,7 +9,7 @@ coverAlt: Guía paso a paso de carouseles HTML y CSS con scroll-snap, scroll-mar
 selfHealing: htmlcs
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

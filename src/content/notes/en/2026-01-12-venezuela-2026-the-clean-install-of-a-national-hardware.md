@@ -5,7 +5,7 @@ selfHealing: VPRNF2
 description: Resource orchestration strategy, dollarization, and the new social algorithm for Venezuela's industrial reconstruction.
 publishDate: 2026-01-12T17:30:00.000Z
 category: strategy
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
     - strategy
     - architecture

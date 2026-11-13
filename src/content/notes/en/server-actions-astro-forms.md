@@ -8,7 +8,7 @@ coverAlt: Server Actions in Astro illustration
 selfHealing: srvrct
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - astro
   - backend

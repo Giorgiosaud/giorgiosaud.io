@@ -69,7 +69,7 @@ publishDate: YYYY-MM-DD
 selfHealing: xxxxxx   # from step 1
 lang: en
 category: development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - relevant-collection
 tags:

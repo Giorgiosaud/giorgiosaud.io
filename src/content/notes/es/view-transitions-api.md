@@ -9,7 +9,7 @@ coverAlt: Ilustración de View Transitions API
 selfHealing: vwtrns
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

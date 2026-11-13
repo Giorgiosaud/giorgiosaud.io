@@ -100,7 +100,7 @@ draft: false
 title: "My Note Title"
 publishDate: "2025-01-01"
 selfHealing: "smthng"
-author: team/giorgio-saud
+author: 000001-jorge-saud
 collections:
   - collections/web-dev
 tags: ["typescript", "astro"]

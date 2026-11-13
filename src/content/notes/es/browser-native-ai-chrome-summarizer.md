@@ -9,7 +9,7 @@ coverAlt: Ilustración de Chrome Summarizer API
 selfHealing: brwsrn
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
   - frontend

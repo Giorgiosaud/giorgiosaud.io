@@ -8,7 +8,7 @@ coverAlt: CSS Grid Subgrid 2026
 selfHealing: cssgrd
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

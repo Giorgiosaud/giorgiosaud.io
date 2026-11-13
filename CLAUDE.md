@@ -30,7 +30,7 @@ vitest tests/components/contactform.test.tsx  # run specific test
 
 ## Architecture Overview
 
-This is a **multilingual (English/Spanish) personal web development notebook** built with Astro 5. The site uses an islands architecture combining Astro, React, Vue, and Svelte components, with content managed through Astro Content Collections.
+This is a **multilingual (English/Spanish) personal web development notebook** built with Astro 7. The site uses an islands architecture combining Astro, React, Vue, and Svelte components, with content managed through Astro Content Collections.
 
 ### Content Collections System
 

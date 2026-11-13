@@ -6,7 +6,7 @@ title: "Web Push Notifications con Astro y Vercel"
 description: "Cómo implementar Web Push Notifications en un sitio Astro desplegado en Vercel — VAPID keys, service workers, gestión de suscripciones y todo lo que puede salir mal."
 publishDate: 2026-05-24T00:00:00.000Z
 category: development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - frontend
   - backend

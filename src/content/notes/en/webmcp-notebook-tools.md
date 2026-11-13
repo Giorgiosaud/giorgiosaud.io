@@ -8,7 +8,7 @@ coverAlt: "A browser window with an open notebook connected to an AI agent throu
 selfHealing: wbmcpn
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
   - frontend

@@ -7,7 +7,7 @@ cover: ../../../assets/images/import-meta-env-dev-vitest.png
 coverAlt: Vitest failing test showing DEV env var issue
 selfHealing: mprtmt
 category: testing
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - frontend
 tags:

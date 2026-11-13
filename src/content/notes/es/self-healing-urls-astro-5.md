@@ -9,7 +9,7 @@ coverAlt: Self-Healing URLs Astro 5
 selfHealing: slfhln
 lang: es
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - astro
   - architecture

@@ -8,7 +8,7 @@ coverAlt: "Cajas de paquetes esperando tras una barrera de cuarentena con un rel
 selfHealing: pnpm11
 lang: es
 category: DevOps
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - security
   - frontend

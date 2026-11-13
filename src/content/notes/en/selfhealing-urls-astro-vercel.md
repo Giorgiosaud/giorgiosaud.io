@@ -8,7 +8,7 @@ coverAlt: Self-Healing URLs in Astro and Vercel — broken URL redirected throug
 selfHealing: slfhln
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - astro
   - frontend

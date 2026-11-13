@@ -8,7 +8,7 @@ coverAlt: A tooltip anchored to the wrong trigger element, with a broken anchor 
 selfHealing: nchrsc
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

@@ -8,7 +8,7 @@ coverAlt: HTML CSS Carousel step by step guide with scroll-snap, scroll-marker a
 selfHealing: htmlcs
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

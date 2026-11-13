@@ -7,7 +7,7 @@ cover: ../../../assets/images/mock-astro-content-vitest.png
 coverAlt: Output de Vitest testeando un helper de content collections en Astro
 selfHealing: hwtmck
 category: testing
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - frontend
   - architecture

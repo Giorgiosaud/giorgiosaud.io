@@ -8,7 +8,7 @@ selfHealing: rfctrn
 slug: venezuela-51-state-refactoring-puerto-ordaz
 publishDate: 2026-05-14T19:00:00.000Z
 category: Geopolitics & Tech
-author: jorge-saud-001
+author: 000001-jorge-saud
 collections:
    - geopolitica
 tags:

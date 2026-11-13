@@ -8,7 +8,7 @@ cover: ../../../assets/images/better-auth-drizzle-neon-astro.png
 coverAlt: Flujo de autenticación con Drizzle y base de datos Neon sobre fondo oscuro
 lang: es
 category: development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - backend
   - security

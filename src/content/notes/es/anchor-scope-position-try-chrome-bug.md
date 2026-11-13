@@ -8,7 +8,7 @@ coverAlt: Un tooltip anclado al trigger equivocado, con una línea de anclaje ro
 selfHealing: nchrsc
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

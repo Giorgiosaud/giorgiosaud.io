@@ -5,7 +5,7 @@ selfHealing: VPRNFG
 description: A Solution Architect's perspective on the technical and industrial priorities required for Venezuela's global repositioning in 2026.
 publishDate: 2026-01-09T23:29:22.207Z
 category: strategy
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - strategy

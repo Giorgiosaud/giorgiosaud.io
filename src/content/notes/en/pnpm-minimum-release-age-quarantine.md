@@ -8,7 +8,7 @@ coverAlt: "Package boxes waiting behind a glowing quarantine barrier with a cloc
 selfHealing: pnpm11
 lang: en
 category: DevOps
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - security
   - frontend

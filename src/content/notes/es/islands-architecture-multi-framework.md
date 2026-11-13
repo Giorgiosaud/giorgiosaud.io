@@ -9,7 +9,7 @@ coverAlt: Ilustración de Islands Architecture
 selfHealing: slndsr
 lang: es
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - frontend

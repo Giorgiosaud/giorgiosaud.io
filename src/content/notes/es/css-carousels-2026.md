@@ -9,7 +9,7 @@ coverAlt: CSS Carousels 2026
 selfHealing: csscrs
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

@@ -8,7 +8,7 @@ coverAlt: Container Queries 2026 illustration
 selfHealing: cntnrq
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

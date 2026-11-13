@@ -8,7 +8,7 @@ coverAlt: CSS Scroll Animations 2026
 selfHealing: cssscr
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

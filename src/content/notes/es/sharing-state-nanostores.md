@@ -9,7 +9,7 @@ coverAlt: Ilustración de Nanostores State Sharing
 selfHealing: shrngs
 lang: es
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - frontend

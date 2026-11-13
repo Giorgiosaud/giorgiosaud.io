@@ -8,7 +8,7 @@ coverAlt: Chrome Summarizer API 2026
 selfHealing: chrmsm
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
   - frontend

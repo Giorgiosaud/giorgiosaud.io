@@ -8,7 +8,7 @@ coverAlt: "Una ventana de navegador con un cuaderno abierto conectado a un agent
 selfHealing: wbmcpn
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
   - frontend

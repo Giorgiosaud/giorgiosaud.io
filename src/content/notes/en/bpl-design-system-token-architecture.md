@@ -8,7 +8,7 @@ coverAlt: "Four stacked translucent layers, from raw color swatches to semantic 
 selfHealing: tknsbp
 lang: en
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - frontend
