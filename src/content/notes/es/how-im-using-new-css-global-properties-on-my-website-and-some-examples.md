@@ -9,7 +9,7 @@ category: migración
 author: 000001-jorge-saud
 collections:
     - frontend
-    - migración
+    - migration
 tags:
     - patrones-de-diseño
     - desarrollo
