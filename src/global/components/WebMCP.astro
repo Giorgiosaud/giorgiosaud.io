@@ -1,0 +1,38 @@
+---
+/**
+ * Registers the notebook's WebMCP tools (search_notes, read_note) for AI
+ * agents in the browser. No markup; a no-op where WebMCP is unavailable.
+ */
+---
+
+<script>
+  import {
+    createNotebookTools,
+    getModelContext,
+    registerNotebookTools,
+  } from '@global-scripts/webmcp'
+
+  const lang = document.documentElement.lang === 'es' ? 'es' : 'en'
+  const currentMarkdownPath =
+    document
+      .querySelector<HTMLLinkElement>('link[rel="alternate"][type="text/markdown"]')
+      ?.getAttribute('href') ?? null
+
+  const tools = createNotebookTools({
+    fetch: window.fetch.bind(window),
+    origin: window.location.origin,
+    lang,
+    currentMarkdownPath,
+  })
+
+  const ctx = getModelContext(document, navigator)
+  if (ctx) registerNotebookTools(ctx, tools)
+
+  // Dev-only hook so the tools can be exercised in browsers without WebMCP.
+  if (import.meta.env.DEV) {
+    ;(window as unknown as { __notebookWebMCP: unknown }).__notebookWebMCP = {
+      registered: Boolean(ctx),
+      tools,
+    }
+  }
+</script>
