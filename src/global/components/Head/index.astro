@@ -45,8 +45,15 @@ const {
 const imageUrl = typeof image === 'string' ? image : image?.src || ''
 const fixedTitle = `Giorgiosaud.io | ${title || 'Notebook'}`
 const lang = getLangFromUrl(Astro.url)
+// One canonical URL per page: apex host, no trailing slash (www and /path/ variants point here)
+const canonicalPath = Astro.url.pathname.replace(/\/+$/, '') || '/'
+const canonicalUrl = new URL(
+  canonicalPath,
+  Astro.site ?? 'https://giorgiosaud.io',
+).href
 ---
 <head>
+  <link rel="canonical" href={canonicalUrl} />
   <!-- Preload critical fonts to break request chain -->
   <link rel="preload" href={poppins400} as="font" type="font/woff2" crossorigin="anonymous" />
   <link rel="preload" href={poppins600} as="font" type="font/woff2" crossorigin="anonymous" />
@@ -96,7 +103,7 @@ const lang = getLangFromUrl(Astro.url)
     <meta property="og:title" content={fixedTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url || 'https://giorgiosaud.io/'} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={imageUrl} />
     <meta property="og:site_name" content="Giorgiosaud.io" />
     <meta property="og:locale" content={lang=='en'?'en_US':'es_VE'} />

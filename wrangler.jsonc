@@ -10,6 +10,8 @@
 		{ "pattern": "giorgiosaud.io", "custom_domain": true },
 		{ "pattern": "www.giorgiosaud.io", "custom_domain": true }
 	],
+	// Serve /path/index.html at /path and redirect /path/ -> /path (canonical URLs have no trailing slash)
+	"assets": { "html_handling": "drop-trailing-slash" },
 	"kv_namespaces": [
 		{ "binding": "SESSION", "id": "20599dfe10784d6e8cced5911a51253c" }
 	],
