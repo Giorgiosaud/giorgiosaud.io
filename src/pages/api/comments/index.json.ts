@@ -5,42 +5,13 @@ import {
   isPushConfigured,
   sendCommentReplyNotification,
 } from '@lib/push-notifications'
+import { verifyTurnstile } from '@lib/turnstile'
 import type { APIRoute } from 'astro'
 import { and, eq, isNull } from 'drizzle-orm'
 
 export const prerender = false
 
 const MAX_DEPTH = 3 // Limit reply nesting
-
-// Verify Turnstile token with Cloudflare
-async function verifyTurnstile(token: string): Promise<boolean> {
-  if (!TURNSTILE_SECRET_KEY) {
-    // Skip verification if no secret key configured
-    return true
-  }
-
-  try {
-    const response = await fetch(
-      'https://challenges.cloudflare.com/turnstile/v0/siteverify',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          secret: TURNSTILE_SECRET_KEY,
-          response: token,
-        }),
-      },
-    )
-
-    const data = await response.json()
-    return data.success === true
-  } catch (error) {
-    console.error('Turnstile verification failed:', error)
-    return false
-  }
-}
 
 // POST /api/comments.json - Create a new comment
 export const POST: APIRoute = async ({ request, locals }) => {

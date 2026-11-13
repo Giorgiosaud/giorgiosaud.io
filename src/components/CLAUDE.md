@@ -76,6 +76,7 @@ Icons are in `src/icons/` directory:
 - Server-side form actions via `actions.sendEmail`
 - Resend API integration
 - Form validation with Zod schemas
-- Honeypot field for bot protection (`name="botcheck"`)
+- Honeypot field (`name="website"`) plus Cloudflare Turnstile, verified server-side via `@lib/turnstile`
+- BPL DS components (`bp-field`, `bp-input`, `bp-btn`, `bp-alert`); fetch submission with JS, POST/Redirect/GET without
 
 Reference this component when building other forms.

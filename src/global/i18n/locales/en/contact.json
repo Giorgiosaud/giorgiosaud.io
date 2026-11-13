@@ -1,15 +1,39 @@
 {
+  "meta": {
+    "title": "Contact",
+    "description": "Write to me about web development, architecture or a project idea. I read every message."
+  },
+  "heading": "Let's talk",
+  "intro": "Questions about a post, a project idea, or just want to swap notes on web development and architecture? Write me here and I'll reply by email.",
+  "aside": {
+    "title": "Prefer another channel?",
+    "linkedin": "LinkedIn",
+    "email": "Email"
+  },
   "name": {
     "error": "Please provide your full name.",
-    "placeholder": "Full Name"
+    "placeholder": "Full name"
   },
   "email": {
-    "placeholder": "Email Address",
-    "error": "Please provide your email."
+    "placeholder": "Email address",
+    "error": "Please provide a valid email."
   },
   "message": {
-    "placeholder": "Your Message",
-    "error": "Please provide your message."
+    "placeholder": "Your message",
+    "hint": "At least {min} characters.",
+    "error": "Your message needs at least {min} characters."
   },
-  "submit": "Send Message"
+  "submit": "Send message",
+  "sending": "Sending…",
+  "success": {
+    "title": "Message sent",
+    "body": "Thanks for writing. I'll get back to you by email soon."
+  },
+  "errors": {
+    "title": "Couldn't send your message",
+    "BAD_REQUEST": "Please check the fields and try again.",
+    "FORBIDDEN": "We couldn't verify you're human. Please try again.",
+    "TOO_MANY_REQUESTS": "Too many messages right now. Please try again in a few minutes.",
+    "default": "Something went wrong. Please try again or email me directly."
+  }
 }
