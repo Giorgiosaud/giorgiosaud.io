@@ -135,7 +135,7 @@ Environment variables are defined in `astro.config.mjs` using Astro's `envField`
 **Server-side (public)**:
 
 - `RESEND_TO_EMAIL` - Default recipient (default: `jorgelsaud@gmail.com`)
-- `RESEND_FROM_EMAIL` - Default sender (default: `notebook@giorgiosaud.io`)
+- `RESEND_FROM_EMAIL` - Default sender (default: `notebook@notebook.giorgiosaud.io`, domain verified in Resend)
 - `RESEND_FROM_NAME` - Default sender name (default: `Notebook`)
 
 In code, access these via `import.meta.env.TAG_MANAGER_ID`, etc. Astro handles the public/secret distinction automatically.
