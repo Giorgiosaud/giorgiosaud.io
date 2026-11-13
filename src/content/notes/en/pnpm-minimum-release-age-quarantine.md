@@ -3,8 +3,8 @@ draft: false
 title: "pnpm 11's Release-Age Quarantine: Why `pnpm outdated` Hides Versions and Forcing One Punches Holes"
 description: "pnpm 11 refuses to install anything published in the last 24 hours. That's a good supply-chain default with two surprising side effects: pnpm outdated quietly lies about 'latest', and forcing a fresh version writes bypass entries into your workspace config."
 publishDate: 2026-11-13
-cover: ../../../assets/images/bunx-vitest-vs-vitest.avif
-coverAlt: A package manager holding fresh npm packages in a waiting area before letting them into a project
+cover: ../../../assets/images/pnpm-minimum-release-age-quarantine.webp
+coverAlt: "Package boxes waiting behind a glowing quarantine barrier with a clock, while one box is forced through a hole punched in the barrier"
 selfHealing: pnpm11
 lang: en
 category: DevOps

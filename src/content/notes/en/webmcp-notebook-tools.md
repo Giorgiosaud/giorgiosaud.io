@@ -3,8 +3,8 @@ draft: false
 title: "Giving My Notebook a WebMCP Interface: Two Read-Only Tools for Browser Agents"
 description: "WebMCP lets a page hand AI agents real tools instead of making them scrape the DOM. Here's where the API stands in late 2026, how I exposed search and read-as-Markdown on this notebook in under 300 lines, and what I still haven't verified."
 publishDate: 2026-11-13
-cover: ../../../assets/images/llms-txt-implementation.png
-coverAlt: A browser window exposing tool icons to an AI agent instead of raw page markup
+cover: ../../../assets/images/webmcp-notebook-tools.webp
+coverAlt: "A browser window with an open notebook connected to an AI agent through two read-only tools: search and read"
 selfHealing: wbmcpn
 lang: en
 category: Development

@@ -3,8 +3,8 @@ draft: false
 title: "La cuarentena de pnpm 11: por qué `pnpm outdated` esconde versiones y forzar una abre agujeros"
 description: "pnpm 11 se niega a instalar cualquier cosa publicada en las últimas 24 horas. Es un buen default contra ataques de supply chain, con dos efectos sorprendentes: pnpm outdated miente en silencio sobre cuál es la 'latest', y forzar una versión fresca escribe excepciones en la configuración del workspace."
 publishDate: 2026-11-13
-cover: ../../../assets/images/bunx-vitest-vs-vitest.avif
-coverAlt: Un gestor de paquetes que retiene paquetes npm recién publicados en una sala de espera antes de dejarlos entrar al proyecto
+cover: ../../../assets/images/pnpm-minimum-release-age-quarantine.webp
+coverAlt: "Cajas de paquetes esperando tras una barrera de cuarentena con un reloj, mientras una caja atraviesa a la fuerza un agujero en la barrera"
 selfHealing: pnpm11
 lang: es
 category: DevOps
