@@ -18,6 +18,27 @@ tags:
   - seguridad
   - dependencias
   - "2026"
+linkedinCopy: |
+  Compañeros devs — pnpm 11 me engañó dos veces en una tarde.
+
+  Ahora retiene las versiones nuevas en una cuarentena de 24 horas por defecto. Buena decisión: la mayoría de los ataques de supply chain en npm se detectan y se retiran en horas.
+
+  Pero:
+
+  1️⃣ pnpm outdated esconde lo que sigue en cuarentena, sin avisar. Su "latest" ya estaba una release atrás.
+
+  2️⃣ Cuando forcé la versión nueva, pnpm escribió en silencio 16 excepciones en pnpm-workspace.yaml, una por cada dependencia transitiva fresca.
+
+  Un bump de rutina acababa de abrirle 16 agujeros a un control de supply chain, escondidos en un diff de YAML fácil de aprobar sin leerlo.
+
+  Cuento cómo ver la latest real, cómo detectar el bypass en el review y cuándo una excepción sí se justifica.
+
+  Inicia sesión y cuéntame si tu equipo mantiene la cuarentena activa 👇
+  https://www.giorgiosaud.io/es/cuaderno/pnpm11
+
+  #pnpm #SeguridadSupplyChain #NodeJS #DesarrolloWeb #DevOps #EsperaUnDía #LaCuarentenaEsUnaFeature
+twitterCopy: |
+  Compañeros devs — pnpm 11: `pnpm outdated` esconde versiones de menos de 24 h, y forzar una escribe excepciones en pnpm-workspace.yaml. Revisa tu diff: https://www.giorgiosaud.io/es/cuaderno/pnpm11 #pnpm #LaCuarentenaEsUnaFeature
 ---
 
 Estaba haciendo un bump rutinario de dependencias en un proyecto y dos cosas parecían bugs.
