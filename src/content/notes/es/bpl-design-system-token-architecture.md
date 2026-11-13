@@ -18,6 +18,26 @@ tags:
   - custom-properties
   - tokens
   - "2026"
+linkedinCopy: |
+  Compañeros devs — antes registrábamos los colores de marca con @property. Lo dejamos de hacer a propósito.
+
+  Nuestro design system no tiene ni una línea de JavaScript. El mismo CSS funciona en Astro, Next.js o un HTML plano, porque toda la API de theming son custom properties, en cuatro niveles:
+
+  → paleta cruda
+  → tokens semánticos base
+  → un slot público por cada propiedad del componente
+  → resolvers privados --_* que nadie fuera del componente toca
+
+  Lo de @property me sorprendió. Un color registrado resuelve light-dark() donde se declara, así que una sección oscura dentro de una página clara nunca cambia. Sin registrar, se resuelve donde se usa. Los tokens tipados parecían lo "correcto" y rompían el theming anidado.
+
+  Escribí la cadena completa, las cinco reglas que la mantienen ordenada y el trade-off.
+
+  Inicia sesión y cuéntame cómo manejas el theming de secciones anidadas 👇
+  https://www.giorgiosaud.io/es/cuaderno/tknsbp
+
+  #CSS #DesignSystems #CustomProperties #DesarrolloWeb #DesignTokens #CuatroNivelesSinProperty #ElCSSEsLaAPI
+twitterCopy: |
+  Compañeros devs — dejamos de registrar los tokens de color con @property: un color registrado resuelve light-dark() donde se declara y rompe el theming anidado. Cuatro niveles y cinco reglas: https://www.giorgiosaud.io/es/cuaderno/tknsbp #CSS #ElCSSEsLaAPI
 ---
 
 Todo design system termina enfrentando la misma pregunta: *¿cómo cambia un cliente el color de marca sin hacer fork del CSS?*

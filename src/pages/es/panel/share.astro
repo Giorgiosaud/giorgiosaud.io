@@ -1,0 +1,25 @@
+---
+import DashboardLayout from '@components/dashboard/DashboardLayout.astro'
+import ShareCards from '@components/dashboard/ShareCards.astro'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+
+export const prerender = false
+
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+
+// Admin-only tool: other signed-in users go back to their dashboard.
+if (
+  (
+    Astro.locals.user as {
+      role?: string
+    } | null
+  )?.role !== 'admin'
+) {
+  return Astro.redirect(lang === 'es' ? '/es/panel' : '/dashboard')
+}
+---
+
+<DashboardLayout title={t('dashboard.nav.share')} currentPage="share">
+  <ShareCards lang={lang} />
+</DashboardLayout>

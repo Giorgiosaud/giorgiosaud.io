@@ -18,6 +18,29 @@ tags:
   - agentes
   - astro
   - "2026"
+linkedinCopy: |
+  Compañeros devs — hoy un agente de IA que lee tu sitio toma screenshots y adivina cuál div es la caja de búsqueda.
+
+  WebMCP le da la vuelta. La página registra tools: un nombre, un JSON Schema y una función. El agente las llama directo.
+
+  Le agregué dos a mi cuaderno:
+  → search_notes
+  → read_note
+
+  Las dos son de solo lectura y envuelven endpoints que el sitio ya tenía. Menos de 300 líneas.
+
+  Si vas a copiar tutoriales viejos, este año cambiaron dos cosas:
+  • la API pasó de navigator.modelContext a document.modelContext
+  • unregisterTool nunca existió. Las tools se quitan con un AbortSignal
+
+  La parte honesta: ningún agente masivo usa estas tools todavía. Cuento por qué lo publiqué igual y qué me falta verificar.
+
+  Inicia sesión y cuéntame qué tools expondría tu sitio 👇
+  https://www.giorgiosaud.io/es/cuaderno/wbmcpn
+
+  #WebMCP #IA #Agentes #DesarrolloWeb #Astro #ToolsNoScreenshots #WebListaParaAgentes
+twitterCopy: |
+  Compañeros devs — le di a mi cuaderno dos tools WebMCP de solo lectura para agentes en el navegador. Ojo: ahora es document.modelContext y las tools se quitan con un AbortSignal: https://www.giorgiosaud.io/es/cuaderno/wbmcpn #WebMCP #ToolsNoScreenshots
 ---
 
 Ver a un agente de navegador usar un sitio web hoy es un poco doloroso. Toma un screenshot, lee el árbol de accesibilidad, adivina cuál input es el buscador, escribe, espera, toma otro screenshot y cruza los dedos para que los resultados que está viendo sean los que pidió.

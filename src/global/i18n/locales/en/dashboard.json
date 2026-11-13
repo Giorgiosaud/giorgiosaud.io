@@ -4,7 +4,8 @@
     "profile": "Profile",
     "passkeys": "Passkeys",
     "comments": "My Comments",
-    "status": "Status"
+    "status": "Status",
+    "share": "Share"
   },
   "profile": {
     "title": "Edit Profile",

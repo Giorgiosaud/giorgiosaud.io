@@ -4,7 +4,7 @@ import Base from '@templates/Base.astro'
 
 interface Props {
   title: string
-  currentPage: 'profile' | 'passkeys' | 'comments' | 'status'
+  currentPage: 'profile' | 'passkeys' | 'comments' | 'status' | 'share'
 }
 
 const { title, currentPage } = Astro.props
@@ -34,6 +34,20 @@ const navItems = [
     label: t('dashboard.nav.status'),
     href: `${basePath}/status`,
   },
+  // Share is an admin-only tool (copy-ready social posts for each note).
+  ...((
+    Astro.locals.user as {
+      role?: string
+    } | null
+  )?.role === 'admin'
+    ? [
+        {
+          id: 'share',
+          label: t('dashboard.nav.share'),
+          href: `${basePath}/share`,
+        },
+      ]
+    : []),
 ]
 ---
 
