@@ -203,13 +203,13 @@ export default defineConfig({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'web@notebook.giorgiosaud.io',
+        default: 'noreply@notebook.giorgiosaud.io',
       }),
       RESEND_FROM_NAME: envField.string({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'Notebook',
+        default: 'Giorgio Notebook',
       }),
 
       // Web Push (VAPID keys - generate with: npx web-push generate-vapid-keys)

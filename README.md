@@ -77,9 +77,9 @@ TURNSTILE_SECRET_KEY=""
 RESEND_API_KEY=""
 
 # Email defaults (server)
-PUBLIC_RESEND_TO_EMAIL="jorgelsaud@gmail.com"
-PUBLIC_RESEND_FROM_EMAIL="notebook@giorgiosaud.io"
-PUBLIC_RESEND_FROM_NAME="Notebook"
+RESEND_TO_EMAIL="jorgelsaud@gmail.com"
+RESEND_FROM_EMAIL="noreply@notebook.giorgiosaud.io"
+RESEND_FROM_NAME="Giorgio Notebook"
 ```
 
 Notes

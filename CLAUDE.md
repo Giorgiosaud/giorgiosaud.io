@@ -135,8 +135,10 @@ Environment variables are defined in `astro.config.mjs` using Astro's `envField`
 **Server-side (public)**:
 
 - `RESEND_TO_EMAIL` - Default recipient (default: `jorgelsaud@gmail.com`)
-- `RESEND_FROM_EMAIL` - Default sender (default: `web@notebook.giorgiosaud.io`, domain verified in Resend)
-- `RESEND_FROM_NAME` - Default sender name (default: `Notebook`)
+- `RESEND_FROM_EMAIL` - Default sender (default: `noreply@notebook.giorgiosaud.io`, domain verified in Resend)
+- `RESEND_FROM_NAME` - Default sender name (default: `Giorgio Notebook`)
+
+Server vars with `access: 'public'` (the `RESEND_*` ones) are **inlined at build time**: a value in `.env` overrides `vars` in `wrangler.jsonc`, and CI builds (no `.env`) fall back to the schema defaults. Keep `.env`, `wrangler.jsonc` and the `astro.config.mjs` defaults in sync.
 
 In code, access these via `import.meta.env.TAG_MANAGER_ID`, etc. Astro handles the public/secret distinction automatically.
 
