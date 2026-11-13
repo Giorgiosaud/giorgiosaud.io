@@ -31,7 +31,7 @@ describe('Dashboard Translations', () => {
 
   describe('Navigation', () => {
     it('should have all nav items', () => {
-      const navItems = ['profile', 'passkeys', 'comments', 'status']
+      const navItems = ['profile', 'passkeys', 'comments', 'status', 'share']
 
       navItems.forEach(item => {
         expect(enDashboard.nav).toHaveProperty(item)

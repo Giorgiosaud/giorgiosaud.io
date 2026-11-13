@@ -1,0 +1,437 @@
+---
+/**
+ * Share tab: copy-ready LinkedIn / X text for every published note, EN and ES.
+ * Filter and pagination are query params resolved on the server; the only
+ * client-side code is the copy button.
+ */
+import { getPublishedNotes } from '@helpers/collections'
+import {
+  buildShareCards,
+  filterShareCards,
+  isShared,
+  needsCopy,
+  paginateShareCards,
+  parseShareFilter,
+  type ShareFilter,
+  type ShareNoteInput,
+  type ShareVariant,
+} from '@helpers/share'
+
+interface Props {
+  lang: 'en' | 'es'
+}
+
+const { lang } = Astro.props
+
+const strings = {
+  en: {
+    filters: {
+      unshared: 'Unshared',
+      needsCopy: 'Needs copy',
+      all: 'All',
+    },
+    english: 'English',
+    spanish: 'Spanish',
+    noTranslation: 'No Spanish version',
+    linkedin: 'LinkedIn',
+    twitter: 'X / Twitter',
+    copy: 'Copy',
+    copied: 'Copied!',
+    missing: 'Missing — add {field} to the frontmatter',
+    shared: 'Shared',
+    viewPost: 'view post',
+    needsCopy: 'Needs copy',
+    empty: 'No notes match this filter.',
+    page: 'Page {current} of {total}',
+    prev: 'Previous',
+    next: 'Next',
+    help: 'Copy comes from linkedinCopy / twitterCopy in each note. After posting, add the post URL as linkedin / twitter to mark it shared.',
+  },
+  es: {
+    filters: {
+      unshared: 'Sin compartir',
+      needsCopy: 'Falta texto',
+      all: 'Todas',
+    },
+    english: 'Inglés',
+    spanish: 'Español',
+    noTranslation: 'Sin versión en español',
+    linkedin: 'LinkedIn',
+    twitter: 'X / Twitter',
+    copy: 'Copiar',
+    copied: '¡Copiado!',
+    missing: 'Falta — agrega {field} al frontmatter',
+    shared: 'Compartido',
+    viewPost: 'ver post',
+    needsCopy: 'Falta texto',
+    empty: 'Ninguna nota coincide con este filtro.',
+    page: 'Página {current} de {total}',
+    prev: 'Anterior',
+    next: 'Siguiente',
+    help: 'El texto sale de linkedinCopy / twitterCopy de cada nota. Después de publicar, agrega la URL del post como linkedin / twitter para marcarla como compartida.',
+  },
+}[lang]
+
+// Drafts are never shareable, even in dev where getPublishedNotes includes them.
+const published = (
+  entries: {
+    data: ShareNoteInput & {
+      draft: boolean
+    }
+  }[],
+) => entries.map(e => e.data).filter(n => !n.draft)
+
+const [enNotes, esNotes] = await Promise.all([
+  getPublishedNotes('en'),
+  getPublishedNotes('es'),
+])
+const cards = buildShareCards(published(enNotes), published(esNotes))
+
+const filter = parseShareFilter(Astro.url.searchParams.get('filter'))
+const filtered = filterShareCards(cards, filter)
+const { items, page, totalPages } = paginateShareCards(
+  filtered,
+  Number(Astro.url.searchParams.get('page') ?? '1'),
+)
+
+const filterOrder: ShareFilter[] = [
+  'unshared',
+  'needsCopy',
+  'all',
+]
+const counts = Object.fromEntries(
+  filterOrder.map(f => [
+    f,
+    filterShareCards(cards, f).length,
+  ]),
+) as Record<ShareFilter, number>
+
+function hrefFor(next: { filter?: ShareFilter; page?: number }) {
+  const params = new URLSearchParams()
+  const f = next.filter ?? filter
+  if (f !== 'unshared') params.set('filter', f)
+  const p = next.page ?? 1
+  if (p > 1) params.set('page', String(p))
+  const query = params.toString()
+  return query ? `${Astro.url.pathname}?${query}` : Astro.url.pathname
+}
+
+const dateFormat = new Intl.DateTimeFormat(lang, {
+  dateStyle: 'medium',
+})
+
+const blocks = (v: ShareVariant) => [
+  {
+    label: strings.linkedin,
+    field: 'linkedinCopy',
+    text: v.linkedinCopy,
+    postUrl: v.linkedin,
+  },
+  {
+    label: strings.twitter,
+    field: 'twitterCopy',
+    text: v.twitterCopy,
+    postUrl: v.twitter,
+  },
+]
+---
+
+<p class="share-help">{strings.help}</p>
+
+<nav class="share-filters" aria-label="Filter">
+  {
+    filterOrder.map(f => (
+      <a
+        href={hrefFor({ filter: f })}
+        class:list={['share-filter', { active: f === filter }]}
+        aria-current={f === filter ? 'page' : undefined}
+      >
+        {strings.filters[f]} <span class="share-count">{counts[f]}</span>
+      </a>
+    ))
+  }
+</nav>
+
+{items.length === 0 && <p class="share-empty">{strings.empty}</p>}
+
+<ul class="share-list">
+  {
+    items.map(card => {
+      const shared = isShared(card)
+      const languages = [
+        { name: strings.english, variant: card.en },
+        { name: strings.spanish, variant: card.es },
+      ]
+      return (
+        <li>
+          <details class:list={['share-card', { shared }]} open={!shared}>
+            <summary>
+              <span class="share-title">{lang === 'es' && card.es ? card.es.title : card.en.title}</span>
+              <span class="share-meta">
+                {dateFormat.format(new Date(card.publishDate))} · {card.selfHealing}
+                {shared && <span class="badge ok">{strings.shared}</span>}
+                {needsCopy(card) && (
+                  <span class="badge warn">{strings.needsCopy}</span>
+                )}
+              </span>
+            </summary>
+
+            <div class="share-langs">
+              {languages.map(({ name, variant }) => (
+                <section class="share-lang">
+                  <h3>
+                    {name}
+                    {variant && (
+                      <a href={variant.url} target="_blank" rel="noopener">
+                        {variant.url.replace('https://www.', '')}
+                      </a>
+                    )}
+                  </h3>
+                  {!variant && <p class="share-missing">{strings.noTranslation}</p>}
+                  {variant &&
+                    blocks(variant).map(block => (
+                      <div class="share-block">
+                        <div class="share-block-head">
+                          <span>{block.label}</span>
+                          {block.postUrl && (
+                            <a href={block.postUrl} target="_blank" rel="noopener">
+                              ✓ {strings.viewPost}
+                            </a>
+                          )}
+                          {block.text && (
+                            <button
+                              type="button"
+                              class="share-copy"
+                              data-copied={strings.copied}
+                            >
+                              {strings.copy}
+                            </button>
+                          )}
+                        </div>
+                        {block.text ? (
+                          <textarea readonly rows="6">{block.text}</textarea>
+                        ) : (
+                          <p class="share-missing">
+                            {strings.missing.replace('{field}', block.field)}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                </section>
+              ))}
+            </div>
+          </details>
+        </li>
+      )
+    })
+  }
+</ul>
+
+{
+  totalPages > 1 && (
+    <nav class="share-pages" aria-label="Pagination">
+      {page > 1 ? (
+        <a href={hrefFor({ page: page - 1 })}>← {strings.prev}</a>
+      ) : (
+        <span />
+      )}
+      <span>
+        {strings.page
+          .replace('{current}', String(page))
+          .replace('{total}', String(totalPages))}
+      </span>
+      {page < totalPages ? (
+        <a href={hrefFor({ page: page + 1 })}>{strings.next} →</a>
+      ) : (
+        <span />
+      )}
+    </nav>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.share-copy').forEach(button => {
+    const label = button.textContent
+    button.addEventListener('click', async () => {
+      const text = button
+        .closest('.share-block')
+        ?.querySelector('textarea')?.value
+      if (!text) return
+      await navigator.clipboard.writeText(text)
+      button.textContent = button.dataset.copied ?? label
+      setTimeout(() => {
+        button.textContent = label
+      }, 2000)
+    })
+  })
+</script>
+
+<style>
+  .share-help {
+    color: var(--color-muted, #666);
+    font-size: 0.9rem;
+    margin: 0 0 1rem;
+  }
+
+  .share-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .share-filter {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 999px;
+    text-decoration: none;
+    color: inherit;
+    font-size: 0.9rem;
+  }
+
+  .share-filter.active {
+    border-color: var(--color-main);
+    color: var(--color-main);
+    font-weight: 500;
+  }
+
+  .share-count {
+    opacity: 0.6;
+  }
+
+  .share-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .share-card {
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .share-card.shared {
+    border-color: light-dark(#86efac, #166534);
+    opacity: 0.85;
+  }
+
+  .share-card summary {
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+  .share-title {
+    font-weight: 600;
+  }
+
+  .share-meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-muted, #666);
+  }
+
+  .badge {
+    padding: 0.1rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+  }
+
+  .badge.ok {
+    background: light-dark(#dcfce7, #14532d);
+    color: light-dark(#166534, #bbf7d0);
+  }
+
+  .badge.warn {
+    background: light-dark(#fef3c7, #713f12);
+    color: light-dark(#92400e, #fde68a);
+  }
+
+  .share-langs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .share-lang h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .share-lang h3 a {
+    font-size: 0.8rem;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+  }
+
+  .share-block {
+    margin-bottom: 0.75rem;
+  }
+
+  .share-block-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .share-block-head a {
+    font-size: 0.8rem;
+  }
+
+  .share-copy {
+    margin-left: auto;
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--color-main);
+    border-radius: 0.3rem;
+    background: transparent;
+    color: var(--color-main);
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .share-block textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: vertical;
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border, #ddd);
+    border-radius: 0.3rem;
+    background: transparent;
+    color: inherit;
+  }
+
+  .share-missing {
+    font-size: 0.85rem;
+    color: light-dark(#92400e, #fde68a);
+    margin: 0;
+  }
+
+  .share-empty {
+    color: var(--color-muted, #666);
+  }
+
+  .share-pages {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+  }
+</style>

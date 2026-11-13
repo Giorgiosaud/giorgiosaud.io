@@ -28,4 +28,10 @@ export const noteSchema = ({ image }: { image: () => z.ZodType }) =>
     category: z.string(),
     collections: z.array(reference('collections')),
     tags: z.array(z.string()),
+    // Social sharing (dashboard Share tab): hand-written post text, and the
+    // URL of the published post once shared, which marks the note as shared.
+    linkedinCopy: z.string().optional(),
+    twitterCopy: z.string().optional(),
+    linkedin: z.url().optional(),
+    twitter: z.url().optional(),
   })

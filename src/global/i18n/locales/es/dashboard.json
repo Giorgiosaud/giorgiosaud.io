@@ -4,7 +4,8 @@
     "profile": "Perfil",
     "passkeys": "Llaves de Acceso",
     "comments": "Mis Comentarios",
-    "status": "Estado"
+    "status": "Estado",
+    "share": "Compartir"
   },
   "profile": {
     "title": "Editar Perfil",
