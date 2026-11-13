@@ -1,10 +1,237 @@
 ---
+/**
+ * Contact form built on BPL DS components (field, input, button, alert).
+ *
+ * - With JS: submits through the `sendEmail` action via fetch, so the page never navigates,
+ *   the URL stays clean and what was typed survives an error.
+ * - Without JS: native POST; the page redirects to ?sent=1 on success (POST/Redirect/GET).
+ * - Spam: hidden honeypot field + Cloudflare Turnstile (verified server-side).
+ */
+import '@be-partner-labs/ds/components/input'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/alert'
 import { actions } from 'astro:actions'
-
+import { TURNSTILE_SITE_KEY } from 'astro:env/client'
+import { MESSAGE_MAX_LENGTH, MESSAGE_MIN_LENGTH } from '@config/constants'
 import { getLangFromUrl, useTranslations } from '@i18n/utils'
 
+interface Props {
+  /** Set by the page after a no-JS POST/Redirect/GET round trip */
+  sent?: boolean
+  /** ActionError code from a no-JS submission */
+  errorCode?: string
+}
+
+const { sent = false, errorCode } = Astro.props
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
-export const prerender = false
-const result = Astro.getActionResult(actions.sendEmail)
+const tx = (key: string) => t(key as Parameters<typeof t>[0]) as string
+const withMin = (text: string) =>
+  text.replace('{min}', String(MESSAGE_MIN_LENGTH))
+
+const errorMessages = {
+  BAD_REQUEST: tx('contact.errors.BAD_REQUEST'),
+  FORBIDDEN: tx('contact.errors.FORBIDDEN'),
+  TOO_MANY_REQUESTS: tx('contact.errors.TOO_MANY_REQUESTS'),
+  default: tx('contact.errors.default'),
+}
+const initialError = errorCode
+  ? (errorMessages[errorCode as keyof typeof errorMessages] ??
+    errorMessages.default)
+  : ''
 ---
+<div class="contact-card">
+  <div class="bp-alert bp-alert--success" role="status" data-contact-success hidden={!sent}>
+    <div class="bp-alert__content">
+      <p class="bp-alert__title">{tx('contact.success.title')}</p>
+      <p class="bp-alert__body">{tx('contact.success.body')}</p>
+    </div>
+  </div>
+
+  <div class="bp-alert bp-alert--error" role="alert" data-contact-error hidden={!initialError}>
+    <div class="bp-alert__content">
+      <p class="bp-alert__title">{tx('contact.errors.title')}</p>
+      <p class="bp-alert__body" data-contact-error-body>{initialError}</p>
+    </div>
+  </div>
+
+  <form
+    method="POST"
+    action={actions.sendEmail}
+    class="contact-form"
+    data-contact-form
+    data-errors={JSON.stringify(errorMessages)}
+    data-sending={tx('contact.sending')}
+  >
+    <div class="bp-field field-name">
+      <label class="bp-field__label" for="contact-name">{tx('contact.name.placeholder')}</label>
+      <input class="bp-input" id="contact-name" name="name" type="text" autocomplete="name" required maxlength="120" placeholder=" " />
+    </div>
+
+    <div class="bp-field field-email">
+      <label class="bp-field__label" for="contact-email">{tx('contact.email.placeholder')}</label>
+      <input class="bp-input" id="contact-email" name="email" type="email" autocomplete="email" required placeholder=" " />
+    </div>
+
+    <div class="bp-field field-message">
+      <label class="bp-field__label" for="contact-message">{tx('contact.message.placeholder')}</label>
+      <textarea
+        class="bp-input message-input"
+        id="contact-message"
+        name="message"
+        rows="7"
+        required
+        placeholder=" "
+        minlength={MESSAGE_MIN_LENGTH}
+        maxlength={MESSAGE_MAX_LENGTH}
+        aria-describedby="contact-message-hint"
+      ></textarea>
+      <div class="message-meta">
+        <span class="bp-field__hint" id="contact-message-hint">{withMin(tx('contact.message.hint'))}</span>
+        <span class="bp-field__hint" data-contact-count aria-live="polite">0 / {MESSAGE_MAX_LENGTH}</span>
+      </div>
+    </div>
+
+    <!-- Honeypot: visually hidden and skipped by keyboard/AT; real people leave it empty. The DS marks empty required fields invalid unless a placeholder is shown, hence placeholder=" " above -->
+    <div class="hp" aria-hidden="true">
+      <label for="contact-website">Website</label>
+      <input id="contact-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    {TURNSTILE_SITE_KEY && (
+      <div class="cf-turnstile field-turnstile" data-sitekey={TURNSTILE_SITE_KEY} data-theme="auto" data-language={lang}></div>
+    )}
+
+    <button class="bp-btn submit" type="submit" data-contact-submit>{tx('contact.submit')}</button>
+  </form>
+</div>
+
+{TURNSTILE_SITE_KEY && (
+  <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+)}
+
+<script>
+  import { actions } from 'astro:actions'
+
+  type TurnstileApi = { reset: (el?: Element | string) => void }
+
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]')
+  if (form) {
+    const success = document.querySelector<HTMLElement>('[data-contact-success]')
+    const errorBox = document.querySelector<HTMLElement>('[data-contact-error]')
+    const errorBody = document.querySelector<HTMLElement>('[data-contact-error-body]')
+    const submit = form.querySelector<HTMLButtonElement>('[data-contact-submit]')
+    const message = form.querySelector<HTMLTextAreaElement>('textarea[name="message"]')
+    const counter = form.querySelector<HTMLElement>('[data-contact-count]')
+    const errors = JSON.parse(form.dataset.errors ?? '{}') as Record<string, string>
+    const submitLabel = submit?.textContent ?? ''
+
+    // Drop ?sent=1 so a reload doesn't keep showing the success alert
+    if (new URL(location.href).searchParams.has('sent')) {
+      history.replaceState(null, '', location.pathname)
+    }
+
+    const updateCount = () => {
+      if (message && counter) counter.textContent = `${message.value.length} / ${message.maxLength}`
+    }
+    message?.addEventListener('input', updateCount)
+    updateCount()
+
+    form.addEventListener('submit', async event => {
+      event.preventDefault()
+      if (!form.reportValidity() || !submit) return
+
+      success?.setAttribute('hidden', '')
+      errorBox?.setAttribute('hidden', '')
+      submit.disabled = true
+      submit.setAttribute('aria-busy', 'true')
+      submit.textContent = form.dataset.sending ?? submitLabel
+
+      const { error } = await actions.sendEmail(new FormData(form))
+
+      submit.disabled = false
+      submit.removeAttribute('aria-busy')
+      submit.textContent = submitLabel
+      ;(window as unknown as { turnstile?: TurnstileApi }).turnstile?.reset()
+
+      if (error) {
+        if (errorBody) errorBody.textContent = errors[error.code] ?? errors.default
+        errorBox?.removeAttribute('hidden')
+        errorBox?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        return
+      }
+
+      form.reset()
+      updateCount()
+      success?.removeAttribute('hidden')
+      success?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    })
+  }
+</script>
+
+<style>
+  .contact-card {
+    container: contact-card / inline-size;
+    display: grid;
+    gap: var(--bp-space-4);
+  }
+
+  .contact-form {
+    display: grid;
+    gap: var(--bp-space-5);
+    grid-template-areas:
+      'name'
+      'email'
+      'message'
+      'turnstile'
+      'submit';
+
+    @container contact-card (inline-size >= 40rem) {
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        'name email'
+        'message message'
+        'turnstile turnstile'
+        'submit submit';
+    }
+  }
+
+  .field-name {
+    grid-area: name;
+  }
+  .field-email {
+    grid-area: email;
+  }
+  .field-message {
+    grid-area: message;
+  }
+  .field-turnstile {
+    grid-area: turnstile;
+  }
+
+  /* DS textarea sizes to content (min 6rem); the message field starts taller.
+     Layout-only rule on a site class: the DS exposes no min-height token. */
+  .message-input {
+    min-block-size: 10rem;
+  }
+
+  .message-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--bp-space-4);
+  }
+
+  .submit {
+    grid-area: submit;
+    justify-self: start;
+  }
+
+  .hp {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

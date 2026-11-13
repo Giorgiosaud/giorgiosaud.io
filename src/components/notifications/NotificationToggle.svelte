@@ -1,4 +1,5 @@
 <script lang="ts">
+import '@be-partner-labs/ds/components/button'
 import {
   getPermissionState,
   isPushSupported,
@@ -84,24 +85,25 @@ async function handleToggle() {
   </div>
 {:else if !supported}
   <div class="notification-toggle disabled" title={t.notSupported}>
-    <span class="icon">🔕</span>
+    <span class="icon" aria-hidden="true">🔕</span>
     <span class="label">{t.notSupported}</span>
   </div>
 {:else if permission === 'denied'}
   <div class="notification-toggle disabled" title={t.deniedTooltip}>
-    <span class="icon">🚫</span>
+    <span class="icon" aria-hidden="true">🚫</span>
     <span class="label">{t.denied}</span>
   </div>
 {:else}
   <button
     type="button"
-    class="notification-toggle"
-    class:active={subscribed}
+    class="bp-btn bp-btn--sm bp-btn--secondary notification-button"
+    data-subscribed={subscribed ? 'true' : undefined}
+    aria-busy={actionLoading ? 'true' : undefined}
     onclick={handleToggle}
     disabled={actionLoading}
     title={t.tooltip}
   >
-    <span class="icon">{subscribed ? '🔔' : '🔕'}</span>
+    <span class="icon" aria-hidden="true">{subscribed ? '🔔' : '🔕'}</span>
     <span class="label">
       {#if actionLoading}
         {subscribed ? t.disabling : t.enabling}
@@ -113,30 +115,20 @@ async function handleToggle() {
 {/if}
 
 <style>
+  /* Status chip shown while loading / when push is unavailable (not a control) */
   .notification-toggle {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid light-dark(hsl(0 0% 80%), hsl(0 0% 30%));
-    border-radius: 6px;
-    background: light-dark(white, hsl(0 0% 15%));
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .notification-toggle:hover:not(:disabled):not(.disabled) {
-    border-color: var(--color-main);
-  }
-
-  .notification-toggle.active {
-    background: light-dark(hsl(142 70% 95%), hsl(142 40% 20%));
-    border-color: light-dark(hsl(142 70% 50%), hsl(142 40% 40%));
+    gap: var(--bp-space-2);
+    padding: var(--bp-space-2) var(--bp-space-3);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-md);
+    background: var(--bp-color-bg-subtle);
+    color: var(--bp-color-text-muted);
+    font-size: var(--bp-text-sm);
   }
 
   .notification-toggle.disabled {
-    opacity: 0.6;
     cursor: not-allowed;
   }
 
@@ -144,16 +136,17 @@ async function handleToggle() {
     opacity: 0.5;
   }
 
-  .notification-toggle:disabled {
-    opacity: 0.5;
+  /* Subscribed: tinted success through the button's public tokens */
+  .notification-button[data-subscribed='true'] {
+    --btn-background: color-mix(in srgb, var(--bp-color-success) 12%, transparent);
+    --btn-border: 1px solid var(--bp-color-success);
+  }
+
+  .notification-button[aria-busy='true'] {
     cursor: wait;
   }
 
   .icon {
-    font-size: 1rem;
-  }
-
-  .label {
-    color: inherit;
+    font-size: var(--bp-text-base);
   }
 </style>

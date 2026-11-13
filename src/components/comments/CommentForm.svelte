@@ -1,5 +1,8 @@
 <script lang="ts">
 import Turnstile from '@components/Turnstile.svelte'
+import '@be-partner-labs/ds/components/alert'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/input'
 
 interface Props {
   noteId: string
@@ -106,7 +109,8 @@ async function handleSubmit(e: Event) {
   <textarea
     bind:value={content}
     placeholder={t.writeComment}
-    class="textarea"
+    aria-label={t.writeComment}
+    class="bp-input"
     rows="3"
     maxlength="5000"
     disabled={isSubmitting}
@@ -122,21 +126,29 @@ async function handleSubmit(e: Event) {
       size="normal"
     />
     {#if turnstileError}
-      <p class="error">{t.verificationFailed}</p>
+      <div class="bp-alert bp-alert--error" role="alert">
+      <div class="bp-alert__content">
+        <p class="bp-alert__body">{t.verificationFailed}</p>
+      </div>
+    </div>
     {/if}
   {/if}
 
   {#if submitError}
-    <p class="error">{submitError}</p>
+    <div class="bp-alert bp-alert--error" role="alert">
+      <div class="bp-alert__content">
+        <p class="bp-alert__body">{submitError}</p>
+      </div>
+    </div>
   {/if}
 
   <div class="form-actions">
     {#if onCancel}
-      <button type="button" onclick={onCancel} class="cancel-btn"
+      <button type="button" onclick={onCancel} class="bp-btn bp-btn--secondary bp-btn--sm"
         >{t.cancel}</button
       >
     {/if}
-    <button type="submit" disabled={!canSubmit} class="submit-btn">
+    <button type="submit" disabled={!canSubmit} class="bp-btn bp-btn--sm">
       {isSubmitting ? "..." : t.post}
     </button>
   </div>
@@ -144,63 +156,15 @@ async function handleSubmit(e: Event) {
 
 <style>
   .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bp-space-2);
     margin-block-end: 2lh;
-  }
-
-  .textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid light-dark(hsl(0 0% 80%), hsl(0 0% 30%));
-    border-radius: 8px;
-    background: light-dark(white, hsl(0 0% 10%));
-    color: inherit;
-    font-family: inherit;
-    font-size: 1rem;
-    resize: vertical;
-    min-height: 80px;
-  }
-
-  .textarea:focus {
-    outline: 2px solid var(--color-main);
-    outline-offset: 2px;
-  }
-
-  .error {
-    color: hsl(0 70% 50%);
-    font-size: 0.85rem;
-    margin: 0;
-    text-align: center;
   }
 
   .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
-    margin-block-start: 0.5rem;
-  }
-
-  .submit-btn,
-  .cancel-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .submit-btn {
-    background: var(--color-main);
-    color: var(--color-light);
-  }
-
-  .submit-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  .cancel-btn {
-    background: transparent;
-    border: 1px solid light-dark(hsl(0 0% 70%), hsl(0 0% 40%));
+    gap: var(--bp-space-2);
   }
 </style>

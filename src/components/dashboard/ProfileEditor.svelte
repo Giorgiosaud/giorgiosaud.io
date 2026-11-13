@@ -1,5 +1,9 @@
 <script lang="ts">
-import { getPropagationHint } from 'astro/runtime/server/render/astro/factory.js'
+import '@be-partner-labs/ds/components/card'
+import '@be-partner-labs/ds/components/input'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/alert'
+import '@be-partner-labs/ds/components/skeleton'
 import { onMount } from 'svelte'
 
 interface Props {
@@ -114,20 +118,21 @@ async function handleSubmit(e: Event) {
 </script>
 
 {#if isLoading}
-  <div class="profile-editor loading">
-    <div class="skeleton skeleton-title"></div>
-    <div class="skeleton skeleton-input"></div>
-    <div class="skeleton skeleton-input"></div>
-    <div class="skeleton skeleton-textarea"></div>
-    <div class="skeleton skeleton-input"></div>
+  <div class="bp-card profile-editor loading" aria-busy="true">
+    <div class="bp-skeleton bp-skeleton--heading skeleton-title"></div>
+    <div class="bp-skeleton skeleton-input"></div>
+    <div class="bp-skeleton skeleton-input"></div>
+    <div class="bp-skeleton skeleton-textarea"></div>
+    <div class="bp-skeleton skeleton-input"></div>
   </div>
 {:else}
-  <form class="profile-editor" onsubmit={handleSubmit}>
+  <form class="bp-card profile-editor" onsubmit={handleSubmit}>
     <h2>{t.title}</h2>
 
-    <div class="form-group">
-      <label for="displayName">{t.displayName}</label>
+    <div class="bp-field">
+      <label class="bp-field__label" for="displayName">{t.displayName}</label>
       <input
+        class="bp-input"
         type="text"
         id="displayName"
         bind:value={displayName}
@@ -136,25 +141,28 @@ async function handleSubmit(e: Event) {
       />
     </div>
 
-    <div class="form-group">
-      <label for="username">{t.username}</label>
+    <div class="bp-field">
+      <label class="bp-field__label" for="username">{t.username}</label>
       <input
+        class="bp-input"
         type="text"
         id="username"
+        aria-describedby="username-help"
         bind:value={username}
         placeholder={t.usernamePlaceholder}
         pattern="[a-zA-Z0-9_]+"
         minlength="3"
         maxlength="30"
       />
-      <small class="help-text">
+      <small class="bp-field__hint" id="username-help">
         {t.usernameHelp.replace("{username}", username || "username")}
       </small>
     </div>
 
-    <div class="form-group">
-      <label for="bio">{t.bio}</label>
+    <div class="bp-field">
+      <label class="bp-field__label" for="bio">{t.bio}</label>
       <textarea
+        class="bp-input"
         id="bio"
         bind:value={bio}
         placeholder={t.bioPlaceholder}
@@ -163,9 +171,10 @@ async function handleSubmit(e: Event) {
       ></textarea>
     </div>
 
-    <div class="form-group">
-      <label for="website">{t.website}</label>
+    <div class="bp-field">
+      <label class="bp-field__label" for="website">{t.website}</label>
       <input
+        class="bp-input"
         type="url"
         id="website"
         bind:value={website}
@@ -174,130 +183,39 @@ async function handleSubmit(e: Event) {
     </div>
 
     {#if saveError}
-      <div class="error">{saveError}</div>
+      <div class="bp-alert bp-alert--error" role="alert">
+        <div class="bp-alert__content">
+          <p class="bp-alert__title">{saveError}</p>
+        </div>
+      </div>
     {/if}
 
     {#if saveSuccess}
-      <div class="success">{t.saved}</div>
+      <div class="bp-alert bp-alert--success" role="status">
+        <div class="bp-alert__content">
+          <p class="bp-alert__title">{t.saved}</p>
+        </div>
+      </div>
     {/if}
 
-    <button type="submit" class="save-button" disabled={isSaving}>
+    <button type="submit" class="bp-btn save-button" disabled={isSaving}>
       {isSaving ? t.saving : t.save}
     </button>
   </form>
 {/if}
 
 <style>
-  .profile-editor {
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 8px;
-    padding: 1.5rem;
-  }
-
   .profile-editor h2 {
-    font-size: 1.25rem;
-    margin: 0 0 1.5rem;
-  }
-
-  .form-group {
-    margin-bottom: 1.25rem;
-  }
-
-  label {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  input,
-  textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid light-dark(hsl(0 0% 85%), hsl(0 0% 30%));
-    border-radius: 6px;
-    background: light-dark(white, hsl(0 0% 15%));
-    font-size: 1rem;
-    color: inherit;
-    transition: border-color 0.2s;
-  }
-
-  input:focus,
-  textarea:focus {
-    outline: none;
-    border-color: var(--color-main);
-  }
-
-  textarea {
-    resize: vertical;
-    min-height: 100px;
-  }
-
-  .help-text {
-    display: block;
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    font-size: var(--bp-text-xl);
+    margin: 0 0 var(--bp-space-2);
   }
 
   .save-button {
     width: 100%;
-    padding: 0.75rem 1.5rem;
-    background: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .save-button:hover:not(:disabled) {
-    opacity: 0.9;
-  }
-
-  .save-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-
-  .error {
-    padding: 0.75rem;
-    background: hsl(0 80% 95%);
-    border: 1px solid hsl(0 70% 80%);
-    border-radius: 6px;
-    color: hsl(0 70% 40%);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
-  }
-
-  .success {
-    padding: 0.75rem;
-    background: hsl(142 70% 95%);
-    border: 1px solid hsl(142 50% 70%);
-    border-radius: 6px;
-    color: hsl(142 60% 30%);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
   }
 
   .loading {
     min-height: 400px;
-  }
-
-  .skeleton {
-    background: light-dark(hsl(0 0% 92%), hsl(0 0% 18%));
-    border-radius: 4px;
-    animation: pulse 1.5s ease-in-out infinite;
-    margin-bottom: 1rem;
-  }
-
-  .skeleton-title {
-    width: 40%;
-    height: 1.5rem;
-    margin-bottom: 1.5rem;
   }
 
   .skeleton-input {
@@ -308,15 +226,5 @@ async function handleSubmit(e: Event) {
   .skeleton-textarea {
     width: 100%;
     height: 6rem;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
   }
 </style>

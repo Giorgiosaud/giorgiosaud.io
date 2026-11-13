@@ -1,6 +1,7 @@
 ---
-import '@global-styles/reset.css'
-import '@global-styles/grid.css'
+import '@global-styles/tokens.css'
+import '@be-partner-labs/ds/core/reset'
+import '@be-partner-labs/ds/core/grid'
 import '@global-styles/global.css'
 
 import CookieConsent from '@global-components/CookieConsent.svelte'
@@ -38,7 +39,7 @@ const {
   <body>
     <OfflineBar client:load />
     <Header pathToTranslate={pathToTranslate} />
-    <main class="content-grid">
+    <main class="bp-content-grid">
       <slot />
     </main>
     <Footer />

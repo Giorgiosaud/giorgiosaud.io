@@ -14,25 +14,15 @@ href={translatePath("home", lang)}
 </a>
 <style>
   .logo {
-    --default-font-family: 'Roboto Mono';
-    font-family: var(
-      --default-font-family,
-      ui-sans-serif,
-      system-ui,
-      sans-serif,
-      "Apple Color Emoji",
-      "Segoe UI Emoji",
-      "Segoe UI Symbol",
-      "Noto Color Emoji"
-    );
+    font-family: var(--bp-font-mono);
     text-wrap-mode: nowrap;
-    color: light-dark(var(--color-dark), var(--color-light));
+    color: var(--bp-color-text);
     text-decoration: none;
     display: flex;
-    font-weight: 800;
+    font-weight: var(--bp-font-weight-bold);
 
     .logo_accent {
-      color: var(--color-main);
+      color: var(--site-color-accent);
     }
   }
 </style>

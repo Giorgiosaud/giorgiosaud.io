@@ -14,6 +14,10 @@ import {
   signUpWithEmail,
 } from '@lib/stores/auth'
 import { onMount } from 'svelte'
+import '@be-partner-labs/ds/components/alert'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/input'
+import '@be-partner-labs/ds/components/skeleton'
 
 interface Props {
   lang?: 'en' | 'es'
@@ -61,6 +65,7 @@ const translations = {
 }
 
 let { lang = 'en' }: Props = $props()
+const uid = $props.id()
 
 let isAuthenticated = $state(false)
 let isLoading = $state(true)
@@ -161,7 +166,7 @@ function goBack() {
   <div class="container" bind:this={containerRef}>
     <button
       type="button"
-      class="button"
+      class="bp-btn bp-btn--sm"
       onclick={() => (showMenu = !showMenu)}
       aria-expanded={showMenu}
       aria-haspopup="true"
@@ -242,7 +247,7 @@ function goBack() {
                 disabled={oauthLoading !== null}
               >
                 {#if oauthLoading === "github"}
-                  <span class="spinner" aria-hidden="true"></span>
+                  <span class="bp-spinner" aria-hidden="true"></span>
                 {:else}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -269,7 +274,7 @@ function goBack() {
                 disabled={oauthLoading !== null}
               >
                 {#if oauthLoading === "google"}
-                  <span class="spinner" aria-hidden="true"></span>
+                  <span class="bp-spinner" aria-hidden="true"></span>
                 {:else}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -305,7 +310,7 @@ function goBack() {
                 disabled={oauthLoading !== null}
               >
                 {#if oauthLoading === "facebook"}
-                  <span class="spinner" aria-hidden="true"></span>
+                  <span class="bp-spinner" aria-hidden="true"></span>
                 {:else}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -358,33 +363,41 @@ function goBack() {
             </button>
 
             {#if authError}
-              <div class="error">{authError}</div>
+              <div class="bp-alert bp-alert--error" role="alert">
+                <div class="bp-alert__content">
+                  <p class="bp-alert__body">{authError}</p>
+                </div>
+              </div>
             {/if}
 
-            <label class="label">
-              {t.email}
+            <div class="bp-field">
+              <label class="bp-field__label" for={`${uid}-email`}>{t.email}</label>
               <input
+                id={`${uid}-email`}
                 type="email"
                 bind:value={email}
-                class="input"
+                class="bp-input"
                 required
+                placeholder=" "
                 autocomplete="email"
               />
-            </label>
+            </div>
 
-            <label class="label">
-              {t.password}
+            <div class="bp-field">
+              <label class="bp-field__label" for={`${uid}-current-password`}>{t.password}</label>
               <input
+                id={`${uid}-current-password`}
                 type="password"
                 bind:value={password}
-                class="input"
+                class="bp-input"
                 required
+                placeholder=" "
                 autocomplete="current-password"
                 minlength="8"
               />
-            </label>
+            </div>
 
-            <button type="submit" class="submit-button" disabled={isLoading}>
+            <button type="submit" class="bp-btn bp-btn--sm" disabled={isLoading}>
               {isLoading ? t.loading : t.loginButton}
             </button>
 
@@ -429,44 +442,54 @@ function goBack() {
             </button>
 
             {#if authError}
-              <div class="error">{authError}</div>
+              <div class="bp-alert bp-alert--error" role="alert">
+                <div class="bp-alert__content">
+                  <p class="bp-alert__body">{authError}</p>
+                </div>
+              </div>
             {/if}
 
-            <label class="label">
-              {t.name}
+            <div class="bp-field">
+              <label class="bp-field__label" for={`${uid}-name`}>{t.name}</label>
               <input
+                id={`${uid}-name`}
                 type="text"
                 bind:value={name}
-                class="input"
+                class="bp-input"
                 required
+                placeholder=" "
                 autocomplete="name"
               />
-            </label>
+            </div>
 
-            <label class="label">
-              {t.email}
+            <div class="bp-field">
+              <label class="bp-field__label" for={`${uid}-email`}>{t.email}</label>
               <input
+                id={`${uid}-email`}
                 type="email"
                 bind:value={email}
-                class="input"
+                class="bp-input"
                 required
+                placeholder=" "
                 autocomplete="email"
               />
-            </label>
+            </div>
 
-            <label class="label">
-              {t.password}
+            <div class="bp-field">
+              <label class="bp-field__label" for={`${uid}-new-password`}>{t.password}</label>
               <input
+                id={`${uid}-new-password`}
                 type="password"
                 bind:value={password}
-                class="input"
+                class="bp-input"
                 required
+                placeholder=" "
                 autocomplete="new-password"
                 minlength="8"
               />
-            </label>
+            </div>
 
-            <button type="submit" class="submit-button" disabled={isLoading}>
+            <button type="submit" class="bp-btn bp-btn--sm" disabled={isLoading}>
               {isLoading ? t.loading : t.signUpButton}
             </button>
 
@@ -493,62 +516,57 @@ function goBack() {
   }
 
   .loading {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: light-dark(#3d5166, #e2e8f0);
-    color: light-dark(#ffffff80, #0f172a80);
-    border-radius: 6px;
-    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--bp-space-2) var(--bp-space-4);
+    background: var(--bp-color-bg-subtle);
+    color: var(--bp-color-text-muted);
+    border-radius: var(--bp-radius-md);
+    font-size: var(--bp-text-sm);
+    line-height: 1;
     pointer-events: none;
-  }
-
-  .button {
-    padding: 0.5rem 1rem;
-    background: light-dark(#3d5166, #e2e8f0);
-    color: light-dark(#fff, #0f172a);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .button:hover {
-    opacity: 0.9;
   }
 
   .menu {
     position: absolute;
     top: 100%;
     right: 0;
-    margin-top: 0.5rem;
+    margin-top: var(--bp-space-2);
     min-width: 280px;
-    background: light-dark(white, hsl(0 0% 15%));
-    border: 1px solid light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 0.5rem;
+    background: var(--bp-color-bg-elevated);
+    color: var(--bp-color-text);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
+    box-shadow: var(--bp-shadow-lg);
+    padding: var(--bp-space-2);
     z-index: 100;
   }
 
   .menu-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--bp-space-3);
     width: 100%;
-    padding: 0.75rem;
+    padding: var(--bp-space-3);
     background: none;
     border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
+    border-radius: var(--bp-radius-md);
+    font-size: var(--bp-text-sm);
     cursor: pointer;
     color: inherit;
     text-align: left;
-    transition: background-color 0.2s;
+    transition: background-color var(--bp-duration-fast) var(--bp-ease);
+    --spinner-size: 20px;
+    --spinner-arc-color: var(--site-color-accent);
   }
 
   .menu-item:hover:not(:disabled) {
-    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+    background: var(--bp-color-bg-subtle);
+  }
+
+  .menu-item:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
   }
 
   .menu-item:disabled {
@@ -556,28 +574,13 @@ function goBack() {
     cursor: not-allowed;
   }
 
-  .spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid light-dark(hsl(0 0% 85%), hsl(0 0% 30%));
-    border-top-color: var(--color-main);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-
   .divider {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    gap: var(--bp-space-3);
+    padding: var(--bp-space-2) var(--bp-space-3);
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
   }
 
   .divider::before,
@@ -585,96 +588,46 @@ function goBack() {
     content: "";
     flex: 1;
     height: 1px;
-    background: light-dark(hsl(0 0% 85%), hsl(0 0% 30%));
+    background: var(--bp-color-border);
   }
 
+  /* Column flex: children (incl. the submit .bp-btn) stretch to full width */
   .form {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.5rem;
+    gap: var(--bp-space-3);
+    padding: var(--bp-space-2);
   }
 
   .back-button {
     display: flex;
+    align-self: flex-start;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--bp-space-1);
     background: none;
     border: none;
     padding: 0;
-    font-size: 0.85rem;
-    color: light-dark(hsl(0 0% 40%), hsl(0 0% 60%));
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
     cursor: pointer;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--bp-space-2);
   }
 
   .back-button:hover {
-    color: var(--color-main);
-  }
-
-  .error {
-    padding: 0.5rem;
-    background: hsl(0 80% 95%);
-    border: 1px solid hsl(0 70% 80%);
-    border-radius: 4px;
-    color: hsl(0 70% 40%);
-    font-size: 0.85rem;
-  }
-
-  .label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    font-size: 0.85rem;
-    font-weight: 500;
-  }
-
-  .input {
-    padding: 0.5rem;
-    border: 1px solid light-dark(hsl(0 0% 80%), hsl(0 0% 30%));
-    border-radius: 4px;
-    font-size: 0.95rem;
-    background: light-dark(white, hsl(0 0% 10%));
-    color: inherit;
-  }
-
-  .input:focus {
-    outline: 2px solid var(--color-main);
-    outline-offset: 1px;
-  }
-
-  .submit-button {
-    padding: 0.6rem 1rem;
-    background: var(--color-main);
-    color: var(--color-light);
-    border: none;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .submit-button:hover:not(:disabled) {
-    opacity: 0.9;
-  }
-
-  .submit-button:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+    color: var(--site-color-accent);
   }
 
   .switch-mode {
-    font-size: 0.85rem;
+    font-size: var(--bp-text-sm);
     text-align: center;
-    color: light-dark(hsl(0 0% 40%), hsl(0 0% 60%));
+    color: var(--bp-color-text-muted);
     margin: 0;
   }
 
   .switch-mode button {
     background: none;
     border: none;
-    color: var(--color-main);
+    color: var(--site-color-accent);
     cursor: pointer;
     font-size: inherit;
     padding: 0;

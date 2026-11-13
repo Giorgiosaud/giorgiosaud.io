@@ -1,4 +1,7 @@
 <script lang="ts">
+import '@be-partner-labs/ds/components/card'
+import '@be-partner-labs/ds/components/badge'
+import '@be-partner-labs/ds/components/skeleton'
 import { isLoadingStore, userStore } from '@lib/stores/auth'
 import type { User } from 'better-auth/types'
 import { onMount } from 'svelte'
@@ -62,13 +65,13 @@ function formatDate(dateStr?: string): string {
 </script>
 
 {#if isLoading}
-  <div class="status-card loading">
-    <div class="skeleton skeleton-title"></div>
-    <div class="skeleton skeleton-text"></div>
-    <div class="skeleton skeleton-text"></div>
+  <div class="bp-card status-card loading" aria-busy="true">
+    <div class="bp-skeleton bp-skeleton--heading"></div>
+    <div class="bp-skeleton bp-skeleton--text skeleton-text"></div>
+    <div class="bp-skeleton bp-skeleton--text skeleton-text"></div>
   </div>
 {:else if user}
-  <div class="status-card" class:compact>
+  <div class="bp-card status-card" class:compact>
     {#if !compact}
       <h2>{t.title}</h2>
     {/if}
@@ -76,7 +79,11 @@ function formatDate(dateStr?: string): string {
     <div class="status-grid">
       <div class="status-item">
         <span class="label">{t.role}</span>
-        <span class="value role-badge" class:admin={isAdmin}>{isAdmin ? t.admin : t.user}</span>
+        <span
+          class="bp-badge role-badge"
+          class:bp-badge--primary={isAdmin}
+          class:bp-badge--neutral={!isAdmin}>{isAdmin ? t.admin : t.user}</span
+        >
       </div>
 
       <div class="status-item">
@@ -103,66 +110,47 @@ function formatDate(dateStr?: string): string {
 {/if}
 
 <style>
-  .status-card {
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 8px;
-    padding: 1.5rem;
-  }
-
   .status-card.compact {
-    padding: 1rem;
+    --card-padding: var(--bp-space-4);
   }
 
   .status-card h2 {
-    font-size: 1.25rem;
-    margin: 0 0 1rem;
+    font-size: var(--bp-text-xl);
+    margin: 0;
   }
 
   .status-grid {
     display: grid;
-    gap: 1rem;
+    gap: var(--bp-space-4);
   }
 
   .status-item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--bp-space-1);
   }
 
   .label {
-    font-size: 0.8rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
   .value {
-    font-size: 1rem;
-    font-weight: 500;
+    font-size: var(--bp-text-base);
+    font-weight: var(--bp-font-weight-medium);
   }
 
   .role-badge {
-    display: inline-block;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.85rem;
-    background: light-dark(hsl(210 70% 95%), hsl(210 40% 20%));
-    color: light-dark(hsl(210 70% 40%), hsl(210 60% 70%));
     width: fit-content;
-  }
-
-  .role-badge.admin {
-    background: light-dark(hsl(280 70% 95%), hsl(280 40% 20%));
-    color: light-dark(hsl(280 70% 40%), hsl(280 60% 70%));
   }
 
   .profile-link {
     display: inline-block;
-    margin-top: 1rem;
-    color: var(--color-main);
+    color: var(--site-color-accent);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: var(--bp-font-weight-medium);
   }
 
   .profile-link:hover {
@@ -170,40 +158,16 @@ function formatDate(dateStr?: string): string {
   }
 
   .no-profile {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    margin: 0;
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
   }
 
   .loading {
     min-height: 120px;
   }
 
-  .skeleton {
-    background: light-dark(hsl(0 0% 92%), hsl(0 0% 18%));
-    border-radius: 4px;
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  .skeleton-title {
-    width: 50%;
-    height: 1.5rem;
-    margin-bottom: 1rem;
-  }
-
   .skeleton-text {
     width: 70%;
-    height: 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
   }
 </style>

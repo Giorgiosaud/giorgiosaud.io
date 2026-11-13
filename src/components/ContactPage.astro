@@ -1,0 +1,80 @@
+---
+import ContactForm from '@components/ContactForm.astro'
+import { getLangFromUrl, useTranslations } from '@i18n/utils'
+
+interface Props {
+  sent?: boolean
+  errorCode?: string
+}
+
+const { sent, errorCode } = Astro.props
+const lang = getLangFromUrl(Astro.url)
+const t = useTranslations(lang)
+const tx = (key: string) => t(key as Parameters<typeof t>[0]) as string
+---
+<section class="contact" aria-labelledby="contact-heading">
+  <header class="contact-intro">
+    <h1 id="contact-heading">{tx('contact.heading')}</h1>
+    <p>{tx('contact.intro')}</p>
+  </header>
+
+  <ContactForm sent={sent} errorCode={errorCode} />
+
+  <aside class="contact-aside" aria-label={tx('contact.aside.title')}>
+    <p class="contact-aside__title">{tx('contact.aside.title')}</p>
+    <ul>
+      <li><a href="https://www.linkedin.com/in/giorgiosaud/" rel="me noopener" target="_blank">{tx('contact.aside.linkedin')}</a></li>
+      <li><a href="mailto:jorgelsaud@gmail.com">{tx('contact.aside.email')}</a></li>
+    </ul>
+  </aside>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--bp-space-8);
+    max-inline-size: 48rem;
+    margin-inline: auto;
+    padding-block: var(--bp-space-8);
+  }
+
+  .contact-intro {
+    display: grid;
+    gap: var(--bp-space-3);
+
+    h1 {
+      font-size: var(--bp-text-3xl);
+      line-height: var(--bp-leading-tight);
+    }
+
+    p {
+      max-inline-size: 60ch;
+      color: var(--bp-color-text-muted);
+    }
+  }
+
+  .contact-aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--bp-space-3) var(--bp-space-5);
+    padding-block-start: var(--bp-space-5);
+    border-block-start: 1px solid var(--bp-color-border);
+    font-size: var(--bp-text-sm);
+
+    ul {
+      display: flex;
+      gap: var(--bp-space-5);
+    }
+
+    a {
+      /* --bp-primary is a fill color (1.85:1 as text on light bg); accent passes AA */
+      color: var(--site-color-accent);
+      text-underline-offset: 0.2em;
+    }
+  }
+
+  .contact-aside__title {
+    color: var(--bp-color-text-muted);
+  }
+</style>

@@ -1,4 +1,7 @@
 ---
+import '@be-partner-labs/ds/components/input'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/alert'
 import AdminLayout from '@components/admin/AdminLayout.astro'
 import { db } from '@db'
 import { pushSubscriptions } from '@db/schema'
@@ -19,33 +22,52 @@ const subscriberCount = activeSubscriptions.length
     <p class="subtitle">Send to all {subscriberCount} subscriber{subscriberCount !== 1 ? 's' : ''}</p>
 
     <form id="broadcast-form">
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input type="text" id="title" name="title" required maxlength="50" placeholder="New blog post!" />
+      <div class="bp-field">
+        <label class="bp-field__label" for="title">Title</label>
+        <input class="bp-input" type="text" id="title" name="title" required maxlength="50" placeholder="New blog post!" />
       </div>
 
-      <div class="form-group">
-        <label for="body">Message</label>
-        <textarea id="body" name="body" required maxlength="200" rows="3" placeholder="Check out my latest article..."></textarea>
+      <div class="bp-field">
+        <label class="bp-field__label" for="body">Message</label>
+        <textarea class="bp-input" id="body" name="body" required maxlength="200" rows="3" placeholder="Check out my latest article..."></textarea>
       </div>
 
-      <div class="form-group">
-        <label for="url">Link URL (optional)</label>
-        <input type="text" id="url" name="url" placeholder="/notebook/my-new-post" />
+      <div class="bp-field">
+        <label class="bp-field__label" for="url">Link URL (optional)</label>
+        <input class="bp-input" type="text" id="url" name="url" placeholder="/notebook/my-new-post" />
       </div>
 
-      <button type="submit" class="btn-primary">
+      <button type="submit" class="bp-btn submit">
         Send Broadcast
       </button>
     </form>
 
-    <div id="result" class="result" hidden></div>
+    <div id="result-success" class="bp-alert bp-alert--success result" role="status" hidden>
+      <div class="bp-alert__content">
+        <p class="bp-alert__title" data-result-text></p>
+      </div>
+    </div>
+    <div id="result-error" class="bp-alert bp-alert--error result" role="alert" hidden>
+      <div class="bp-alert__content">
+        <p class="bp-alert__title" data-result-text></p>
+      </div>
+    </div>
   </section>
 </AdminLayout>
 
 <script>
   const form = document.getElementById('broadcast-form') as HTMLFormElement
-  const resultDiv = document.getElementById('result') as HTMLDivElement
+  const successAlert = document.getElementById('result-success') as HTMLDivElement
+  const errorAlert = document.getElementById('result-error') as HTMLDivElement
+
+  function showResult(ok: boolean, message: string) {
+    const target = ok ? successAlert : errorAlert
+    const other = ok ? errorAlert : successAlert
+    other.hidden = true
+    const text = target.querySelector('[data-result-text]')
+    if (text) text.textContent = message
+    target.hidden = false
+  }
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault()
@@ -71,19 +93,14 @@ const subscriberCount = activeSubscriptions.length
 
       const data = await response.json()
 
-      resultDiv.hidden = false
       if (response.ok) {
-        resultDiv.className = 'result success'
-        resultDiv.textContent = `Sent to ${data.result.sent} subscriber(s). ${data.result.failed} failed.`
+        showResult(true, `Sent to ${data.result.sent} subscriber(s). ${data.result.failed} failed.`)
         form.reset()
       } else {
-        resultDiv.className = 'result error'
-        resultDiv.textContent = data.error || 'Failed to send broadcast'
+        showResult(false, data.error || 'Failed to send broadcast')
       }
     } catch {
-      resultDiv.hidden = false
-      resultDiv.className = 'result error'
-      resultDiv.textContent = 'Network error. Please try again.'
+      showResult(false, 'Network error. Please try again.')
     } finally {
       submitBtn.disabled = false
       submitBtn.textContent = 'Send Broadcast'
@@ -97,69 +114,26 @@ const subscriberCount = activeSubscriptions.length
   }
 
   h2 {
-    font-size: 1.25rem;
-    margin-bottom: 0.25rem;
+    font-size: var(--bp-text-xl);
+    margin-bottom: var(--bp-space-1);
   }
 
   .subtitle {
-    color: var(--color-muted, #666);
-    margin-bottom: 1.5rem;
+    color: var(--bp-color-text-muted);
+    margin-bottom: var(--bp-space-6);
   }
 
-  .form-group {
-    margin-bottom: 1rem;
+  #broadcast-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bp-space-4);
   }
 
-  label {
-    display: block;
-    margin-bottom: 0.25rem;
-    font-weight: 500;
-  }
-
-  input, textarea {
+  .submit {
     width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 4px;
-    font-family: inherit;
-    font-size: 1rem;
-  }
-
-  .btn-primary {
-    width: 100%;
-    padding: 0.75rem;
-    background: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .btn-primary:hover:not(:disabled) {
-    opacity: 0.9;
-  }
-
-  .btn-primary:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
   }
 
   .result {
-    margin-top: 1rem;
-    padding: 0.75rem;
-    border-radius: 4px;
-    text-align: center;
-  }
-
-  .result.success {
-    background: var(--color-success, #10b981);
-    color: white;
-  }
-
-  .result.error {
-    background: var(--color-error, #ef4444);
-    color: white;
+    margin-top: var(--bp-space-4);
   }
 </style>

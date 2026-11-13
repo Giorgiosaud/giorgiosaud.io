@@ -1,4 +1,5 @@
 <script lang="ts">
+import '@be-partner-labs/ds/components/skeleton'
 import { userStore } from '@lib/stores/auth'
 import type { User } from 'better-auth/types'
 import { onMount } from 'svelte'
@@ -57,18 +58,19 @@ onMount(() => {
 
 <div class="badges-container">
   {#if isLoading}
-    <div class="loading">
-      <div class="skeleton skeleton-badge"></div>
-      <div class="skeleton skeleton-badge"></div>
-      <div class="skeleton skeleton-badge"></div>
+    <div class="loading" aria-busy="true">
+      <div class="bp-skeleton skeleton-badge"></div>
+      <div class="bp-skeleton skeleton-badge"></div>
+      <div class="bp-skeleton skeleton-badge"></div>
     </div>
   {:else if badges.length === 0}
     <p class="no-badges">{t.noBadges}</p>
   {:else}
     <div class="badge-grid">
       {#each badges as badge (badge.id)}
-        <div class="badge-item" style="--badge-color: {badge.color}">
-          <div class="badge-icon">{badge.icon}</div>
+        <!-- Per-badge color comes from data, so it can only be passed inline -->
+        <div class="badge-item" style="--site-badge-item-border-color: {badge.color}">
+          <div class="badge-icon" aria-hidden="true">{badge.icon}</div>
           <div class="badge-info">
             <span class="badge-name">{badge.name}</span>
             <span class="badge-description">{badge.description}</span>
@@ -89,88 +91,74 @@ onMount(() => {
 
   .no-badges {
     text-align: center;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
-    padding: 2rem;
-    background: light-dark(hsl(0 0% 98%), hsl(0 0% 12%));
-    border: 1px dashed light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
-    border-radius: 8px;
+    color: var(--bp-color-text-muted);
+    padding: var(--bp-space-8);
+    background: var(--bp-color-bg-subtle);
+    border: 1px dashed var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
   }
 
   .badge-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1rem;
+    gap: var(--bp-space-4);
   }
 
   .badge-item {
+    --_border-color: var(--site-badge-item-border-color, var(--site-color-accent));
+
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 8px;
-    border-left: 4px solid var(--badge-color, var(--color-main));
+    gap: var(--bp-space-4);
+    padding: var(--bp-space-4);
+    background: var(--bp-color-bg-elevated);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
+    border-left: 4px solid var(--_border-color);
   }
 
   .badge-icon {
-    font-size: 2rem;
+    font-size: var(--bp-text-3xl);
     width: 48px;
     height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: light-dark(hsl(0 0% 97%), hsl(0 0% 15%));
-    border-radius: 50%;
+    background: var(--bp-color-bg-subtle);
+    border-radius: var(--bp-radius-full);
     flex-shrink: 0;
   }
 
   .badge-info {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: var(--bp-space-1);
     min-width: 0;
   }
 
   .badge-name {
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: var(--bp-font-weight-semibold);
+    font-size: var(--bp-text-base);
   }
 
   .badge-description {
-    font-size: 0.85rem;
-    color: light-dark(hsl(0 0% 40%), hsl(0 0% 60%));
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
   }
 
   .badge-earned {
-    font-size: 0.75rem;
-    color: light-dark(hsl(0 0% 55%), hsl(0 0% 50%));
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
   }
 
   .loading {
     display: flex;
-    gap: 1rem;
+    gap: var(--bp-space-4);
     flex-wrap: wrap;
-  }
-
-  .skeleton {
-    background: light-dark(hsl(0 0% 92%), hsl(0 0% 18%));
-    border-radius: 8px;
-    animation: pulse 1.5s ease-in-out infinite;
   }
 
   .skeleton-badge {
     width: 280px;
     height: 80px;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
   }
 </style>

@@ -29,7 +29,7 @@ const { page } = Astro.props
     </li>
   })}
 </ul>
-<footer class="content-grid">
+<footer class="bp-content-grid">
   <div class="prev-next">
     {page.currentPage > 1 && (
       <a href={page.url.prev} rel="prev">
@@ -52,10 +52,10 @@ const { page } = Astro.props
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    font-size: var(--font-size, clamp(.9rem, .6cqw, 1rem));
+    font-size: var(--bp-text-sm);
   }
   a {
-    color: var(--color-primary);
+    color: var(--site-color-accent);
     text-decoration: none;
   }
   a:hover {

@@ -1,4 +1,9 @@
 <script lang="ts">
+import '@be-partner-labs/ds/components/card'
+import '@be-partner-labs/ds/components/input'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/alert'
+import '@be-partner-labs/ds/components/skeleton'
 import { passkey } from '@lib/auth-client'
 import { onMount } from 'svelte'
 
@@ -157,7 +162,7 @@ async function handleDelete(id: string) {
 }
 </script>
 
-<div class="passkey-manager">
+<div class="bp-card passkey-manager">
   <div class="header">
     <div>
       <h2>{t.title}</h2>
@@ -165,7 +170,7 @@ async function handleDelete(id: string) {
     </div>
     <button
       type="button"
-      class="add-button"
+      class="bp-btn bp-btn--sm"
       onclick={handleAddClick}
       disabled={isAdding}
     >
@@ -174,8 +179,11 @@ async function handleDelete(id: string) {
   </div>
 
   {#if showNamePrompt}
-    <div class="name-prompt">
+    <div class="bp-field name-prompt">
+      <label class="bp-field__label" for="passkey-name">{t.namePrompt}</label>
       <input
+        class="bp-input"
+        id="passkey-name"
         type="text"
         bind:value={newPasskeyName}
         placeholder={t.namePlaceholder}
@@ -183,12 +191,12 @@ async function handleDelete(id: string) {
         onkeydown={(e) => e.key === "Enter" && handleAddPasskey()}
       />
       <div class="prompt-actions">
-        <button type="button" onclick={handleAddPasskey} disabled={isAdding}>
+        <button type="button" class="bp-btn bp-btn--sm" onclick={handleAddPasskey} disabled={isAdding}>
           {t.add}
         </button>
         <button
           type="button"
-          class="cancel"
+          class="bp-btn bp-btn--sm bp-btn--secondary"
           onclick={() => (showNamePrompt = false)}
         >
           {t.cancel}
@@ -198,13 +206,17 @@ async function handleDelete(id: string) {
   {/if}
 
   {#if error}
-    <div class="error">{error}</div>
+    <div class="bp-alert bp-alert--error" role="alert">
+      <div class="bp-alert__content">
+        <p class="bp-alert__title">{error}</p>
+      </div>
+    </div>
   {/if}
 
   {#if isLoading}
-    <div class="loading">
-      <div class="skeleton skeleton-item"></div>
-      <div class="skeleton skeleton-item"></div>
+    <div class="loading" aria-busy="true">
+      <div class="bp-skeleton skeleton-item"></div>
+      <div class="bp-skeleton skeleton-item"></div>
     </div>
   {:else if passkeys.length === 0}
     <p class="no-passkeys">{t.noPasskeys}</p>
@@ -231,7 +243,7 @@ async function handleDelete(id: string) {
           </div>
           <button
             type="button"
-            class="delete-button"
+            class="bp-btn bp-btn--sm bp-btn--secondary delete-button"
             onclick={() => handleDelete(pk.id)}
             disabled={deletingId === pk.id}
           >
@@ -244,110 +256,40 @@ async function handleDelete(id: string) {
 </div>
 
 <style>
-  .passkey-manager {
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 8px;
-    padding: 1.5rem;
-  }
-
   .header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+    gap: var(--bp-space-4);
   }
 
   .header h2 {
-    font-size: 1.25rem;
+    font-size: var(--bp-text-xl);
     margin: 0;
   }
 
   .description {
-    font-size: 0.9rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
-    margin: 0.5rem 0 0;
-  }
-
-  .add-button {
-    padding: 0.5rem 1rem;
-    background: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-
-  .add-button:hover:not(:disabled) {
-    opacity: 0.9;
-  }
-
-  .add-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
+    margin: var(--bp-space-2) 0 0;
   }
 
   .name-prompt {
-    background: light-dark(hsl(0 0% 97%), hsl(0 0% 15%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
-    border-radius: 6px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  .name-prompt input {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid light-dark(hsl(0 0% 85%), hsl(0 0% 30%));
-    border-radius: 6px;
-    background: light-dark(white, hsl(0 0% 18%));
-    font-size: 1rem;
-    color: inherit;
-    margin-bottom: 0.75rem;
+    background: var(--bp-color-bg-subtle);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-md);
+    padding: var(--bp-space-4);
   }
 
   .prompt-actions {
     display: flex;
-    gap: 0.5rem;
-  }
-
-  .prompt-actions button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-  }
-
-  .prompt-actions button:first-child {
-    background: var(--color-main);
-    color: white;
-  }
-
-  .prompt-actions button.cancel {
-    background: light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
-    color: inherit;
-  }
-
-  .error {
-    padding: 0.75rem;
-    background: hsl(0 80% 95%);
-    border: 1px solid hsl(0 70% 80%);
-    border-radius: 6px;
-    color: hsl(0 70% 40%);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    gap: var(--bp-space-2);
   }
 
   .no-passkeys {
     text-align: center;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
-    padding: 2rem;
+    color: var(--bp-color-text-muted);
+    padding: var(--bp-space-8);
   }
 
   .passkey-list {
@@ -360,11 +302,11 @@ async function handleDelete(id: string) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
-    padding: 1rem;
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
-    border-radius: 6px;
-    margin-bottom: 0.5rem;
+    gap: var(--bp-space-4);
+    padding: var(--bp-space-4);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-md);
+    margin-bottom: var(--bp-space-2);
   }
 
   .passkey-info {
@@ -373,68 +315,41 @@ async function handleDelete(id: string) {
   }
 
   .passkey-name {
-    font-weight: 600;
+    font-weight: var(--bp-font-weight-semibold);
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: var(--bp-space-2);
   }
 
   .passkey-details {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    font-size: 0.8rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    gap: var(--bp-space-3);
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
   }
 
   .detail-label {
-    font-weight: 500;
+    font-weight: var(--bp-font-weight-medium);
   }
 
+  /* Outline danger: secondary button recolored through its public tokens */
   .delete-button {
-    padding: 0.5rem 0.75rem;
-    background: transparent;
-    color: hsl(0 70% 50%);
-    border: 1px solid hsl(0 70% 50%);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    transition:
-      background-color 0.2s,
-      color 0.2s;
+    --btn-background: transparent;
+    --btn-color: var(--bp-color-error);
+    --btn-border: 1px solid var(--bp-color-error);
   }
 
-  .delete-button:hover:not(:disabled) {
-    background: hsl(0 70% 50%);
-    color: white;
-  }
-
-  .delete-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  .delete-button:hover {
+    --btn-background: var(--bp-color-error-surface);
+    --btn-color: #fff;
   }
 
   .loading {
-    padding: 1rem 0;
-  }
-
-  .skeleton {
-    background: light-dark(hsl(0 0% 92%), hsl(0 0% 18%));
-    border-radius: 6px;
-    animation: pulse 1.5s ease-in-out infinite;
+    padding: var(--bp-space-4) 0;
   }
 
   .skeleton-item {
     height: 80px;
-    margin-bottom: 0.5rem;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+    margin-bottom: var(--bp-space-2);
   }
 </style>

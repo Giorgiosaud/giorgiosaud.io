@@ -5,6 +5,7 @@ import {
   RESEND_FROM_NAME,
   RESEND_TO_EMAIL,
 } from 'astro:env/server'
+import { verifyTurnstile } from '@lib/turnstile'
 import { Resend } from 'resend'
 import { MESSAGE_MAX_LENGTH, MESSAGE_MIN_LENGTH } from '../config/constants'
 
@@ -34,6 +35,7 @@ import { z } from 'astro:schema'
  *
  * @throws {ActionError} With specific codes:
  *   - 'BAD_REQUEST' - Invalid email format or missing required fields
+ *   - 'FORBIDDEN' - Turnstile verification failed
  *   - 'TOO_MANY_REQUESTS' - Rate limit exceeded
  *   - 'INTERNAL_SERVER_ERROR' - Network errors or service unavailable
  *
@@ -47,11 +49,29 @@ export const sendEmail = defineAction({
   accept: 'form',
 
   input: z.object({
-    name: z.string(),
-    email: z.string().email(),
-    message: z.string().min(MESSAGE_MIN_LENGTH).max(MESSAGE_MAX_LENGTH),
+    name: z.string().trim().min(1).max(120),
+    email: z.string().trim().email(),
+    message: z.string().trim().min(MESSAGE_MIN_LENGTH).max(MESSAGE_MAX_LENGTH),
+    // Honeypot: hidden from people, bots tend to fill it
+    website: z.string().optional(),
+    // Injected by the Turnstile widget
+    'cf-turnstile-response': z.string().optional(),
   }),
   handler: async input => {
+    // Pretend success so bots get no signal
+    if (input.website)
+      return {
+        id: null,
+      }
+
+    const token = input['cf-turnstile-response'] ?? ''
+    if (!(await verifyTurnstile(token))) {
+      throw new ActionError({
+        code: 'FORBIDDEN',
+        message: 'Verification failed. Please try again.',
+      })
+    }
+
     const name = escapeHtml(input.name)
     const email = escapeHtml(input.email)
     const message = escapeHtml(input.message).replace(/\n/g, '<br>')

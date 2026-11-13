@@ -53,6 +53,10 @@ const canonicalUrl = new URL(
 ).href
 ---
 <head>
+  <!-- Cascade layer order: BPL DS layers with the site's token/base layers slotted in.
+       site-tokens overrides DS Level 1 tokens; site-base sits after the DS reset and
+       before DS components, so components always win over element defaults. -->
+  <style is:inline>@layer bp-tokens, site-tokens, bp-reset, site-base, bp-grid, bp-components, bp-utilities;</style>
   <link rel="canonical" href={canonicalUrl} />
   <!-- Preload critical fonts to break request chain -->
   <link rel="preload" href={poppins400} as="font" type="font/woff2" crossorigin="anonymous" />
@@ -147,7 +151,8 @@ const canonicalUrl = new URL(
     </script>
   }
   <meta name="robots" content="index, follow" />
-  <meta name="theme-color" content="#22223b" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8f6f2" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#16140f" />
   <link rel="apple-touch-icon" href="/icons/apple-icon.png" />
   <link rel="alternate" href="https://giorgiosaud.io/" hreflang="en" />
   <link rel="alternate" href="https://giorgiosaud.io/es/" hreflang="es" />
