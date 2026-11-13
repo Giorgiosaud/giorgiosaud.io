@@ -1,6 +1,6 @@
 # giorgiosaud.io – Personal Web Dev Notebook (Astro)
 
-Multilingual (EN/ES) personal web dev notebook built with Astro 5. It mixes Markdown/MDX content with interactive islands using React, Vue, and Svelte. Content is organized with Astro Content Collections and deployed to Vercel.
+Multilingual (EN/ES) personal web dev notebook built with Astro 5. It mixes Markdown/MDX content with interactive islands using React, Vue, and Svelte. Content is organized with Astro Content Collections and deployed to Cloudflare Workers.
 
 Live: https://giorgiosaud.io
 
@@ -13,13 +13,13 @@ Live: https://giorgiosaud.io
 - Bilingual content (en, es)
 - Sitemap + (optional) RSS
 - Form actions via Resend (email) and Cloudflare Turnstile (comments)
-- Biome for lint/format, TypeScript, Vercel adapter
+- Biome for lint/format, TypeScript, Cloudflare adapter
 
 ## Tech Stack
 
 - Astro 5, TypeScript
 - Integrations: @astrojs/mdx, @astrojs/react, @astrojs/vue, @astrojs/svelte, @astrojs/sitemap
-- Adapter: @astrojs/vercel
+- Adapter: @astrojs/cloudflare
 - Tooling: Biome
 
 ---
@@ -77,9 +77,9 @@ TURNSTILE_SECRET_KEY=""
 RESEND_API_KEY=""
 
 # Email defaults (server)
-PUBLIC_RESEND_TO_EMAIL="jorgelsaud@gmail.com"
-PUBLIC_RESEND_FROM_EMAIL="notebook@giorgiosaud.io"
-PUBLIC_RESEND_FROM_NAME="Notebook"
+RESEND_TO_EMAIL="jorgelsaud@gmail.com"
+RESEND_FROM_EMAIL="noreply@notebook.giorgiosaud.io"
+RESEND_FROM_NAME="Giorgio Notebook"
 ```
 
 Notes
@@ -225,15 +225,11 @@ public/              # static assets
 
 ---
 
-## Deployment (Vercel)
+## Deployment (Cloudflare Workers)
 
-- Adapter: `@astrojs/vercel` is configured in `astro.config.mjs`.
-- Connect the repo to Vercel and deploy; defaults in `vercel.json`.
-- Environment variables can be set in Vercel Project Settings.
-
-Caching & ISR
-
-- The adapter is configured with `isr: true` and `skewProtection: true`.
+- Adapter: `@astrojs/cloudflare`, Worker config in `wrangler.jsonc`.
+- Deploy with `bun run deploy`; set secrets with `bunx wrangler secret put NAME`.
+- Custom domains `giorgiosaud.io` and `www.giorgiosaud.io` are attached to the Worker.
 
 ---
 

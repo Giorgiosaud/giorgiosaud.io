@@ -9,9 +9,9 @@
   "scripts": {
     "predev": "bun scripts/generateSelfHealMap.ts",
     "dev": "astro dev",
-    "build": "bun scripts/generateSelfHealMap.ts && astro build && bun scripts/patchVercelRoutes.ts && bun scripts/generateCspHashes.ts && bun scripts/notifyNewPosts.ts",
-    "csp:hashes": "bun scripts/generateCspHashes.ts",
+    "build": "bun scripts/generateSelfHealMap.ts && astro build && bun scripts/notifyNewPosts.ts",
     "preview": "astro preview",
+    "deploy": "bun run build && wrangler deploy",
     "lint": "biome lint --write .",
     "lint:fix": "biome check --write .",
     "astro": "astro",
@@ -30,12 +30,12 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "13",
     "@astrojs/mdx": "5.0.4",
     "@astrojs/react": "5.0.4",
     "@astrojs/rss": "4.0.18",
     "@astrojs/sitemap": "3.7.2",
     "@astrojs/svelte": "8.1.0",
-    "@astrojs/vercel": "10.0.6",
     "@astrojs/vue": "6.0.1",
     "@better-auth/passkey": "^1.6.9",
     "@fontsource/poppins": "^5.2.7",
@@ -47,7 +47,7 @@
     "@neondatabase/serverless": "^1.1.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "astro": "6.2.1",
+    "astro": "^6.3.0",
     "better-auth": "^1.6.9",
     "drizzle-orm": "^0.45.2",
     "fuse.js": "^7.3.0",
@@ -78,7 +78,8 @@
     "lightningcss": "^1.32.0",
     "lint-staged": "^16.4.0",
     "postgres": "^3.4.9",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.5",
+    "wrangler": "^4.149.0"
   },
   "overrides": {
     "@better-auth/core": "1.6.9",

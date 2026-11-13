@@ -1,0 +1,43 @@
+name: Deploy
+
+# Builds on the runner and deploys to Cloudflare Workers (personal account).
+# Client-side env vars (astro:env context 'client') are baked into the bundle here,
+# so they must come from GitHub vars — Worker secrets only cover runtime/server vars.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare Workers
+    runs-on: ubuntu-24.04
+    environment:
+      name: Production
+      url: https://giorgiosaud.io
+    steps:
+      - uses: actions/checkout@v5
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.11
+      - run: bun install --frozen-lockfile
+      - name: Build
+        run: bun run build
+        env:
+          BETTER_AUTH_URL: https://giorgiosaud.io
+          SITE_URL: https://giorgiosaud.io
+          GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
+          TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
+          VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
+          # Used by scripts/notifyNewPosts.ts to call the push broadcast endpoint
+          NOTIFY_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

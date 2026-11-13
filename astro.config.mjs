@@ -1,9 +1,9 @@
 import { fileURLToPath } from 'node:url'
+import cloudflare from '@astrojs/cloudflare'
 import mdx from '@astrojs/mdx'
 import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 import svelte, { vitePreprocess } from '@astrojs/svelte'
-import vercel from '@astrojs/vercel'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
 
@@ -31,6 +31,27 @@ const suppressKnownWarnings = {
   },
 }
 
+// The Cloudflare Vite plugin sets cssTarget: 'es2024' on its worker environments, which
+// lightningcss can't map to browser targets. Use Vite's default browser baseline instead.
+const browserCssTarget = [
+  'chrome107',
+  'edge107',
+  'firefox104',
+  'safari16',
+]
+const workerCssTarget = {
+  name: 'worker-css-target',
+  configResolved(config) {
+    if (config.build.cssTarget === 'es2024')
+      config.build.cssTarget = browserCssTarget
+    for (const environment of Object.values(config.environments)) {
+      if (environment.build.cssTarget === 'es2024') {
+        environment.build.cssTarget = browserCssTarget
+      }
+    }
+  },
+}
+
 // https://astro.build/config
 export default defineConfig({
   site: 'https://giorgiosaud.io',
@@ -50,7 +71,14 @@ export default defineConfig({
   vite: {
     plugins: [
       suppressKnownWarnings,
+      workerCssTarget,
     ],
+    // picomatch is CJS; pre-bundle it so content loaders can run inside workerd
+    optimizeDeps: {
+      include: [
+        'picomatch',
+      ],
+    },
     resolve: {
       alias: {
         '@lib': fileURLToPath(new URL('./src/lib', import.meta.url)),
@@ -78,16 +106,17 @@ export default defineConfig({
   },
 
   redirects: {
-    about: 'about-this-notebook',
+    '/about': '/about-this-notebook',
   },
 
   env: {
     schema: {
-      // Database (Vercel-Supabase integration uses POSTGRES_URL)
+      // Database (Neon Postgres connection string)
+      // Optional so the blog keeps serving if the DB is unreachable; src/db handles a missing URL
       POSTGRES_URL: envField.string({
         context: 'server',
         access: 'secret',
-        optional: false,
+        optional: true,
       }),
 
       // Better Auth
@@ -174,13 +203,13 @@ export default defineConfig({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'notebook@bepartnerlabs.com',
+        default: 'noreply@notebook.giorgiosaud.io',
       }),
       RESEND_FROM_NAME: envField.string({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'Notebook',
+        default: 'Giorgio Notebook',
       }),
 
       // Web Push (VAPID keys - generate with: npx web-push generate-vapid-keys)
@@ -205,7 +234,13 @@ export default defineConfig({
 
   output: 'server',
 
-  adapter: vercel({
-    skewProtection: true,
-  }),
+  // The Cloudflare Vite plugin rejects Vitest's SSR environment, so tests run without the adapter
+  ...(process.env.VITEST
+    ? {}
+    : {
+        adapter: cloudflare({
+          // Optimize images at build time for prerendered pages; no Images binding needed
+          imageService: 'compile',
+        }),
+      }),
 })

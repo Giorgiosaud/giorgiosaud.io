@@ -1,0 +1,26 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "giorgiosaud-io",
+	"compatibility_date": "2026-10-01",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	// Custom domains: Cloudflare creates the DNS records; existing A/CNAME records must be removed first
+	"routes": [
+		{ "pattern": "giorgiosaud.io", "custom_domain": true },
+		{ "pattern": "www.giorgiosaud.io", "custom_domain": true }
+	],
+	"kv_namespaces": [
+		{ "binding": "SESSION", "id": "20599dfe10784d6e8cced5911a51253c" }
+	],
+	"observability": {
+		"enabled": true
+	},
+	// Public (non-secret) runtime vars. Secrets are set with `wrangler secret bulk`.
+	"vars": {
+		"RESEND_TO_EMAIL": "jorgelsaud@gmail.com",
+		"RESEND_FROM_EMAIL": "noreply@notebook.giorgiosaud.io",
+		"RESEND_FROM_NAME": "Giorgio Notebook",
+		"VAPID_SUBJECT": "mailto:jorgelsaud@gmail.com"
+	}
+}

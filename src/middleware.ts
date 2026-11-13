@@ -135,7 +135,34 @@ const dashboardMiddleware = defineMiddleware(async (context, next) => {
   return next()
 })
 
+// Security headers for server-rendered responses. Static assets get the same set from
+// public/_headers, which Cloudflare only applies to files served from the assets bucket.
+const SECURITY_HEADERS: Record<string, string> = {
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'SAMEORIGIN',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=()',
+}
+
+const securityHeadersMiddleware = defineMiddleware(async (_context, next) => {
+  const response = await next()
+  try {
+    for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+      response.headers.set(key, value)
+    }
+    return response
+  } catch {
+    // Some responses (e.g. Response.redirect) have immutable headers; clone to set them
+    const cloned = new Response(response.body, response)
+    for (const [key, value] of Object.entries(SECURITY_HEADERS)) {
+      cloned.headers.set(key, value)
+    }
+    return cloned
+  }
+})
+
 export const onRequest = sequence(
+  securityHeadersMiddleware,
   selfhealMiddleware,
   authMiddleware,
   banCheckMiddleware,
