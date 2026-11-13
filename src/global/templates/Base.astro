@@ -9,6 +9,7 @@ import Head from '@global-components/Head/index.astro'
 import Header from '@global-components/Header.astro'
 import BottomTabBar from '@global-components/Navbar/BottomTabBar.astro'
 import OfflineBar from '@global-components/OfflineBar.svelte'
+import WebMCP from '@global-components/WebMCP.astro'
 import type { RouteNames } from '@i18n/utils'
 
 export interface Props {
@@ -43,5 +44,6 @@ const {
     <Footer />
     <CookieConsent client:load />
     <BottomTabBar pathToTranslate={pathToTranslate} />
+    <WebMCP />
   </body>
 </html>
