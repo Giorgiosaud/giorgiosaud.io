@@ -175,7 +175,8 @@ No `vitest.config.ts` is present; Vitest uses defaults.
 
 Configured with the `@astrojs/cloudflare` adapter in `astro.config.mjs`; Worker config in `wrangler.jsonc`.
 
-- **Deploy**: `bun run deploy` (build + `wrangler deploy`) on the personal Cloudflare account. Auth comes from `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` in `.env`.
+- **Deploy (CI)**: publishing a GitHub release runs `.github/workflows/deploy.yml` (merges to `main` only update the Release Drafter draft). Manual runs via `workflow_dispatch`.
+- **Deploy (local)**: `bun run deploy` (build + `wrangler deploy`) on the personal Cloudflare account. Auth comes from `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` in `.env`.
 - **Domains**: `giorgiosaud.io` and `www.giorgiosaud.io` are Worker custom domains (`routes` in `wrangler.jsonc`).
 - **Secrets**: set with `bunx wrangler secret put NAME` (or `wrangler secret bulk`). Non-secret vars live in `vars` in `wrangler.jsonc`.
 - **Bindings**: `SESSION` KV namespace (Astro sessions).

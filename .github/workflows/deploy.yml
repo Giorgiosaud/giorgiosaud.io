@@ -3,9 +3,13 @@ name: Deploy
 # Builds on the runner and deploys to Cloudflare Workers (personal account).
 # Client-side env vars (astro:env context 'client') are baked into the bundle here,
 # so they must come from GitHub vars — Worker secrets only cover runtime/server vars.
+#
+# Deploys when a release is published (Release Drafter keeps the draft up to date on each
+# merge to main), so merges can be batched and new-post push notifications go out on purpose.
+# The checkout is the release tag. workflow_dispatch stays for manual/emergency deploys.
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
 
 concurrency:
