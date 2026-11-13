@@ -19,7 +19,7 @@
 	// Public (non-secret) runtime vars. Secrets are set with `wrangler secret bulk`.
 	"vars": {
 		"RESEND_TO_EMAIL": "jorgelsaud@gmail.com",
-		"RESEND_FROM_EMAIL": "notebook@notebook.giorgiosaud.io",
+		"RESEND_FROM_EMAIL": "web@notebook.giorgiosaud.io",
 		"RESEND_FROM_NAME": "Notebook",
 		"VAPID_SUBJECT": "mailto:jorgelsaud@gmail.com"
 	}

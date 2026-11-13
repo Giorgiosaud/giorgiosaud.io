@@ -203,7 +203,7 @@ export default defineConfig({
         context: 'server',
         access: 'public',
         optional: true,
-        default: 'notebook@notebook.giorgiosaud.io',
+        default: 'web@notebook.giorgiosaud.io',
       }),
       RESEND_FROM_NAME: envField.string({
         context: 'server',
