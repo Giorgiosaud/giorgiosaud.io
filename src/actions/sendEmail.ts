@@ -10,6 +10,20 @@ import { MESSAGE_MAX_LENGTH, MESSAGE_MIN_LENGTH } from '../config/constants'
 
 const resend = new Resend(RESEND_API_KEY)
 
+// User input is interpolated into the email HTML, so it must be escaped
+const escapeHtml = (value: string) =>
+  value.replace(
+    /[&<>"']/g,
+    char =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      })[char] as string,
+  )
+
 import { z } from 'astro:schema'
 
 /**
@@ -38,21 +52,27 @@ export const sendEmail = defineAction({
     message: z.string().min(MESSAGE_MIN_LENGTH).max(MESSAGE_MAX_LENGTH),
   }),
   handler: async input => {
+    const name = escapeHtml(input.name)
+    const email = escapeHtml(input.email)
+    const message = escapeHtml(input.message).replace(/\n/g, '<br>')
     try {
       const { data, error } = await resend.emails.send({
         from: `${RESEND_FROM_NAME} <${RESEND_FROM_EMAIL}>`,
         to: [
           RESEND_TO_EMAIL,
         ],
+        replyTo: input.email,
         subject: `Email from ${input.name} in Website Form`,
         html: `
-          <h1>New message from ${input.name}</h1>
-          <p><strong>Email:</strong> ${input.email}</p>
-          <p><strong>Message:</strong> ${input.message}</p>
+          <h1>New message from ${name}</h1>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Message:</strong> ${message}</p>
         `,
       })
 
       if (error) {
+        // Surface the failure in `wrangler tail`; never log the API key or message body
+        console.error('[sendEmail] Resend error', error.name, error.message)
         // Map Resend error types to appropriate ActionError codes
         if (error.name === 'validation_error') {
           throw new ActionError({
@@ -86,6 +106,7 @@ export const sendEmail = defineAction({
         throw e
       }
       // Network or unexpected errors
+      console.error('[sendEmail] unexpected error', e)
       throw new ActionError({
         code: 'INTERNAL_SERVER_ERROR',
         message: 'Email service unavailable. Please try again later.',

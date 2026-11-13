@@ -32,6 +32,9 @@ const result = Astro.getActionResult(actions.sendEmail)
 {result && !result.error && (
   <p class="success" role="alert" aria-live="polite">¡Email enviado correctamente!</p>
 )}
+{result?.error && (
+  <p class="error" role="alert" aria-live="assertive">{result.error.message}</p>
+)}
 
 <form method="POST" action={actions.sendEmail} class="contact-form">
     <div class="form-control">
@@ -53,6 +56,16 @@ const result = Astro.getActionResult(actions.sendEmail)
 <style>
     :global(main){
         height: 100dvh;
+    }
+    .error {
+        color: #8a1c1c;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        display: block;
+        text-align: center;
+        background-color: #ffe5e5;
+        padding: 0.5rem;
+        border: #e0a0a0 1px solid;
     }
     .success {
         color: green;
