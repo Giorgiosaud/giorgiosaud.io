@@ -8,7 +8,7 @@ selfHealing: MCPNRF
 slug: mcps-role-in-the-future-of-ai-technology
 publishDate: 2025-09-14T03:00:00.000Z
 category: AI
-author: jorge-saud-001
+author: 000001-jorge-saud
 collections:
    - ai
 tags:

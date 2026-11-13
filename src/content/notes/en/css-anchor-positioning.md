@@ -8,7 +8,7 @@ coverAlt: CSS Anchor Positioning illustration
 selfHealing: cssnch
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

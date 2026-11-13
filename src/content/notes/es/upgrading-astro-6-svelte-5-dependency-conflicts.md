@@ -8,7 +8,7 @@ coverAlt: Conflictos de dependencias en la actualización de Astro
 selfHealing: ctlznd
 lang: es
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - astro
   - architecture

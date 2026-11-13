@@ -9,7 +9,7 @@ coverAlt: Ilustración de i18n Type-Safe
 selfHealing: typsf1
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - typescript
   - patterns

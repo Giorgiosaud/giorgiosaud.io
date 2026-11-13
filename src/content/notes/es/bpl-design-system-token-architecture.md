@@ -8,7 +8,7 @@ coverAlt: "Cuatro capas translúcidas apiladas, desde swatches de color crudos h
 selfHealing: tknsbp
 lang: es
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - frontend

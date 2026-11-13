@@ -8,7 +8,7 @@ coverAlt: CSS Custom Properties 2026
 selfHealing: csscst
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - css
   - frontend

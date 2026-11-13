@@ -16,7 +16,7 @@ tags:
 keywords:
   - Summary api
   - generate AI-powered summaries
-author: giorgio-saud
+author: 000001-jorge-saud
 category: IA
 ---
 

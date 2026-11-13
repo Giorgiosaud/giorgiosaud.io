@@ -9,7 +9,7 @@ coverAlt: URLs Auto-Sanadas en Astro y Vercel — URL rota redirigida por middle
 selfHealing: slfhln
 lang: es
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - astro
   - frontend

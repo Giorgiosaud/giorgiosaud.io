@@ -8,7 +8,7 @@ selfHealing: SMMPPN
 draft: false
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
 tags:

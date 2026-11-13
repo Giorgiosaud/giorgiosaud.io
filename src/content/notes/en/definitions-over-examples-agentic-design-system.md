@@ -8,7 +8,7 @@ coverAlt: A design system contract being read by an AI agent, with CSS definitio
 selfHealing: dfntns
 lang: en
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - ai

@@ -8,7 +8,7 @@ coverAlt: LLMs.txt Implementation
 selfHealing: llmstx
 lang: en
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
   - architecture

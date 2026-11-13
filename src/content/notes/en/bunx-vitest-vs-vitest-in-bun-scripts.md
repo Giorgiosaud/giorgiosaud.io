@@ -7,7 +7,7 @@ cover: ../../../assets/images/bunx-vitest-vs-vitest.avif
 coverAlt: Terminal showing vitest command not found error under bun
 selfHealing: bnxvts
 category: devops
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - frontend
   - architecture

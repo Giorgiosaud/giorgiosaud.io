@@ -8,7 +8,7 @@ coverAlt: Chrome browser with a robot summarizing text on screen
 selfHealing: chrmbl
 lang: en
 category: Development
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - ai
   - frontend

@@ -6,7 +6,7 @@ title: "CSP Sin unsafe-inline en Astro + Vercel"
 description: "Cómo eliminar unsafe-inline de tu Content Security Policy en un sitio Astro desplegado en Vercel, usando hashes SHA-256 generados automáticamente en el build — y todos los errores que cometí en el camino."
 publishDate: 2026-05-24T00:00:00.000Z
 category: security
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - security
   - frontend

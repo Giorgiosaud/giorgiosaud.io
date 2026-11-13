@@ -8,7 +8,7 @@ coverAlt: Un contrato de design system siendo leído por un agente de IA, con de
 selfHealing: dfntns
 lang: es
 category: Architecture
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
   - ai

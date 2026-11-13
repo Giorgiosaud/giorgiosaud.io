@@ -8,7 +8,7 @@ coverAlt: Terminal mostrando el indicador de carga de la API de Claude
 selfHealing: bldngc
 lang: es
 category: devops
-author: giorgio-saud
+author: 000001-jorge-saud
 collections:
   - architecture
 tags:

@@ -37,6 +37,10 @@ jobs:
           GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
           VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
+          # Astro 7 validates required server secrets while prerendering. Real values live in
+          # Worker secrets at runtime; these placeholders only satisfy the build-time check.
+          BETTER_AUTH_SECRET: prerender-placeholder
+          TURNSTILE_SECRET_KEY: prerender-placeholder
           # Used by scripts/notifyNewPosts.ts to call the push broadcast endpoint
           NOTIFY_SECRET: ${{ secrets.BETTER_AUTH_SECRET }}
       - name: Deploy
