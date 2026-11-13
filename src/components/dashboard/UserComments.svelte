@@ -1,4 +1,8 @@
 <script lang="ts">
+import '@be-partner-labs/ds/components/card'
+import '@be-partner-labs/ds/components/badge'
+import '@be-partner-labs/ds/components/alert'
+import '@be-partner-labs/ds/components/skeleton'
 import { onMount } from 'svelte'
 
 interface Props {
@@ -85,37 +89,42 @@ onMount(() => {
 })
 </script>
 
-<div class="comments-container">
+<div class="bp-card comments-container">
   <div class="header">
     <h2>{t.title}</h2>
     <p class="description">{t.description}</p>
   </div>
 
   {#if error}
-    <div class="error">{error}</div>
+    <div class="bp-alert bp-alert--error" role="alert">
+      <div class="bp-alert__content">
+        <p class="bp-alert__title">{error}</p>
+      </div>
+    </div>
   {/if}
 
   {#if isLoading}
-    <div class="loading">
-      <div class="skeleton skeleton-item"></div>
-      <div class="skeleton skeleton-item"></div>
-      <div class="skeleton skeleton-item"></div>
+    <div class="loading" aria-busy="true">
+      <div class="bp-skeleton skeleton-item"></div>
+      <div class="bp-skeleton skeleton-item"></div>
+      <div class="bp-skeleton skeleton-item"></div>
     </div>
   {:else if comments.length === 0}
     <p class="no-comments">{t.noComments}</p>
   {:else}
     <ul class="comment-list">
       {#each comments as comment (comment.id)}
-        <li class="comment-item" class:deleted={comment.deletedAt !== null}>
+        <li class="comment-item" data-deleted={comment.deletedAt !== null ? 'true' : undefined}>
           <div class="comment-meta">
             <span class="comment-date">{formatDate(comment.createdAt)}</span>
             {#if comment.isEdited}
               <span class="edited-badge">({t.edited})</span>
             {/if}
             <span
-              class="status-badge"
-              class:approved={comment.isApproved}
-              class:deleted={comment.deletedAt !== null}
+              class="bp-badge status-badge"
+              class:bp-badge--error={comment.deletedAt !== null}
+              class:bp-badge--success={comment.deletedAt === null && comment.isApproved}
+              class:bp-badge--warning={comment.deletedAt === null && !comment.isApproved}
             >
               {#if comment.deletedAt}
                 {t.deleted}
@@ -142,38 +151,21 @@ onMount(() => {
 </div>
 
 <style>
-  .comments-container {
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 8px;
-    padding: 1.5rem;
-  }
-
   .header h2 {
-    font-size: 1.25rem;
+    font-size: var(--bp-text-xl);
     margin: 0;
   }
 
   .description {
-    font-size: 0.9rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
-    margin: 0.5rem 0 1.5rem;
-  }
-
-  .error {
-    padding: 0.75rem;
-    background: hsl(0 80% 95%);
-    border: 1px solid hsl(0 70% 80%);
-    border-radius: 6px;
-    color: hsl(0 70% 40%);
-    font-size: 0.9rem;
-    margin-bottom: 1rem;
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
+    margin: var(--bp-space-2) 0 0;
   }
 
   .no-comments {
     text-align: center;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
-    padding: 2rem;
+    color: var(--bp-color-text-muted);
+    padding: var(--bp-space-8);
   }
 
   .comment-list {
@@ -183,116 +175,89 @@ onMount(() => {
   }
 
   .comment-item {
-    padding: 1rem;
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
-    border-radius: 6px;
-    margin-bottom: 0.75rem;
+    padding: var(--bp-space-4);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-md);
+    margin-bottom: var(--bp-space-3);
   }
 
-  .comment-item.deleted {
+  .comment-item[data-deleted='true'] {
     opacity: 0.6;
   }
 
   .comment-meta {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: var(--bp-space-2);
+    margin-bottom: var(--bp-space-2);
     flex-wrap: wrap;
   }
 
   .comment-date {
-    font-size: 0.8rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
   }
 
   .edited-badge {
-    font-size: 0.75rem;
-    color: light-dark(hsl(0 0% 60%), hsl(0 0% 50%));
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
     font-style: italic;
   }
 
   .status-badge {
-    font-size: 0.7rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
     text-transform: uppercase;
-    font-weight: 600;
     letter-spacing: 0.05em;
-    background: light-dark(hsl(45 80% 90%), hsl(45 50% 25%));
-    color: light-dark(hsl(45 80% 35%), hsl(45 70% 70%));
-  }
-
-  .status-badge.approved {
-    background: light-dark(hsl(142 70% 90%), hsl(142 40% 20%));
-    color: light-dark(hsl(142 60% 30%), hsl(142 60% 70%));
-  }
-
-  .status-badge.deleted {
-    background: light-dark(hsl(0 70% 95%), hsl(0 40% 20%));
-    color: light-dark(hsl(0 60% 40%), hsl(0 60% 70%));
   }
 
   .comment-content {
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin: 0 0 0.75rem;
-    color: light-dark(hsl(0 0% 20%), hsl(0 0% 85%));
+    font-size: var(--bp-text-sm);
+    line-height: var(--bp-leading-normal);
+    margin: 0 0 var(--bp-space-3);
+    color: var(--bp-color-text);
   }
 
   .note-link {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 0.75rem;
-    background: light-dark(hsl(0 0% 97%), hsl(0 0% 15%));
-    border-radius: 4px;
+    padding: var(--bp-space-2) var(--bp-space-3);
+    background: var(--bp-color-bg-subtle);
+    border-radius: var(--bp-radius-sm);
     text-decoration: none;
     color: inherit;
-    font-size: 0.85rem;
-    transition: background-color 0.2s;
+    font-size: var(--bp-text-sm);
+    transition: background-color var(--bp-duration-fast) var(--bp-ease);
   }
 
   .note-link:hover {
-    background: light-dark(hsl(0 0% 94%), hsl(0 0% 18%));
+    background: color-mix(in srgb, var(--bp-color-text) 6%, var(--bp-color-bg-subtle));
+  }
+
+  .note-link:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
   }
 
   .note-title {
-    font-weight: 500;
+    font-weight: var(--bp-font-weight-medium);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .view-note {
-    color: var(--color-main);
-    font-weight: 500;
+    color: var(--site-color-accent);
+    font-weight: var(--bp-font-weight-medium);
     flex-shrink: 0;
-    margin-left: 0.5rem;
+    margin-left: var(--bp-space-2);
   }
 
   .loading {
-    padding: 1rem 0;
-  }
-
-  .skeleton {
-    background: light-dark(hsl(0 0% 92%), hsl(0 0% 18%));
-    border-radius: 6px;
-    animation: pulse 1.5s ease-in-out infinite;
+    padding: var(--bp-space-4) 0;
   }
 
   .skeleton-item {
     height: 100px;
-    margin-bottom: 0.75rem;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
+    margin-bottom: var(--bp-space-3);
   }
 </style>

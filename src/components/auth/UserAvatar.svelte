@@ -19,6 +19,8 @@ import {
 } from '@lib/stores/auth'
 import type { User } from 'better-auth/types'
 import { onMount } from 'svelte'
+import '@be-partner-labs/ds/components/alert'
+import '@be-partner-labs/ds/components/skeleton'
 
 interface Props {
   lang?: 'en' | 'es'
@@ -184,7 +186,7 @@ async function handleToggleNotifications() {
   <div class="hidden" aria-hidden="true"></div>
 {:else if isLoading}
   <div class="container">
-    <div class="avatar-placeholder"></div>
+    <div class="bp-skeleton bp-skeleton--circle avatar-placeholder" aria-hidden="true"></div>
   </div>
 {:else}
   <div class="container">
@@ -214,7 +216,7 @@ async function handleToggleNotifications() {
           <span class="user-email">{user?.email}</span>
         </div>
 
-        <div class="divider"></div>
+        <div class="divider" role="separator"></div>
 
         {#if isAdmin}
           <a href="/admin" class="menu-item" role="menuitem">
@@ -272,17 +274,21 @@ async function handleToggleNotifications() {
         </button>
 
         {#if authError}
-          <div class="error">{authError}</div>
+          <div class="bp-alert bp-alert--error menu-alert" role="alert">
+            <div class="bp-alert__content">
+              <p class="bp-alert__body">{authError}</p>
+            </div>
+          </div>
         {/if}
 
         {#if pushSupported && pushPermission !== "denied"}
           <button
             type="button"
             class="menu-item"
-            class:active={pushSubscribed}
             onclick={handleToggleNotifications}
             disabled={pushLoading}
-            role="menuitem"
+            role="menuitemcheckbox"
+            aria-checked={pushSubscribed}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -318,7 +324,7 @@ async function handleToggleNotifications() {
           </button>
         {/if}
 
-        <div class="divider"></div>
+        <div class="divider" role="separator"></div>
 
         <button
           type="button"
@@ -361,38 +367,30 @@ async function handleToggleNotifications() {
   .avatar {
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    border: 2px solid var(--color-main);
-    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+    border-radius: var(--bp-radius-full);
+    border: 2px solid var(--site-color-accent);
+    background: var(--bp-color-bg-subtle);
     cursor: pointer;
     padding: 0;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s;
+    transition: transform var(--bp-duration-fast) var(--bp-ease);
   }
 
   .avatar:hover {
     transform: scale(1.05);
   }
 
+  .avatar:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
+  }
+
   .avatar-placeholder {
     width: 36px;
     height: 36px;
-    border-radius: 50%;
-    background: light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
-    animation: pulse 1.5s ease-in-out infinite;
-  }
-
-  @keyframes pulse {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
   }
 
   .avatar-image {
@@ -402,66 +400,72 @@ async function handleToggleNotifications() {
   }
 
   .initials {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--color-main);
+    font-size: var(--bp-text-sm);
+    font-weight: var(--bp-font-weight-semibold);
+    color: var(--site-color-accent);
   }
 
   .menu {
     position: absolute;
     top: 100%;
     right: 0;
-    margin-top: 0.5rem;
+    margin-top: var(--bp-space-2);
     min-width: 220px;
-    background: light-dark(white, hsl(0 0% 15%));
-    border: 1px solid light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    padding: 0.5rem;
+    background: var(--bp-color-bg-elevated);
+    color: var(--bp-color-text);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
+    box-shadow: var(--bp-shadow-lg);
+    padding: var(--bp-space-2);
     z-index: 100;
   }
 
   .user-info {
     display: flex;
     flex-direction: column;
-    padding: 0.5rem 0.75rem;
+    padding: var(--bp-space-2) var(--bp-space-3);
   }
 
   .user-name {
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: var(--bp-font-weight-semibold);
+    font-size: var(--bp-text-sm);
   }
 
   .user-email {
-    font-size: 0.8rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
   }
 
   .divider {
     height: 1px;
-    background: light-dark(hsl(0 0% 90%), hsl(0 0% 25%));
-    margin: 0.5rem 0;
+    background: var(--bp-color-border);
+    margin: var(--bp-space-2) 0;
   }
 
   .menu-item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: var(--bp-space-3);
     width: 100%;
-    padding: 0.6rem 0.75rem;
+    padding: var(--bp-space-2) var(--bp-space-3);
     background: none;
     border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
+    border-radius: var(--bp-radius-md);
+    font-size: var(--bp-text-sm);
     cursor: pointer;
     color: inherit;
     text-decoration: none;
     text-align: left;
-    transition: background-color 0.2s;
+    transition: background-color var(--bp-duration-fast) var(--bp-ease);
   }
 
   .menu-item:hover:not(:disabled) {
-    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+    background: var(--bp-color-bg-subtle);
+  }
+
+  .menu-item:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
   }
 
   .menu-item:disabled {
@@ -469,17 +473,11 @@ async function handleToggleNotifications() {
     cursor: not-allowed;
   }
 
-  .menu-item.active {
-    color: light-dark(hsl(142 70% 35%), hsl(142 50% 55%));
+  .menu-item[aria-checked="true"] {
+    color: var(--bp-color-success);
   }
 
-  .error {
-    padding: 0.5rem 0.75rem;
-    background: hsl(0 80% 95%);
-    border: 1px solid hsl(0 70% 80%);
-    border-radius: 4px;
-    color: hsl(0 70% 40%);
-    font-size: 0.8rem;
-    margin: 0.25rem 0;
+  .menu-alert {
+    margin: var(--bp-space-1) 0;
   }
 </style>

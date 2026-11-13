@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content'
 import { getPublishedNotes } from '@helpers/collections'
 import Base from '@templates/Base.astro'
 import { runSearch } from '../helpers/search'
+import '@be-partner-labs/ds/components/input'
+import '@be-partner-labs/ds/components/pagination'
 import '@global-styles/notebook-listing.css'
 
 interface Props {
@@ -126,6 +128,7 @@ if (!hasQuery) {
     <div class="search-bar">
       <input
         id="search-input"
+        class="bp-input"
         type="search"
         placeholder={t.searchPlaceholder}
         aria-label={t.searchAriaLabel}
@@ -134,11 +137,11 @@ if (!hasQuery) {
     </div>
 
     <div class="chip-bar" role="group" aria-label={t.filterAriaLabel}>
-      <button class="chip active" data-collection-chip="" aria-pressed="true">
+      <button type="button" class="chip" data-collection-chip="" aria-pressed="true">
         {t.allLabel}
       </button>
       {collections.map(col => (
-        <button class="chip" data-collection-chip={chipId(col.id)} aria-pressed="false">
+        <button type="button" class="chip" data-collection-chip={chipId(col.id)} aria-pressed="false">
           {col.data.title ?? chipId(col.id)}
         </button>
       ))}

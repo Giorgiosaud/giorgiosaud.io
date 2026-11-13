@@ -39,8 +39,7 @@ onMount(() => {
 {#if showBar}
   <div
     class="offline-bar"
-    class:offline={isOffline}
-    class:online={!isOffline}
+    data-state={isOffline ? "offline" : "online"}
     role="alert"
   >
     {#if isOffline}
@@ -52,26 +51,25 @@ onMount(() => {
 {/if}
 
 <style>
+  /* Opaque tint over the elevated surface so it stays readable in both themes */
   .offline-bar {
+    --_accent: var(--bp-color-warning);
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    padding: 0.5rem 1rem;
+    padding: var(--bp-space-2) var(--bp-space-4);
     text-align: center;
-    font-size: 0.875rem;
+    font-size: var(--bp-text-sm);
     z-index: 9999;
-    animation: slideDown 0.3s ease-out;
+    background: color-mix(in srgb, var(--_accent) 18%, var(--bp-color-bg-elevated));
+    color: var(--bp-color-text);
+    border-bottom: 2px solid var(--_accent);
+    animation: slideDown var(--bp-duration-slow) var(--bp-ease);
   }
 
-  .offline {
-    background: var(--color-warning, #f59e0b);
-    color: var(--color-warning-text, #000);
-  }
-
-  .online {
-    background: var(--color-success, #10b981);
-    color: var(--color-success-text, #fff);
+  .offline-bar[data-state="online"] {
+    --_accent: var(--bp-color-success);
   }
 
   @keyframes slideDown {
@@ -80,6 +78,12 @@ onMount(() => {
     }
     to {
       transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .offline-bar {
+      animation: none;
     }
   }
 </style>

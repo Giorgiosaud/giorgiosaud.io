@@ -1,4 +1,5 @@
 ---
+import '@be-partner-labs/ds/components/badge'
 import { Image } from 'astro:assets'
 import { isDraftInDevMode } from '@helpers/collections'
 import { getLangFromUrl, useTranslations } from '@i18n/utils'
@@ -11,7 +12,7 @@ const nameImage = `${note.id}-${context}`
 const showDraftBadge = isDraftInDevMode(note.data)
 ---
 <article aria-label={note.data.title} data-link={link} id={nameImage} style="position:relative;">
-    {showDraftBadge && <span class="draft-badge">DRAFT</span>}
+    {showDraftBadge && <span class="bp-badge bp-badge--warning draft-badge">DRAFT</span>}
     <div class="wrapper">
         <div class="title" title={note.data.title}>
             <h2>{note.data.title}</h2>
@@ -34,21 +35,12 @@ const showDraftBadge = isDraftInDevMode(note.data)
         top: 0.5rem;
         right: 0.5rem;
         z-index: 200;
-        background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-        color: white;
-        font-size: 0.65rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        box-shadow: 0 2px 8px rgba(249, 115, 22, 0.4);
     }
     .wrapper{
         position: relative;
-        --_color:var(--color,light-dark(var(--color-dark),var(--color-light)));
-        --_background-color:var(--background-color,light-dark(var(--color-light),var(--color-dark)));
-        --_border-radius:var(--border-radius,10px);
+        --_color:var(--color,var(--bp-color-text));
+        --_background-color:var(--background-color,var(--bp-color-bg-subtle));
+        --_border-radius:var(--border-radius,var(--bp-radius-lg));
         display: grid;
         border-radius: var(--_border-radius);
         background-color: var(--_background-color);
@@ -59,7 +51,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
         transition: transform 0.2s cubic-bezier(.4,1.3,.5,1), box-shadow 0.2s cubic-bezier(.4,1.3,.5,1);
     }
     .wrapper:hover, .wrapper:focus-within {
-        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.16), 0 3px 12px 0 rgba(0,0,0,0.12);
+        box-shadow: var(--bp-shadow-xl);
         z-index: 2;
     }
     .title {
@@ -75,6 +67,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
         --_padding-inline: var(--padding-inline, 1rem);
         padding-inline: var(--_padding-inline);
         & h2 {
+            color: inherit;
             --_font-size: var(--font-size, clamp(1rem, 7cqw, 2rem));
             font-size: var(--_font-size);
             text-wrap: balance;
@@ -112,14 +105,14 @@ const showDraftBadge = isDraftInDevMode(note.data)
     }
     .wrapper:has(+ .card-link:hover),
     .wrapper:has(+ .card-link:focus) {
-        box-shadow: 0 8px 32px 0 rgba(0,0,0,0.16), 0 3px 12px 0 rgba(0,0,0,0.12);
+        box-shadow: var(--bp-shadow-xl);
         z-index: 2;
     }
 
     @container note (min-width: 301px) {
         .wrapper {
             grid-template-rows: none;
-            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.08);
+            box-shadow: var(--bp-shadow-lg);
             border-radius: 1.25rem;
             padding: 1.25rem 1.25rem 1.5rem 1.25rem;
             gap: 1rem;
@@ -127,7 +120,7 @@ const showDraftBadge = isDraftInDevMode(note.data)
             transition: box-shadow 0.2s cubic-bezier(.4,1.3,.5,1), transform 0.2s cubic-bezier(.4,1.3,.5,1);
         }
         .wrapper:hover, .wrapper:focus-within {
-            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.16), 0 3px 12px 0 rgba(0,0,0,0.12);
+            box-shadow: var(--bp-shadow-xl);
             transform: scale(1.045);
         }
         .title {

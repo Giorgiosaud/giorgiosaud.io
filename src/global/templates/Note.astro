@@ -1,6 +1,7 @@
 ---
-import '@global-styles/reset.css'
-import '@global-styles/grid.css'
+import '@global-styles/tokens.css'
+import '@be-partner-labs/ds/core/reset'
+import '@be-partner-labs/ds/core/grid'
 import '@global-styles/global.css'
 
 import Footer from '@global-components/Footer.astro'
@@ -73,7 +74,7 @@ llmPath={llmPath}
   <Header 
 	 pathToTranslate={pathToTranslate}
    	pathToTranslateNote={pathToTranslateNote} />
-  <main class="content-grid">
+  <main class="bp-content-grid">
     <slot />
   </main>
   <Footer />

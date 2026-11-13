@@ -1,8 +1,4 @@
-@layer global {
-  * {
-    --_color: var(--color, light-dark(var(--color-main), var(--color-light)));
-    color: var(--_color);
-  }
+@layer site-base {
   h1,
   h2,
   h3,
@@ -27,14 +23,13 @@
   h4 code,
   h5 code,
   h6 code {
-    --_color: var(--color, light-dark(lightsalmon, darkseagreen));
-    --_bg: var(--bg, light-dark(beige, black));
-    background: var(--_bg);
-    padding: 0.5rem;
+    background: var(--bp-primary-subtle);
+    padding: var(--bp-space-1) var(--bp-space-2);
     display: inline-block;
-    color: var(--_color);
-    font-family: monospace;
-    border: solid 3px var(--_color);
+    color: var(--bp-color-text);
+    font-family: var(--bp-font-mono);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-sm);
     transition:
       color 0.3s ease,
       background-color 0.3s ease;
@@ -43,30 +38,36 @@
     text-wrap: pretty;
   }
   a {
+    color: var(--site-color-accent);
     text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  :not(pre) > code {
+    font-family: var(--bp-font-mono);
+    font-size: 0.9em;
+    background: var(--bp-color-bg-subtle);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-sm);
+    padding: 0.1em 0.35em;
   }
   .text-center {
     text-align: center;
   }
   .focus {
     --padding-block: 1lh;
-    --color: light-dark(var(--color-light), var(--color-dark));
-
-    --_background-color: var(
-      --background-color,
-      light-dark(var(--color-dark), var(--color-light))
-    );
-
-    background-color: var(--_background-color);
+    color: var(--bp-primary-fg);
+    background-color: var(--bp-primary-subtle);
+    border-inline-start: 4px solid var(--bp-primary);
+    padding-inline: var(--bp-space-4);
+    border-radius: var(--bp-radius-md);
     font-size: clamp(2rem, 3vw, 2rem);
   }
   blockquote {
     font-style: italic;
     position: relative;
-    &::before {
-      content: open-quote;
-      position: absolute;
-      left: 0;
-    }
+    color: var(--bp-color-text-muted);
+    border-inline-start: 3px solid var(--bp-color-border);
+    padding-inline-start: var(--bp-space-6);
   }
 }

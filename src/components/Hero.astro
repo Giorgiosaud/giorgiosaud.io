@@ -3,6 +3,7 @@ import { Image } from 'astro:assets'
 import Icon from '@components/Icon.astro'
 import { getLangFromUrl, useTranslatedPath, useTranslations } from '@i18n/utils'
 import HomeNotebook from '@images/home-notebook.webp'
+import '@be-partner-labs/ds/components/button'
 
 const lang = getLangFromUrl(Astro.url)
 const t = useTranslations(lang)
@@ -31,8 +32,7 @@ const { title, description, showButtons = true } = Astro.props
     {showButtons &&(
       <div class="hero__buttons">
         <a
-        class="button button-block button-primary"
-        
+        class="bp-btn bp-btn--lg"
         href={translatePath("notebook", lang)}
         >
         <Icon name="Note" />
@@ -42,7 +42,7 @@ const { title, description, showButtons = true } = Astro.props
       href="https://github.com/giorgiosaud"
       rel="noopener"
       target="_blank"
-      class="button button-block button-outline"
+      class="bp-btn bp-btn--lg bp-btn--secondary"
       ><Icon name="GitHub" />
       <span>{t("hero.githubProfileButton")}</span>
     </a>
@@ -73,14 +73,15 @@ const { title, description, showButtons = true } = Astro.props
         "buttons image";
     }
     align-items: center;
-    color: light-dark(var(--color-main), white);
+    color: var(--bp-color-text);
 
     .hero__title {
       grid-area: title;
     }
     .hero__description {
       grid-area: description;
-      font-size: clamp(0.75rem, 5vw, 1.3rem);
+      font-size: var(--bp-text-lg);
+      color: var(--bp-color-text-muted);
       padding-block: 1lh;
       /* Prevent CLS: reserve space for text with min-height */
       min-height: 8lh;
@@ -94,7 +95,7 @@ const { title, description, showButtons = true } = Astro.props
     .hero__image {
       grid-area: image;
       margin: auto;
-      padding: calc(var(--spacing) * 4);
+      padding: var(--bp-space-4);
       place-items: center;
       img{
         border-radius:50%;
@@ -102,7 +103,7 @@ const { title, description, showButtons = true } = Astro.props
         width: 100%;
         max-width: 400px;
         aspect-ratio: 1;
-        box-shadow: 10px 10px 15px -10px light-dark(var(--color-main),var(--color-light));
+        box-shadow: 10px 10px 15px -10px var(--bp-primary);
       }
     }
     .hero__buttons {
@@ -110,12 +111,16 @@ const { title, description, showButtons = true } = Astro.props
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: calc(var(--spacing) * 4);
-      margin-top: calc(var(--spacing) * 8);
+      gap: var(--bp-space-4);
+      margin-top: var(--bp-space-8);
       @container hero (width > 48ch) {
         flex-direction: row;
         justify-content: start;
       }
     }
+  }
+  .hero__buttons :global(svg) {
+    width: 1.5rem;
+    aspect-ratio: 1;
   }
 </style>

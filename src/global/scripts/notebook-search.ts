@@ -153,6 +153,23 @@ function renderResults(
   })
 }
 
+/** Pages to show: first, last, current ±1; gaps become `null` (ellipsis). */
+export function paginationWindow(
+  page: number,
+  total: number,
+): (number | null)[] {
+  const pages: (number | null)[] = []
+  for (let i = 1; i <= total; i++) {
+    if (i === 1 || i === total || Math.abs(i - page) <= 1) {
+      pages.push(i)
+    } else if (pages[pages.length - 1] !== null) {
+      pages.push(null)
+    }
+  }
+  return pages
+}
+
+/** Renders BPL DS pagination (.bp-pagination): state lives in aria-current / aria-disabled. */
 function renderPagination(
   data: SearchResponse,
   container: HTMLElement,
@@ -163,26 +180,55 @@ function renderPagination(
   container.innerHTML = ''
   if (data.totalPages <= 1) return
 
-  if (data.page > 1) {
-    const prev = document.createElement('button')
-    prev.className = 'pagination-btn'
-    prev.textContent = prevLabel
-    prev.addEventListener('click', () => onPage(data.page - 1))
-    container.appendChild(prev)
+  const list = document.createElement('ol')
+  list.className = 'bp-pagination'
+
+  const addButton = (
+    label: string,
+    target: number,
+    opts: {
+      current?: boolean
+      disabled?: boolean
+      ariaLabel?: string
+    } = {},
+  ) => {
+    const item = document.createElement('li')
+    item.className = 'bp-pagination__item'
+    const btn = document.createElement('button')
+    btn.type = 'button'
+    btn.className = 'bp-pagination__link'
+    btn.textContent = label
+    if (opts.ariaLabel) btn.setAttribute('aria-label', opts.ariaLabel)
+    if (opts.current) btn.setAttribute('aria-current', 'page')
+    if (opts.disabled) btn.setAttribute('aria-disabled', 'true')
+    if (!opts.current && !opts.disabled) {
+      btn.addEventListener('click', () => onPage(target))
+    }
+    item.appendChild(btn)
+    list.appendChild(item)
   }
 
-  const info = document.createElement('span')
-  info.className = 'pagination-info'
-  info.textContent = `${data.page} / ${data.totalPages}`
-  container.appendChild(info)
-
-  if (data.page < data.totalPages) {
-    const next = document.createElement('button')
-    next.className = 'pagination-btn'
-    next.textContent = nextLabel
-    next.addEventListener('click', () => onPage(data.page + 1))
-    container.appendChild(next)
+  addButton(prevLabel, data.page - 1, {
+    disabled: data.page <= 1,
+  })
+  for (const n of paginationWindow(data.page, data.totalPages)) {
+    if (n === null) {
+      const item = document.createElement('li')
+      item.className = 'bp-pagination__item'
+      item.innerHTML =
+        '<span class="bp-pagination__ellipsis" aria-hidden="true">…</span>'
+      list.appendChild(item)
+    } else {
+      addButton(String(n), n, {
+        current: n === data.page,
+      })
+    }
   }
+  addButton(nextLabel, data.page + 1, {
+    disabled: data.page >= data.totalPages,
+  })
+
+  container.appendChild(list)
 }
 
 export function initNotebookSearch(options: {
@@ -267,7 +313,6 @@ export function initNotebookSearch(options: {
   function updateChips(collection: string): void {
     chipEls.forEach(chip => {
       const chipCollection = chip.dataset.collectionChip ?? ''
-      chip.classList.toggle('active', chipCollection === collection)
       chip.setAttribute(
         'aria-pressed',
         chipCollection === collection ? 'true' : 'false',

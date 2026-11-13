@@ -35,8 +35,10 @@ const legal = [
   footer {
     margin-top: 1lh;
     text-align: center;
-    background: light-dark(var(--color-light),var(--color-dark));
+    background: var(--bp-color-bg-subtle);
     padding-block: 1lh;
+    color: var(--bp-color-text-muted);
+    border-top: 1px solid var(--bp-color-border);
 
     p {
       --_font-size: var(--font-size, clamp(.9rem, .6cqw, 1rem));
@@ -52,13 +54,13 @@ const legal = [
     margin-top: 0.5rem;
 
     a {
-      font-size: 0.75rem;
-      color: light-dark(#64748b, #94a3b8);
+      font-size: var(--bp-text-xs);
+      color: var(--bp-color-text-muted);
       text-decoration: none;
 
       &:hover {
         text-decoration: underline;
-        color: var(--color-main);
+        color: var(--site-color-accent);
       }
     }
   }

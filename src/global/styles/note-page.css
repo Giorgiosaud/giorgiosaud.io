@@ -1,17 +1,20 @@
+/* Note page layout. Unlayered: scoped to note pages only. */
 .comments-wrapper {
   grid-column: content;
 }
 figure {
   text-align: center;
+  color: var(--bp-color-text-muted);
+  font-size: var(--bp-text-sm);
   padding-top: 1lh;
   & img {
     margin: auto;
-    border-radius: 10px;
+    border-radius: var(--bp-radius-lg);
   }
 }
 .byline {
   font-size: 0.875rem;
-  color: light-dark(#666, #aaa);
+  color: var(--bp-color-text-muted);
   margin-top: 0.25rem;
   margin-bottom: 1.5rem;
 }

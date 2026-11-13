@@ -10,8 +10,8 @@
     "fullscreen",
     "standalone"
   ],
-  "background_color": "#f1f5f9",
-  "theme_color": "#f7f7f7",
+  "background_color": "#f8f6f2",
+  "theme_color": "#f8f6f2",
   "icons": [
     {
       "src": "/favicon.ico",

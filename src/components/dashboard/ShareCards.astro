@@ -4,6 +4,9 @@
  * Filter and pagination are query params resolved on the server; the only
  * client-side code is the copy button.
  */
+import '@be-partner-labs/ds/components/badge'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/input'
 import { getPublishedNotes } from '@helpers/collections'
 import {
   buildShareCards,
@@ -143,7 +146,7 @@ const blocks = (v: ShareVariant) => [
     filterOrder.map(f => (
       <a
         href={hrefFor({ filter: f })}
-        class:list={['share-filter', { active: f === filter }]}
+        class="share-filter"
         aria-current={f === filter ? 'page' : undefined}
       >
         {strings.filters[f]} <span class="share-count">{counts[f]}</span>
@@ -164,14 +167,14 @@ const blocks = (v: ShareVariant) => [
       ]
       return (
         <li>
-          <details class:list={['share-card', { shared }]} open={!shared}>
+          <details class="share-card" data-shared={shared ? 'true' : undefined} open={!shared}>
             <summary>
               <span class="share-title">{lang === 'es' && card.es ? card.es.title : card.en.title}</span>
               <span class="share-meta">
                 {dateFormat.format(new Date(card.publishDate))} · {card.selfHealing}
-                {shared && <span class="badge ok">{strings.shared}</span>}
+                {shared && <span class="bp-badge bp-badge--success">{strings.shared}</span>}
                 {needsCopy(card) && (
-                  <span class="badge warn">{strings.needsCopy}</span>
+                  <span class="bp-badge bp-badge--warning">{strings.needsCopy}</span>
                 )}
               </span>
             </summary>
@@ -201,7 +204,7 @@ const blocks = (v: ShareVariant) => [
                           {block.text && (
                             <button
                               type="button"
-                              class="share-copy"
+                              class="bp-btn bp-btn--sm bp-btn--secondary share-copy"
                               data-copied={strings.copied}
                             >
                               {strings.copy}
@@ -209,7 +212,12 @@ const blocks = (v: ShareVariant) => [
                           )}
                         </div>
                         {block.text ? (
-                          <textarea readonly rows="6">{block.text}</textarea>
+                          <textarea
+                            class="bp-input share-text"
+                            readonly
+                            rows="6"
+                            aria-label={`${block.label} · ${name}`}
+                          >{block.text}</textarea>
                         ) : (
                           <p class="share-missing">
                             {strings.missing.replace('{field}', block.field)}
@@ -268,35 +276,47 @@ const blocks = (v: ShareVariant) => [
 
 <style>
   .share-help {
-    color: var(--color-muted, #666);
-    font-size: 0.9rem;
-    margin: 0 0 1rem;
+    color: var(--bp-color-text-muted);
+    font-size: var(--bp-text-sm);
+    margin: 0 0 var(--bp-space-4);
   }
 
   .share-filters {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    gap: var(--bp-space-2);
+    margin-bottom: var(--bp-space-6);
   }
 
+  /* Filter pills: links with aria-current, no DS equivalent */
   .share-filter {
-    padding: 0.35rem 0.8rem;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 999px;
+    padding: var(--bp-space-1) var(--bp-space-3);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-full);
     text-decoration: none;
-    color: inherit;
-    font-size: 0.9rem;
+    color: var(--bp-color-text);
+    font-size: var(--bp-text-sm);
+    transition: background-color var(--bp-duration-fast) var(--bp-ease);
   }
 
-  .share-filter.active {
-    border-color: var(--color-main);
-    color: var(--color-main);
-    font-weight: 500;
+  .share-filter:hover {
+    background: var(--bp-color-bg-subtle);
+  }
+
+  .share-filter:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
+  }
+
+  .share-filter[aria-current='page'] {
+    background: var(--bp-primary);
+    border-color: var(--bp-primary);
+    color: var(--bp-primary-fg);
+    font-weight: var(--bp-font-weight-medium);
   }
 
   .share-count {
-    opacity: 0.6;
+    opacity: 0.7;
   }
 
   .share-list {
@@ -304,17 +324,18 @@ const blocks = (v: ShareVariant) => [
     padding: 0;
     margin: 0;
     display: grid;
-    gap: 1rem;
+    gap: var(--bp-space-4);
   }
 
   .share-card {
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
+    background: var(--bp-color-bg-elevated);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
+    padding: var(--bp-space-3) var(--bp-space-4);
   }
 
-  .share-card.shared {
-    border-color: light-dark(#86efac, #166534);
+  .share-card[data-shared='true'] {
+    border-color: var(--bp-color-success);
     opacity: 0.85;
   }
 
@@ -323,115 +344,100 @@ const blocks = (v: ShareVariant) => [
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 0.25rem 1rem;
+    gap: var(--bp-space-1) var(--bp-space-4);
+  }
+
+  .share-card summary:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
+    border-radius: var(--bp-radius-sm);
   }
 
   .share-title {
-    font-weight: 600;
+    font-weight: var(--bp-font-weight-semibold);
   }
 
   .share-meta {
     display: inline-flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: var(--color-muted, #666);
-  }
-
-  .badge {
-    padding: 0.1rem 0.5rem;
-    border-radius: 999px;
-    font-size: 0.75rem;
-  }
-
-  .badge.ok {
-    background: light-dark(#dcfce7, #14532d);
-    color: light-dark(#166534, #bbf7d0);
-  }
-
-  .badge.warn {
-    background: light-dark(#fef3c7, #713f12);
-    color: light-dark(#92400e, #fde68a);
+    gap: var(--bp-space-2);
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
   }
 
   .share-langs {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
+    gap: var(--bp-space-4);
+    margin-top: var(--bp-space-4);
   }
 
   .share-lang h3 {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.5rem;
-    font-size: 1rem;
-    margin: 0 0 0.5rem;
+    gap: var(--bp-space-2);
+    font-size: var(--bp-text-base);
+    margin: 0 0 var(--bp-space-2);
+  }
+
+  .share-lang a {
+    color: var(--site-color-accent);
   }
 
   .share-lang h3 a {
-    font-size: 0.8rem;
-    font-weight: 400;
+    font-size: var(--bp-text-xs);
+    font-weight: var(--bp-font-weight-regular);
     overflow-wrap: anywhere;
   }
 
   .share-block {
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--bp-space-3);
   }
 
   .share-block-head {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
+    gap: var(--bp-space-3);
+    font-size: var(--bp-text-sm);
+    margin-bottom: var(--bp-space-1);
   }
 
   .share-block-head a {
-    font-size: 0.8rem;
+    font-size: var(--bp-text-xs);
   }
 
   .share-copy {
     margin-left: auto;
-    padding: 0.2rem 0.7rem;
-    border: 1px solid var(--color-main);
-    border-radius: 0.3rem;
-    background: transparent;
-    color: var(--color-main);
-    cursor: pointer;
-    font: inherit;
   }
 
-  .share-block textarea {
-    width: 100%;
-    box-sizing: border-box;
+  .share-text {
+    --input-padding: var(--bp-space-2);
     resize: vertical;
-    font: inherit;
-    font-size: 0.85rem;
-    padding: 0.5rem;
-    border: 1px solid var(--color-border, #ddd);
-    border-radius: 0.3rem;
-    background: transparent;
-    color: inherit;
+    font-size: var(--bp-text-sm);
   }
 
   .share-missing {
-    font-size: 0.85rem;
-    color: light-dark(#92400e, #fde68a);
+    font-size: var(--bp-text-sm);
+    font-style: italic;
+    color: var(--bp-color-text-muted);
     margin: 0;
   }
 
   .share-empty {
-    color: var(--color-muted, #666);
+    color: var(--bp-color-text-muted);
   }
 
   .share-pages {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
+    margin-top: var(--bp-space-6);
+    font-size: var(--bp-text-sm);
+  }
+
+  .share-pages a {
+    color: var(--site-color-accent);
   }
 </style>

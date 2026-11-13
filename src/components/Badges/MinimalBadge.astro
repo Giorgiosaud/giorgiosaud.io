@@ -11,7 +11,8 @@ interface Props {
 const { imgSrc, title, cardColor, category, poweredBy } = Astro.props
 ---
 
-<article class="badge-card" style={`--accent: ${cardColor}`}>
+<!-- Achievement cards are always dark: data-theme forces the DS dark scheme on this subtree -->
+<article class="badge-card" data-theme="dark" style={`--accent: ${cardColor}`}>
   <span class="powered-by">{poweredBy}</span>
   <div class="badge-img-wrap">
     <img src={imgSrc} alt={title} loading="lazy" decoding="async" width="140" height="140" />
@@ -31,13 +32,13 @@ const { imgSrc, title, cardColor, category, poweredBy } = Astro.props
     justify-content: space-between;
     gap: 1rem;
     padding: 1.5rem 1.25rem 1.25rem;
-    background: light-dark(#1a1f2e, #111827);
-    border-radius: 16px;
+    background: var(--bp-color-bg-elevated);
+    border-radius: var(--bp-radius-xl);
     border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent) 15%, transparent),
       0 4px 24px color-mix(in srgb, var(--accent) 20%, transparent),
-      0 1px 4px rgba(0,0,0,0.4);
+      var(--bp-shadow-sm);
     transition: transform 0.25s ease, box-shadow 0.25s ease;
     width: 100%;
     height: 100%;
@@ -49,7 +50,7 @@ const { imgSrc, title, cardColor, category, poweredBy } = Astro.props
     box-shadow:
       0 0 0 1px color-mix(in srgb, var(--accent) 35%, transparent),
       0 8px 32px color-mix(in srgb, var(--accent) 35%, transparent),
-      0 2px 8px rgba(0,0,0,0.4);
+      var(--bp-shadow-md);
   }
 
   .powered-by {
@@ -94,7 +95,7 @@ const { imgSrc, title, cardColor, category, poweredBy } = Astro.props
   h4 {
     font-size: 0.78rem;
     font-weight: 600;
-    color: light-dark(#e2e8f0, #e2e8f0);
+    color: var(--bp-color-text);
     line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -112,6 +113,6 @@ const { imgSrc, title, cardColor, category, poweredBy } = Astro.props
     background: color-mix(in srgb, var(--accent) 15%, transparent);
     border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
     padding: 0.2rem 0.6rem;
-    border-radius: 20px;
+    border-radius: var(--bp-radius-full);
   }
 </style>

@@ -108,7 +108,7 @@ const initials = displayName
       <div class="badge-grid">
         {badges.map(badge => (
           <div class="badge-item" style={`--badge-color: ${badge.color}`}>
-            <span class="badge-icon">{badge.icon}</span>
+            <span class="badge-icon" aria-hidden="true">{badge.icon}</span>
             <div class="badge-info">
               <span class="badge-name">{badge.name}</span>
               <span class="badge-desc">{badge.description}</span>
@@ -132,30 +132,30 @@ const initials = displayName
 <style>
   .profile-container {
     max-width: 800px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+    margin: var(--bp-space-8) auto;
+    padding: 0 var(--bp-space-4);
   }
 
   .profile-header {
     display: flex;
-    gap: 1.5rem;
+    gap: var(--bp-space-6);
     align-items: flex-start;
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--color-border, #ddd);
+    margin-bottom: var(--bp-space-8);
+    padding-bottom: var(--bp-space-8);
+    border-bottom: 1px solid var(--bp-color-border);
   }
 
   .avatar {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
+    border-radius: var(--bp-radius-full);
     overflow: hidden;
     flex-shrink: 0;
-    background: light-dark(hsl(0 0% 95%), hsl(0 0% 20%));
+    background: var(--bp-color-bg-subtle);
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 3px solid var(--color-main);
+    border: 3px solid var(--site-color-accent);
   }
 
   .avatar-image {
@@ -165,9 +165,9 @@ const initials = displayName
   }
 
   .initials {
-    font-size: 2rem;
-    font-weight: 600;
-    color: var(--color-main);
+    font-size: var(--bp-text-2xl);
+    font-weight: var(--bp-font-weight-semibold);
+    color: var(--site-color-accent);
   }
 
   .profile-info {
@@ -176,37 +176,37 @@ const initials = displayName
   }
 
   .display-name {
-    font-size: 1.75rem;
+    font-size: var(--bp-text-2xl);
     margin: 0;
-    line-height: 1.2;
+    line-height: var(--bp-leading-tight);
   }
 
   .username {
-    font-size: 1rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
-    margin: 0.25rem 0 0;
+    font-size: var(--bp-text-base);
+    color: var(--bp-color-text-muted);
+    margin: var(--bp-space-1) 0 0;
   }
 
   .bio {
-    margin: 1rem 0;
-    line-height: 1.6;
-    color: light-dark(hsl(0 0% 30%), hsl(0 0% 75%));
+    margin: var(--bp-space-4) 0;
+    line-height: var(--bp-leading-loose);
+    color: var(--bp-color-text);
   }
 
   .meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: var(--bp-space-4);
     align-items: center;
-    font-size: 0.9rem;
+    font-size: var(--bp-text-sm);
   }
 
   .member-since {
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    color: var(--bp-color-text-muted);
   }
 
   .website-link {
-    color: var(--color-main);
+    color: var(--site-color-accent);
     text-decoration: none;
   }
 
@@ -216,34 +216,35 @@ const initials = displayName
 
   .badges-section,
   .comments-section {
-    margin-bottom: 2rem;
+    margin-bottom: var(--bp-space-8);
   }
 
   .badges-section h2,
   .comments-section h2 {
-    font-size: 1.25rem;
-    margin: 0 0 1rem;
+    font-size: var(--bp-text-lg);
+    margin: 0 0 var(--bp-space-4);
   }
 
   .badge-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--bp-space-3);
   }
 
+  /* --badge-color comes from the badge record (data-driven), set inline */
   .badge-item {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 6px;
-    border-left: 3px solid var(--badge-color, var(--color-main));
+    gap: var(--bp-space-2);
+    padding: var(--bp-space-2) var(--bp-space-3);
+    background: var(--bp-color-bg-elevated);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-md);
+    border-left: 3px solid var(--badge-color, var(--site-color-accent));
   }
 
   .badge-icon {
-    font-size: 1.25rem;
+    font-size: var(--bp-text-lg);
   }
 
   .badge-info {
@@ -252,22 +253,22 @@ const initials = displayName
   }
 
   .badge-name {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: var(--bp-font-weight-semibold);
+    font-size: var(--bp-text-sm);
   }
 
   .badge-desc {
-    font-size: 0.75rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    font-size: var(--bp-text-xs);
+    color: var(--bp-color-text-muted);
   }
 
   .no-comments {
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    color: var(--bp-color-text-muted);
     text-align: center;
-    padding: 2rem;
-    background: light-dark(hsl(0 0% 98%), hsl(0 0% 12%));
-    border: 1px dashed light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
-    border-radius: 8px;
+    padding: var(--bp-space-8);
+    background: var(--bp-color-bg-subtle);
+    border: 1px dashed var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
   }
 
   @media (max-width: 600px) {

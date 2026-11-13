@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
 import MinimalBadge from './MinimalBadge.astro'
+import '@be-partner-labs/ds/components/badge'
 
 const badges = (await getCollection('badges')).sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime(),
@@ -14,7 +15,7 @@ const { title, readMore } = Astro.props as Props
 
 <section class="full-width">
   <header>
-    <h3>{title}</h3><span class="count">{badges.length}</span>
+    <h3>{title}</h3><span class="bp-badge bp-badge--primary count">{badges.length}</span>
   </header>
   <ul class="badges-carousel" data-name="badges-carousel">
     {
@@ -44,12 +45,7 @@ const { title, readMore } = Astro.props as Props
     justify-content: space-between;
   }
   .count {
-    margin-left: 0.5rem;
-    font-size: 0.8rem;
-    color: var(--color-light);
-    background-color: var(--color-main);
-    padding: 0.2rem 1.5rem;
-    border-radius: 30px;
+    margin-left: var(--bp-space-2);
   }
   ul {
     display: grid;
@@ -57,7 +53,7 @@ const { title, readMore } = Astro.props as Props
     gap: 1rem;
     overflow-x: scroll;
     width: 100%;
-    margin-block: calc(var(--spacing) * 20);
+    margin-block: var(--bp-space-20);
     anchor-name: --badges-carousel;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
@@ -87,7 +83,7 @@ const { title, readMore } = Astro.props as Props
       content: "" / attr(data-name);
       width: 20px;
       height: 20px;
-      background-color: light-dark(var(--color-light), var(--color-dark));
+      background-color: var(--bp-color-border);
       border-radius: 50%;
       transition:
         width 0.3s ease-in-out,
@@ -95,7 +91,7 @@ const { title, readMore } = Astro.props as Props
       transition-delay: background-color 0.3s;
     }
     &::scroll-marker:target-current {
-      background-color: light-dark(var(--color-main), var(--color-light));
+      background-color: var(--site-color-accent);
       width: 40px;
       border-radius: 20px;
     }

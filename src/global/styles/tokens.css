@@ -1,0 +1,44 @@
+/*
+ * Site token layer on top of BPL DS.
+ *
+ * Level 1 (--bp-*) comes from @be-partner-labs/ds/core/tokens with the BPL brand
+ * colors and light/dark values via light-dark(). This file only:
+ *   1. maps the site's self-hosted fonts onto the DS font tokens, and
+ *   2. adds a few site semantics the DS doesn't ship (--site-*), always derived
+ *      from --bp-* so a brand change on :root reaches them too.
+ * Component tokens never go here (DS rule 4): they stay scoped in each component.
+ */
+@import "@be-partner-labs/ds/core/tokens";
+
+@layer site-tokens {
+  :root {
+    --bp-font-sans: "Poppins", "Poppins Fallback", system-ui, sans-serif;
+    --bp-font-mono: "Roboto Mono", ui-monospace, monospace;
+
+    /*
+     * Accent for text/links/borders on page surfaces. --bp-primary (mint) is a
+     * fill color: as text on the light background it's ~1.9:1. The light value is
+     * darkened to pass WCAG AA (>= 4.5:1); dark mode already passes as-is.
+     */
+    --site-color-accent: light-dark(
+      color-mix(in oklab, var(--bp-primary) 50%, black),
+      var(--bp-primary)
+    );
+
+    /* Translucent surface for the floating nav and other glass panels */
+    --site-color-glass: color-mix(
+      in srgb,
+      var(--bp-color-bg-elevated) 78%,
+      transparent
+    );
+  }
+
+  @supports (color: oklch(from red l c h)) {
+    :root {
+      --site-color-accent: light-dark(
+        oklch(from var(--bp-primary) 0.48 c h),
+        var(--bp-primary)
+      );
+    }
+  }
+}

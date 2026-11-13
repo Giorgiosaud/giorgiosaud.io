@@ -1,4 +1,5 @@
 ---
+import '@be-partner-labs/ds/components/badge'
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import { isDraftInDevMode } from '@helpers/collections'
@@ -42,7 +43,7 @@ const dateLabel = note.data.lastUpdate
 
 <li class="note-card-item">
   <article aria-label={note.data.title} data-link={href} data-collection={slug} style={`view-transition-name:${cardVtn}`}>
-    {showDraftBadge && <span class="draft-badge">DRAFT</span>}
+    {showDraftBadge && <span class="bp-badge bp-badge--warning draft-badge">DRAFT</span>}
     <div class="wrapper">
       {note.data.cover && (
         <div class="card-thumb" style={`view-transition-name:${imgVtn}`}>
@@ -234,13 +235,5 @@ const dateLabel = note.data.lastUpdate
     top: 0.5rem;
     right: 0.5rem;
     z-index: 200;
-    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
   }
 </style>
