@@ -37,3 +37,4 @@ scripts/generateCoverImage.ts
 
 # Cloudflare
 .wrangler/
+.dev.vars*

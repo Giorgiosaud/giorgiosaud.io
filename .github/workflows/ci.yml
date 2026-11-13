@@ -21,6 +21,11 @@ jobs:
           bun-version: 1.3.11
       - run: bun install --frozen-lockfile
       - run: bun run test
+      - name: Prerender secrets placeholder
+        # Astro 7 validates required server secrets while prerendering inside workerd, which
+        # only reads .dev.vars/.env (not the job env). Real values live in Worker secrets at
+        # runtime; these placeholders only satisfy the build-time check and are not deployed.
+        run: printf 'BETTER_AUTH_SECRET=prerender-placeholder\nTURNSTILE_SECRET_KEY=prerender-placeholder\n' > .dev.vars
       - name: Build
         # Same as `bun run build` minus notifyNewPosts (no push notifications from PRs);
         # the self-heal map is gitignored and must be generated before astro build
@@ -31,7 +36,3 @@ jobs:
           GA4_MEASUREMENT_ID: ${{ vars.GA4_MEASUREMENT_ID }}
           TURNSTILE_SITE_KEY: ${{ vars.TURNSTILE_SITE_KEY }}
           VAPID_PUBLIC_KEY: ${{ vars.VAPID_PUBLIC_KEY }}
-          # Astro 7 validates required server secrets while prerendering. Real values live in
-          # Worker secrets at runtime; these placeholders only satisfy the build-time check.
-          BETTER_AUTH_SECRET: prerender-placeholder
-          TURNSTILE_SECRET_KEY: prerender-placeholder
