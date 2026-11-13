@@ -169,13 +169,17 @@ Tests use Vitest with Astro's experimental container API for component testing:
 
 No `vitest.config.ts` is present; Vitest uses defaults.
 
-## Deployment (Vercel)
+## Deployment (Cloudflare Workers)
 
-Configured with `@astrojs/vercel` adapter in `astro.config.mjs`:
+Configured with the `@astrojs/cloudflare` adapter in `astro.config.mjs`; Worker config in `wrangler.jsonc`.
 
-- **ISR enabled**: Incremental Static Regeneration
-- **Skew protection**: Enabled for gradual rollouts
-- Set environment variables in Vercel dashboard
+- **Deploy**: `bun run deploy` (build + `wrangler deploy`) on the personal Cloudflare account. Auth comes from `CLOUDFLARE_API_TOKEN` / `CLOUDFLARE_ACCOUNT_ID` in `.env`.
+- **Domains**: `giorgiosaud.io` and `www.giorgiosaud.io` are Worker custom domains (`routes` in `wrangler.jsonc`).
+- **Secrets**: set with `bunx wrangler secret put NAME` (or `wrangler secret bulk`). Non-secret vars live in `vars` in `wrangler.jsonc`.
+- **Bindings**: `SESSION` KV namespace (Astro sessions).
+- **Database**: Neon Postgres (`POSTGRES_URL`). Migrations: `bun run db:migrate` (drizzle-kit prefers `DATABASE_URL`, keep both pointing to Neon).
+- **Headers**: static files get security headers from `public/_headers`; SSR responses get them from `src/middleware.ts`.
+- **Logs**: `bunx wrangler tail`.
 
 ## Code Quality
 

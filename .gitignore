@@ -34,3 +34,6 @@ pnpm-debug.log*
 .pollinations-last-request
 scripts/generateCoverImage.ts
 .env*
+
+# Cloudflare
+.wrangler/

@@ -21,11 +21,11 @@
 ### 1. Provision a Postgres database
 
 Use any Postgres provider. The project uses [Neon](https://neon.tech) (serverless driver).
-Set the connection string as `POSTGRES_URL` in `.env` and in the Vercel dashboard.
+Set the connection string as `POSTGRES_URL` in `.env` and as a Worker secret (`bunx wrangler secret put POSTGRES_URL`).
 
 ### 2. Environment variables
 
-Add to `.env` (and Vercel env for deployed environments):
+Add to `.env` (and as Worker secrets for production):
 
 ```ini
 # Database
