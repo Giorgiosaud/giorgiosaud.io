@@ -58,6 +58,18 @@ export function getLangFromUrl(url: URL): SupportedLanguages {
 }
 
 /**
+ * Normalizes Astro.currentLocale (string | undefined) to a supported language.
+ * Prefer this in .astro files; getLangFromUrl stays for code without Astro context.
+ *
+ * @example
+ * const lang = getLang(Astro.currentLocale)
+ */
+export function getLang(locale: string | undefined): SupportedLanguages {
+  if (locale && isSupportedLanguage(locale)) return locale
+  return defaultLang
+}
+
+/**
  * Safely retrieves a nested value from an object using dot notation.
  * @internal
  */

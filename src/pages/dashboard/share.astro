@@ -1,11 +1,11 @@
 ---
 import DashboardLayout from '@components/dashboard/DashboardLayout.astro'
 import ShareCards from '@components/dashboard/ShareCards.astro'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 
 export const prerender = false
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 
 // Admin-only tool: other signed-in users go back to their dashboard.

@@ -1,8 +1,8 @@
 ---
 import { getCollection } from 'astro:content'
-import { getLangFromUrl, useTranslatedPath } from '@i18n/utils'
+import { getLang, useTranslatedPath } from '@i18n/utils'
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const { translatePath } = useTranslatedPath(lang)
 
 const collectionsCol = lang === 'es' ? 'colecciones' : 'collections'

@@ -2,9 +2,9 @@
 import '@be-partner-labs/ds/components/badge'
 import { Image } from 'astro:assets'
 import { isDraftInDevMode } from '@helpers/collections'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const { note, context = 'no-context' } = Astro.props
 const t = useTranslations(lang)
 const link = lang === 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`

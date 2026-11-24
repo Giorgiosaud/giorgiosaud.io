@@ -13,7 +13,7 @@ import '@be-partner-labs/ds/components/alert'
 import { actions } from 'astro:actions'
 import { TURNSTILE_SITE_KEY } from 'astro:env/client'
 import { MESSAGE_MAX_LENGTH, MESSAGE_MIN_LENGTH } from '@config/constants'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 
 interface Props {
   /** Set by the page after a no-JS POST/Redirect/GET round trip */
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const { sent = false, errorCode } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 const tx = (key: string) => t(key as Parameters<typeof t>[0]) as string
 const withMin = (text: string) =>

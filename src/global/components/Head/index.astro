@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl } from '@i18n/utils'
+import { getLang } from '@i18n/utils'
 import Favicons from './Favicons.astro'
 import PWA from './PWA.astro'
 
@@ -44,7 +44,7 @@ const {
 } = Astro.props
 const imageUrl = typeof image === 'string' ? image : image?.src || ''
 const fixedTitle = `Giorgiosaud.io | ${title || 'Notebook'}`
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 // One canonical URL per page: apex host, no trailing slash (www and /path/ variants point here)
 const canonicalPath = Astro.url.pathname.replace(/\/+$/, '') || '/'
 const canonicalUrl = new URL(

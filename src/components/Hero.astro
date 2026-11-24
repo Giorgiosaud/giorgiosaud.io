@@ -1,11 +1,11 @@
 ---
 import { Image } from 'astro:assets'
 import Icon from '@components/Icon.astro'
-import { getLangFromUrl, useTranslatedPath, useTranslations } from '@i18n/utils'
+import { getLang, useTranslatedPath, useTranslations } from '@i18n/utils'
 import HomeNotebook from '@images/home-notebook.webp'
 import '@be-partner-labs/ds/components/button'
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 const { translatePath } = useTranslatedPath(lang)
 // set props of hero component

@@ -1,12 +1,12 @@
 ---
 import { actions } from 'astro:actions'
 import ContactPage from '@components/ContactPage.astro'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 import Base from '@templates/Base.astro'
 
 export const prerender = false
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 const result = Astro.getActionResult(actions.sendEmail)
 

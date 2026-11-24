@@ -1,9 +1,9 @@
 ---
 import { getCollection } from 'astro:content'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 import NoteCardSticky from './NoteCardSticky.astro'
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 interface Props {
   collection: 'notes' | 'notas'

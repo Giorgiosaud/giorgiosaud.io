@@ -1,9 +1,9 @@
 ---
 import Hero from '@components/Hero.astro'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 import Base from '@templates/Base.astro'
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 ---
 

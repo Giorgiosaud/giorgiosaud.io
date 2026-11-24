@@ -11,7 +11,7 @@ import Header from '@global-components/Header.astro'
 import BottomTabBar from '@global-components/Navbar/BottomTabBar.astro'
 import OfflineBar from '@global-components/OfflineBar.svelte'
 import WebMCP from '@global-components/WebMCP.astro'
-import { getLangFromUrl, type RouteNames } from '@i18n/utils'
+import { getLang, type RouteNames } from '@i18n/utils'
 
 export interface Props {
   lang?: string
@@ -23,7 +23,7 @@ export interface Props {
 const {
   title,
   description,
-  lang = getLangFromUrl(Astro.url),
+  lang = getLang(Astro.currentLocale),
   pathToTranslate = 'home',
   pathToTranslateNote,
 } = Astro.props

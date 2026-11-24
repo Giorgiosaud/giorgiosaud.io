@@ -1,9 +1,9 @@
 ---
 import { getEntry } from 'astro:content'
 import Icon from '@components/Icon.astro'
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 const TechCollection = await getEntry('technologies', 'techs')
 const techs: string[] = TechCollection?.data.techs ?? []

@@ -1,5 +1,5 @@
 ---
-import { getLangFromUrl, useTranslations } from '@i18n/utils'
+import { getLang, useTranslations } from '@i18n/utils'
 import Base from '@templates/Base.astro'
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 const { title, currentPage } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 
 const basePath = lang === 'es' ? '/es/panel' : '/dashboard'
