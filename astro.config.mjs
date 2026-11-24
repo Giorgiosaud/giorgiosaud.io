@@ -58,6 +58,16 @@ export default defineConfig({
   site: 'https://giorgiosaud.io',
   // Canonical URLs have no trailing slash (matches internal links and the sitemap)
   trailingSlash: 'never',
+  // Only used to expose Astro.currentLocale. Routing stays manual: localized
+  // slugs (notebook/cuaderno) and the /es prefix live in src/global/i18n/routes.ts
+  i18n: {
+    defaultLocale: 'en',
+    locales: [
+      'en',
+      'es',
+    ],
+    routing: 'manual',
+  },
   integrations: [
     mdx(),
     react(),

@@ -47,37 +47,55 @@ const t = i18n[lang]
   id="summary-modal"
   class="summary-modal"
   aria-label={t.buttonTitle}
+  data-loading={t.loading}
+  data-unavailable={t.unavailable}
 >
   <button id="close-summary-modal" class="bp-btn bp-btn--secondary bp-btn--icon bp-btn--sm close-summary-modal" type="button" aria-label="Close">&times;</button>
   <div id="summary-content" aria-live="polite" aria-atomic="false"></div>
 </dialog>
 
-<script define:vars={{ t }}>
-  // Detect which summarizer API is available: Chrome's global Summarizer or Safari's window.ai.summarizer
-  const SummarizerAPI = ("Summarizer" in self)
-    ? self.Summarizer
-    : (self.ai?.summarizer ?? null);
+<script>
+  import { trackEvent } from "@helpers/datalayer";
 
-  if (SummarizerAPI) {
-    const summaryBubble = document.getElementById("generate-summary-bubble");
-    const summaryModal = document.getElementById("summary-modal");
-    const summaryContent = document.getElementById("summary-content");
-    const closeModalBtn = document.getElementById("close-summary-modal");
+  // Detect which summarizer API is available: Chrome's global Summarizer or Safari's window.ai.summarizer
+  // biome-ignore lint/suspicious/noExplicitAny: experimental browser APIs without types
+  const g = self as any;
+  const SummarizerAPI = "Summarizer" in g ? g.Summarizer : (g.ai?.summarizer ?? null);
+
+  const summaryBubble = document.getElementById("generate-summary-bubble") as HTMLButtonElement | null;
+  const summaryModal = document.getElementById("summary-modal") as HTMLDialogElement | null;
+  const summaryContent = document.getElementById("summary-content");
+  const closeModalBtn = document.getElementById("close-summary-modal") as HTMLButtonElement | null;
+
+  if (SummarizerAPI && summaryBubble && summaryModal && summaryContent && closeModalBtn) {
+    const loadingText = summaryModal.dataset.loading ?? "";
+    const unavailableText = summaryModal.dataset.unavailable ?? "";
+
+    const showMessage = (text: string) => {
+      const p = document.createElement("p");
+      p.textContent = text;
+      summaryContent.replaceChildren(p);
+    };
 
     summaryBubble.hidden = false;
 
-    let markedModule = null;
-    async function getMarked() {
-      if (!markedModule) {
-        const module = await import("https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js");
-        markedModule = module.marked;
+    // Lazy-load the markdown parser + sanitizer only when the user asks for a summary.
+    // Both are pinned npm deps (bundled by Vite), not a floating CDN import.
+    let renderMarkdown: ((md: string) => string) | null = null;
+    async function getRenderer() {
+      if (!renderMarkdown) {
+        const [{ marked }, { default: DOMPurify }] = await Promise.all([
+          import("marked"),
+          import("dompurify"),
+        ]);
+        renderMarkdown = (md) => DOMPurify.sanitize(marked.parse(md, { async: false }));
       }
-      return markedModule;
+      return renderMarkdown;
     }
 
     async function summarizeContent() {
-      summaryContent.innerHTML = `<p>${t.loading}</p>`;
-      summaryModal.showModal();
+      showMessage(loadingText);
+      summaryModal?.showModal();
 
       try {
         const options = {
@@ -91,14 +109,14 @@ const t = i18n[lang]
         const availability = await SummarizerAPI.availability(options);
         // Both APIs return 'unavailable' when not supported
         if (availability === "unavailable" || availability === "no") {
-          summaryContent.innerHTML = `<p>${t.unavailable}</p>`;
+          showMessage(unavailableText);
           return;
         }
 
-        const marked = await getMarked();
+        const render = await getRenderer();
 
         const summarizer = await SummarizerAPI.create(options);
-        const text = document.getElementById("content").innerText;
+        const text = document.getElementById("content")?.innerText ?? "";
 
         // Both APIs support summarizeStreaming
         const stream = summarizer.summarizeStreaming(text);
@@ -113,15 +131,20 @@ const t = i18n[lang]
             result += chunk; // Chrome: delta
           }
           prevLength = result.length;
-          summaryContent.innerHTML = marked.parse(result);
+          if (summaryContent) summaryContent.innerHTML = render(result);
         }
       } catch (err) {
-        summaryContent.innerHTML = `<p>${t.unavailable}</p>`;
+        showMessage(unavailableText);
         console.error("Summarizer error:", err);
       }
     }
 
     summaryBubble.addEventListener("click", () => {
+      trackEvent({
+        event: "ai_summarizer_open",
+        note_id: summaryBubble.dataset.noteId ?? "",
+        lang: (summaryBubble.dataset.lang ?? "en") as "en" | "es",
+      });
       summarizeContent();
       // Move focus into dialog for keyboard/screen reader users
       setTimeout(() => closeModalBtn.focus(), 50);
@@ -129,31 +152,17 @@ const t = i18n[lang]
 
     closeModalBtn.addEventListener("click", () => {
       summaryModal.close();
-      summaryContent.innerHTML = "";
+      summaryContent.replaceChildren();
       summaryBubble.focus();
     });
 
     summaryModal.addEventListener("click", (e) => {
       if (e.target === summaryModal) {
         summaryModal.close();
-        summaryContent.innerHTML = "";
+        summaryContent.replaceChildren();
       }
     });
   }
-</script>
-<script>
-  import { trackEvent } from "@helpers/datalayer";
-
-  const btn = document.getElementById(
-    "generate-summary-bubble",
-  ) as HTMLButtonElement | null;
-  btn?.addEventListener("click", () => {
-    trackEvent({
-      event: "ai_summarizer_open",
-      note_id: btn.dataset.noteId ?? "",
-      lang: (btn.dataset.lang ?? "en") as "en" | "es",
-    });
-  });
 </script>
 
 <style>

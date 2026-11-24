@@ -1,6 +1,6 @@
 ---
 import {
-  getLangFromUrl,
+  getLang,
   type RouteNames,
   useTranslatedPath,
   useTranslations,
@@ -13,7 +13,7 @@ interface Props {
 }
 
 const { pathToTranslate, pathToTranslateNote } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const t = useTranslations(lang)
 const { translatePath } = useTranslatedPath(lang)
 

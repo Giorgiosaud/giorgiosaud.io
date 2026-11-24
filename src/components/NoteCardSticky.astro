@@ -3,14 +3,14 @@ import '@be-partner-labs/ds/components/badge'
 import { Image } from 'astro:assets'
 import type { CollectionEntry } from 'astro:content'
 import { isDraftInDevMode } from '@helpers/collections'
-import { getLangFromUrl } from '@i18n/utils'
+import { getLang } from '@i18n/utils'
 
 interface Props {
   note: CollectionEntry<'notes' | 'notas'>
 }
 
 const { note } = Astro.props
-const lang = getLangFromUrl(Astro.url)
+const lang = getLang(Astro.currentLocale)
 const href = lang === 'es' ? `/es/cuaderno/${note.id}` : `/notebook/${note.id}`
 const collection = note.data.collections?.[0] as
   | {
