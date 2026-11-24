@@ -1,28 +1,41 @@
 /*
  * Site token layer on top of BPL DS.
  *
- * Level 1 (--bp-*) comes from @be-partner-labs/ds/core/tokens with the BPL brand
- * colors and light/dark values via light-dark(). This file only:
- *   1. maps the site's self-hosted fonts onto the DS font tokens, and
- *   2. adds a few site semantics the DS doesn't ship (--site-*), always derived
- *      from --bp-* so a brand change on :root reaches them too.
+ * Level 1 (--bp-*) comes from @be-partner-labs/ds/core/tokens. This file:
+ *   1. defines the site's base tokens (primitives): ONE seed color plus its
+ *      a lighter variant via relative hsl(), the same scheme the site used
+ *      before the DS migration (--color-main / -dark / -light),
+ *   2. maps DS semantics (--bp-primary) onto those base tokens, so light and
+ *      dark mode both derive from the seed instead of two unrelated literals,
+ *   3. maps the site's self-hosted fonts onto the DS font tokens, and
+ *   4. adds a few site semantics the DS doesn't ship (--site-color-accent,
+ *      --site-color-glass), always derived from the tokens above.
+ * Changing --site-color-main changes the whole palette.
  * Component tokens never go here (DS rule 4): they stay scoped in each component.
  */
 @import "@be-partner-labs/ds/core/tokens";
 
 @layer site-tokens {
   :root {
+    /* ── Base tokens (primitives) ── */
+    --site-color-main: #5fcb9f;
+    /* Fallback for browsers without relative color syntax */
+    --site-color-light: var(--site-color-main);
+
+    /* ── DS semantics mapped to the base tokens ── */
+    --bp-primary: light-dark(var(--site-color-main), var(--site-color-light));
+
     --bp-font-sans: "Poppins", "Poppins Fallback", system-ui, sans-serif;
     --bp-font-mono: "Roboto Mono", ui-monospace, monospace;
 
     /*
-     * Accent for text/links/borders on page surfaces. --bp-primary (mint) is a
-     * fill color: as text on the light background it's ~1.9:1. The light value is
-     * darkened to pass WCAG AA (>= 4.5:1); dark mode already passes as-is.
+     * Accent for text/links/borders on page surfaces. The seed is a fill color:
+     * as text on the light background it's ~1.9:1. The light value is darkened
+     * to pass WCAG AA (>= 4.5:1); dark mode already passes as-is.
      */
     --site-color-accent: light-dark(
-      color-mix(in oklab, var(--bp-primary) 50%, black),
-      var(--bp-primary)
+      color-mix(in oklab, var(--site-color-main) 50%, black),
+      var(--site-color-light)
     );
 
     /* Translucent surface for the floating nav and other glass panels */
@@ -33,11 +46,19 @@
     );
   }
 
+  @supports (color: hsl(from red h s l)) {
+    :root {
+      /* Lighter variant of the seed (dark mode): same hue and saturation, only lightness moves */
+      --site-color-light: hsl(from var(--site-color-main) h s calc(l * 1.1));
+    }
+  }
+
   @supports (color: oklch(from red l c h)) {
     :root {
+      /* Fixed oklch lightness guarantees AA contrast whatever the seed is */
       --site-color-accent: light-dark(
-        oklch(from var(--bp-primary) 0.48 c h),
-        var(--bp-primary)
+        oklch(from var(--site-color-main) 0.48 c h),
+        var(--site-color-light)
       );
     }
   }
