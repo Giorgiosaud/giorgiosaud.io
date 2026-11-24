@@ -55,7 +55,8 @@
   }
   .focus {
     --site-prose-padding-block: 1lh;
-    color: var(--bp-primary-fg);
+    /* --bp-primary-fg on the subtle fill is ~2.7:1 in dark mode */
+    color: var(--bp-color-text);
     background-color: var(--bp-primary-subtle);
     border-inline-start: 4px solid var(--bp-primary);
     padding-inline: var(--bp-space-4);
