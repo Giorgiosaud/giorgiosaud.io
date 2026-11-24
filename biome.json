@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.4.14/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.6/schema.json",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -9,6 +9,8 @@
     "ignoreUnknown": false,
     "includes": [
       "src/**/*",
+      "!**/*.md",
+      "!**/*.mdx",
       "astro.config.mjs",
       "biome.json",
       ".biomeignore"
@@ -30,7 +32,7 @@
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true
+      "preset": "recommended"
     }
   },
   "javascript": {
@@ -52,6 +54,18 @@
     }
   },
   "overrides": [
+    {
+      "includes": [
+        "src/icons/**"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
+    },
     {
       "includes": [
         "**/*.svelte",

@@ -52,6 +52,18 @@
       var(--site-color-light)
     );
 
+    /*
+     * Tint of the primary over the page background. The DS formula
+     * (oklch l + 0.28) pushes light mode to l = 1 with full chroma, which is
+     * out of gamut and gets clipped to a saturated cyan (#b1ffff). Mixing
+     * with the background always stays in gamut.
+     */
+    --bp-primary-subtle: color-mix(
+      in oklab,
+      var(--bp-primary) 18%,
+      var(--bp-color-bg)
+    );
+
     /* DS default (primary at 40%) is ~1.4:1; the accent passes WCAG 3:1 */
     --bp-focus-ring: 0 0 0 3px var(--site-color-accent);
 
