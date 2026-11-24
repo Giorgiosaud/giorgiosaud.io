@@ -47,7 +47,7 @@ const menuItems = [
     {menuItems.map(({ title, path }) => (
       <a
         href={path}
-        class:list={['nav-link', { active: path === Astro.url.pathname && path !== '/' }]}
+        class="nav-link"
         aria-current={path === Astro.url.pathname && path !== '/' ? 'page' : undefined}
       >
         {title}
@@ -71,6 +71,13 @@ const menuItems = [
 </nav>
 
 <style>
+  /*
+   * Floating pill nav (desktop). Site component on the DS token chain.
+   * Public API (set on a scoped ancestor, never :root):
+   *   --site-nav-background   pill background (default: --site-color-glass)
+   *   --site-nav-border       pill border (default: 1px solid --bp-color-border)
+   *   --site-nav-link-color   link text (default: --bp-color-text-muted)
+   */
   .floating-nav {
     display: none;
     pointer-events: auto;
@@ -82,19 +89,20 @@ const menuItems = [
   }
 
   .pill {
+    --_background: var(--site-nav-background, var(--site-color-glass));
+    --_border: var(--site-nav-border, 1px solid var(--bp-color-border));
+    --_link-color: var(--site-nav-link-color, var(--bp-color-text-muted));
+
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: light-dark(
-      hsl(from var(--color-light) h s l / 0.75),
-      hsl(from var(--color-dark) h s l / 0.75)
-    );
+    gap: var(--bp-space-2);
+    background: var(--_background);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid light-dark(#e2e8f0, #334155);
-    border-radius: 999px;
+    border: var(--_border);
+    border-radius: var(--bp-radius-full);
     padding: 0.4rem 0.8rem;
-    box-shadow: 0 4px 24px light-dark(rgba(0,0,0,0.08), rgba(0,0,0,0.4));
+    box-shadow: var(--bp-shadow-lg);
     animation: compress-pill linear both;
     animation-timeline: scroll(root);
     animation-range: 0px 120px;
@@ -115,11 +123,10 @@ const menuItems = [
   }
 
   .logo {
-    --default-font-family: 'Roboto Mono';
-    font-family: var(--default-font-family, ui-sans-serif, system-ui, sans-serif);
-    font-weight: 800;
+    font-family: var(--bp-font-mono);
+    font-weight: var(--bp-font-weight-bold);
     font-size: 0.95rem;
-    color: light-dark(var(--color-dark), var(--color-light));
+    color: var(--bp-color-text);
     text-decoration: none;
     white-space: nowrap;
     padding: 0.3rem 1rem;
@@ -128,51 +135,59 @@ const menuItems = [
     animation-range: 0px 120px;
 
     .logo-accent {
-      color: var(--color-main);
+      color: var(--site-color-accent);
     }
   }
 
   .sep {
     width: 1px;
     height: 18px;
-    background: light-dark(#e2e8f0, #334155);
+    background: var(--bp-color-border);
     margin: 0 0.1rem;
     flex-shrink: 0;
   }
 
   .nav-link {
-    color: light-dark(#64748b, #94a3b8);
-    font-size: 0.875rem;
+    color: var(--_link-color);
+    font-size: var(--bp-text-sm);
     padding: 0.4rem 1rem;
     animation: compress-link linear both;
     animation-timeline: scroll(root);
     animation-range: 0px 120px;
-    border-radius: 999px;
+    border-radius: var(--bp-radius-full);
     text-decoration: none;
     white-space: nowrap;
-    transition: color 0.15s, background 0.15s;
+    transition:
+      color var(--bp-duration-fast) var(--bp-ease),
+      background-color var(--bp-duration-fast) var(--bp-ease);
 
     &:hover {
-      color: light-dark(#0f172a, #f8fafc);
+      color: var(--bp-color-text);
+      background-color: var(--bp-color-bg-subtle);
     }
 
-    &.active {
-      background: var(--color-main);
-      color: #fff;
-      font-weight: 500;
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--bp-focus-ring);
+    }
+
+    &[aria-current='page'] {
+      background: var(--bp-primary);
+      color: var(--bp-primary-fg);
+      font-weight: var(--bp-font-weight-medium);
     }
   }
 
   .lang-link {
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: var(--bp-text-xs);
+    font-weight: var(--bp-font-weight-semibold);
     letter-spacing: 0.04em;
   }
 
   .auth-actions {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: var(--bp-space-1);
   }
 </style>
 
@@ -181,7 +196,6 @@ const menuItems = [
     const path = window.location.pathname
     document.querySelectorAll<HTMLAnchorElement>('.floating-nav .nav-link:not(.lang-link)').forEach(a => {
       const matches = a.getAttribute('href') === path && path !== '/'
-      a.classList.toggle('active', matches)
       if (matches) {
         a.setAttribute('aria-current', 'page')
       } else {

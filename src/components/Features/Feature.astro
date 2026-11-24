@@ -33,13 +33,13 @@ const { icon, title, description } = Astro.props
     flex-direction: column;
 
     align-items: center;
-    padding: calc(var(--spacing) * 4) 0;
+    padding: var(--bp-space-4) 0;
     @container feature (width>320px) {
       flex-direction: row;
     }
     .icon {
       border-radius: 50%;
-      color: var(--color-light);
+      color: var(--site-color-accent);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -51,7 +51,7 @@ const { icon, title, description } = Astro.props
     }
     h3 {
       font-size: clamp(1.3rem, 2vw, 1.5rem);
-      margin-left: calc(var(--spacing) * 4);
+      margin-left: var(--bp-space-4);
       @container card (width > 48ch) {
         margin-left: 0;
         text-align: center;

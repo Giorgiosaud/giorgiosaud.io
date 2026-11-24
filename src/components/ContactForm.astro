@@ -7,7 +7,6 @@
  * - Without JS: native POST; the page redirects to ?sent=1 on success (POST/Redirect/GET).
  * - Spam: hidden honeypot field + Cloudflare Turnstile (verified server-side).
  */
-import '@be-partner-labs/ds/core/tokens'
 import '@be-partner-labs/ds/components/input'
 import '@be-partner-labs/ds/components/button'
 import '@be-partner-labs/ds/components/alert'
@@ -77,7 +76,7 @@ const initialError = errorCode
     <div class="bp-field field-message">
       <label class="bp-field__label" for="contact-message">{tx('contact.message.placeholder')}</label>
       <textarea
-        class="bp-input"
+        class="bp-input message-input"
         id="contact-message"
         name="message"
         rows="7"
@@ -172,13 +171,14 @@ const initialError = errorCode
 
 <style>
   .contact-card {
+    container: contact-card / inline-size;
     display: grid;
-    gap: var(--bp-space-4, 1rem);
+    gap: var(--bp-space-4);
   }
 
   .contact-form {
     display: grid;
-    gap: var(--bp-space-5, 1.25rem);
+    gap: var(--bp-space-5);
     grid-template-areas:
       'name'
       'email'
@@ -186,7 +186,7 @@ const initialError = errorCode
       'turnstile'
       'submit';
 
-    @media (min-width: 48rem) {
+    @container contact-card (inline-size >= 40rem) {
       grid-template-columns: 1fr 1fr;
       grid-template-areas:
         'name email'
@@ -209,15 +209,16 @@ const initialError = errorCode
     grid-area: turnstile;
   }
 
-  textarea.bp-input {
-    resize: vertical;
+  /* DS textarea sizes to content (min 6rem); the message field starts taller.
+     Layout-only rule on a site class: the DS exposes no min-height token. */
+  .message-input {
     min-block-size: 10rem;
   }
 
   .message-meta {
     display: flex;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--bp-space-4);
   }
 
   .submit {

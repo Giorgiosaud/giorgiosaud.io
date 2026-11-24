@@ -48,7 +48,7 @@ const tabs = [
   {tabs.map(({ title, path, Icon }) => (
     <a
       href={path}
-      class:list={['tab', { active: path === Astro.url.pathname && path !== '/' }]}
+      class="tab"
       aria-current={path === Astro.url.pathname && path !== '/' ? 'page' : undefined}
     >
       <Icon size={20} aria-hidden="true" class="tab-icon" />
@@ -66,15 +66,16 @@ const tabs = [
     bottom: 0;
     left: 0;
     right: 0;
-    background: light-dark(#475569, #1e293b);
-    border-top: 1px solid light-dark(#334155, #0f172a);
+    background: var(--bp-color-bg-elevated);
+    border-top: 1px solid var(--bp-color-border);
+    box-shadow: var(--bp-shadow-lg);
     padding: 0.5rem 0;
     padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
     z-index: 200;
     view-transition-name: bottom-tab-bar;
     transition: transform 0.3s ease;
 
-    &.hidden {
+    &[data-state='hidden'] {
       transform: translateY(100%);
     }
 
@@ -90,15 +91,21 @@ const tabs = [
     gap: 0.2rem;
     padding: 0.25rem 0.75rem;
     text-decoration: none;
-    color: #fff;
-    transition: color 0.15s;
+    color: var(--bp-color-text-muted);
+    border-radius: var(--bp-radius-md);
+    transition: color var(--bp-duration-fast) var(--bp-ease);
 
     &:hover {
-      color: var(--color-main);
+      color: var(--site-color-accent);
     }
 
-    &.active {
-      color: var(--color-main);
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--bp-focus-ring);
+    }
+
+    &[aria-current='page'] {
+      color: var(--site-color-accent);
 
       .tab-icon {
         filter: drop-shadow(0 0 6px color-mix(in srgb, currentColor 80%, transparent));
@@ -112,7 +119,7 @@ const tabs = [
 
   .tab-label {
     font-size: 0.6rem;
-    font-weight: 500;
+    font-weight: var(--bp-font-weight-medium);
     white-space: nowrap;
   }
 </style>
@@ -127,9 +134,9 @@ const tabs = [
     window.requestAnimationFrame(() => {
       const currentY = window.scrollY
       if (currentY > lastY + 4) {
-        bar?.classList.add('hidden')
+        bar?.setAttribute('data-state', 'hidden')
       } else if (currentY < lastY - 4) {
-        bar?.classList.remove('hidden')
+        bar?.removeAttribute('data-state')
       }
       lastY = currentY
       ticking = false
@@ -141,10 +148,8 @@ const tabs = [
   document.querySelectorAll<HTMLAnchorElement>('.bottom-tab-bar .tab').forEach(tab => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.bottom-tab-bar .tab').forEach(t => {
-        t.classList.remove('active')
         t.removeAttribute('aria-current')
       })
-      tab.classList.add('active')
       tab.setAttribute('aria-current', 'page')
     })
   })

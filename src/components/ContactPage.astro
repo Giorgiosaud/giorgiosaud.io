@@ -32,19 +32,19 @@ const tx = (key: string) => t(key as Parameters<typeof t>[0]) as string
 <style>
   .contact {
     display: grid;
-    gap: var(--bp-space-8, 2rem);
+    gap: var(--bp-space-8);
     max-inline-size: 48rem;
     margin-inline: auto;
-    padding-block: var(--bp-space-8, 2rem);
+    padding-block: var(--bp-space-8);
   }
 
   .contact-intro {
     display: grid;
-    gap: var(--bp-space-3, 0.75rem);
+    gap: var(--bp-space-3);
 
     h1 {
-      font-size: clamp(2rem, 5vw, 2.75rem);
-      line-height: 1.1;
+      font-size: var(--bp-text-3xl);
+      line-height: var(--bp-leading-tight);
     }
 
     p {
@@ -57,18 +57,19 @@ const tx = (key: string) => t(key as Parameters<typeof t>[0]) as string
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--bp-space-3, 0.75rem) var(--bp-space-5, 1.25rem);
-    padding-block-start: var(--bp-space-5, 1.25rem);
+    gap: var(--bp-space-3) var(--bp-space-5);
+    padding-block-start: var(--bp-space-5);
     border-block-start: 1px solid var(--bp-color-border);
     font-size: var(--bp-text-sm);
 
     ul {
       display: flex;
-      gap: var(--bp-space-5, 1.25rem);
+      gap: var(--bp-space-5);
     }
 
     a {
-      color: var(--bp-primary);
+      /* --bp-primary is a fill color (1.85:1 as text on light bg); accent passes AA */
+      color: var(--site-color-accent);
       text-underline-offset: 0.2em;
     }
   }

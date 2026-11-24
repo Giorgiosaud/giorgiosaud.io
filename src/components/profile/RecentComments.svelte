@@ -59,29 +59,29 @@ function formatDate(dateStr: string): string {
   }
 
   .comment-item {
-    padding: 1rem;
-    background: light-dark(white, hsl(0 0% 12%));
-    border: 1px solid light-dark(hsl(0 0% 90%), hsl(0 0% 22%));
-    border-radius: 8px;
-    margin-bottom: 0.75rem;
+    padding: var(--bp-space-4);
+    background: var(--bp-color-bg-elevated);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
+    margin-bottom: var(--bp-space-3);
   }
 
   .comment-content {
-    margin: 0 0 0.75rem;
-    line-height: 1.5;
-    color: light-dark(hsl(0 0% 20%), hsl(0 0% 85%));
+    margin: 0 0 var(--bp-space-3);
+    line-height: var(--bp-leading-normal);
+    color: var(--bp-color-text);
   }
 
   .comment-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 55%));
+    gap: var(--bp-space-2);
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
   }
 
   .comment-note a {
-    color: var(--color-main);
+    color: var(--site-color-accent);
     text-decoration: none;
   }
 

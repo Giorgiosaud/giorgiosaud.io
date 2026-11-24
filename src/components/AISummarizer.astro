@@ -1,4 +1,5 @@
 ---
+import '@be-partner-labs/ds/components/button'
 interface Props {
   lang?: 'en' | 'es'
   noteId?: string
@@ -47,7 +48,7 @@ const t = i18n[lang]
   class="summary-modal"
   aria-label={t.buttonTitle}
 >
-  <button id="close-summary-modal" class="close-summary-modal" aria-label="Close">&times;</button>
+  <button id="close-summary-modal" class="bp-btn bp-btn--secondary bp-btn--icon bp-btn--sm close-summary-modal" type="button" aria-label="Close">&times;</button>
   <div id="summary-content" aria-live="polite" aria-atomic="false"></div>
 </dialog>
 
@@ -167,21 +168,27 @@ const t = i18n[lang]
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: conic-gradient(from 180deg, #7c3aed, #2563eb, #06b6d4, #7c3aed);
-    box-shadow: 0 4px 20px rgba(124, 58, 237, 0.4);
+    background: var(--bp-primary);
+    color: var(--bp-primary-fg);
+    box-shadow: var(--bp-shadow-lg);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.5rem;
     cursor: pointer;
     z-index: 2000;
-    border: 2px solid rgba(255,255,255,0.15);
+    border: 2px solid var(--bp-color-bg-elevated);
     transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .summary-bubble:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
   }
 
   .summary-bubble:hover {
     transform: scale(1.08);
-    box-shadow: 0 6px 28px rgba(124, 58, 237, 0.55);
+    box-shadow: var(--bp-shadow-xl);
   }
 
   .summary-modal {
@@ -201,11 +208,12 @@ const t = i18n[lang]
     max-width: calc(100vw - 2rem);
     max-height: 70vh;
     overflow-y: auto;
-    background: #fff;
-    border-radius: 1.5rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    background: var(--bp-color-bg-elevated);
+    color: var(--bp-color-text);
+    border-radius: var(--bp-radius-xl);
+    box-shadow: var(--bp-shadow-xl);
     padding: 2rem 1.5rem 1.5rem 1.5rem;
-    border: none;
+    border: 1px solid var(--bp-color-border);
     z-index: 2100;
     flex-direction: column;
     gap: 1rem;
@@ -214,31 +222,23 @@ const t = i18n[lang]
   }
   .summary-modal::backdrop { background: rgba(0,0,0,0.3); }
   code {
-    background: #e8e8e8;
-    color: #1a1a1a;
+    background: var(--bp-color-bg-subtle);
+    color: var(--bp-color-text);
+    font-family: var(--bp-font-mono);
     padding: 0.2rem 0.4rem;
-    border-radius: 0.3rem;
+    border-radius: var(--bp-radius-sm);
   }
 
   .close-summary-modal {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #1a1a1a;
-    cursor: pointer;
-    line-height: 1;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    &:hover { background: #f0f0f0; }
-    &:focus-visible { outline: 2px solid #7c3aed; outline-offset: 2px; }
+    top: var(--bp-space-3);
+    right: var(--bp-space-3);
+    font-size: var(--bp-text-lg);
   }
 
   #summary-content {
-    font-size: 1rem;
-    color: #1a1a1a;
+    font-size: var(--bp-text-base);
+    color: var(--bp-color-text);
     & p, & li { line-height: 1.6; }
   }
 

@@ -1,4 +1,7 @@
 ---
+import '@be-partner-labs/ds/components/badge'
+import '@be-partner-labs/ds/components/button'
+
 interface Props {
   lang: 'en' | 'es'
   selfHealing: string
@@ -26,15 +29,15 @@ const dateISO = publishDate.toISOString()
 
 <section class="share">
   <p id="share-notification" role="status" aria-live="polite">{t.toast}</p>
-  <time class="reader-badge" datetime={dateISO}>
+  <time class="bp-badge bp-badge--primary reader-badge" datetime={dateISO}>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
     {t.badge}
   </time>
-  <button id="share-copy" title={t.copy}>
+  <button id="share-copy" class="bp-btn bp-btn--secondary bp-btn--icon bp-btn--sm share-btn" type="button" title={t.copy}>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
     <span class="sr-only">{t.copy}</span>
   </button>
-  <button id="share-native" title={t.share}>
+  <button id="share-native" class="bp-btn bp-btn--secondary bp-btn--icon bp-btn--sm share-btn" type="button" title={t.share}>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
     <span class="sr-only">{t.share}</span>
   </button>
@@ -83,64 +86,30 @@ const dateISO = publishDate.toISOString()
     gap: 0.5rem;
     margin-top: 2rem;
     padding-top: 1rem;
-    border-top: 1px solid light-dark(#e2e8f0, rgba(255,255,255,0.08));
+    border-top: 1px solid var(--bp-color-border);
   }
   .reader-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.25rem 0.625rem;
-    background: #7c3aed;
-    color: white;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    border-radius: 9999px;
-    text-transform: uppercase;
+    gap: var(--bp-space-1);
     margin-right: auto;
-    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     & svg { width: 11px; height: 11px; }
   }
-  #share-copy, #share-native {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 8px;
-    border: 1px solid light-dark(#e2e8f0, rgba(255,255,255,0.12));
-    background: transparent;
-    color: light-dark(#64748b, #94a3b8);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
-    & svg { width: 14px; height: 14px; }
-    &:hover {
-      background: light-dark(#f1f5f9, rgba(255,255,255,0.08));
-      color: light-dark(#1e293b, #e2e8f0);
-    }
+  .share-btn svg {
+    width: 14px;
+    height: 14px;
   }
   #share-notification {
     display: none;
     position: fixed;
     bottom: 6rem;
     right: 1.5rem;
-    background-color: var(--color-main);
-    color: white;
-    padding: 0.5rem 0.875rem;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    background-color: var(--bp-primary);
+    color: var(--bp-primary-fg);
+    padding: var(--bp-space-2) var(--bp-space-4);
+    border-radius: var(--bp-radius-md);
+    font-size: var(--bp-text-sm);
     z-index: 2200;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  }
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0,0,0,0);
-    white-space: nowrap;
-    border-width: 0;
+    box-shadow: var(--bp-shadow-lg);
   }
 </style>

@@ -1,5 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/checkbox'
 
 const CONSENT_KEY = 'cookie_consent'
 const CONSENT_SESSION_KEY = 'consent_session_id'
@@ -156,7 +158,7 @@ declare global {
 
 {#if !showBanner}
   <button type="button" class="manage-btn" onclick={() => { showBanner = true; showSettings = false }}>
-    🍪 Cookies
+    <span aria-hidden="true">🍪</span> Cookies
   </button>
 {/if}
 
@@ -171,10 +173,10 @@ declare global {
           <button type="button" class="btn-link" onclick={() => showSettings = true}>
             Customize
           </button>
-          <button type="button" class="btn-secondary" onclick={rejectAll}>
+          <button type="button" class="bp-btn bp-btn--secondary bp-btn--sm" onclick={rejectAll}>
             Reject All
           </button>
-          <button type="button" class="btn-primary" onclick={acceptAll}>
+          <button type="button" class="bp-btn bp-btn--sm" onclick={acceptAll}>
             Accept All
           </button>
         </div>
@@ -184,24 +186,24 @@ declare global {
         <h3>Cookie Preferences</h3>
 
         <div class="cookie-option">
-          <label>
-            <input type="checkbox" checked disabled />
+          <label class="bp-checkbox">
+            <input class="bp-checkbox__input" type="checkbox" checked disabled />
             <span class="option-title">Necessary</span>
           </label>
           <p class="option-desc">Required for the website to function. Cannot be disabled.</p>
         </div>
 
         <div class="cookie-option">
-          <label>
-            <input type="checkbox" bind:checked={consent.analytics} />
+          <label class="bp-checkbox">
+            <input class="bp-checkbox__input" type="checkbox" bind:checked={consent.analytics} />
             <span class="option-title">Analytics</span>
           </label>
           <p class="option-desc">Help us understand how visitors interact with the website.</p>
         </div>
 
         <div class="cookie-option">
-          <label>
-            <input type="checkbox" bind:checked={consent.marketing} />
+          <label class="bp-checkbox">
+            <input class="bp-checkbox__input" type="checkbox" bind:checked={consent.marketing} />
             <span class="option-title">Marketing</span>
           </label>
           <p class="option-desc">Used to deliver personalized ads and track campaigns.</p>
@@ -211,7 +213,7 @@ declare global {
           <button type="button" class="btn-link" onclick={() => showSettings = false}>
             Back
           </button>
-          <button type="button" class="btn-primary" onclick={saveCustom}>
+          <button type="button" class="bp-btn bp-btn--sm" onclick={saveCustom}>
             Save Preferences
           </button>
         </div>
@@ -222,189 +224,119 @@ declare global {
 
 <style>
   .cookie-banner {
-    --_font-size: clamp(0.6875rem, 1.5vw, 0.75rem);
     position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
+    bottom: var(--bp-space-6);
+    right: var(--bp-space-6);
     width: min(360px, calc(100vw - 2rem));
-    background: #1e293b;
-    color: #e2e8f0;
-    border: 1px solid #334155;
-    border-radius: 12px;
-    padding: 1rem 1.25rem;
-    font-size: var(--_font-size);
+    background: var(--bp-color-bg-elevated);
+    color: var(--bp-color-text);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-lg);
+    padding: var(--bp-space-4) var(--bp-space-5);
+    font-size: var(--bp-text-xs);
     z-index: 9998;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    box-shadow: var(--bp-shadow-xl);
   }
 
-  :global(.light) .cookie-banner,
-  :global([data-theme="light"]) .cookie-banner {
-    background: #ffffff;
-    color: #1e293b;
-    border-color: #e2e8f0;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  }
-
-  .banner-content, .settings-content {
+  .banner-content,
+  .settings-content {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: var(--bp-space-3);
   }
 
   .banner-content p {
     margin: 0;
     font-size: inherit;
-    line-height: 1.5;
-    color: #94a3b8;
+    line-height: var(--bp-leading-normal);
+    color: var(--bp-color-text-muted);
   }
 
   .policy-link {
     font-size: inherit;
+    color: var(--site-color-accent);
+    text-decoration: underline;
   }
 
-  :global(.light) .banner-content p,
-  :global([data-theme="light"]) .banner-content p {
-    color: #64748b;
-  }
-
-  .banner-actions, .settings-actions {
+  .banner-actions,
+  .settings-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--bp-space-2);
     flex-wrap: wrap;
     justify-content: flex-end;
+    align-items: center;
   }
 
   .settings-content h3 {
     margin: 0;
-    font-size: calc(var(--_font-size) * 1.2);
-    color: #f1f5f9;
-  }
-
-  :global(.light) .settings-content h3,
-  :global([data-theme="light"]) .settings-content h3 {
-    color: #0f172a;
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text);
   }
 
   .cookie-option {
-    margin-bottom: 0.5rem;
-    padding: 0.625rem;
-    background: #0f172a;
-    border-radius: 6px;
-  }
-
-  :global(.light) .cookie-option,
-  :global([data-theme="light"]) .cookie-option {
-    background: #f1f5f9;
-  }
-
-  .cookie-option label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    cursor: pointer;
-    color: #e2e8f0;
-  }
-
-  :global(.light) .cookie-option label,
-  :global([data-theme="light"]) .cookie-option label {
-    color: #1e293b;
+    margin-bottom: var(--bp-space-2);
+    padding: var(--bp-space-3);
+    background: var(--bp-color-bg-subtle);
+    border-radius: var(--bp-radius-md);
   }
 
   .option-title {
-    font-weight: 500;
-    font-size: 0.875rem;
+    font-weight: var(--bp-font-weight-medium);
+    font-size: var(--bp-text-sm);
   }
 
   .option-desc {
-    margin: 0.25rem 0 0 1.5rem;
+    margin: var(--bp-space-1) 0 0 var(--bp-space-6);
     font-size: inherit;
-    color: #64748b;
-  }
-
-  .btn-primary {
-    padding: 0.3rem 0.75rem;
-    background: var(--color-main);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: inherit;
-    font-weight: 500;
-  }
-
-  .btn-secondary {
-    padding: 0.3rem 0.75rem;
-    background: #334155;
-    color: #e2e8f0;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: inherit;
-  }
-
-  :global(.light) .btn-secondary,
-  :global([data-theme="light"]) .btn-secondary {
-    background: #e2e8f0;
-    color: #1e293b;
+    color: var(--bp-color-text-muted);
   }
 
   .btn-link {
-    padding: 0.3rem 0.375rem;
+    padding: var(--bp-space-1) var(--bp-space-2);
     background: none;
     border: none;
-    color: #94a3b8;
+    color: var(--bp-color-text-muted);
     cursor: pointer;
-    font-size: inherit;
+    font-size: var(--bp-text-sm);
     text-decoration: underline;
+    border-radius: var(--bp-radius-sm);
   }
 
-  :global(.light) .btn-link,
-  :global([data-theme="light"]) .btn-link {
-    color: #64748b;
+  .btn-link:hover {
+    color: var(--site-color-accent);
   }
 
-  .btn-primary:hover { opacity: 0.9; }
-  .btn-secondary:hover { opacity: 0.85; }
-
-  .policy-link {
-    color: #7dd3fc;
-    text-decoration: underline;
-  }
-
-  :global(.light) .policy-link,
-  :global([data-theme="light"]) .policy-link {
-    color: #0369a1;
+  .btn-link:focus-visible,
+  .manage-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
   }
 
   .manage-btn {
     position: fixed;
-    bottom: 1rem;
-    right: 1rem;
-    background: #1e293b;
-    color: #94a3b8;
-    border: 1px solid #334155;
-    border-radius: 8px;
-    padding: 0.375rem 0.625rem;
-    font-size: 0.6875rem;
+    bottom: var(--bp-space-4);
+    right: var(--bp-space-4);
+    background: var(--bp-color-bg-elevated);
+    color: var(--bp-color-text-muted);
+    border: 1px solid var(--bp-color-border);
+    border-radius: var(--bp-radius-md);
+    padding: var(--bp-space-1) var(--bp-space-3);
+    font-size: var(--bp-text-xs);
     cursor: pointer;
     z-index: 9997;
     opacity: 0.7;
-    transition: opacity 0.2s;
+    transition: opacity var(--bp-duration-fast) var(--bp-ease);
   }
 
-  .manage-btn:hover { opacity: 1; }
-
-  :global(.light) .manage-btn,
-  :global([data-theme="light"]) .manage-btn {
-    background: #f8fafc;
-    color: #64748b;
-    border-color: #e2e8f0;
+  .manage-btn:hover,
+  .manage-btn:focus-visible {
+    opacity: 1;
   }
 
   @media (width < 48rem) {
     .cookie-banner {
       bottom: calc(4.5rem + 1rem);
-      right: 0.75rem;
+      right: var(--bp-space-3);
       width: calc(100vw - 1.5rem);
     }
 

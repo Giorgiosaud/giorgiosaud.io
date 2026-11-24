@@ -2,6 +2,8 @@
 import type { User } from 'better-auth/types'
 import CommentForm from './CommentForm.svelte'
 import CommentItem from './CommentItem.svelte'
+import '@be-partner-labs/ds/components/button'
+import '@be-partner-labs/ds/components/input'
 
 interface Comment {
   id: string
@@ -132,7 +134,7 @@ function handleReplySubmit(newComment: Comment) {
 }
 </script>
 
-<article class="comment" style="--depth: {comment.depth}">
+<article class="comment">
   <header class="comment-header">
     {#if comment.authorImage}
       <img src={comment.authorImage} alt="" class="avatar" />
@@ -152,14 +154,19 @@ function handleReplySubmit(newComment: Comment) {
 
   {#if isEditing}
     <div class="edit-form">
-      <textarea bind:value={editContent} class="textarea" rows="3"></textarea>
+      <textarea
+        bind:value={editContent}
+        class="bp-input"
+        rows="3"
+        aria-label={t.edit}
+      ></textarea>
       <div class="form-actions">
         <button
           type="button"
           onclick={() => (isEditing = false)}
-          class="cancel-btn">{t.cancel}</button
+          class="bp-btn bp-btn--secondary bp-btn--sm">{t.cancel}</button
         >
-        <button type="button" class="submit-btn" onclick={handleEdit}
+        <button type="button" class="bp-btn bp-btn--sm" onclick={handleEdit}
           >{t.save}</button
         >
       </div>
@@ -222,134 +229,106 @@ function handleReplySubmit(newComment: Comment) {
 </article>
 
 <style>
-  .comment {
-    padding-left: calc(var(--depth, 0) * 1.5rem);
-    border-left: calc(var(--depth, 0) * 2px) solid
-      light-dark(hsl(0 0% 85%), hsl(0 0% 25%));
-  }
-
   .comment-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    margin-block-end: 0.5rem;
+    gap: var(--bp-space-2);
+    font-size: var(--bp-text-sm);
+    margin-block-end: var(--bp-space-2);
   }
 
   .avatar {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
+    border-radius: var(--bp-radius-full);
     object-fit: cover;
   }
 
   .avatar-placeholder {
     width: 28px;
     height: 28px;
-    border-radius: 50%;
-    background: var(--color-main);
-    color: var(--color-light);
+    border-radius: var(--bp-radius-full);
+    background: var(--bp-primary);
+    color: var(--bp-primary-fg);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: var(--bp-text-xs);
+    font-weight: var(--bp-font-weight-semibold);
   }
 
   .author {
-    font-weight: 600;
+    font-weight: var(--bp-font-weight-semibold);
   }
 
   .time {
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 60%));
+    color: var(--bp-color-text-muted);
   }
 
   .edited {
-    color: light-dark(hsl(0 0% 50%), hsl(0 0% 60%));
+    color: var(--bp-color-text-muted);
     font-style: italic;
-    font-size: 0.8rem;
+    font-size: var(--bp-text-xs);
   }
 
   .content {
     margin: 0;
-    line-height: 1.6;
+    line-height: var(--bp-leading-loose);
     white-space: pre-wrap;
     word-break: break-word;
   }
 
   .comment-footer {
     display: flex;
-    gap: 1rem;
-    margin-block-start: 0.5rem;
+    gap: var(--bp-space-4);
+    margin-block-start: var(--bp-space-2);
   }
 
   .action-btn {
     background: none;
     border: none;
     padding: 0;
-    font-size: 0.85rem;
-    color: light-dark(hsl(0 0% 40%), hsl(0 0% 60%));
+    font-size: var(--bp-text-sm);
+    color: var(--bp-color-text-muted);
     cursor: pointer;
-    transition: color 0.2s;
+    transition: color var(--bp-duration-fast) var(--bp-ease);
   }
 
   .action-btn:hover {
-    color: var(--color-main);
+    color: var(--site-color-accent);
+  }
+
+  .action-btn:focus-visible {
+    outline: none;
+    box-shadow: var(--bp-focus-ring);
+    border-radius: var(--bp-radius-sm);
   }
 
   .reply-form {
-    margin-block-start: 1rem;
-    padding-left: 1rem;
+    margin-block-start: var(--bp-space-4);
+    padding-inline-start: var(--bp-space-4);
   }
 
   .edit-form {
-    margin-block: 0.5rem;
-  }
-
-  .textarea {
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid light-dark(hsl(0 0% 80%), hsl(0 0% 30%));
-    border-radius: 8px;
-    background: light-dark(white, hsl(0 0% 10%));
-    color: inherit;
-    font-family: inherit;
-    font-size: 1rem;
-    resize: vertical;
-    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--bp-space-2);
+    margin-block: var(--bp-space-2);
   }
 
   .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 0.5rem;
-    margin-block-start: 0.5rem;
+    gap: var(--bp-space-2);
   }
 
-  .submit-btn,
-  .cancel-btn {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .submit-btn {
-    background: var(--color-main);
-    color: var(--color-light);
-  }
-
-  .cancel-btn {
-    background: transparent;
-    border: 1px solid light-dark(hsl(0 0% 70%), hsl(0 0% 40%));
-  }
-
+  /* Nesting is structural: each level of .replies indents once */
   .replies {
-    margin-block-start: 1rem;
+    margin-block-start: var(--bp-space-4);
+    padding-inline-start: var(--bp-space-6);
+    border-inline-start: 2px solid var(--bp-color-border);
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--bp-space-4);
   }
 </style>

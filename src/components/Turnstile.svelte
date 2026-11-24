@@ -74,6 +74,6 @@ export function reset() {
   .turnstile-container {
     display: flex;
     justify-content: center;
-    margin-block: 0.5rem;
+    margin-block: var(--bp-space-2);
   }
 </style>

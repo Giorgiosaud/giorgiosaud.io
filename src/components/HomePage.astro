@@ -6,6 +6,7 @@ import Logos from '@components/Logos.astro'
 import NotesLatest from '@components/NotesLatest.astro'
 import { useTranslatedPath, useTranslations } from '@i18n/utils'
 import Base from '@templates/Base.astro'
+import '@be-partner-labs/ds/components/button'
 
 interface Props {
   lang: 'en' | 'es'
@@ -26,7 +27,7 @@ const notebookHref = translatePath('notebook', lang)
   <section class="cta full-width">
     <blockquote>
       <p>{t("cta.description")}</p>
-      <a href={notebookHref} class="cta-btn">{t("cta.action")}</a>
+      <a href={notebookHref} class="bp-btn bp-btn--lg cta-btn">{t("cta.action")}</a>
     </blockquote>
   </section>
   <Logos />
@@ -36,16 +37,8 @@ const notebookHref = translatePath('notebook', lang)
       align-items: center;
       justify-content: center;
       min-height: 28rem;
-      background: light-dark(
-        rgba(15, 40, 100, 0.08),
-        rgba(10, 26, 53, 0.55)
-      );
-      backdrop-filter: blur(32px);
-      -webkit-backdrop-filter: blur(32px);
-      border-block: 1px solid light-dark(
-        rgba(15, 40, 100, 0.1),
-        rgba(255, 255, 255, 0.06)
-      );
+      background: var(--bp-primary-subtle);
+      border-block: 1px solid var(--bp-color-border);
     }
 
     blockquote {
@@ -70,7 +63,7 @@ const notebookHref = translatePath('notebook', lang)
       left: 1rem;
       font-size: 8rem;
       line-height: 1;
-      color: light-dark(rgba(15,40,100,0.15), rgba(255,255,255,0.1));
+      color: color-mix(in srgb, var(--site-color-accent) 25%, transparent);
       font-family: Georgia, serif;
       pointer-events: none;
     }
@@ -78,29 +71,15 @@ const notebookHref = translatePath('notebook', lang)
     blockquote p {
       font-size: clamp(1.5rem, 4vw, 2.5rem);
       font-style: italic;
-      font-weight: 600;
-      color: light-dark(var(--color-main), white);
+      font-weight: var(--bp-font-weight-semibold);
+      color: var(--bp-color-text);
       line-height: 1.3;
       margin: 0 0 2rem;
       text-wrap: balance;
     }
 
     .cta-btn {
-      display: inline-block;
-      padding: 0.75rem 2rem;
-      border: 2px solid light-dark(rgba(15,40,100,0.4), rgba(255,255,255,0.6));
-      border-radius: 2rem;
-      color: light-dark(var(--color-main), white);
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      transition: background 0.2s ease, border-color 0.2s ease;
-
-      &:hover {
-        background: light-dark(rgba(15,40,100,0.08), rgba(255,255,255,0.15));
-        border-color: light-dark(var(--color-main), white);
-      }
+      --btn-border-radius: var(--bp-radius-full);
     }
   </style>
 </Base>

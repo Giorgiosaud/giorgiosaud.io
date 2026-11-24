@@ -6,6 +6,7 @@ import sitemap from '@astrojs/sitemap'
 import svelte, { vitePreprocess } from '@astrojs/svelte'
 import vue from '@astrojs/vue'
 import { defineConfig, envField } from 'astro/config'
+import { Features } from 'lightningcss'
 
 // Suppress LightningCSS warnings for bleeding-edge pseudo-elements not yet in its spec database
 const suppressKnownWarnings = {
@@ -95,6 +96,10 @@ export default defineConfig({
         },
         // Don't error on unknown at-rules or pseudo-elements (for bleeding-edge CSS like scroll-marker)
         errorRecovery: true,
+        // Keep light-dark() native. Transpiled, it becomes --lightningcss-light/dark vars
+        // resolved on :root, so a nested [data-theme] (BPL DS) can't flip a subtree.
+        // BPL DS ships its own @supports fallback (light values) for older browsers.
+        exclude: Features.LightDark,
       },
     },
     build: {
