@@ -11,7 +11,6 @@
       "src/**/*",
       "!**/*.md",
       "!**/*.mdx",
-      "!**/*.svg",
       "astro.config.mjs",
       "biome.json",
       ".biomeignore"
@@ -55,6 +54,18 @@
     }
   },
   "overrides": [
+    {
+      "includes": [
+        "src/icons/**"
+      ],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "noSvgWithoutTitle": "off"
+          }
+        }
+      }
+    },
     {
       "includes": [
         "**/*.svelte",
