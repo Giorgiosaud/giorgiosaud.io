@@ -18,12 +18,26 @@
 @layer site-tokens {
   :root {
     /* ── Base tokens (primitives) ── */
-    --site-color-main: #5fcb9f;
+    /* Cyan from the hero's glow: the site's "space" look */
+    --site-color-main: #54b2d4;
     /* Fallback for browsers without relative color syntax */
     --site-color-light: var(--site-color-main);
 
     /* ── DS semantics mapped to the base tokens ── */
     --bp-primary: light-dark(var(--site-color-main), var(--site-color-light));
+
+    /*
+     * Cool navy neutrals instead of the DS warm ones (cream / brown), so the
+     * surfaces match the space imagery. Dark mode is the deep-space navy of
+     * the hero; light mode is a slightly blue-tinted white.
+     */
+    --bp-color-bg: light-dark(#f5f7fa, #0b1526);
+    --bp-color-bg-subtle: light-dark(#edf1f6, #101c31);
+    --bp-color-bg-elevated: light-dark(#ffffff, #13213a);
+    --bp-color-text: light-dark(#0f1726, #e8eef7);
+    --bp-color-text-muted: light-dark(#5a6678, #93a1b8);
+    --bp-color-text-inverse: light-dark(#e8eef7, #0f1726);
+    --bp-color-border: light-dark(#dde3ec, #24344d);
 
     --bp-font-sans: "Poppins", "Poppins Fallback", system-ui, sans-serif;
     --bp-font-mono: "Roboto Mono", ui-monospace, monospace;
@@ -37,6 +51,9 @@
       color-mix(in oklab, var(--site-color-main) 50%, black),
       var(--site-color-light)
     );
+
+    /* DS default (primary at 40%) is ~1.4:1; the accent passes WCAG 3:1 */
+    --bp-focus-ring: 0 0 0 3px var(--site-color-accent);
 
     /* Translucent surface for the floating nav and other glass panels */
     --site-color-glass: color-mix(
