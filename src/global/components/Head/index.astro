@@ -53,6 +53,8 @@ const canonicalUrl = new URL(
 ).href
 ---
 <head>
+  <!-- Cascade layer order: site reset/grid first, BPL DS layers after so DS components win over the reset -->
+  <style is:inline>@layer reset, grid, bp-tokens, bp-reset, bp-grid, bp-components, bp-utilities;</style>
   <link rel="canonical" href={canonicalUrl} />
   <!-- Preload critical fonts to break request chain -->
   <link rel="preload" href={poppins400} as="font" type="font/woff2" crossorigin="anonymous" />

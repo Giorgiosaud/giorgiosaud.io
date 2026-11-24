@@ -1,15 +1,39 @@
 {
+  "meta": {
+    "title": "Contacto",
+    "description": "Escríbeme sobre desarrollo web, arquitectura o una idea de proyecto. Leo todos los mensajes."
+  },
+  "heading": "Conversemos",
+  "intro": "¿Una pregunta sobre un post, una idea de proyecto o ganas de intercambiar notas sobre desarrollo web y arquitectura? Escríbeme aquí y te respondo por email.",
+  "aside": {
+    "title": "¿Prefieres otro canal?",
+    "linkedin": "LinkedIn",
+    "email": "Email"
+  },
   "name": {
-    "error": "Por favor, escriba su nombre completo.",
+    "error": "Por favor, escribe tu nombre completo.",
     "placeholder": "Nombre completo"
   },
   "email": {
-    "placeholder": "Dirección de correo electrónico",
-    "error": "Por favor, escriba su correo electrónico."
+    "placeholder": "Correo electrónico",
+    "error": "Por favor, escribe un correo válido."
   },
   "message": {
     "placeholder": "Tu mensaje",
-    "error": "Por Favor, escriba un mensaje"
+    "hint": "Mínimo {min} caracteres.",
+    "error": "Tu mensaje necesita al menos {min} caracteres."
   },
-  "submit": "Enviar mensaje"
+  "submit": "Enviar mensaje",
+  "sending": "Enviando…",
+  "success": {
+    "title": "Mensaje enviado",
+    "body": "Gracias por escribir. Te respondo por email pronto."
+  },
+  "errors": {
+    "title": "No se pudo enviar tu mensaje",
+    "BAD_REQUEST": "Revisa los campos e inténtalo de nuevo.",
+    "FORBIDDEN": "No pudimos verificar que eres humano. Inténtalo de nuevo.",
+    "TOO_MANY_REQUESTS": "Demasiados mensajes en este momento. Inténtalo en unos minutos.",
+    "default": "Algo salió mal. Inténtalo de nuevo o escríbeme directo por email."
+  }
 }

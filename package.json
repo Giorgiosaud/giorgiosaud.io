@@ -37,6 +37,7 @@
     "@astrojs/sitemap": "3.7.4",
     "@astrojs/svelte": "9.1.5",
     "@astrojs/vue": "7.1.5",
+    "@be-partner-labs/ds": "^1.10.1",
     "@better-auth/passkey": "^1.7.23",
     "@fontsource/poppins": "^5.3.0",
     "@fontsource/roboto-mono": "^5.3.0",
