@@ -68,7 +68,7 @@
   },
   "devDependencies": {
     "@astrojs/ts-plugin": "1.10.7",
-    "@biomejs/biome": "2.4.14",
+    "@biomejs/biome": "2.6.6",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
     "@playwright/test": "^1.65.0",

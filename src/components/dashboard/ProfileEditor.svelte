@@ -59,7 +59,7 @@ let saveError = $state<string | null>(null)
 const t = $derived(translations[lang])
 
 onMount(() => {
-  async function GetProfile() {
+  async function getProfile() {
     try {
       const res = await fetch('/api/dashboard/profile.json')
       const data = await res.json()
@@ -78,7 +78,7 @@ onMount(() => {
       isLoading = false
     }
   }
-  GetProfile()
+  getProfile()
 })
 
 async function handleSubmit(e: Event) {
