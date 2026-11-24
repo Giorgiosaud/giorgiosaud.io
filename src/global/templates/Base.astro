@@ -11,19 +11,21 @@ import Header from '@global-components/Header.astro'
 import BottomTabBar from '@global-components/Navbar/BottomTabBar.astro'
 import OfflineBar from '@global-components/OfflineBar.svelte'
 import WebMCP from '@global-components/WebMCP.astro'
-import type { RouteNames } from '@i18n/utils'
+import { getLangFromUrl, type RouteNames } from '@i18n/utils'
 
 export interface Props {
   lang?: string
   title?: string
   description?: string
   pathToTranslate: RouteNames
+  pathToTranslateNote?: string
 }
 const {
   title,
   description,
-  lang = 'en',
+  lang = getLangFromUrl(Astro.url),
   pathToTranslate = 'home',
+  pathToTranslateNote,
 } = Astro.props
 ---
 
@@ -38,13 +40,13 @@ const {
 
   <body>
     <OfflineBar client:load />
-    <Header pathToTranslate={pathToTranslate} />
+    <Header pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
     <main class="bp-content-grid">
       <slot />
     </main>
     <Footer />
     <CookieConsent client:load />
-    <BottomTabBar pathToTranslate={pathToTranslate} />
+    <BottomTabBar pathToTranslate={pathToTranslate} pathToTranslateNote={pathToTranslateNote} />
     <WebMCP />
   </body>
 </html>

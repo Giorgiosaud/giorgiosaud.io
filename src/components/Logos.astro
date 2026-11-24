@@ -92,18 +92,25 @@ const rows = [
     gap: 0.4rem;
     width: 72px;
     flex-shrink: 0;
-    opacity: 0.7;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    transition:
+      opacity var(--bp-duration-normal) var(--bp-ease),
+      transform var(--bp-duration-normal) var(--bp-ease);
     cursor: default;
 
-    &:hover {
-      opacity: 1;
-      transform: scale(1.6);
-      z-index: 10;
+    /* Dim + zoom-on-hover only where hover exists; touch devices (iOS) never
+       fire :hover, so they keep the logos at full opacity */
+    @media (hover: hover) and (pointer: fine) {
+      opacity: 0.7;
 
-      .tech-name {
+      &:hover {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1.6);
+        z-index: 10;
+
+        .tech-name {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     }
 

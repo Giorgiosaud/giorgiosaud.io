@@ -18,9 +18,13 @@ interface Props {
 }
 const { page } = Astro.props
 ---
-<Base title='Archive Page' pathToTranslate="notebook">
-<h1>Archive Notes </h1>
-<p>page {page.currentPage} of {page.lastPage}</p>
+<Base
+  title={`Archivo de notas · ${page.currentPage}`}
+  pathToTranslate="internal-note"
+  pathToTranslateNote={String(page.currentPage)}
+>
+<h1>Archivo de notas</h1>
+<p>Página {page.currentPage} de {page.lastPage}</p>
 
 <ul class="page-list">
   {page.data.map(note=>{
@@ -33,12 +37,12 @@ const { page } = Astro.props
   <div class="prev-next">
     {page.currentPage > 1 && (
       <a href={page.url.prev} rel="prev">
-        ← Previous Page
+        ← Página anterior
       </a>
     )}
     {page.currentPage < page.lastPage && (
       <a href={page.url.next} rel="next">
-        Next Page →
+        Página siguiente →
       </a>
     )}
   </div>
@@ -66,7 +70,8 @@ const { page } = Astro.props
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    /* min() keeps a single column from overflowing on phones narrower than 300px + gutter */
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
     gap: 1rem;
   }
   p{
